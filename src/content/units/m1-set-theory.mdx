@@ -1,0 +1,376 @@
+---
+slug: "m1-set-theory"
+title: "Set Theory, Axioms & Theorems"
+moduleId: "m1"
+moduleTitle: "Probability"
+unitNumber: 2
+moduleUnitNumber: 2
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Kolmogorov's 3rd axiom applies when A ∩ B = ∅. Which formula does it give?"
+    options:
+      - "Pr(A ∪ B) = Pr(A) × Pr(B)"
+      - "Pr(A ∪ B) = Pr(A) + Pr(B)"
+      - "Pr(A ∩ B) = Pr(A) + Pr(B)"
+      - "Pr(A) = 1 − Pr(B)"
+    answer: 1
+    explanation: "Axiom 3 states: if A and B are mutually exclusive (A ∩ B = ∅), then Pr(A ∪ B) = Pr(A) + Pr(B). Multiplication arises in independence (a later topic), and the other options have no basis in the axioms."
+  - id: "q2"
+    type: "true-false"
+    question: "As the number of trials n increases, the relative frequency r/n always equals the true probability exactly."
+    answer: false
+    explanation: "False. The relative frequency only tends toward the true probability as a limit — any finite run will almost certainly show some deviation. Click 'Run trials yourself' and add 100 trials at a time: r/n converges on the dashed line without ever locking to it permanently."
+  - id: "q3"
+    type: "mcq"
+    question: "Pr(A) = 0.5, Pr(B) = 0.6, Pr(A ∩ B) = 0.3. Using the Addition Rule (Theorem 3), what is Pr(A ∪ B)?"
+    options:
+      - "1.1"
+      - "0.8"
+      - "0.3"
+      - "0.5"
+    answer: 1
+    explanation: "Theorem 3: Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B) = 0.5 + 0.6 − 0.3 = 0.8. Open the probability Venn diagram and drag the sliders to these exact values — the Pr(A ∪ B) box should read 0.80."
+  - id: "q4"
+    type: "mcq"
+    question: "An elementary event in a sample space S is defined as an event that contains..."
+    options:
+      - "All possible outcomes of the experiment"
+      - "Exactly one outcome"
+      - "Two or more outcomes"
+      - "No outcomes (it is the impossible event)"
+    answer: 1
+    explanation: "An elementary event has exactly one member. For a die with S = {1,2,3,4,5,6}, the set {3} is an elementary event. The set {1,3,5} has three members so it is not elementary, and ∅ is the impossible event, not an elementary event."
+  - id: "q5"
+    type: "mcq"
+    question: "Theorem 1: Pr(Ā) = 1 − Pr(A). If Pr(A) = 0.65, what is Pr(Ā)?"
+    options:
+      - "0.65"
+      - "0.35"
+      - "1.65"
+      - "0.50"
+    answer: 1
+    explanation: "Pr(Ā) = 1 − 0.65 = 0.35. The proof uses axioms 2 and 3: since A and Ā are mutually exclusive and A ∪ Ā = S, we have Pr(A) + Pr(Ā) = Pr(S) = 1."
+  - id: "q6"
+    type: "mcq"
+    question: "A fair die has 6 equally likely outcomes. What is Pr({2, 4, 6}), the probability of rolling an even number?"
+    options:
+      - "1/6 ≈ 0.17"
+      - "1/3 ≈ 0.33"
+      - "1/2 = 0.50"
+      - "2/3 ≈ 0.67"
+    answer: 2
+    explanation: "Using the equiprobable formula: Pr(A) = n(A)/N = 3/6 = 1/2. The event {2,4,6} contains 3 of the 6 equally likely elementary events. This matches Example 11A exactly."
+  - id: "q7"
+    type: "true-false"
+    question: "It follows from Kolmogorov's axioms that Pr(∅) = 0."
+    answer: true
+    explanation: "True. Since S and ∅ are mutually exclusive and S ∪ ∅ = S, axiom 3 gives Pr(S) = Pr(S) + Pr(∅), so Pr(∅) = 0. The notes state this consequence directly after the axioms."
+prevUnit: "m1-introducing-probability"
+nextUnit: "m1-permutations-combinations"
+---
+
+> **Keywords:** Random experiments, sample space, events, elementary events, certain and impossible events, mutually exclusive events, probability, relative frequency, permutations, combinations, conditional probability, Bayes' theorem, independent events.
+
+## Random experiments, sample spaces, trials
+
+To statisticians, a **random experiment** is a procedure whose **outcome** in a particular performance or trial cannot be predetermined. Although we cannot foretell what the outcome of any single repetition of the experiment will be, we must be able to list the set of all possible outcomes of the experiment. In general, random experiments must be capable, in theory at least, of indefinite repetition. It must also be possible to observe the outcome of each repetition of the experiment. The set of all possible outcomes of a random experiment is called the **sample space** of the random experiment. We usually use the letter $S$ to denote the sample space. Each repetition of the procedure for the random experiment is called a **trial**, and gives rise to **one and only one** of the possible outcomes.
+
+<Example title="Example 1A">
+The following are examples of random experiments and their sample spaces.
+
+(a) We toss a coin. We can list the set of possible outcomes: $S = \{\text{heads},\, \text{tails}\}$. We can repeat the experiment endlessly, and we can observe the result of every trial.
+
+(b) A phone number is chosen at random. The number is dialled, and the person who answers is asked whether he/she is currently watching television. If the telephone is unanswered after 45 seconds, the outcome, "no reply", is recorded. The set of possible outcomes, the sample space, is $S = \{\text{yes},\, \text{no},\, \text{won't say},\, \text{no reply}\}$.
+
+(c) A light bulb is allowed to burn until it burns out. The lifetime of the bulb is recorded. The possible outcomes are the set of non-negative real numbers (i.e. the set of positive numbers plus zero — the bulb might not burn at all). The sample space is thus $S = \{t \mid t \geq 0\}$.
+
+(d) A die is placed in a shaker, which is agitated violently, and thrown out onto the table. The dots on the upturned face are counted. The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
+
+(e) In a survey of traffic passing a particular point on Boulevard East, a time period of one minute is chosen at random, and the number of vehicles that pass the point in the minute is counted. The possible outcomes are the integers, including zero: $\{0, 1, 2, 3, \ldots\}$.
+
+(f) A geologist takes rock samples in a mine in order to determine the quality of the iron-ore to be mined. The analytical laboratory reports the proportion of iron in the ore. The sample space is $S = \{p \mid 0 \leq p \leq 1\}$.
+</Example>
+
+## Events
+
+An **event** is defined to be any subset of the sample space $S$. Thus if $S = \{1, 2, 3, 4, 5, 6\}$ then the sets $A = \{1, 3, 5\}$ and $C = \{3, 4, 5, 6\}$ are events. $A$ is clearly the event of getting an odd number. $C$ is the event of getting a number greater than or equal to 3.
+
+The **empty set** is the set containing no elements. It is often denoted by $\{\}$ or by $\emptyset$. By the definition of subsets, $\emptyset$ and $S$ are both subsets of $S$ and are thus events. They have special names. The event $\emptyset$ is called the **impossible event**, and $S$ is called the **certain event**.
+
+An **elementary event** is an event with exactly one member; the events $D = \{3\}$ and $E = \{5\}$ are elementary events. $A$ and $C$ are not elementary events, nor are $\emptyset$ and $S$.
+
+Given two events $A$ and $B$ we say that $A$ and $B$ are **mutually exclusive** if $A \cap B = \emptyset$, that is, no elementary events are contained in the intersection of $A$ and $B$. For example, if $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $A \cap B = \emptyset$. This makes sense, because $A$ is the event of getting an odd number, $B$ is the event of getting an even number — and obviously you cannot get an odd number **and** an even number on the same throw of a die.
+
+## When does an event "occur"?
+
+We give a special meaning to the concept "the occurrence of an event". We say that the event $A = \{1, 3, 5\}$ has **occurred** if the outcome of a trial is **any** member of $A$. So if we toss a die and get a 3, then we can say that the event $A$ has occurred — we have obtained an odd number. Simultaneously, the events $C$ and $D$, as defined above, have also occurred.
+
+<Example title="Example 2B">
+What is the sample space for each of the following random experiments?
+
+(a) We record the way in which a batsman in cricket ends his innings.
+
+(b) An investor owns two shares which she monitors for a month. At the end of the month she records whether they went up, down or remained unchanged.
+
+**Solutions:**
+
+(a) The set of ways in which a batsman's innings can end is given by $S = \{\text{bowled},\, \text{caught},\, \text{leg before wicket},\, \text{run out},\, \text{stumped},\, \text{hit wicket},\, \text{not out},\, \text{retired},\, \text{retired hurt},\, \text{obstruction},\, \text{timed out}\}$.
+
+(b) It is convenient to let $U = \text{up}$, $D = \text{down}$ and $N = \text{no change}$. Then $S = \{\text{UU},\, \text{UD},\, \text{UN},\, \text{DU},\, \text{DD},\, \text{DN},\, \text{NU},\, \text{ND},\, \text{NN}\}$, where, for example, $\text{DU}$ means "first share down, second share up".
+
+Notice how we construct the most detailed possible sample space — the set of outcomes $\{$both up, one up & one down, one up & one unchanged, one down & one unchanged, both unchanged, both down$\}$ is **not** acceptable because each of these could represent several distinguishable outcomes. For example, "one up & one down" could represent either "UD" or "DU".
+</Example>
+
+<Example title="Example 3C">
+A random experiment consists of tossing 3 coins of values R1, R2 and R5 and observing heads and tails. Which of the following is the correct sample space?
+
+(a) $S = \{\text{3 heads},\, \text{2 heads},\, \text{1 head},\, \text{0 heads}\}$.
+
+(b) $S = \{\text{3 heads},\, \text{2 heads 1 tail},\, \text{1 head 2 tails},\, \text{3 tails}\}$.
+
+(c) $S = \{\text{HHH},\, \text{HHT},\, \text{HTH},\, \text{THH},\, \text{HTT},\, \text{THT},\, \text{TTH},\, \text{TTT}\}$, where, for example, HTH means "heads on R1, tails on R2 and heads on R5".
+</Example>
+
+<Example title="Example 4B">
+Refer to the random experiments of Example 2B, and give the subsets of $S$ that correspond to the following events.
+
+(a) When the batsman ended his innings the bails were dislodged from the wickets.
+
+(b) None of the shares decline.
+
+In each case we simply list the outcomes that favour the occurrence of the event in which we are interested. The answers are:
+
+(a) $\{\text{bowled},\, \text{run out},\, \text{stumped},\, \text{hit wicket}\}$.
+
+(b) $\{\text{UU},\, \text{UN},\, \text{NU},\, \text{NN}\}$.
+</Example>
+
+<Example title="Example 5C">
+A salesperson, after calling on a client, records the outcome: sale made ($S$), or no sale made ($N$). List the sample space of outcomes in one afternoon if
+
+(a) two clients are visited;
+
+(b) three clients are visited.
+
+(c) Suppose now that three outcomes are recorded: sale made ($S$), sales potential good ($P$), no sale ever likely to be made ($N$). List the sample space if two clients are visited.
+</Example>
+
+## Kolmogorov, father of probability
+
+Andrey Nikolaevich Kolmogorov was a Russian mathematician who, in 1933, published the axioms of probability, and established the theoretical foundation for the rigorous mathematical study of probability theory.
+
+<Theorem name="Kolmogorov's Axioms of Probability">
+Suppose that $S$ is the sample space for a random experiment. For all events $A \subset S$, we define the **probability** of $A$, denoted $\Pr(A)$, to be a real number with the following properties:
+
+1. $0 \leq \Pr(A) \leq 1$ for all $A \subset S$.
+
+2. $\Pr(S) = 1$.
+
+3. If $A \cap B = \emptyset$ (i.e. if $A$ and $B$ are mutually exclusive events) then $\Pr(A \cup B) = \Pr(A) + \Pr(B)$.
+</Theorem>
+
+A consequence of the Kolmogorov axioms is that $\Pr(\emptyset) = 0$. The function $\Pr(A)$ provides a means of attaching probabilities to events in $S$. The first two axioms tell us that probabilities lie between zero and one, and that these extreme probabilities occur for the impossible and certain events, respectively. The probabilities of all other events are graded between these two extremes — unlikely events have probabilities close to zero, and events which are nearly certain have probabilities close to one. If an event is as likely to occur as it is not to occur, then it has probability 0.5. Thus for an unbiased coin, for which "heads" and "tails" are equally likely, the probability of the event "heads" is equal to the probability of the event "tails" is equal to 0.5!
+
+This function $\Pr(A)$ is almost certainly a new kind of function to you. The functions you have seen before, e.g. $y = 3(x^2 + 5)$, take one real number, $x$, and map them onto another real number, $y$. If it helps you, you can think of the function $y = f(x)$ as a kind of mincing machine — you put a number ($x$) in, you get another number ($y$) out. Now you must think of the function $\Pr(A)$ as a new kind of mincing machine — you put a **set** ($A$) in, and out pops a **number** between zero and one (inclusive of these end limits)!
+
+## Relative frequencies
+
+To try to get some insight into the concept of probability, consider a random experiment on some sample space $S$ repeated **infinitely many times**. Let's start by doing $n$ trials of the random experiment and counting the number of times $r$ that some event $A \subset S$ occurs during the $n$ trials. Then we define $r/n$ to be the **relative frequency** of the event $A$. Obviously, $0 \leq r/n \leq 1$. Thus relative frequencies and probabilities both lie between zero and one.
+
+We can think of the probability of the event $A$ as the relative frequency of $A$ as $n$, the number of trials of the random experiment, gets very large. In symbols
+$$\Pr(A) = \lim_{n \to \infty} \frac{r}{n}.$$
+
+If you toss a fair coin, then the probability of "heads" is equal to the probability of "tails", i.e. $\Pr(H) = \Pr(T) = 0.5$. If you tossed the coin 10 times you might observe 6 heads, a relative frequency of $6/10 = 0.6$. But if you tossed it 100 times you might observe 53 heads, relative frequency $53/100 = 0.53$. If you kept going for a few hours more, and tossed it 1000 times you might observe 512 heads, giving a relative frequency of $512/1000 = 0.512$. **As the number of trials increases, the relative frequency tends to get closer and closer to the "true" probability.**
+
+<TryThis
+  vizId="relative-frequency"
+  params={{ experiment: "coin" }}
+  label="Run trials yourself"
+  description="Add 1, 10 or 100 trials at a time and watch r/n drift toward the dashed line at the true probability. Try the die experiment too — the convergence is much slower because Pr(roll a 6) is only 1/6."
+/>
+
+### A class experiment — birthdays in April, May and June
+
+Almost exactly a quarter of the days of the year fall into April, May or June ($91/365.25 = 0.249$, allowing for leap years every fourth year). Thus we expect the probability that an individual's birthday falls into one of these three months to be pretty close to 0.249. Let's do an experiment within the class, and fill in this table.
+
+| | Number of students ($n$) | Number with birthdays in April, May, June ($r$) | Relative frequency ($r/n$) |
+|---|---|---|---|
+| Front row | | | |
+| Front three rows | | | |
+| Whole class | | | |
+
+Do the relative frequencies get closer to the "true" probability as $n$ gets larger?
+
+## Some useful theorems
+
+We consider several theorems that follow immediately from the axioms of probability.
+
+<Theorem name="Theorem 1">
+Let $A \subset S$. Then $\Pr(\overline{A}) = 1 - \Pr(A)$.
+
+**Proof.** We write $S$ as the union of two mutually exclusive events:
+$$A \cup \overline{A} = S.$$
+Because $A$ and $\overline{A}$ are mutually exclusive, i.e. $A \cap \overline{A} = \emptyset$, we can use axiom 3 to state
+$$\Pr(A \cup \overline{A}) = \Pr(A) + \Pr(\overline{A}).$$
+But $A \cup \overline{A} = S$, and $\Pr(S) = 1$ by Kolmogorov's 2nd axiom, so $\Pr(A \cup \overline{A}) = 1$. Therefore
+$$\Pr(A) + \Pr(\overline{A}) = 1$$
+and
+$$\Pr(\overline{A}) = 1 - \Pr(A),$$
+as required.
+</Theorem>
+
+<Theorem name="Theorem 2">
+If $A \subset S$ and $B \subset S$ then $\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B})$.
+
+**Proof.** Write $A$ as the union of the two mutually exclusive sets:
+$$A = (A \cap B) \cup (A \cap \overline{B}).$$
+Clearly,
+$$(A \cap B) \cap (A \cap \overline{B}) = \emptyset.$$
+Therefore, using axiom 3,
+$$\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B}).$$
+
+Notice that Theorem 2 may also be expressed as
+$$\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B).$$
+</Theorem>
+
+<Theorem name="Theorem 3 — The Addition Rule">
+For any arbitrary events $A$ and $B$,
+$$\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B).$$
+
+**Proof.** Write $A \cup B$ as the union of two mutually exclusive sets:
+$$A \cup B = B \cup (A \cap \overline{B}).$$
+Because $B$ and $A \cap \overline{B}$ are mutually exclusive, we can again apply axiom 3 and say
+$$\Pr(A \cup B) = \Pr(B) + \Pr(A \cap \overline{B}).$$
+But, by Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B)$. The result follows.
+</Theorem>
+
+<TryThis
+  vizId="probability-venn"
+  label="Test the addition rule"
+  description="Drag Pr(A), Pr(B) and Pr(A ∩ B) and watch the four region probabilities and Pr(A ∪ B) update live. Notice why Pr(A ∩ B) gets clamped — the four regions can't sum to more than 1."
+/>
+
+<Theorem name="Theorem 4">
+If $B \subset A$, then $\Pr(B) \leq \Pr(A)$.
+
+**Proof.** If $B \subset A$ then we can write $A$ as the union of two mutually exclusive sets,
+$$A = B \cup (A \cap \overline{B}),$$
+and
+$$\Pr(A) = \Pr(B) + \Pr(A \cap \overline{B}) \geq \Pr(B)$$
+because $\Pr(A \cap \overline{B}) \geq 0$, as all probabilities are non-negative.
+</Theorem>
+
+<Theorem name="Theorem 5">
+If $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, i.e. $A_i \cap A_j = \emptyset$ for $i \neq j$, then
+$$\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n),$$
+or, in a more concise notation,
+$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} \Pr(A_i).$$
+
+**Proof.** The proof is by repeated use of axiom 3. The events $(A_1 \cup A_2 \cup \ldots \cup A_{n-1})$ and $A_n$ are mutually exclusive. Thus
+$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) + \Pr(A_n).$$
+Next, the events $(A_1 \cup A_2 \cup \ldots \cup A_{n-2})$ and $A_{n-1}$ are mutually exclusive. Thus
+$$\Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}),$$
+so that
+$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}) + \Pr(A_n).$$
+Continue the process, and the result follows.
+</Theorem>
+
+<Example title="Example 7A">
+If $\Pr(A) = 0.5$, $\Pr(B) = 0.6$ and $\Pr(A \cap B) = 0.3$, find $\Pr(\overline{B})$, $\Pr(A \cap \overline{B})$ and $\Pr(A \cup B)$.
+
+By Theorem 1, $\Pr(\overline{B}) = 1 - \Pr(B) = 1 - 0.6 = 0.4$.
+
+By Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B) = 0.5 - 0.3 = 0.2$.
+
+By Theorem 3, $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B) = 0.5 + 0.6 - 0.3 = 0.8$.
+</Example>
+
+<Example title="Example 8C">
+Is it possible for events in the same sample space to have probabilities $\Pr(A) = 0.8$, $\Pr(\overline{B}) = 0.6$ and $\Pr(A \cap \overline{B}) = 0.7$?
+</Example>
+
+<Example title="Example 9C">
+In the sample space $S$, let $\Pr(A) = 0.7$, $\Pr(B) = 0.5$, $\Pr(C) = 0.1$, $\Pr(A \cup B) = 0.9$, and $\Pr((A \cup B) \cap C) = 0$. Depict the events $A$, $B$ and $C$ on a Venn diagram and find the probability of the events $A \cap B$, $A \cap C$, $A \cup B \cup C$, $\overline{B} \cap C$, and $\overline{A \cap B}$.
+</Example>
+
+<Example title="Example 10C">
+If we know that $\Pr(A \cup B) = 0.6$ and $\Pr(A \cap B) = 0.2$, can we find $\Pr(A)$ and $\Pr(B)$?
+</Example>
+
+## Equally probable elementary events
+
+All probability problems, in theory at least, can be solved by making use of Theorem 5. The elementary events whose union make up the sample space $S$ are always mutually exclusive, because if one elementary event occurs, no other elementary event occurs. Therefore, if we knew the probabilities of all the elementary events, we would also be able to compute the probabilities of any event in $S$. By Theorem 5, the probability of any event is simply the sum of the probabilities of the elementary events that make up the event.
+
+There is a wide class of problems for which we **do** know the probabilities of **all** the elementary events in a sample space. These are the problems for which it is reasonable to assume that **all the elementary events are equally likely**. If there are $N$ elementary events contained in $S$, and each one has the same probability of occurring, then the probability of each and every elementary event must be $1/N$.
+
+Equally probable elementary events occur in many games of chance — coins and dice are assumed to be unbiased; when a card is drawn from a pack of 52 playing cards, the probability of any particular card is assumed to be $1/52$. Let $A$ be some event in this scenario. Then $A$ must consist of the union of elementary events, each of probability $1/N$. If we could determine the **number of elementary events contained in $A$**, then we could write
+$$\Pr(A) = \frac{\text{number of elementary events contained in } A}{\text{number of elementary events contained in } S} = \frac{n(A)}{n(S)} = \frac{n(A)}{N},$$
+where we define the function $n(A)$ to mean the count of the number of elementary events contained in $A$. Clearly, $n(S) = N$.
+
+<Example title="Example 11A">
+Consider tossing a fair die. Then $S = \{1, 2, 3, 4, 5, 6\}$ and $N = 6$. Let $A = \{1, 3, 5\}$, the event of getting an odd number. Find $\Pr(A)$.
+
+The number of elementary events contained in $A$ is $n(A) = 3$. So
+$$\Pr(A) = \frac{n(A)}{N} = \frac{3}{6} = \frac{1}{2},$$
+which your intuition should tell you is correct!
+</Example>
+
+<Note>
+**Computing probabilities when the elementary events are all equiprobable.**
+
+If all the $N$ elementary events contained in a sample space have probability $1/N$, the following three steps enable the probability of any event $A$ in the sample space to be found:
+
+1. Determine the sample space $S$ made up out of elementary events. Determine the number $N = n(S)$ of elementary events contained in $S$. You might have to list and count them, or you might be able to use one of the "counting rules" given below. If the $N$ elementary events are equally probable, then each one occurs with probability $1/N$.
+
+2. Determine $A$, the subset of $S$, the event whose probability is to be found. Count the number of elementary events contained in $A$ — suppose $n(A)$ elementary events make up the event $A$.
+
+3. Then $\Pr(A) = n(A)/N$.
+</Note>
+
+<Example title="Example 12A">
+100 people bought tickets in a charity raffle. 60 of them bought the tickets because they supported the charity. 75 bought tickets because they liked the prize. No one who neither supported the charity nor liked the prize bought a ticket.
+
+(a) What is the probability that the prize-winning ticket was bought by someone who liked the prize?
+
+(b) What is the probability that the prize was won by someone who did not support the charity?
+
+(c) What is the probability that the prize was won by someone who both supported the charity and liked the prize?
+
+**Solutions:**
+
+(a) Let $A$ and $B$ be the events "liked the prize" and "support the charity" respectively. To find $\Pr(A)$ we apply the three steps as follows:
+
+1. $N = 100$.
+2. $n(A) = 75$.
+3. Therefore $\Pr(A) = n(A)/N = 75/100 = 0.75$.
+
+(b) To find $\Pr(\overline{B})$ we only have to go through steps 2 and 3:
+
+1. $n(\overline{B}) = 40$.
+2. Thus $\Pr(\overline{B}) = n(\overline{B})/N = 40/100 = 0.4$.
+
+(c) We now need $\Pr(A \cap B)$:
+
+1. $n(A \cap B) = 60 + 75 - 100 = 35$.
+2. $\Pr(A \cap B) = n(A \cap B)/N = 35/100 = 0.35$.
+</Example>
+
+<Example title="Example 13C">
+A pack of playing cards contains 52 cards, 13 belonging to each of the four suits "Spades", "Hearts", "Diamonds" and "Clubs". Within each suit the 13 cards are labelled: Ace, 2, …, 10, Jack, Queen, King. Let $D$ be the event that a randomly selected card is a diamond, $K$ the event that the card is a king, and $B$ the event that the card has one of the numbers from 2 to 10. Find $\Pr(D)$, $\Pr(K)$, $\Pr(B)$, $\Pr(D \cap K)$, $\Pr(\overline{B} \cup D)$, $\Pr(\overline{B} \cap K)$ and $\Pr(D \cup K \cup B)$.
+</Example>
+
+<Example title="Example 14C">
+The seats of a jet airliner are arranged in 55 rows (numbered 1 to 55) of 10 seats (lettered A to K, leaving out I). In each row, seats C, D, G and H are on aisles, and A and K are window seats. Smoking is permitted in rows 45 to 55 inclusive. If a passenger is assigned a seat at random, what is the probability of being allocated
+
+(a) an aisle seat?
+
+(b) a seat in the smoking section?
+
+(c) a window seat in the non-smoking section?
+
+(d) a window seat in row 1?
+</Example>
+
+<Quiz />

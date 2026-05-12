@@ -1,0 +1,486 @@
+---
+slug: "m1-introducing-probability"
+title: "Introducing Probability"
+moduleId: "m1"
+moduleTitle: "Probability"
+unitNumber: 1
+moduleUnitNumber: 1
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "What is L ∩ M where L = {a, b, c} and M = {b, c, d}?"
+    options:
+      - "{a, b, c, d}"
+      - "{b, c}"
+      - "{a, d}"
+      - "∅ (empty set)"
+    answer: 1
+    explanation: "The intersection contains elements belonging to both sets. L and M both contain b and c, so L ∩ M = {b, c}. Open the Venn explorer and select 'A ∩ B' to see this lens-shaped region highlighted."
+  - id: "q2"
+    type: "true-false"
+    question: "If G ⊂ H and H ⊂ G, we can conclude that G = H."
+    answer: true
+    explanation: "True. G ⊂ H means every element of G is in H; H ⊂ G means every element of H is in G. Together the two sets must have exactly the same members, so G = H. The notes draw the analogy: x ≤ 2 and x ≥ 2 together force x = 2."
+  - id: "q3"
+    type: "mcq"
+    question: "P = {x | 0 ≤ x ≤ 10} and Q = {x | 5 < x < 20}. Which correctly describes P ∩ Q?"
+    options:
+      - "{x | 5 ≤ x ≤ 10} — both endpoints included"
+      - "{x | 5 < x ≤ 10} — open at 5, closed at 10"
+      - "{x | 0 ≤ x < 20} — full span of both sets"
+      - "{x | 5 < x < 20} — just the range of Q"
+    answer: 1
+    explanation: "An element must satisfy both P and Q. P requires x ≥ 0 and x ≤ 10; Q requires x > 5 and x < 20. The binding constraints are x > 5 (Q excludes 5) and x ≤ 10 (P closes at 10). Click 'Plot P, Q and P ∩ Q' to see the solid and hollow endpoints on the number line."
+  - id: "q4"
+    type: "mcq"
+    question: "Given sample space S and any set A ⊂ S, which statement is always true?"
+    options:
+      - "A ∩ Ā = S"
+      - "A ∪ Ā = S"
+      - "A ∪ Ā = ∅"
+      - "A ∩ Ā = A"
+    answer: 1
+    explanation: "The complement Ā collects all elements of S not in A, so together A and Ā account for every element of S with no overlap — their union is exactly S. Switch to the Ā mode in the Venn explorer: A and its complement tile the entire rectangle with no gaps."
+  - id: "q5"
+    type: "mcq"
+    question: "De Morgan's law: the complement of A ∪ B equals which of the following?"
+    options:
+      - "A ∩ B"
+      - "Ā ∩ B̄"
+      - "Ā ∪ B̄"
+      - "A ∩ B̄"
+    answer: 1
+    explanation: "An element outside A ∪ B must be outside A AND outside B — meaning it belongs to Ā ∩ B̄. In the Venn explorer, the 'Neither' button highlights exactly Ā ∩ B̄, the region outside both circles. Exercise 2.4(c) and 2.4(d) confirm both De Morgan laws."
+  - id: "q6"
+    type: "mcq"
+    question: "Sets A₁, A₂, …, Aₙ are pairwise disjoint (Aᵢ ∩ Aⱼ = ∅ for i ≠ j) and their union covers all of S. What are they called?"
+    options:
+      - "Pairwise mutually exclusive and exhaustive"
+      - "Complementary events"
+      - "A symmetric difference family"
+      - "Independent subsets"
+    answer: 0
+    explanation: "Both conditions are required: pairwise disjoint (no two sets share an element) and exhaustive (together they cover all of S). Open the 'Partition S' visualisation — the colour strips are exactly this: disjoint pieces that together fill the whole rectangle."
+prevUnit: null
+nextUnit: "m1-set-theory"
+---
+
+## What is Statistics?
+
+We define **statistics** as the science of decision making in the face of uncertainty. The emphasis is not on the collection of data (although the statistician has an important role in advising on the data collection process), but on taking matters one step further — interpreting the data. Statistics may be thought of as data-based decision making. Perhaps it is a pity that our discipline is called Statistics. A far better name would have been Decision Science. Statistics really comes into its own when the decisions to be made are not clear-cut and obvious, and there is uncertainty (even after the data has been gathered) about which of several alternative decisions is the best one to choose.
+
+For example, the decision about which card to play in a game of bridge to maximize your chance of winning, or the decision about where to locate a factory so as to maximize the likelihood that your company's share of the market will reach a target value, are not simple decisions. In both situations, you can gather as much data as you can (the cards in your hand, and those already played in the first case; proximity to raw materials and to markets in the second), and take a best possible decision on the basis of this data, but there is still no guarantee of success. In both cases, your opposition may react in unexpected ways, and you risk defeat.
+
+In the above sentences, the words "uncertainty", "chance", "likelihood" and "risk" have appeared. All these terms are qualitative and open to many interpretations. Before the statistician can get down to their real job (of taking decisions in the face of uncertainty), this nebulous concept of uncertainty has to be put onto a firm footing by being quantified in an objective way. **Probability Theory** is the branch of mathematics that achieves this quantification of uncertainty.
+
+Therefore, before you can become a statistician, you have to learn a hefty chunk of Probability Theory. However, before you can begin to explore probability, you need a basic understanding of Set Theory.
+
+## Set Theory
+
+> **Keywords:** <KeywordChip vizId="venn-diagram" mode="A">Set</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="subset">subset</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="intersection">intersection</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="union">union</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="complement-A">complement</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="universal-set">empty and universal sets</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="mutually-exclusive">mutually exclusive sets</KeywordChip>; <KeywordChip vizId="set-partition" n={4}>pairwise mutually exclusive and exhaustive sets</KeywordChip>
+
+<TryThis
+  vizId="venn-diagram"
+  params={{ mode: "intersection" }}
+  label="Open the Venn explorer"
+  description="Click any operation — intersection, union, complement, symmetric difference — to see which region of the sample space it picks out."
+/>
+
+### Definition of sets
+
+We define a **set** $A$ to be a collection of distinguishable objects or entities. The set $A$ is determined when we can either (a) list the objects that belong to $A$ or (b) give a rule by which we can decide whether or not a given object belongs to $A$.
+
+<Example title="Example 1A">
+(a) If we say, "The letters $e$, $f$, $g$ belong to the set $A$", then we write
+$$A = \{e, f, g\}.$$
+
+(b) If we say, "The set $B$ consists of real numbers between 1 and 10 inclusive", then we write
+$$B = \{x \mid 1 \leq x \leq 10\}.$$
+
+We read this by saying: "The set $B$ consists of all real numbers $x$ such that $x$ is larger than or equal to 1 but is less than or equal to 10."
+</Example>
+
+Because the object $e$ belongs to the set $A$ we write
+$$e \in A$$
+and we say: "$e$ is an element of $A$". Because $e$ does not belong to $B$, we write
+$$e \notin B$$
+and we say: "$e$ is not an element of $B$".
+
+Note, firstly, that if $C = \{1, 3, 5, a\}$ and $D = \{a, 1, 5, 3\}$ then $C = D$. The order in which we list the elements of a set is irrelevant. Secondly, if $E = \{a, b, c, a\}$ and $F = \{a, b, c\}$ then $E = F$. The set $E$ contains only the distinguishable elements $a$, $b$ and $c$.
+
+<Example title="Example 2B">
+(a) Express in set theory notation: the set $U$ of numbers which have square roots between 1 and 4.
+
+(b) Write out in full all the elements of the set $Z = \{(x, y) \mid x \in \{1, 2, 3, 4\},\; y = x^2\}$.
+
+**Solutions:**
+
+(a) Because the square roots of numbers between 1 and 16 belong to $U$, we write
+$$U = \{x \mid 1 \leq x \leq 16\}.$$
+
+(b) $Z = \{(1, 1), (2, 4), (3, 9), (4, 16)\}$.
+</Example>
+
+<Example title="Example 3C">
+Which of the following statements are correct and which are wrong?
+
+(a) $\{3, 3, 3, 3\} = \{3\}$
+
+(b) $6 \in \{5, 6, 7\}$
+
+(c) $C = \{-1, 0, 1\}$
+
+(d) $F = \{x \mid 4 < f < 5\}$
+
+(e) $\{1, 2, 7\} = \{7, 2, 1, 7\}$
+
+(f) If $H = \{2, 4, 6, 8\}$, $J = \{1, 2, 3, 4\}$ and $K = \{2x \mid x \in H\}$, then $K = J$.
+
+(g) $\{1\} \in \{1, 2, 3\}$.
+</Example>
+
+### Subsets
+
+Suppose we have two sets, $G$ and $H$, and that every element of $G$ also belongs to $H$. Then we say that "$G$ is a subset of $H$" and we write $G \subset H$. We can also write $H \supset G$ and say "$H$ contains $G$". If every element in $G$ does not also belong to $H$, we write $G \not\subset H$ and say "$G$ is not a subset of $H$."
+
+<Example title="Example 4A">
+Let $G = \{1, 3, 5\}$, $H = \{1, 3, 5, 9\}$ and $J = \{1, 2, 3, 4, 5\}$. Then clearly $G \subset H$, $H \not\subset J$, $J \supset G$.
+</Example>
+
+Note that the notation $\subset, \supset$ for sets is analogous to the notation $\leq, \geq$ for ordinary numbers (rather than the notation $<, >$). The "round end" of the subset notation tells you which of the sets is "smaller" (in the same way as the "pointed end" shows which of two numbers is smaller).
+
+Our definition of subset has a curious (at first sight) but logical consequence. Because every element in $G$ belongs to $G$, we can write $G \subset G$. For numbers, we can write $2 \leq 2$.
+
+If $H \subset G$ and $G \subset H$, then, obviously, $H = G$. For numbers, $x \leq 2$ and $x \geq 2$ together imply that $x = 2$.
+
+<Example title="Example 5C">
+Let $V = \{v \mid 0 < v < 5\}$, $W = \{0, 5\}$, $X = \{1, 2, 3, 4\}$, $Y = \{2, 4\}$, $Z = \{x \mid 1 \leq x \leq 4\}$. Which of the following statements are true, and which are false:
+
+(a) $V = W$
+
+(b) $Y \subset X$
+
+(c) $W \supset V$
+
+(d) $Z \supset X$
+
+(e) $X = Z$
+
+(f) $Z \not\subset V$
+
+(g) $Y \subset W$
+
+(h) $Y \in Z$
+</Example>
+
+### Intersections
+
+Suppose that $L = \{a, b, c\}$ and $M = \{b, c, d\}$. Then $L \not\subset M$ and $M \not\subset L$. But if we consider the set $N = \{b, c\}$, then we see that $N \subset L$ and $N \subset M$, and that no other set of which $N$ is a subset has this property. This leads us to the idea of intersection.
+
+The **intersection** of any two sets is the set that contains precisely those elements which belong to both sets. For the sets $L$, $M$ and $N$ above we write $N = L \cap M$ and read this "$N$ equals $L$ intersection $M$". The intersection of two sets $M$ and $N$ can be thought of as the set containing those elements which belong to both $M$ and to $N$.
+
+<Example title="Example 6A">
+If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cap Q$. Is $5 \in P \cap Q$? Is $10 \in P \cap Q$?
+
+Paying careful attention to the endpoints,
+$$P \cap Q = \{x \mid 5 < x \leq 10\}.$$
+No, $5 \notin P \cap Q$, but, yes, $10 \in P \cap Q$.
+</Example>
+
+<TryThis
+  vizId="set-builder-line"
+  params={{ mode: "intersection" }}
+  label="Plot P, Q and P ∩ Q"
+  description="Place P and Q on a number line and watch the endpoints — solid means included, hollow means excluded — explain why P ∩ Q is open at 5 and closed at 10."
+/>
+
+### The empty set, mutually exclusive sets
+
+What happens if $L = \{a, b, c\}$ and $R = \{d, e, f\}$? If we want $L \cap R$ to be a set, then we must introduce a new concept, the **empty set**, the set that has no members. This is a sensible concept: consider the set of English-speaking fish, or consider the set of real numbers whose square is negative. We reserve the symbol $\emptyset$ to denote the empty set. We use this symbol for no other purpose. We write and read this as $L \cap R = \emptyset$, "the intersection of sets $L$ and $R$ is the empty set".
+
+Pairs of sets whose intersection is the empty set are said to be **mutually exclusive sets** (or **disjoint sets**). Thus $L$ and $R$ are mutually exclusive.
+
+### The universal set, the sample space
+
+Another reserved symbol is the letter $S$. It is used for the set containing all objects under consideration. Thus if, in a particular problem, the only objects of interest are the colours of a traffic light, then $S = \{\text{red},\, \text{amber},\, \text{green}\}$. The set $S$ is known to mathematicians as the **universal set**. In statistical jargon the set $S$ is called the **sample space**.
+
+### Unions
+
+The concept **union** contrasts with the concept intersection. The union of two sets $A$ and $B$ is the set that contains the elements that belong to $A$ or to $B$. Here we use the word "or" in an inclusive sense — we do not exclude from the union those elements that belong to both $A$ and $B$.
+
+If $A = \{1, 2, 3\}$ and $B = \{2, 3, 4, 5\}$ then the union of $A$ and $B$ is the set $C = \{1, 2, 3, 4, 5\}$. We write
+$$C = A \cup B$$
+and say "$C$ equals $A$ union $B$".
+
+<Example title="Example 7A">
+If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cup Q$.
+
+The union includes all the elements of both set $P$ and set $Q$:
+$$P \cup Q = \{x \mid 0 \leq x < 20\}.$$
+</Example>
+
+### Complements
+
+Our final concept from set theory is that of the **complement** of a set. Given the sample space $S$, we define the complement of a set $A$ to be the set of elements of $S$ which are not in $A$. The complement of $A$ is written $\overline{A}$, and is always relative to the sample space $S$.
+
+If $S = \{1, 2, 3, 4, 5, 6\}$, $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $\overline{A} = \{2, 4, 6\}$. We write
+$$\overline{A} = B$$
+and say "the complement of $A$ equals $B$" or, more briefly, "$A$ complement equals $B$".
+
+<Example title="Example 8A">
+If $S = \{x \mid 0 \leq x \leq 1\}$ and $D = \{x \mid 0 < x < 1\}$, find $\overline{D}$.
+
+Because the set $D$ excludes the endpoints of the interval from zero to one, $\overline{D} = \{0, 1\}$.
+</Example>
+
+<TryThis
+  vizId="venn-diagram"
+  params={{ mode: "complement-A" }}
+  label="Highlight the complement"
+  description="Switch to Ā in the Venn explorer to see how the complement covers everything in S that is not in A — and try (A ∩ B)̄ to see why complementing the intersection is the same as the union of complements (De Morgan)."
+/>
+
+<Example title="Example 9C">
+If the sample space $S$ contains the letters of the alphabet, i.e. $S = \{a, b, c, \ldots, x, y, z\}$, the set $A$ contains the vowels, the set $B$ contains the consonants, and the set $C$ contains the first 10 letters of the alphabet $C = \{a, b, c, \ldots, h, i, j\}$, pick out the true and false statements in the following list:
+
+(a) $A \cup B = S$
+
+(b) $A \cap B = \emptyset$
+
+(c) $S \subset S$
+
+(d) $A \cap C = \{a, e, i\}$
+
+(e) $A \subset B$
+
+(f) $\overline{A} = B$
+
+(g) $S \cap B = B$
+
+(h) $A \cup \overline{A} = S$
+
+(i) $C \cap \overline{A} = \{o, u\}$
+
+(j) $\overline{A \cup C} = \overline{A} \cap \overline{C}$
+
+(k) $A \cap C \subset C$
+
+(l) $\overline{S} = \emptyset$
+</Example>
+
+### Venn diagrams
+
+A pictorial representation of sets that helps us solve many problems in set theory is known as the **Venn diagram**. In the diagrams below think of all the "points" in the rectangle as being the sample space $S$, and all the points inside the circles for $A$ and $B$ as the sets $A$ and $B$ respectively. The shaded area in the diagram on the left then represents $A \cap B$, the set of points belonging to $A$ and $B$. Similarly the diagram on the right is a visual representation of $A \cup B$, the set of points belonging to $A$ or $B$. Recall once again the special, inclusive meaning we give to "or". When drawing Venn diagrams it is helpful to associate "intersection" with "and" and "union" with "or".
+
+The diagram on the left below shows how to depict two mutually exclusive sets in a Venn diagram.
+
+Venn diagrams are usually only useful for up to three sets: the area shaded in the diagram on the right is $A \cap B \cap C$.
+
+### Pairwise mutually exclusive, exhaustive sets
+
+If a family of sets $A_1, A_2, \ldots, A_n$ are such that any pair of them is mutually exclusive, i.e. $A_i \cap A_j = \emptyset$ if $i \neq j$, and if $A_1 \cup A_2 \cup \ldots \cup A_n = S$, i.e. the union of the sets "exhausts" the sample space, then the family of sets $A_1, A_2, \ldots, A_n$ are said to be **pairwise mutually exclusive and exhaustive**. If we represent such a family of sets on a Venn diagram, the sets must cover the sample space, and they must be disjoint.
+
+<TryThis
+  vizId="set-partition"
+  params={{ n: 4 }}
+  label="Partition S"
+  description="Slice S into 2–6 disjoint pieces that cover the whole sample space, then overlay an arbitrary set B to see how it decomposes as a union of intersections with each piece."
+/>
+
+### Using Venn diagrams
+
+<Example title="Example 10B">
+Draw Venn diagrams to show that
+$$(A \cup B) \cap C = (A \cap C) \cup (B \cap C).$$
+
+In the left-hand Venn diagram, the grey-shaded area is $A \cup B$, and the vertically shaded area is $C$. Their intersection $(A \cup B) \cap C$ is shaded both grey and vertically. In the right-hand Venn diagram, the two shaded areas are $A \cap C$ and $B \cap C$. Their union is the same as the area shaded both grey and vertically in the left-hand diagram.
+</Example>
+
+<Example title="Example 11C">
+Draw Venn diagrams to show that the following are true:
+
+(a) $A \cup B = A \cup (B \cap \overline{A})$
+
+(b) $(A \cap C) \cup (B \cap \overline{A}) = (A \cup C) \cap \overline{\overline{A} \cap \overline{B}}$
+
+(c) The sets $A \cap \overline{B}$, $A \cap C$, $B \cap \overline{A}$ and $\overline{A \cup C}$ form a family of pairwise mutually exclusive and exhaustive sets.
+</Example>
+
+<Example title="Example 12C">
+Draw Venn diagrams to determine which of the following statements are true.
+
+(a) $\overline{A \cap B} = \overline{A} \cap \overline{B}$
+
+(b) $(A \cap B) \cup (\overline{A} \cap B) \subset A \cup B$
+
+(c) $(A \cup B) \cap C = (A \cap C) \cup (B \cap C)$
+
+(d) $(C \cap A) \cup (C \cap B) = C \cup (A \cap B)$
+
+(e) $\bigl[(A \cup B) \cap \overline{C}\bigr] \cup \bigl[(A \cup C) \cap \overline{B}\bigr] = \bigl[(A \cup B \cup C) \cap \overline{(A \cup B) \cap C}\bigr] \cup (\overline{A} \cap \overline{B})$
+
+(f) If the sets $A_1, A_2, A_3$, and $A_4$ are pairwise mutually exclusive and exhaustive, and $B$ is an arbitrary set, then
+$$B = (A_1 \cap B) \cup (A_2 \cap B) \cup (A_3 \cap B) \cup (A_4 \cap B).$$
+</Example>
+
+### Solutions to examples
+
+**3C** — (a), (b), (c) and (e) are correct; (d) should read either $F = \{x \mid 4 < x < 5\}$ or $F = \{f \mid 4 < f < 5\}$. For (f), check that the following statement is correct: if $H$ and $J$ are as given, and if $K = \{2x \mid x \in J\}$ then $K = H$. For (g), note that we never use the $\in$-notation with a set on the left hand side.
+
+**5C** — Only (b) and (d) are true.
+
+**9C** — All are true.
+
+**11C** — All are true.
+
+**12C** — (b), (c), (e) and (f) are true. For (a), check that $\overline{A \cap B} = \overline{A} \cup \overline{B}$ is true.
+
+### Easy exercises
+
+**2.1** Let $S$ be $\{1, 2, 3, 4, 5, 6\}$, the set of all possible outcomes when a die is thrown and the number of dots on the uppermost face recorded. Describe in words the following sets:
+
+(a) $\{6\}$
+
+(b) $\{1, 2, 3, 4\}$
+
+(c) $\{1, 3, 5\}$
+
+(d) $\{2, 4, 6\}$
+
+(e) $\{5, 6\}$
+
+(f) $\overline{\{6\}}$
+
+**\*2.2** If $S = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$, and $A = \{0, 1, 2\}$, $B = \{3, 4, 5, 6, 7\}$, $C = \{7, 8\}$, and $D = \{2, 4, 6, 8\}$, which of the following statements are true?
+
+(a) $A$ and $B$ are mutually exclusive.
+
+(b) $\overline{B} = \{0, 1, 2, 8, 9\}$
+
+(c) $A \cup B \cup C \cup D = \{0, 1, 2, 3, 4, 5, 6, 7, 8\}$
+
+(d) $D \subset (B \cup C)$
+
+(e) $A \cap B \cap C \cap D = \{9\}$
+
+(f) $A \cup (B \cap D) = (A \cap B) \cup (A \cap D)$.
+
+**2.3** Let $S$ denote the set of all companies listed on the Johannesburg Stock Exchange. Let $A = \{x \mid x \text{ is in the gold mining sector}\}$, let $B = \{x \mid x \text{ has annual turnover exceeding R10 million}\}$, let $C = \{x \mid x \text{ has financial year ending in June}\}$, let $D = \{x \mid \text{the share price of } x \text{ is higher now than six months ago}\}$.
+
+Describe in words the following sets:
+
+(a) $A \cup B$
+
+(b) $A \cap D$
+
+(c) $A \cap C \cap D$
+
+(d) $B \cap (C \cup A)$
+
+(e) $\overline{A}$
+
+(f) $\overline{C} \cup D$
+
+(g) $\overline{B \cap C}$
+
+(h) $\overline{B \cap A} \cup (C \cap D)$
+
+**\*2.4** If $A$, $B$ and $C$ are subsets of a universal set $S$, draw Venn diagrams to determine which of the following statements are true.
+
+(a) $A \cup \overline{A} = S$
+
+(b) $A \cap \overline{A} = \emptyset$
+
+(c) $\overline{A \cup B} = \overline{A} \cap \overline{B}$
+
+(d) $\overline{A \cap B} = \overline{A} \cup \overline{B}$
+
+(e) $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$
+
+(f) $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$
+
+(g) $A \cup B \cup C = S$
+
+(h) $A \cap B \cap C = \emptyset$
+
+(i) $A \cup B \supset A \cap B$
+
+(j) $A \cap (B \cup C) \subset A \cup (B \cap C)$
+
+**2.5** If $S = \{1, 2, 3\}$, list all the subsets of $S$.
+
+**\*2.6** Draw a series of Venn diagrams representing three sets, and shade in the following areas.
+
+(a) $\overline{A \cap B \cap C}$
+
+(b) $(B \cap A) \cup (A \cap C)$
+
+(c) $A \cup B \cup C$
+
+(d) $\overline{A \cup B \cup C} \cap (B \cap C)$
+
+### More difficult exercises
+
+**\*2.7** Let $B_1, B_2, \ldots, B_n$ be $n$ disjoint subsets of $S$ such that
+$$\bigcup_{i=1}^{n} B_i = S \quad \text{and} \quad B_i \cap B_j = \emptyset \text{ for } i \neq j.$$
+Let $A$ be any other subset of $S$. Use a Venn diagram to show that
+$$A = \bigcup_{i=1}^{n} (A \cap B_i).$$
+
+(Notation: $\bigcup_{i=1}^{n} B_i$ means $B_1 \cup B_2 \cup \ldots \cup B_n$.)
+
+**2.8** Show that if the set $S$ has $n$ elements, then $S$ has $2^n$ subsets. (Hint: Use the binomial theorem.)
+
+**2.9** Let $A$ and $B$ be two events defined on a sample space $S$. Depict the following events in Venn diagrams:
+
+(a) $C = (A \cap \overline{B}) \cup (\overline{A} \cap B)$
+
+(b) $D = \overline{A \cup B} \cup (A \cap B)$
+
+(c) What can you say about events $C$ and $D$?
+
+### Solutions to exercises
+
+**2.1**
+
+(a) The number six is obtained.
+
+(b) A number less than or equal to four is obtained.
+
+(c) An odd number is obtained.
+
+(d) An even number is obtained.
+
+(e) A number greater than or equal to 5 is obtained.
+
+(f) A number other than 6 is obtained.
+
+**2.2** All are true except (d) and (f).
+
+**2.3**
+
+(a) Set of companies either in the gold mining sector or with turnovers exceeding R10 million.
+
+(b) Set of gold mining companies whose share price is higher now than six months ago.
+
+(c) Set of gold mining companies with a financial year ending in June whose share price is higher now than six months ago.
+
+(d) Set of all companies which have an annual turnover exceeding R10 million and which are either gold mining companies or companies with financial years ending in June (or both).
+
+(e) Set of companies not in the gold mining sector.
+
+(f) Set of companies which either do not have a financial year ending in June or have a share price which is higher now than six months ago.
+
+(g) Set of companies which either do not have an annual turnover exceeding R10 million or do not have financial year ending in June.
+
+(h) Set of companies which either do not have an annual turnover exceeding R10 million or are not in the gold mining sector or both have a financial year ending in June and have a share price which is higher now than six months ago.
+
+(Notice how difficult it is to express unambiguously in words the meaning of a few mathematical symbols.)
+
+**2.4** All are true, except (g) and (h).
+
+**2.5** $\emptyset, \{1\}, \{2\}, \{3\}, \{1, 2\}, \{1, 3\}, \{2, 3\}, \{1, 2, 3\}$.
+
+**2.9** (c) $C$ and $D$ are mutually exclusive.
+
+<Quiz />

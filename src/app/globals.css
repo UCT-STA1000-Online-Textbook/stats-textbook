@@ -1,0 +1,160 @@
+/*
+ * Project-wide styles.
+ *
+ * Tailwind 4 is loaded first; design tokens are exposed via @theme so they
+ * are available as CSS variables (e.g. var(--color-ink-900)) and as
+ * Tailwind utility classes alike. Component files reference the variables
+ * directly via `text-[color:var(--color-ink-700)]` etc.; raw colour values
+ * should not appear outside this file.
+ */
+
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@theme {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif: "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", serif;
+
+  /* Ink scale — text colours from strongest to faintest. */
+  --color-ink-900: #0b1020;
+  --color-ink-700: #2a3147;
+  --color-ink-500: #5b6478;
+  --color-ink-400: #8a93a6;
+  --color-ink-300: #b6bccb;
+
+  /* Surface + line scale used for panels, cards, and dividers. */
+  --color-paper: #fbfbfa;
+  --color-surface: #ffffff;
+  --color-line: #e7e8ee;
+  --color-line-strong: #d3d6df;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink-900);
+  /* Subtle OpenType variants give the body type a quieter, more editorial feel. */
+  font-feature-settings:
+    "ss01" on,
+    "cv11" on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Editorial scrollbar — thin, low-contrast so it disappears into the page. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(11, 16, 32, 0.18) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: rgba(11, 16, 32, 0.14);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(11, 16, 32, 0.28);
+  background-clip: padding-box;
+}
+
+/* Refined keyboard focus ring — applied only on `:focus-visible` so mouse
+   clicks don't show the outline. */
+:where(button, a, [role="button"], input, select, textarea):focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* KaTeX adjustments — bump the inline size a touch and give display equations
+   horizontal scroll on narrow viewports rather than overflowing the column. */
+.katex {
+  font-size: 1.02em;
+}
+.katex-display {
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* Tabular numerals — applied to body copy so embedded statistics line up. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Background grain. The dotted pattern is barely visible and stops large
+   white expanses from feeling sterile; remove the utility from <body> if a
+   flat background is preferred. */
+.bg-paper-grain {
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(
+      circle at 1px 1px,
+      rgba(11, 16, 32, 0.025) 1px,
+      transparent 0
+    );
+  background-size: 22px 22px;
+}
+
+/* Hover-lift utility used by interactive cards (prev/next pagination etc.). */
+.hover-lift {
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+.hover-lift:hover {
+  transform: translateY(-1px);
+}
+
+/* Soft fade-up entrance — used for transient UI like quiz feedback. */
+@keyframes soft-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-soft-fade {
+  animation: soft-fade-up 280ms ease-out both;
+}
+
+/* Skeleton shimmer — used as the lazy-load fallback for visualisations. */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(11, 16, 32, 0.04) 0%,
+    rgba(11, 16, 32, 0.08) 50%,
+    rgba(11, 16, 32, 0.04) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}

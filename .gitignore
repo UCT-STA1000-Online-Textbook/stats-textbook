@@ -43,3 +43,7 @@ next-env.d.ts
 #Built in Claude files
 .claude/
 CLAUDE.md
+
+.playwright-mcp/
+
+docs/

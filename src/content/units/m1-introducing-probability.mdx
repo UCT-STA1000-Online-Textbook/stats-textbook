@@ -114,12 +114,12 @@ Note, firstly, that if $C = \{1, 3, 5, a\}$ and $D = \{a, 1, 5, 3\}$ then $C = D
 
 (b) Write out in full all the elements of the set $Z = \{(x, y) \mid x \in \{1, 2, 3, 4\},\; y = x^2\}$.
 
-**Solutions:**
-
+<Solution>
 (a) Because the square roots of numbers between 1 and 16 belong to $U$, we write
 $$U = \{x \mid 1 \leq x \leq 16\}.$$
 
 (b) $Z = \{(1, 1), (2, 4), (3, 9), (4, 16)\}$.
+</Solution>
 </Example>
 
 <Example title="Example 3C">
@@ -138,6 +138,10 @@ Which of the following statements are correct and which are wrong?
 (f) If $H = \{2, 4, 6, 8\}$, $J = \{1, 2, 3, 4\}$ and $K = \{2x \mid x \in H\}$, then $K = J$.
 
 (g) $\{1\} \in \{1, 2, 3\}$.
+
+<Solution>
+(a), (b), (c) and (e) are correct; (d) should read either $F = \{x \mid 4 < x < 5\}$ or $F = \{f \mid 4 < f < 5\}$. For (f), check that the following statement is correct: if $H$ and $J$ are as given, and if $K = \{2x \mid x \in J\}$ then $K = H$. For (g), note that we never use the $\in$-notation with a set on the left hand side.
+</Solution>
 </Example>
 
 ### Subsets
@@ -172,6 +176,10 @@ Let $V = \{v \mid 0 < v < 5\}$, $W = \{0, 5\}$, $X = \{1, 2, 3, 4\}$, $Y = \{2, 
 (g) $Y \subset W$
 
 (h) $Y \in Z$
+
+<Solution>
+Only (b) and (d) are true.
+</Solution>
 </Example>
 
 ### Intersections
@@ -183,9 +191,11 @@ The **intersection** of any two sets is the set that contains precisely those el
 <Example title="Example 6A">
 If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cap Q$. Is $5 \in P \cap Q$? Is $10 \in P \cap Q$?
 
+<Solution>
 Paying careful attention to the endpoints,
 $$P \cap Q = \{x \mid 5 < x \leq 10\}.$$
 No, $5 \notin P \cap Q$, but, yes, $10 \in P \cap Q$.
+</Solution>
 </Example>
 
 <TryThis
@@ -216,8 +226,10 @@ and say "$C$ equals $A$ union $B$".
 <Example title="Example 7A">
 If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cup Q$.
 
+<Solution>
 The union includes all the elements of both set $P$ and set $Q$:
 $$P \cup Q = \{x \mid 0 \leq x < 20\}.$$
+</Solution>
 </Example>
 
 ### Complements
@@ -231,7 +243,9 @@ and say "the complement of $A$ equals $B$" or, more briefly, "$A$ complement equ
 <Example title="Example 8A">
 If $S = \{x \mid 0 \leq x \leq 1\}$ and $D = \{x \mid 0 < x < 1\}$, find $\overline{D}$.
 
+<Solution>
 Because the set $D$ excludes the endpoints of the interval from zero to one, $\overline{D} = \{0, 1\}$.
+</Solution>
 </Example>
 
 <TryThis
@@ -267,6 +281,10 @@ If the sample space $S$ contains the letters of the alphabet, i.e. $S = \{a, b, 
 (k) $A \cap C \subset C$
 
 (l) $\overline{S} = \emptyset$
+
+<Solution>
+All are true.
+</Solution>
 </Example>
 
 ### Venn diagrams
@@ -294,7 +312,9 @@ If a family of sets $A_1, A_2, \ldots, A_n$ are such that any pair of them is mu
 Draw Venn diagrams to show that
 $$(A \cup B) \cap C = (A \cap C) \cup (B \cap C).$$
 
+<Solution>
 In the left-hand Venn diagram, the grey-shaded area is $A \cup B$, and the vertically shaded area is $C$. Their intersection $(A \cup B) \cap C$ is shaded both grey and vertically. In the right-hand Venn diagram, the two shaded areas are $A \cap C$ and $B \cap C$. Their union is the same as the area shaded both grey and vertically in the left-hand diagram.
+</Solution>
 </Example>
 
 <Example title="Example 11C">
@@ -305,6 +325,10 @@ Draw Venn diagrams to show that the following are true:
 (b) $(A \cap C) \cup (B \cap \overline{A}) = (A \cup C) \cap \overline{\overline{A} \cap \overline{B}}$
 
 (c) The sets $A \cap \overline{B}$, $A \cap C$, $B \cap \overline{A}$ and $\overline{A \cup C}$ form a family of pairwise mutually exclusive and exhaustive sets.
+
+<Solution>
+All are true.
+</Solution>
 </Example>
 
 <Example title="Example 12C">
@@ -322,19 +346,13 @@ Draw Venn diagrams to determine which of the following statements are true.
 
 (f) If the sets $A_1, A_2, A_3$, and $A_4$ are pairwise mutually exclusive and exhaustive, and $B$ is an arbitrary set, then
 $$B = (A_1 \cap B) \cup (A_2 \cap B) \cup (A_3 \cap B) \cup (A_4 \cap B).$$
+
+<Solution>
+(b), (c), (e) and (f) are true. For (a), check that $\overline{A \cap B} = \overline{A} \cup \overline{B}$ is true.
+</Solution>
 </Example>
 
-### Solutions to examples
-
-**3C** — (a), (b), (c) and (e) are correct; (d) should read either $F = \{x \mid 4 < x < 5\}$ or $F = \{f \mid 4 < f < 5\}$. For (f), check that the following statement is correct: if $H$ and $J$ are as given, and if $K = \{2x \mid x \in J\}$ then $K = H$. For (g), note that we never use the $\in$-notation with a set on the left hand side.
-
-**5C** — Only (b) and (d) are true.
-
-**9C** — All are true.
-
-**11C** — All are true.
-
-**12C** — (b), (c), (e) and (f) are true. For (a), check that $\overline{A \cap B} = \overline{A} \cup \overline{B}$ is true.
+<Collapse title="Exercises" hint="9 questions">
 
 ### Easy exercises
 
@@ -439,7 +457,9 @@ $$A = \bigcup_{i=1}^{n} (A \cap B_i).$$
 
 (c) What can you say about events $C$ and $D$?
 
-### Solutions to exercises
+</Collapse>
+
+<Collapse title="Exercise solutions" hint="answers to 2.1–2.9">
 
 **2.1**
 
@@ -482,5 +502,7 @@ $$A = \bigcup_{i=1}^{n} (A \cap B_i).$$
 **2.5** $\emptyset, \{1\}, \{2\}, \{3\}, \{1, 2\}, \{1, 3\}, \{2, 3\}, \{1, 2, 3\}$.
 
 **2.9** (c) $C$ and $D$ are mutually exclusive.
+
+</Collapse>
 
 <Quiz />

@@ -1,5 +1,6 @@
 import { compileMDX } from "next-mdx-remote/rsc";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import { readFile } from "fs/promises";
 import path from "path";
@@ -52,7 +53,9 @@ export async function getUnitBySlug(slug: string) {
     options: {
       parseFrontmatter: true,
       mdxOptions: {
-        remarkPlugins: [remarkMath],
+        // remark-gfm enables GFM tables (the `table`/`th`/`td` overrides in
+        // mdxComponents depend on it); remark-math handles `$…$` LaTeX.
+        remarkPlugins: [remarkGfm, remarkMath],
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rehypePlugins: [rehypeKatex as any],
       },

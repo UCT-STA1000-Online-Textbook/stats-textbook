@@ -17,6 +17,8 @@ import { Quiz } from "@/components/mdx/Quiz";
 import { Definition } from "@/components/mdx/Definition";
 import { Theorem } from "@/components/mdx/Theorem";
 import { Example } from "@/components/mdx/Example";
+import { Solution } from "@/components/mdx/Solution";
+import { Collapse } from "@/components/mdx/Collapse";
 import { Note } from "@/components/mdx/Note";
 import { KeywordChip } from "@/components/mdx/KeywordChip";
 
@@ -26,6 +28,8 @@ export const mdxComponents: MDXComponents = {
   Definition,
   Theorem,
   Example,
+  Solution,
+  Collapse,
   Note,
   KeywordChip,
 

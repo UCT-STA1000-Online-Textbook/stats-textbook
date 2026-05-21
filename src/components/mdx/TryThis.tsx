@@ -13,6 +13,7 @@
 "use client";
 
 import { useVizStore, VizParams } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import { IconSparkles, IconArrowRight } from "@/components/icons";
 
 interface TryThisProps {
@@ -34,7 +35,18 @@ export function TryThis({
 }: TryThisProps) {
   const setViz = useVizStore((s) => s.setViz);
   const activeViz = useVizStore((s) => s.activeViz);
+  const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
   const isActive = activeViz === vizId;
+
+  /**
+   * Load the viz and, on phone widths, raise the bottom sheet so the result
+   * is actually visible. The sheet flag is inert on `md`+, where the viz
+   * panel is always on screen.
+   */
+  function handleClick() {
+    setViz(vizId, params);
+    setVizSheetOpen(true);
+  }
 
   return (
     <div
@@ -64,7 +76,7 @@ export function TryThis({
             </p>
           )}
           <button
-            onClick={() => setViz(vizId, params)}
+            onClick={handleClick}
             className="mt-2.5 group inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-indigo-700"
           >
             {label}

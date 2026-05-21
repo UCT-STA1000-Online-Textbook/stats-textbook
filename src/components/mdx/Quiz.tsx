@@ -4,7 +4,7 @@
  * Rendered at the bottom of the reading body. Acts only as a launcher — it
  * shows the question count, surfaces any prior best score, and on click
  * flips `vizStore.quizOpen` to `true`. The actual quiz UI is `QuizPanel`,
- * mounted inside `VizPanel`'s lower half.
+ * hosted inside the right-hand viz panel.
  *
  * Reads the question list from `QuizContext` so the call site in MDX stays
  * prop-free: `<Quiz />`.
@@ -13,6 +13,7 @@
 "use client";
 
 import { useVizStore } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import { useProgressStore } from "@/store/progressStore";
 import { useQuizContext } from "./QuizContext";
 import {
@@ -25,6 +26,7 @@ import {
 export function Quiz() {
   const { slug, questions } = useQuizContext();
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
+  const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
   const getUnitProgress = useProgressStore((s) => s.getUnitProgress);
   const progress = getUnitProgress(slug);
 
@@ -32,6 +34,16 @@ export function Quiz() {
   if (questions.length === 0) return null;
 
   const completed = progress?.completed ?? false;
+
+  /**
+   * Open the quiz. Also raise the viz bottom sheet so the quiz is visible on
+   * phones, where the right panel is otherwise off-screen; the sheet flag is
+   * inert on `md`+, where that panel is always shown.
+   */
+  function openQuiz() {
+    setQuizOpen(true);
+    setVizSheetOpen(true);
+  }
 
   return (
     <section className="mt-12 rounded-2xl border border-[color:var(--color-line)] bg-white p-5">
@@ -64,7 +76,7 @@ export function Quiz() {
       )}
 
       <button
-        onClick={() => setQuizOpen(true)}
+        onClick={openQuiz}
         className="mt-3 group w-full rounded-xl bg-[color:var(--color-ink-900)] px-4 py-3 text-sm font-semibold text-white inline-flex items-center justify-center gap-2 transition-all hover:bg-[color:var(--color-ink-700)] hover:shadow-lg"
       >
         {completed ? (

@@ -1,20 +1,84 @@
 /**
- * Right panel: interactive visualisations + quiz overlay.
+ * Right panel: interactive visualisations + the section quiz.
  *
  * Subscribes to `vizStore`. When `activeViz` is set, looks up the matching
  * lazy component in `VIZ_REGISTRY` and renders it inside a `<Suspense>`
- * boundary. When `quizOpen` is true the panel splits 50/50 — the
- * visualisation stays visible on top and `QuizPanel` is mounted underneath,
- * so students can refer back to the plot while answering.
+ * boundary, itself wrapped in an error boundary so a failed chunk load or a
+ * runtime error in a visualisation shows a readable message instead of
+ * blanking the panel or crashing the app.
+ *
+ * When `quizOpen` is true the panel hosts `QuizPanel` too, in one of two
+ * layouts (`quizExpanded`):
+ *   - split    — the viz keeps a fixed, comfortable height on top and the
+ *                quiz fills the space below; both stay usable at once.
+ *   - expanded — the quiz fills the panel and the viz collapses to a thin
+ *                "Show visualisation" strip, one tap from being restored.
+ * The split is chosen per device on open: phones default to expanded (a
+ * split leaves the quiz too short), larger screens default to split.
+ *
+ * Responsive behaviour (driven by `uiStore`):
+ *   - `md`+  — an in-flow column to the right of the reading area.
+ *   - `<md`  — a slide-up bottom sheet toggled by `vizSheetOpen`.
  */
 
 "use client";
 
-import { Suspense } from "react";
+import { Component, Suspense, useState, type ReactNode } from "react";
 import { useVizStore } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import { VIZ_REGISTRY } from "@/components/viz/VizRegistry";
 import { QuizPanel } from "./QuizPanel";
-import { IconChart, IconRefresh, IconSparkles } from "@/components/icons";
+import {
+  IconChart,
+  IconChevronDown,
+  IconClose,
+  IconRefresh,
+  IconSparkles,
+} from "@/components/icons";
+
+/**
+ * Catches render-time and lazy-load failures from a visualisation component.
+ * A 3D/WebGL viz can legitimately fail on some devices, and a stale dev server
+ * can reject the lazy `import()` — without this the error would unmount the
+ * whole panel tree with no on-screen explanation. Re-key this boundary (on the
+ * active viz id) so picking a different visualisation clears a prior error.
+ */
+class VizErrorBoundary extends Component<
+  { children: ReactNode },
+  { error: Error | null }
+> {
+  state: { error: Error | null } = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  componentDidCatch(error: Error) {
+    // Surface the full stack in the console for debugging.
+    console.error("Visualisation failed:", error);
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div className="h-full grid place-items-center p-6 text-center">
+          <div>
+            <p className="text-sm font-semibold text-[color:var(--color-ink-900)]">
+              This visualisation failed to load
+            </p>
+            <p className="mt-1.5 text-[12px] leading-relaxed text-[color:var(--color-ink-500)]">
+              {this.state.error.message}
+            </p>
+            <p className="mt-2 text-[11px] text-[color:var(--color-ink-400)]">
+              See the browser console for details.
+            </p>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 /**
  * Renders the active visualisation, or the placeholder if nothing is active.
@@ -47,18 +111,22 @@ function VizArea() {
           Reset
         </button>
       </div>
-      <Suspense fallback={<VizSkeleton />}>
-        <div className="flex-1 min-h-0 p-4">
-          {/* Re-key on params so a fresh `<TryThis>` click resets the
-              component to the new initial state. Local interactions inside
-              the viz don't change `vizParams`, so user input is preserved
-              between TryThis fires. */}
-          <VizComponent
-            key={`${activeViz}:${JSON.stringify(vizParams)}`}
-            params={vizParams}
-          />
-        </div>
-      </Suspense>
+      {/* Re-key the boundary on viz + params so every `<TryThis>` click
+          clears any error from a previous visualisation. */}
+      <VizErrorBoundary key={`${activeViz}:${JSON.stringify(vizParams)}`}>
+        <Suspense fallback={<VizSkeleton />}>
+          <div className="flex-1 min-h-0 p-4">
+            {/* Re-key on params so a fresh `<TryThis>` click resets the
+                component to the new initial state. Local interactions inside
+                the viz don't change `vizParams`, so user input is preserved
+                between TryThis fires. */}
+            <VizComponent
+              key={`${activeViz}:${JSON.stringify(vizParams)}`}
+              params={vizParams}
+            />
+          </div>
+        </Suspense>
+      </VizErrorBoundary>
     </div>
   );
 }
@@ -116,23 +184,81 @@ function VizPlaceholder() {
 }
 
 export function VizPanel() {
+  const vizSheetOpen = useUiStore((s) => s.vizSheetOpen);
+  const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
   const quizOpen = useVizStore((s) => s.quizOpen);
 
+  /**
+   * Quiz layout within the panel. `false` → split (viz fixed on top, quiz
+   * below); `true` → quiz fills the panel and the viz collapses to a strip.
+   */
+  const [quizExpanded, setQuizExpanded] = useState(false);
+
+  // Default the layout per device the moment the quiz opens — phones expanded,
+  // larger screens split (see file header). This is React's "adjust state on
+  // a changing input" pattern: the transition is detected and state set during
+  // render, so there is no effect round-trip. `window` is only read on the
+  // open transition, which can only happen on the client.
+  const [prevQuizOpen, setPrevQuizOpen] = useState(quizOpen);
+  if (quizOpen !== prevQuizOpen) {
+    setPrevQuizOpen(quizOpen);
+    if (quizOpen) setQuizExpanded(window.innerWidth < 768);
+  }
+
   return (
-    <aside className="w-[440px] flex-shrink-0 border-l border-[color:var(--color-line)] bg-white overflow-hidden flex flex-col">
+    <aside
+      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-shrink-0 md:w-[380px] lg:w-[480px] xl:w-[520px] ${
+        vizSheetOpen ? "translate-y-0" : "translate-y-full"
+      }`}
+    >
+      {/* Bottom-sheet grabber — phone only; the close button dismisses the sheet. */}
+      <div className="md:hidden relative flex-shrink-0 flex items-center justify-center py-2 border-b border-[color:var(--color-line)]">
+        <span className="h-1 w-9 rounded-full bg-slate-300" aria-hidden />
+        <button
+          onClick={() => setVizSheetOpen(false)}
+          aria-label="Close panel"
+          className="absolute right-2 grid place-items-center w-7 h-7 rounded-md text-[color:var(--color-ink-400)] hover:bg-slate-100 hover:text-[color:var(--color-ink-900)] transition-colors"
+        >
+          <IconClose size={14} strokeWidth={2} />
+        </button>
+      </div>
+
       {quizOpen ? (
-        // Split view: viz on top, quiz on bottom. Equal halves keep the plot
-        // visible so students can reference it while answering.
-        <>
-          <div className="h-1/2 border-b border-[color:var(--color-line)] overflow-hidden">
-            <VizArea />
+        <div className="flex-1 min-h-0 flex flex-col">
+          {quizExpanded ? (
+            // Collapsed viz — a one-tap strip back to the split layout.
+            <button
+              onClick={() => setQuizExpanded(false)}
+              className="flex-shrink-0 flex items-center gap-2 px-4 h-9 border-b border-[color:var(--color-line)] bg-slate-50 text-[12px] font-medium text-[color:var(--color-ink-700)] hover:bg-slate-100 transition-colors"
+            >
+              <IconChart
+                size={13}
+                strokeWidth={2}
+                className="text-[color:var(--color-ink-500)]"
+              />
+              Show visualisation
+              <IconChevronDown
+                size={13}
+                strokeWidth={2}
+                className="ml-auto text-[color:var(--color-ink-400)]"
+              />
+            </button>
+          ) : (
+            // Split — the viz keeps a fixed, comfortable height so it is
+            // never squashed; the quiz below takes the remaining space.
+            <div className="flex-shrink-0 grow-0 basis-[clamp(380px,48%,520px)] border-b border-[color:var(--color-line)]">
+              <VizArea />
+            </div>
+          )}
+          <div className="flex-1 min-h-0">
+            <QuizPanel
+              expanded={quizExpanded}
+              onToggleExpanded={() => setQuizExpanded((e) => !e)}
+            />
           </div>
-          <div className="h-1/2 overflow-hidden">
-            <QuizPanel />
-          </div>
-        </>
+        </div>
       ) : (
-        <div className="h-full">
+        <div className="flex-1 min-h-0">
           <VizArea />
         </div>
       )}

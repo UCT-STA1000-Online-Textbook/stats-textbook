@@ -1,15 +1,22 @@
 /**
- * The quiz UI itself, rendered in the bottom half of `VizPanel` whenever
- * `vizStore.quizOpen` is true.
+ * The section quiz, rendered inside the right panel beneath the
+ * visualisation (see `VizPanel`).
  *
- * Reads the question list and unit slug from `QuizContext` (provided one
- * level up by `ThreePanelShell`, so both `Quiz` in MDX and this panel see
- * the same data without prop drilling). On submit it commits the result to
- * `progressStore.completeUnit`, which also persists to localStorage.
+ * Mounted by `VizPanel` whenever `vizStore.quizOpen` is true, so its local
+ * answer state is fresh on every open. Reads the question list and unit slug
+ * from `QuizContext` (provided by `ThreePanelShell`, so both `Quiz` in MDX
+ * and this panel see the same data without prop drilling). On submit it
+ * commits the result to `progressStore.completeUnit`, which persists to
+ * localStorage.
  *
  * A unit is only considered "complete" when the score equals the number of
  * questions (i.e. 100%) — a deliberate teaching choice: students keep
  * iterating until they actually get every answer right.
+ *
+ * Layout: `VizPanel` either splits the panel (viz fixed on top, this quiz
+ * below) or lets the quiz fill the panel with the viz collapsed to a strip.
+ * The title-bar toggle flips between the two; `VizPanel` owns that state and
+ * passes it in via `expanded` / `onToggleExpanded`.
  */
 
 "use client";
@@ -22,11 +29,20 @@ import { QuizQuestion } from "@/components/mdx/QuizQuestion";
 import {
   IconClose,
   IconCheck,
+  IconChevronDown,
+  IconChevronUp,
   IconRefresh,
   IconTrophy,
 } from "@/components/icons";
 
-export function QuizPanel() {
+interface QuizPanelProps {
+  /** True when the quiz fills the whole panel (viz collapsed to a strip). */
+  expanded: boolean;
+  /** Flip between the split layout and the quiz-expanded layout. */
+  onToggleExpanded: () => void;
+}
+
+export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
   const { slug, questions } = useQuizContext();
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
   const completeUnit = useProgressStore((s) => s.completeUnit);
@@ -86,13 +102,28 @@ export function QuizPanel() {
               Section quiz
             </h3>
           </div>
-          <button
-            onClick={() => setQuizOpen(false)}
-            className="grid place-items-center w-7 h-7 rounded-md text-[color:var(--color-ink-400)] hover:text-[color:var(--color-ink-900)] hover:bg-slate-100 transition-colors"
-            aria-label="Close quiz"
-          >
-            <IconClose size={14} strokeWidth={2} />
-          </button>
+          <div className="flex items-center gap-0.5">
+            {/* Expand the quiz over the viz, or restore the split. */}
+            <button
+              onClick={onToggleExpanded}
+              aria-label={expanded ? "Restore split view" : "Expand quiz"}
+              title={expanded ? "Restore split view" : "Expand quiz"}
+              className="grid place-items-center w-7 h-7 rounded-md text-[color:var(--color-ink-400)] hover:text-[color:var(--color-ink-900)] hover:bg-slate-100 transition-colors"
+            >
+              {expanded ? (
+                <IconChevronDown size={14} strokeWidth={2} />
+              ) : (
+                <IconChevronUp size={14} strokeWidth={2} />
+              )}
+            </button>
+            <button
+              onClick={() => setQuizOpen(false)}
+              className="grid place-items-center w-7 h-7 rounded-md text-[color:var(--color-ink-400)] hover:text-[color:var(--color-ink-900)] hover:bg-slate-100 transition-colors"
+              aria-label="Close quiz"
+            >
+              <IconClose size={14} strokeWidth={2} />
+            </button>
+          </div>
         </div>
 
         <div className="flex items-center gap-2">

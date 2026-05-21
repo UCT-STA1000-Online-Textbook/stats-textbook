@@ -99,6 +99,16 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Justified body copy (trial). Scoped to reading-area paragraphs only —
+   list items and callouts stay left-aligned. `hyphens: auto` (the page sets
+   <html lang="en">) breaks long words so justification doesn't open large
+   inter-word gaps. Remove this whole block to revert to left-aligned text. */
+.reading-body p {
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 /* Background grain. The dotted pattern is barely visible and stops large
    white expanses from feeling sterile; remove the utility from <body> if a
    flat background is preferred. */

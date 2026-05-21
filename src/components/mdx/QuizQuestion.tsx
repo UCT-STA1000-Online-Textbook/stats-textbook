@@ -1,9 +1,9 @@
 /**
  * Renders a single quiz question — multiple-choice or true/false.
  *
- * Used inside `QuizPanel` (the bottom half of `VizPanel` when the quiz is
- * open). Owns no state of its own; the parent passes the current `selected`
- * value and `submitted` flag and is told about answers via `onAnswer`.
+ * Used inside `QuizPanel` (the quiz hosted in the right-hand viz panel).
+ * Owns no state of its own; the parent passes the current `selected` value
+ * and `submitted` flag and is told about answers via `onAnswer`.
  *
  * Layout: a fixed left "rail" holds the question number badge (24px wide).
  * The question text and option group both indent from that rail using

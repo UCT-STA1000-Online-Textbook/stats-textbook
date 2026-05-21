@@ -16,6 +16,7 @@
 import Link from "next/link";
 import { useEffect, useMemo } from "react";
 import { useVizStore } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import type { VizParams } from "@/store/vizStore";
 import type { UnitFrontmatter } from "@/lib/mdx";
 import { ALL_UNITS } from "@/content/units";
@@ -54,6 +55,11 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
   // is intentional — the setters from the store are stable references.
   useEffect(() => {
     setQuizOpen(false);
+    // Dismiss any open mobile overlays so a fresh unit starts clean. The
+    // viz sheet is only re-raised by an explicit `<TryThis>` click, never
+    // by the `defaultViz` load below.
+    useUiStore.getState().setNavDrawerOpen(false);
+    useUiStore.getState().setVizSheetOpen(false);
     if (frontmatter.defaultViz) {
       setViz(
         frontmatter.defaultViz,
@@ -67,7 +73,7 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
 
   return (
     <main className="flex-1 min-w-0 overflow-y-auto">
-      <article className="max-w-[680px] mx-auto px-10 py-12 animate-soft-fade">
+      <article className="max-w-[680px] mx-auto px-5 py-8 sm:px-10 sm:py-12 animate-soft-fade">
         <header className="mb-10">
           {/* Breadcrumb: module · work-unit position · global position */}
           <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-[color:var(--color-ink-500)]">

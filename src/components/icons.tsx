@@ -70,6 +70,33 @@ export const IconArrowLeft = (p: IconProps) => (
   </Base>
 );
 
+export const IconChevronLeft = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m15 18-6-6 6-6" />
+  </Base>
+);
+
+export const IconChevronRight = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m9 18 6-6-6-6" />
+  </Base>
+);
+
+export const IconChevronUp = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m18 15-6-6-6 6" />
+  </Base>
+);
+
+/** Hamburger glyph — opens the off-canvas navigation drawer on small screens. */
+export const IconMenu = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M3 6h18" />
+    <path d="M3 12h18" />
+    <path d="M3 18h18" />
+  </Base>
+);
+
 export const IconSparkles = (p: IconProps) => (
   <Base {...p}>
     <path d="M12 3v4" />

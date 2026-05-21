@@ -27,6 +27,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   "set-partition": lazy(() => import("./probability/SetPartition")),
 
   // M1 — Sample spaces, axioms & theorems (m1-set-theory)
-  "relative-frequency": lazy(() => import("./probability/RelativeFrequency")),
   "probability-venn": lazy(() => import("./probability/ProbabilityVenn")),
+
+  // Showcase-tier viz (3D physics) — see the viz tiers note in CLAUDE.md.
+  // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
+  // a draggable 3D die or coin with a relative-frequency convergence chart.
+  "random-trials": lazy(() => import("./probability/RandomTrials")),
 };

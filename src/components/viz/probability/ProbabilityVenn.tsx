@@ -1,10 +1,12 @@
 /**
  * Probability Venn diagram for the Addition Rule.
  *
- * Sliders control Pr(A), Pr(B) and Pr(A ∩ B). The four region probabilities
- * (A only, intersection, B only, neither) are written into the diagram, and
- * the derived quantities Pr(A ∪ B), Pr(Ā), etc. are listed underneath so
- * Theorems 1–3 of WU2 are visible at a glance.
+ * Sliders control Pr(A), Pr(B) and Pr(A ∩ B). The diagram is **drawn to the
+ * data**: each circle's *area* scales with its probability, and the circles
+ * slide together or apart so the size of the overlap tracks Pr(A ∩ B) — drag a
+ * slider and the picture moves with it. The four region probabilities are
+ * written into the diagram and the derived quantities Pr(A ∪ B), Pr(Ā), etc.
+ * are listed underneath, so Theorems 1–3 of WU2 are visible at a glance.
  *
  * Pr(A ∩ B) is auto-clamped to [max(0, Pr(A)+Pr(B)−1), min(Pr(A), Pr(B))]
  * whenever any slider moves — the only way to keep all four region
@@ -15,6 +17,7 @@
 
 import { useState, type ReactNode } from "react";
 import type { VizParams } from "@/store/vizStore";
+import { VizGuide } from "../VizGuide";
 
 /**
  * Renders a horizontal bar that spans every character it wraps. Used for
@@ -23,6 +26,39 @@ import type { VizParams } from "@/store/vizStore";
  */
 function Bar({ children }: { children: ReactNode }) {
   return <span className="overline">{children}</span>;
+}
+
+// --- SVG geometry (viewBox units) ---
+const VB_W = 360;
+const VB_H = 200;
+const MID_X = 180;
+const MID_Y = 100;
+/** Circle radius at probability 0 (floor, for visibility) and at probability 1. */
+const R_MIN = 16;
+const R_MAX = 66;
+
+/**
+ * Derives the circle geometry from the three probabilities.
+ *
+ * Radius scales with √p so circle *area* is proportional to the probability.
+ * The centre separation `d` interpolates from "just touching" (no overlap,
+ * Pr(A∩B)=0) to "fully nested" (the smaller set entirely inside the larger)
+ * as Pr(A∩B) grows toward min(Pr(A),Pr(B)) — a faithful, if not area-exact,
+ * picture of the intersection.
+ */
+function geometry(pA: number, pB: number, pAB: number) {
+  const rA = R_MIN + (R_MAX - R_MIN) * Math.sqrt(pA);
+  const rB = R_MIN + (R_MAX - R_MIN) * Math.sqrt(pB);
+  const minP = Math.min(pA, pB);
+  const frac = minP > 0 ? pAB / minP : 0; // 0 = disjoint, 1 = nested
+  const d = rA + rB - frac * 2 * Math.min(rA, rB);
+  return {
+    rA,
+    rB,
+    cAx: MID_X - d / 2,
+    cBx: MID_X + d / 2,
+    cy: MID_Y,
+  };
 }
 
 /**
@@ -65,8 +101,38 @@ export default function ProbabilityVenn({ params }: { params: VizParams }) {
   const pNotA = 1 - pA;
   const pNotIntersection = 1 - pAB;
 
+  // Circle geometry, recomputed every render so the picture follows the
+  // sliders in real time.
+  const { rA, rB, cAx, cBx, cy } = geometry(pA, pB, pAB);
+
+  // Centre-line spans of each region, so a probability label sits inside the
+  // region it describes even as the circles resize and slide together.
+  const aL = cAx - rA;
+  const aR = cAx + rA;
+  const bL = cBx - rB;
+  const bR = cBx + rB;
+  const aOnlyMid = (aL + Math.min(aR, bL)) / 2;
+  const lensMid = (Math.max(aL, bL) + Math.min(aR, bR)) / 2;
+  const bOnlyMid = (Math.max(bL, aR) + bR) / 2;
+  // A region's number is shown only when its span is wide enough to hold it —
+  // this drops the stray "0.00" when a region has collapsed away.
+  const MIN_LABEL_W = 18;
+  const hasAOnly = Math.min(aR, bL) - aL > MIN_LABEL_W;
+  const hasLens = Math.min(aR, bR) - Math.max(aL, bL) > MIN_LABEL_W;
+  const hasBOnly = bR - Math.max(bL, aR) > MIN_LABEL_W;
+
   return (
     <div className="h-full flex flex-col gap-3 overflow-y-auto">
+      <div className="flex justify-end">
+        <VizGuide
+          steps={[
+            "Drag the three sliders to set Pr(A), Pr(B) and the overlap Pr(A∩B).",
+            "Each circle's area grows and shrinks with its probability.",
+            "The number inside a region is that region's probability.",
+            "Pr(A∩B) is auto-limited so the four regions always add up to 1.",
+          ]}
+        />
+      </div>
       <div className="space-y-2">
         <Slider label="Pr(A)" value={pA} onChange={handlePA} />
         <Slider label="Pr(B)" value={pB} onChange={handlePB} />
@@ -74,19 +140,19 @@ export default function ProbabilityVenn({ params }: { params: VizParams }) {
       </div>
 
       <div className="flex items-center justify-center">
-        <svg viewBox="0 0 360 200" className="w-full max-w-[360px]">
+        <svg viewBox={`0 0 ${VB_W} ${VB_H}`} className="w-full max-w-[360px]">
           <defs>
             <mask id="pv-maskInsideA">
-              <rect width="360" height="200" fill="black" />
-              <circle cx="140" cy="100" r="62" fill="white" />
+              <rect width={VB_W} height={VB_H} fill="black" />
+              <circle cx={cAx} cy={cy} r={rA} fill="white" />
             </mask>
             <mask id="pv-maskOutsideA">
-              <rect width="360" height="200" fill="white" />
-              <circle cx="140" cy="100" r="62" fill="black" />
+              <rect width={VB_W} height={VB_H} fill="white" />
+              <circle cx={cAx} cy={cy} r={rA} fill="black" />
             </mask>
             <mask id="pv-maskOutsideB">
-              <rect width="360" height="200" fill="white" />
-              <circle cx="220" cy="100" r="62" fill="black" />
+              <rect width={VB_W} height={VB_H} fill="white" />
+              <circle cx={cBx} cy={cy} r={rB} fill="black" />
             </mask>
           </defs>
 
@@ -116,59 +182,81 @@ export default function ProbabilityVenn({ params }: { params: VizParams }) {
               denser regions look heavier without ever fully obscuring the
               outline. */}
           <circle
-            cx="140"
-            cy="100"
-            r="62"
+            cx={cAx}
+            cy={cy}
+            r={rA}
             fill="rgb(37, 99, 235)"
             fillOpacity={tintOpacity(pAOnly)}
             mask="url(#pv-maskOutsideB)"
           />
           <circle
-            cx="220"
-            cy="100"
-            r="62"
+            cx={cBx}
+            cy={cy}
+            r={rB}
             fill="rgb(37, 99, 235)"
             fillOpacity={tintOpacity(pBOnly)}
             mask="url(#pv-maskOutsideA)"
           />
           <circle
-            cx="220"
-            cy="100"
-            r="62"
+            cx={cBx}
+            cy={cy}
+            r={rB}
             fill="rgb(37, 99, 235)"
             fillOpacity={tintOpacity(pAB)}
             mask="url(#pv-maskInsideA)"
           />
 
           <circle
-            cx="140"
-            cy="100"
-            r="62"
+            cx={cAx}
+            cy={cy}
+            r={rA}
             fill="none"
             stroke="rgb(15, 23, 42)"
             strokeWidth="1.5"
           />
           <circle
-            cx="220"
-            cy="100"
-            r="62"
+            cx={cBx}
+            cy={cy}
+            r={rB}
             fill="none"
             stroke="rgb(15, 23, 42)"
             strokeWidth="1.5"
           />
 
-          <text x="92" y="50" fontSize="13" fontWeight="700" fill="rgb(15, 23, 42)">
+          <text
+            x={cAx}
+            y={cy - rA - 5}
+            textAnchor="middle"
+            fontSize="13"
+            fontWeight="700"
+            fill="rgb(15, 23, 42)"
+          >
             A
           </text>
-          <text x="258" y="50" fontSize="13" fontWeight="700" fill="rgb(15, 23, 42)">
+          <text
+            x={cBx}
+            y={cy - rB - 5}
+            textAnchor="middle"
+            fontSize="13"
+            fontWeight="700"
+            fill="rgb(15, 23, 42)"
+          >
             B
           </text>
 
-          {/* Region probability labels */}
-          <RegionLabel x={108} y={104} value={pAOnly} />
-          <RegionLabel x={180} y={104} value={pAB} emphasized />
-          <RegionLabel x={252} y={104} value={pBOnly} />
-          <RegionLabel x={325} y={104} value={pNeither} muted />
+          {/* Region probability labels — each placed at the centre of its
+              region's span on the diagram's centre line, and omitted when
+              that region has shrunk away entirely. */}
+          {hasAOnly && (
+            <RegionLabel x={aOnlyMid} y={cy + 4} value={pAOnly} />
+          )}
+          {hasLens && (
+            <RegionLabel x={lensMid} y={cy + 4} value={pAB} emphasized />
+          )}
+          {hasBOnly && (
+            <RegionLabel x={bOnlyMid} y={cy + 4} value={pBOnly} />
+          )}
+          <RegionLabel x={MID_X} y={26} value={pNeither} muted />
         </svg>
       </div>
 

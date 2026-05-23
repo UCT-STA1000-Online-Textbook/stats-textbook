@@ -29,8 +29,14 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // M1 — Sample spaces, axioms & theorems (m1-set-theory)
   "probability-venn": lazy(() => import("./probability/ProbabilityVenn")),
 
-  // Showcase-tier viz (3D physics) — see the viz tiers note in CLAUDE.md.
+  // M1 — Conditional probability & independence (m1-conditional-probability)
+  "bayes-grid": lazy(() => import("./probability/BayesGrid")),
+  "independence-square": lazy(() => import("./probability/IndependenceSquare")),
+
+  // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.
   "random-trials": lazy(() => import("./probability/RandomTrials")),
+  // `counting-studio` is the 3D counting-rules viz for m1-permutations-combinations.
+  "counting-studio": lazy(() => import("./probability/CountingStudio")),
 };

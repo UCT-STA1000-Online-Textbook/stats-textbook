@@ -5,10 +5,253 @@ moduleId: "m1"
 moduleTitle: "Probability"
 unitNumber: 4
 moduleUnitNumber: 4
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "The conditional probability Pr(B | A) is defined as:"
+    options:
+      - "Pr(A ∩ B) / Pr(A)"
+      - "Pr(A ∩ B) / Pr(B)"
+      - "Pr(A) / Pr(A ∩ B)"
+      - "Pr(A) × Pr(B)"
+    answer: 0
+    explanation: "By definition, Pr(B | A) = Pr(A ∩ B) / Pr(A), provided Pr(A) ≠ 0. It reassesses the probability of B once we know that A has occurred."
+  - id: "q2"
+    type: "mcq"
+    question: "One card is drawn from a pack of 52. Given that the card is a club, what is the probability that it is the King of Clubs?"
+    options:
+      - "1/52"
+      - "1/13"
+      - "1/4"
+      - "13/52"
+    answer: 1
+    explanation: "Knowing the card is a club shrinks the sample space from 52 cards to 13 clubs. Exactly one of those is the King of Clubs, so the probability is 1/13. Formally, Pr(King of Clubs | clubs) = (1/52) / (13/52) = 1/13."
+  - id: "q3"
+    type: "mcq"
+    question: "If Pr(A | B) = 0.5 and Pr(B) = 0.2, what is Pr(A ∩ B)?"
+    options:
+      - "0.7"
+      - "0.25"
+      - "0.1"
+      - "0.4"
+    answer: 2
+    explanation: "Rearranging the definition Pr(A | B) = Pr(A ∩ B) / Pr(B) gives Pr(A ∩ B) = Pr(A | B) × Pr(B) = 0.5 × 0.2 = 0.1."
+  - id: "q4"
+    type: "true-false"
+    question: "Events A and B are independent if Pr(A ∩ B) = Pr(A) × Pr(B)."
+    answer: true
+    explanation: "True — that is the definition of independence. It is equivalent to Pr(B | A) = Pr(B): knowing A has occurred leaves the probability of B unchanged."
+  - id: "q5"
+    type: "true-false"
+    question: "If two events, each with positive probability, are mutually exclusive, then they are independent."
+    answer: false
+    explanation: "False — they are the opposite. If A and B are mutually exclusive, learning that A occurred forces the probability of B down to 0, which is the strongest possible dependence. Mutually exclusive events are never independent."
+  - id: "q6"
+    type: "mcq"
+    question: "A factory buys 20% of its tubes from outside (8% of those are defective) and makes 80% in-house (6% of those are defective). A tube is found to be defective. Using Bayes' theorem, what is the probability it was made in-house?"
+    options:
+      - "0.75"
+      - "0.06"
+      - "0.80"
+      - "0.48"
+    answer: 0
+    explanation: "By Bayes' theorem, Pr(in-house | defective) = (0.06 × 0.8) / (0.06 × 0.8 + 0.08 × 0.2) = 0.048 / 0.064 = 0.75. This is Example 49B."
 prevUnit: "m1-permutations-combinations"
 nextUnit: "m2-graphical-summaries"
 ---
 
-Content coming soon.
+> **Keywords:** Conditional probability, updating probabilities, Bayes' theorem, the law of total probability, independent events, mutually exclusive versus independent.
+
+## Conditional probability
+
+Conditional probabilities give us a way of **updating** or **revising** probabilities in the light of new information. On Monday a weather forecaster might put the probability of rain on Thursday at 50%; on Tuesday, with more information, she revises it to 70%; on Wednesday, with still better information, to 60%. In statistical language, each forecast is **conditional** on the information available at the time.
+
+<Example title="Example 42A">
+We draw one card from a pack of 52. The probability that it is the King of Clubs is $1/52$. Now suppose someone draws the card for you and tells you only that it is a club. What is the probability that it is the King of Clubs now?
+
+Obviously $1/13$ — the information has **reduced our sample space** from the 52 cards to the 13 clubs.
+</Example>
+
+This idea — shrinking the sample space to the event we know has occurred, and reassessing probabilities inside it — is captured by the following definition.
+
+<Definition term="Conditional probability">
+Let $A$ and $B$ be two events in a sample space $S$. The **conditional probability of $B$ given that $A$ has occurred**, written $\Pr(B \mid A)$, is
+$$\Pr(B \mid A) = \frac{\Pr(A \cap B)}{\Pr(A)},$$
+provided $\Pr(A) \neq 0$. It is read "the probability of $B$ given $A$", and may be thought of as a reassessment of the probability of $B$ once we know that $A$ has occurred.
+</Definition>
+
+<Example title="Example 42A (continued)">
+We reconsider the card example using the definition. The event "King of Clubs" is a subset of the event "clubs", so the intersection of the two is just the event "King of Clubs". There are 13 clubs, so $\Pr(\text{clubs}) = 13/52$. Hence
+$$\Pr(\text{King of Clubs} \mid \text{clubs}) = \frac{\Pr(\text{King of Clubs} \cap \text{clubs})}{\Pr(\text{clubs})} = \frac{1/52}{13/52} = \frac{1}{13},$$
+exactly as our intuition said.
+</Example>
+
+<Example title="Example 43C">
+You — a woman with a medical background — are one of 198 applicants for an MBA programme, of whom 81 will be selected. You hear, on good authority, that there were 70 women applicants, of whom 38 were selected. Assess your probability of being accepted before and after you receive this information, using the definition of conditional probability.
+</Example>
+
+<Example title="Example 44B">
+Suppose $A$ and $B$ are events in a sample space with $\Pr(A) = 0.6$, $\Pr(B) = 0.2$ and $\Pr(A \mid B) = 0.5$. Find
+
+(a) $\Pr(B \mid A)$,&nbsp;&nbsp; (b) $\Pr(A \cup B)$,&nbsp;&nbsp; (c) $\Pr(\overline{A} \cap B)$,&nbsp;&nbsp; (d) $\Pr(B \mid \overline{A})$.
+
+<Solution>
+A useful first step is always to turn conditional probabilities into ordinary ("absolute") probabilities. From $\Pr(A \mid B) = \Pr(A \cap B)/\Pr(B)$,
+$$0.5 = \frac{\Pr(A \cap B)}{0.2} \quad\Longrightarrow\quad \Pr(A \cap B) = 0.1.$$
+
+(a) $\displaystyle \Pr(B \mid A) = \frac{\Pr(A \cap B)}{\Pr(A)} = \frac{0.1}{0.6} \approx 0.17.$
+
+(b) $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B) = 0.6 + 0.2 - 0.1 = 0.7.$
+
+(c) By Theorem 2, $\Pr(B) = \Pr(A \cap B) + \Pr(\overline{A} \cap B)$, so
+$$\Pr(\overline{A} \cap B) = \Pr(B) - \Pr(A \cap B) = 0.2 - 0.1 = 0.1.$$
+
+(d) $\displaystyle \Pr(B \mid \overline{A}) = \frac{\Pr(\overline{A} \cap B)}{\Pr(\overline{A})} = \frac{\Pr(\overline{A} \cap B)}{1 - \Pr(A)} = \frac{0.1}{1 - 0.6} = 0.25.$
+</Solution>
+</Example>
+
+<Example title="Example 45B">
+Show that $\Pr(B \mid A) + \Pr(\overline{B} \mid A) = 1$.
+
+<Solution>
+Using the definition of conditional probability and then Theorem 2,
+$$\Pr(B \mid A) + \Pr(\overline{B} \mid A) = \frac{\Pr(B \cap A)}{\Pr(A)} + \frac{\Pr(\overline{B} \cap A)}{\Pr(A)} = \frac{\Pr(B \cap A) + \Pr(\overline{B} \cap A)}{\Pr(A)} = \frac{\Pr(A)}{\Pr(A)} = 1.$$
+Conditioning on $A$ therefore produces a genuine probability distribution: the conditional probabilities of $B$ and $\overline{B}$ still sum to one.
+</Solution>
+</Example>
+
+<Example title="Example 46C">
+Is it possible for events $A$ and $B$ in a sample space to have $\Pr(A) = 0.5$, $\Pr(B) = 0.8$ and $\Pr(A \mid B) = 0.2$?
+</Example>
+
+<Example title="Example 47C">
+The probability that a first-year student passes Economics if he passes Statistics is 0.5; the probability that he passes Statistics if he passes Economics is 0.8; and the unconditional probability that he passes Statistics is 0.7. The Statistics results come out first, and the student finds he has failed. What is now the conditional probability that he passes Economics?
+</Example>
+
+<Example title="Example 48C">
+Show that for any three events $A$, $B$ and $C$ in a sample space $S$,
+$$\Pr(A \cap B \cap C) = \Pr(A \mid B \cap C)\,\Pr(B \mid C)\,\Pr(C).$$
+</Example>
+
+## Bayes' theorem
+
+For any two events $A$ and $B$ there are two conditional probabilities to consider: $\Pr(B \mid A)$ and $\Pr(A \mid B)$. **Bayes' theorem** — named for the Rev. Thomas Bayes, who did pioneering work in probability in the 1700s — connects the two, and is one of the most useful tools for finding conditional probabilities.
+
+<Theorem name="Bayes' Theorem">
+If $A$ and $B$ are two events, then
+$$\Pr(A \mid B) = \frac{\Pr(B \mid A)\,\Pr(A)}{\Pr(B \mid A)\,\Pr(A) + \Pr(B \mid \overline{A})\,\Pr(\overline{A})}.$$
+
+**Proof.** By the definition of conditional probability, $\Pr(A \mid B) = \Pr(A \cap B)/\Pr(B)$. By Theorem 2, $\Pr(B) = \Pr(A \cap B) + \Pr(\overline{A} \cap B)$, so
+$$\Pr(A \mid B) = \frac{\Pr(A \cap B)}{\Pr(A \cap B) + \Pr(\overline{A} \cap B)}.$$
+Now rewrite each intersection with the definition of conditional probability: $\Pr(A \cap B) = \Pr(B \mid A)\,\Pr(A)$ and $\Pr(\overline{A} \cap B) = \Pr(B \mid \overline{A})\,\Pr(\overline{A})$. Substituting these gives the result.
+</Theorem>
+
+The denominator is simply $\Pr(B)$, rebuilt from the two ways $B$ can happen — alongside $A$, or alongside $\overline{A}$. That decomposition, $B = (A \cap B) \cup (\overline{A} \cap B)$, is the **law of total probability**.
+
+<TryThis
+  vizId="bayes-grid"
+  label="Open the Bayes Frequency Grid"
+  description="See Example 49B as a population of 250 television sets. Set the in-house share and the two defect rates, then click a category to condition on it — the grid keeps only that subgroup and reads off the conditional probability. Conditioning on 'defective' versus 'in-house' gives different answers, and that gap is exactly what Bayes' theorem resolves."
+/>
+
+<Example title="Example 49B">
+A television manufacturer cannot produce all the tubes it needs, so it buys 20% of them from an outside supplier. The quality manager finds that 6% of the tubes produced in-house are defective, and that 8% of the purchased tubes are defective. A randomly selected television has a defective tube. What is the probability that the tube was produced in-house?
+
+<Solution>
+Let $D$ be the event "tube defective" and $C$ the event "produced by the company". We are given $\Pr(D \mid C) = 0.06$, $\Pr(D \mid \overline{C}) = 0.08$ and $\Pr(C) = 0.8$, so $\Pr(\overline{C}) = 0.2$. We want $\Pr(C \mid D)$. By Bayes' theorem,
+$$\Pr(C \mid D) = \frac{\Pr(D \mid C)\,\Pr(C)}{\Pr(D \mid C)\,\Pr(C) + \Pr(D \mid \overline{C})\,\Pr(\overline{C})} = \frac{0.06 \times 0.8}{0.06 \times 0.8 + 0.08 \times 0.2} = \frac{0.048}{0.064} = 0.75.$$
+</Solution>
+</Example>
+
+<Example title="Example 50B">
+You feel ill in the night, stumble into the bathroom, grab one of three bottles in the dark and take a pill. One bottle contains poison; the other two contain aspirin. An hour later you feel ghastly. Your medical text says that 80% of people who take the poison show your symptoms, and that 5% of people who take aspirin show them. What is the probability that you took the poison, given that you have the symptoms?
+
+<Solution>
+Let $B$ be the event "having the symptoms" and $A$ the event "taking the poison", so $\overline{A}$ is "taking aspirin". The medical text gives $\Pr(B \mid A) = 0.8$ and $\Pr(B \mid \overline{A}) = 0.05$. Groping in the dark, $\Pr(A) = 1/3$ and $\Pr(\overline{A}) = 2/3$. By Bayes' theorem,
+$$\Pr(A \mid B) = \frac{\Pr(B \mid A)\,\Pr(A)}{\Pr(B \mid A)\,\Pr(A) + \Pr(B \mid \overline{A})\,\Pr(\overline{A})} = \frac{0.8 \times \tfrac{1}{3}}{0.8 \times \tfrac{1}{3} + 0.05 \times \tfrac{2}{3}} \approx 0.89.$$
+We recommend that you call the doctor!
+</Solution>
+</Example>
+
+<Example title="Example 51C">
+A trick coin with two tails is put in a jar with three normal coins. One coin is selected at random and tossed. If the result is a tail, what is the probability that the trick coin was selected?
+</Example>
+
+<Example title="Example 52C">
+Let $A$ and $B$ be two events with positive probability. Which of the following statements are always true, and which are not, in general, true?
+
+(a) $\Pr(A \mid B) + \Pr(\overline{A} \mid B) = 1$.
+
+(b) $\Pr(A \mid B) + \Pr(A \mid \overline{B}) = 1$.
+
+(c) $\Pr(A \mid B) + \Pr(\overline{A} \mid \overline{B}) = 1$.
+</Example>
+
+<Example title="Example 53C">
+Let $A$ and $B$ be two mutually exclusive events, and let $C$ be any other event. Show that
+
+(a) $\Pr(A \cup B \mid C) = \Pr(A \mid C) + \Pr(B \mid C)$.
+
+(b) $\displaystyle \Pr(C \mid A \cup B) = \frac{\Pr(A \cap C) + \Pr(B \cap C)}{\Pr(A) + \Pr(B)}$.
+</Example>
+
+<Example title="Example 54C">
+Mineworkers are on strike with a list of demands. Negotiators reckon that if management meets one of the demands, the probability the strike will end is 0.85; but if that demand is not met, the probability the strike will continue is 0.92. You assess the probability that management will agree to meet the demand as 0.3. Later you hear that the strike has ended. What is the probability that the demand was met?
+</Example>
+
+<Example title="Example 55C">
+A well is drilled as part of an oil-exploration programme. The probability of the well passing through shale is 0.4. If the well passes through shale, the probability of striking oil is 0.3; if it does not pass through shale, the probability drops to 0.1.
+
+(a) Given that oil was found, what is the probability that the well did not pass through shale?
+
+(b) Given that oil was not found, what is the probability that it passed through shale?
+</Example>
+
+<Example title="Example 56C">
+The form of Bayes' theorem above splits the sample space into just $A$ and $\overline{A}$. Prove the general version: let $A_1, A_2, \ldots, A_n$ be a set of mutually exclusive and exhaustive events in $S$, and let $B$ be any other event. Then
+$$\Pr(A_i \mid B) = \frac{\Pr(B \mid A_i)\,\Pr(A_i)}{\Pr(B \mid A_1)\,\Pr(A_1) + \Pr(B \mid A_2)\,\Pr(A_2) + \cdots + \Pr(B \mid A_n)\,\Pr(A_n)}.$$
+</Example>
+
+<Example title="Example 57C">
+Jim has applied for a bursary. His estimated probabilities of getting each grade of result, and of getting the bursary given each grade, are:
+
+| Grade | Pr(getting grade) | Pr(bursary given grade) |
+|---|---|---|
+| 1st | 0.20 | 0.90 |
+| Upper 2nd | 0.15 | 0.75 |
+| Lower 2nd | 0.50 | 0.40 |
+| 3rd | 0.10 | 0.15 |
+| Fail | 0.05 | 0.00 |
+
+You subsequently hear that he was awarded the bursary. What is the probability (a) that he got a first-class pass? (b) that he failed? (c) that he got either an upper or a lower second?
+</Example>
+
+<Example title="Example 58C">
+A family has two dogs (Rex and Rover) and a cat called Garfield, none of them fond of the postman. If they are outside, the probabilities that Rex, Rover and Garfield will attack the postman are 30%, 40% and 15% respectively. Only one animal is outside at a time, with probabilities 10%, 20% and 70% respectively. If the postman is attacked, what is the probability that Garfield was the culprit?
+</Example>
+
+## Independent events
+
+Intuitively, two events are **independent** if they have nothing to do with each other — the occurrence of one tells us nothing about the other. If event $A$ has no bearing on event $B$, then knowing that $A$ has occurred should leave the probability of $B$ unchanged:
+$$\Pr(B \mid A) = \Pr(B).$$
+Substituting the definition of conditional probability, $\Pr(B \mid A) = \Pr(A \cap B)/\Pr(A)$, this becomes $\Pr(A \cap B)/\Pr(A) = \Pr(B)$, or $\Pr(A \cap B) = \Pr(A)\,\Pr(B)$. This gives a clean, symmetric definition that does not single out one event as the "condition".
+
+<Definition term="Independent events">
+Events $A$ and $B$ are **independent** if
+$$\Pr(A \cap B) = \Pr(A) \times \Pr(B).$$
+More generally, events $A_1, A_2, \ldots, A_n$ are independent if
+$$\Pr(A_1 \cap A_2 \cap \cdots \cap A_n) = \Pr(A_1) \times \Pr(A_2) \times \cdots \times \Pr(A_n).$$
+</Definition>
+
+<TryThis
+  vizId="independence-square"
+  label="Open the Independence Square"
+  description="The unit square is the whole sample space. Drag the divider to set Pr(A), then drag the two handles to set how much of column A and column Ā is filled by B. Level them into one straight cut and A and B become independent — Pr(A∩B) lines up exactly with Pr(A)×Pr(B)."
+/>
+
+Many students confuse **independent** events with **mutually exclusive** events. It helps to remember that "mutually exclusive" is a concept from *set theory* — it can be drawn on a Venn diagram — whereas "independence" is a concept from *probability theory* and **cannot** be shown on a Venn diagram.
+
+In fact, two events with positive probability that are mutually exclusive can **never** be independent. The events "the gold price rises today" and "it rains in Cape Town this afternoon" are genuinely independent — they have nothing to do with each other — and their intersection is not empty, so they are not mutually exclusive. By contrast, "heads" and "tails" on a single coin toss *are* mutually exclusive: tell me the coin came up heads and my probability of tails drops instantly from 0.5 to zero. That is the strongest possible dependence — so mutually exclusive events are certainly not independent.
+
+<Quiz />

@@ -54,9 +54,6 @@ export function ExcelPointer({ title, screenshot = true, children }: ExcelPointe
             <p className="text-[12px] font-medium text-emerald-700">
               Excel screenshot to be added
             </p>
-            <p className="mt-0.5 text-[11px] text-[color:var(--color-ink-500)]">
-              Drop in a screenshot of this step here.
-            </p>
           </div>
         )}
       </div>

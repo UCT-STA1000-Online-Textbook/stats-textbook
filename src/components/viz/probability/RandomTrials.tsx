@@ -4,8 +4,9 @@
  * CLAUDE.md).
  *
  * Students pick an experiment — rolling a fair die or flipping a fair coin —
- * then drag-throw the object for a real, physically-simulated trial, or use the
- * "Simulate" buttons to fast-forward many trials. A bar chart of the observed
+ * then tap the object (or press the Flip/Roll button) for a real,
+ * physically-simulated trial, or use the "Simulate" buttons to fast-forward
+ * many trials. A bar chart of the observed
  * relative frequency per outcome is drawn with Observable Plot, with a dashed
  * line at the theoretical probability (1/6 for the die, 1/2 for the coin). As
  * the number of trials grows the bars converge on that line — which is exactly
@@ -131,10 +132,6 @@ function createCoinFace(letter: string): HTMLCanvasElement {
   return canvas;
 }
 
-function clamp(v: number, lo: number, hi: number): number {
-  return Math.max(lo, Math.min(hi, v));
-}
-
 /**
  * Interactive 3D die / coin simulator.
  *
@@ -158,7 +155,11 @@ export default function RandomTrials({ params }: { params: VizParams }) {
   const mountRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<HTMLDivElement>(null);
   /** Imperative handle the control buttons use to poke the physics world. */
-  const apiRef = useRef<{ spin: () => void; reset: () => void } | null>(null);
+  const apiRef = useRef<{
+    flip: () => void;
+    spin: () => void;
+    reset: () => void;
+  } | null>(null);
 
   // --- Three.js + cannon-es scene. Rebuilt whenever the experiment changes;
   //     fully torn down on unmount. ---
@@ -180,7 +181,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     renderer.shadowMap.type = THREE.PCFShadowMap; // soft by default in modern three
     const canvas = renderer.domElement;
     canvas.style.touchAction = "none"; // let Pointer Events own touch gestures
-    canvas.style.cursor = "grab";
+    canvas.style.cursor = "pointer"; // the whole view is tap-to-throw
     mount.appendChild(canvas);
 
     const scene = new THREE.Scene();
@@ -257,8 +258,6 @@ export default function RandomTrials({ params }: { params: VizParams }) {
 
     // --- The thrown object: a die or a coin ---
     const restY = isCoin ? COIN_T / 2 + 0.001 : HALF_DIE + 0.001;
-    const span = isCoin ? COIN_R : HALF_DIE;
-    const dragBound = HALF_TRAY - span - 0.15;
 
     let objMesh: THREE.Mesh;
     /** Local axes paired with the outcome index they represent when up. */
@@ -372,88 +371,34 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     const labels = labelsFor(experiment);
 
     // --- Trial lifecycle flags (mutable, read by the animation loop) ---
-    let isRolling = false; // object is in motion from a throw/spin
-    let isDragging = false; // pointer is currently holding the object
+    let isRolling = false; // object is in motion from a throw
     let resultLogged = true; // true ⇒ current motion must not be tallied
 
-    // --- Drag-to-throw, unified mouse + touch via Pointer Events ---
-    const raycaster = new THREE.Raycaster();
-    const ndc = new THREE.Vector2();
-    // Horizontal plane at the drag height; the cursor ray is intersected with
-    // it to get an exact world position for the object.
-    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -LIFT_Y);
-    const dragPoint = new THREE.Vector3();
-    const prevDragPoint = new THREE.Vector3();
-    let prevDragTime = 0;
-    const dragVel = { x: 0, z: 0 };
-
-    const setNdc = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      ndc.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      ndc.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-    };
-
-    const onPointerDown = (e: PointerEvent) => {
-      setNdc(e);
-      raycaster.setFromCamera(ndc, camera);
-      if (raycaster.intersectObject(objMesh).length === 0) return;
-      isDragging = true;
-      isRolling = true;
-      resultLogged = false; // this throw should be tallied once it settles
-      canvas.style.cursor = "grabbing";
-      try {
-        canvas.setPointerCapture(e.pointerId);
-      } catch {
-        // Pointer capture is best-effort; the window pointerup is the fallback.
-      }
+    // --- Tap-to-throw, unified mouse + touch via Pointer Events ---
+    // A tap anywhere in the 3D view (or the Flip/Roll button, which calls this
+    // through `apiRef`) lifts the object and flings it with a random impulse
+    // and spin, so it tumbles honestly and settles on a random face. This is
+    // far more reliable than the old raycast drag, which needed the pointer to
+    // grab the small object precisely before it would respond.
+    const throwObject = () => {
+      resultLogged = false; // tally this throw once it settles
       objBody.wakeUp();
       objBody.velocity.setZero();
       objBody.angularVelocity.setZero();
-      if (raycaster.ray.intersectPlane(dragPlane, dragPoint)) {
-        prevDragPoint.copy(dragPoint);
-      }
-      prevDragTime = performance.now();
-      dragVel.x = 0;
-      dragVel.z = 0;
-      ensureLoop();
-    };
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (!isDragging) return;
-      setNdc(e);
-      raycaster.setFromCamera(ndc, camera);
-      if (!raycaster.ray.intersectPlane(dragPlane, dragPoint)) return;
-      dragPoint.x = clamp(dragPoint.x, -dragBound, dragBound);
-      dragPoint.z = clamp(dragPoint.z, -dragBound, dragBound);
-      objBody.position.set(dragPoint.x, LIFT_Y, dragPoint.z);
-      objBody.velocity.setZero();
-      objBody.angularVelocity.setZero();
-
-      // Track recent cursor speed (world units/sec) to scale the throw.
-      const now = performance.now();
-      const dt = Math.max((now - prevDragTime) / 1000, 1 / 120);
-      dragVel.x = (dragPoint.x - prevDragPoint.x) / dt;
-      dragVel.z = (dragPoint.z - prevDragPoint.z) / dt;
-      prevDragPoint.copy(dragPoint);
-      prevDragTime = now;
-    };
-
-    const onPointerUp = () => {
-      if (!isDragging) return;
-      isDragging = false;
-      canvas.style.cursor = "grab";
-      objBody.wakeUp();
-      // Fling along the drag direction, plus an upward toss and random spin so
-      // even a near-still release still tumbles and produces an honest trial.
-      const k = 0.16;
+      // Re-centre with a little jitter so repeated taps don't pile into a wall.
+      objBody.position.set(
+        (Math.random() - 0.5) * 3,
+        LIFT_Y,
+        (Math.random() - 0.5) * 3,
+      );
       objBody.applyImpulse(
         new CANNON.Vec3(
-          clamp(dragVel.x * k, -9, 9),
+          (Math.random() - 0.5) * 6,
           4 + Math.random() * 3,
-          clamp(dragVel.z * k, -9, 9),
+          (Math.random() - 0.5) * 6,
         ),
       );
-      const spin = 16;
+      const spin = 20;
       objBody.angularVelocity.set(
         (Math.random() - 0.5) * spin,
         (Math.random() - 0.5) * spin,
@@ -463,9 +408,11 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       ensureLoop();
     };
 
+    const onPointerDown = (e: PointerEvent) => {
+      e.preventDefault();
+      throwObject();
+    };
     canvas.addEventListener("pointerdown", onPointerDown);
-    canvas.addEventListener("pointermove", onPointerMove);
-    window.addEventListener("pointerup", onPointerUp);
 
     // --- Animation loop: runs only while something is moving ---
     const STEP = 1 / 60;
@@ -497,12 +444,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
 
       // The object has come to rest: tally the result of a manual throw
       // exactly once, then let the loop wind down.
-      if (
-        isRolling &&
-        !isDragging &&
-        motion < 0.08 &&
-        objBody.position.y < restY + 0.4
-      ) {
+      if (isRolling && motion < 0.08 && objBody.position.y < restY + 0.4) {
         if (!resultLogged) {
           const outcome = getOutcome();
           resultLogged = true;
@@ -518,7 +460,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
 
       renderer.render(scene, camera);
 
-      if (isRolling || isDragging) {
+      if (isRolling) {
         rafId = requestAnimationFrame(frame);
       } else {
         loopRunning = false; // idle — stop burning frames until next interaction
@@ -536,6 +478,8 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     // "Simulate" tally is computed in React state, so the spin must not be
     // counted as a physics trial (hence resultLogged = true).
     apiRef.current = {
+      // One honest, tallied physics trial — identical to tapping the object.
+      flip: throwObject,
       spin: () => {
         resultLogged = true;
         objBody.wakeUp();
@@ -552,7 +496,6 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       reset: () => {
         resultLogged = true;
         isRolling = false;
-        isDragging = false;
         objBody.velocity.setZero();
         objBody.angularVelocity.setZero();
         objBody.position.set(0, restY, 0);
@@ -582,8 +525,6 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       resizeObserver.disconnect();
       if (rafId) cancelAnimationFrame(rafId);
       canvas.removeEventListener("pointerdown", onPointerDown);
-      canvas.removeEventListener("pointermove", onPointerMove);
-      window.removeEventListener("pointerup", onPointerUp);
       apiRef.current = null;
       disposeFns.forEach((fn) => fn());
       renderer.dispose();
@@ -609,7 +550,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
         empty.className =
           "h-full grid place-items-center text-center text-[12px] text-[color:var(--color-ink-500)] px-4";
         empty.textContent =
-          "Throw the object, or use Simulate below to run trials.";
+          "Tap the object (or Flip / Roll), or use Simulate to run trials.";
         container.appendChild(empty);
         return;
       }
@@ -714,7 +655,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
         <VizGuide
           steps={[
             "Use the toggle to choose the die or the coin.",
-            "Drag the object in the 3D view to throw it.",
+            "Tap the object (or press Flip / Roll) for one real trial.",
             "Or press Simulate to run many trials at once.",
             "Watch each bar settle toward the dashed theoretical line.",
           ]}
@@ -731,9 +672,18 @@ export default function RandomTrials({ params }: { params: VizParams }) {
         }}
       >
         <p className="absolute inset-x-0 bottom-1.5 text-center text-[10px] text-white/55 pointer-events-none">
-          Drag the {isCoin ? "coin to flip" : "die to throw"} it
+          Tap to {isCoin ? "flip the coin" : "roll the die"}
         </p>
       </div>
+
+      {/* Primary single-trial control — the same physics throw as tapping the
+          object, surfaced as a button for discoverability and accessibility. */}
+      <button
+        onClick={() => apiRef.current?.flip()}
+        className="shrink-0 px-3 py-2 rounded-md bg-orange-500 text-white text-[13px] font-semibold hover:bg-orange-600 transition-colors"
+      >
+        {isCoin ? "Flip the coin" : "Roll the die"}
+      </button>
 
       {/* Tally summary */}
       <div className="flex shrink-0 items-stretch gap-2">

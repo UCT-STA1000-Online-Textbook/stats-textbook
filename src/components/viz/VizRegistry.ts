@@ -33,6 +33,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   "bayes-grid": lazy(() => import("./probability/BayesGrid")),
   "independence-square": lazy(() => import("./probability/IndependenceSquare")),
 
+  // M2 — Graphical summaries (m2-graphical-summaries)
+  "categorical-display": lazy(() => import("./exploring-data/CategoricalDisplay")),
+  "histogram-builder": lazy(() => import("./exploring-data/HistogramBuilder")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

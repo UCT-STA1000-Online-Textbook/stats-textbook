@@ -72,7 +72,7 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
   }, [frontmatter.slug]);
 
   return (
-    <main className="flex-1 min-w-0 overflow-y-auto">
+    <main className="flex-[2] min-w-0 max-w-[760px] overflow-y-auto">
       <article className="max-w-[680px] mx-auto px-5 py-8 sm:px-10 sm:py-12 animate-soft-fade">
         <header className="mb-10">
           {/* Breadcrumb: module · work-unit position · global position */}

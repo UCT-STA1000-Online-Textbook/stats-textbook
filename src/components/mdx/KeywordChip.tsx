@@ -20,15 +20,21 @@ interface KeywordChipProps {
   mode?: string;
   /** Numeric param forwarded to visualisations that accept an `n` param. */
   n?: number;
+  /** Dataset id forwarded to viz that accept a `dataset` param (Module 2). */
+  dataset?: string;
+  /** Chart type forwarded to viz that accept a `chart` param (Module 2). */
+  chart?: string;
 }
 
-export function KeywordChip({ children, vizId, mode, n }: KeywordChipProps) {
+export function KeywordChip({ children, vizId, mode, n, dataset, chart }: KeywordChipProps) {
   const setViz = useVizStore((s) => s.setViz);
 
   function handleClick() {
     const params: Record<string, string | number> = {};
     if (mode !== undefined) params.mode = mode;
     if (n !== undefined) params.n = n;
+    if (dataset !== undefined) params.dataset = dataset;
+    if (chart !== undefined) params.chart = chart;
     setViz(vizId, params);
   }
 

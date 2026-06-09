@@ -82,7 +82,7 @@ Therefore, before you can become a statistician, you have to learn a hefty chunk
 
 <TryThis
   vizId="venn-diagram"
-  params={{ mode: "intersection" }}
+  mode="intersection"
   label="Open the Venn explorer"
   description="Click any operation — intersection, union, complement, symmetric difference — to see which region of the sample space it picks out."
 />
@@ -93,18 +93,26 @@ We define a **set** $A$ to be a collection of distinguishable objects or entitie
 
 <Example title="Example 1A">
 (a) If we say, "The letters $e$, $f$, $g$ belong to the set $A$", then we write
-$$A = \{e, f, g\}.$$
+$$
+A = \{e, f, g\}.
+$$
 
 (b) If we say, "The set $B$ consists of real numbers between 1 and 10 inclusive", then we write
-$$B = \{x \mid 1 \leq x \leq 10\}.$$
+$$
+B = \{x \mid 1 \leq x \leq 10\}.
+$$
 
 We read this by saying: "The set $B$ consists of all real numbers $x$ such that $x$ is larger than or equal to 1 but is less than or equal to 10."
 </Example>
 
 Because the object $e$ belongs to the set $A$ we write
-$$e \in A$$
+$$
+e \in A
+$$
 and we say: "$e$ is an element of $A$". Because $e$ does not belong to $B$, we write
-$$e \notin B$$
+$$
+e \notin B
+$$
 and we say: "$e$ is not an element of $B$".
 
 Note, firstly, that if $C = \{1, 3, 5, a\}$ and $D = \{a, 1, 5, 3\}$ then $C = D$. The order in which we list the elements of a set is irrelevant. Secondly, if $E = \{a, b, c, a\}$ and $F = \{a, b, c\}$ then $E = F$. The set $E$ contains only the distinguishable elements $a$, $b$ and $c$.
@@ -116,7 +124,9 @@ Note, firstly, that if $C = \{1, 3, 5, a\}$ and $D = \{a, 1, 5, 3\}$ then $C = D
 
 <Solution>
 (a) Because the square roots of numbers between 1 and 16 belong to $U$, we write
-$$U = \{x \mid 1 \leq x \leq 16\}.$$
+$$
+U = \{x \mid 1 \leq x \leq 16\}.
+$$
 
 (b) $Z = \{(1, 1), (2, 4), (3, 9), (4, 16)\}$.
 </Solution>
@@ -193,14 +203,16 @@ If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \c
 
 <Solution>
 Paying careful attention to the endpoints,
-$$P \cap Q = \{x \mid 5 < x \leq 10\}.$$
+$$
+P \cap Q = \{x \mid 5 < x \leq 10\}.
+$$
 No, $5 \notin P \cap Q$, but, yes, $10 \in P \cap Q$.
 </Solution>
 </Example>
 
 <TryThis
   vizId="set-builder-line"
-  params={{ mode: "intersection" }}
+  mode="intersection"
   label="Plot P, Q and P ∩ Q"
   description="Place P and Q on a number line and watch the endpoints — solid means included, hollow means excluded — explain why P ∩ Q is open at 5 and closed at 10."
 />
@@ -220,7 +232,9 @@ Another reserved symbol is the letter $S$. It is used for the set containing all
 The concept **union** contrasts with the concept intersection. The union of two sets $A$ and $B$ is the set that contains the elements that belong to $A$ or to $B$. Here we use the word "or" in an inclusive sense — we do not exclude from the union those elements that belong to both $A$ and $B$.
 
 If $A = \{1, 2, 3\}$ and $B = \{2, 3, 4, 5\}$ then the union of $A$ and $B$ is the set $C = \{1, 2, 3, 4, 5\}$. We write
-$$C = A \cup B$$
+$$
+C = A \cup B
+$$
 and say "$C$ equals $A$ union $B$".
 
 <Example title="Example 7A">
@@ -228,7 +242,9 @@ If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \c
 
 <Solution>
 The union includes all the elements of both set $P$ and set $Q$:
-$$P \cup Q = \{x \mid 0 \leq x < 20\}.$$
+$$
+P \cup Q = \{x \mid 0 \leq x < 20\}.
+$$
 </Solution>
 </Example>
 
@@ -237,7 +253,9 @@ $$P \cup Q = \{x \mid 0 \leq x < 20\}.$$
 Our final concept from set theory is that of the **complement** of a set. Given the sample space $S$, we define the complement of a set $A$ to be the set of elements of $S$ which are not in $A$. The complement of $A$ is written $\overline{A}$, and is always relative to the sample space $S$.
 
 If $S = \{1, 2, 3, 4, 5, 6\}$, $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $\overline{A} = \{2, 4, 6\}$. We write
-$$\overline{A} = B$$
+$$
+\overline{A} = B
+$$
 and say "the complement of $A$ equals $B$" or, more briefly, "$A$ complement equals $B$".
 
 <Example title="Example 8A">
@@ -250,7 +268,7 @@ Because the set $D$ excludes the endpoints of the interval from zero to one, $\o
 
 <TryThis
   vizId="venn-diagram"
-  params={{ mode: "complement-A" }}
+  mode="complement-A"
   label="Highlight the complement"
   description="Switch to Ā in the Venn explorer to see how the complement covers everything in S that is not in A — and try (A ∩ B)̄ to see why complementing the intersection is the same as the union of complements (De Morgan)."
 />
@@ -301,7 +319,7 @@ If a family of sets $A_1, A_2, \ldots, A_n$ are such that any pair of them is mu
 
 <TryThis
   vizId="set-partition"
-  params={{ n: 4 }}
+  n={4}
   label="Partition S"
   description="Slice S into 2–6 disjoint pieces that cover the whole sample space, then overlay an arbitrary set B to see how it decomposes as a union of intersections with each piece."
 />
@@ -310,7 +328,9 @@ If a family of sets $A_1, A_2, \ldots, A_n$ are such that any pair of them is mu
 
 <Example title="Example 10B">
 Draw Venn diagrams to show that
-$$(A \cup B) \cap C = (A \cap C) \cup (B \cap C).$$
+$$
+(A \cup B) \cap C = (A \cap C) \cup (B \cap C).
+$$
 
 <Solution>
 In the left-hand Venn diagram, the grey-shaded area is $A \cup B$, and the vertically shaded area is $C$. Their intersection $(A \cup B) \cap C$ is shaded both grey and vertically. In the right-hand Venn diagram, the two shaded areas are $A \cap C$ and $B \cap C$. Their union is the same as the area shaded both grey and vertically in the left-hand diagram.
@@ -345,7 +365,9 @@ Draw Venn diagrams to determine which of the following statements are true.
 (e) $\bigl[(A \cup B) \cap \overline{C}\bigr] \cup \bigl[(A \cup C) \cap \overline{B}\bigr] = \bigl[(A \cup B \cup C) \cap \overline{(A \cup B) \cap C}\bigr] \cup (\overline{A} \cap \overline{B})$
 
 (f) If the sets $A_1, A_2, A_3$, and $A_4$ are pairwise mutually exclusive and exhaustive, and $B$ is an arbitrary set, then
-$$B = (A_1 \cap B) \cup (A_2 \cap B) \cup (A_3 \cap B) \cup (A_4 \cap B).$$
+$$
+B = (A_1 \cap B) \cup (A_2 \cap B) \cup (A_3 \cap B) \cup (A_4 \cap B).
+$$
 
 <Solution>
 (b), (c), (e) and (f) are true. For (a), check that $\overline{A \cap B} = \overline{A} \cup \overline{B}$ is true.
@@ -441,9 +463,13 @@ Describe in words the following sets:
 ### More difficult exercises
 
 **\*2.7** Let $B_1, B_2, \ldots, B_n$ be $n$ disjoint subsets of $S$ such that
-$$\bigcup_{i=1}^{n} B_i = S \quad \text{and} \quad B_i \cap B_j = \emptyset \text{ for } i \neq j.$$
+$$
+\bigcup_{i=1}^{n} B_i = S \quad \text{and} \quad B_i \cap B_j = \emptyset \text{ for } i \neq j.
+$$
 Let $A$ be any other subset of $S$. Use a Venn diagram to show that
-$$A = \bigcup_{i=1}^{n} (A \cap B_i).$$
+$$
+A = \bigcup_{i=1}^{n} (A \cap B_i).
+$$
 
 (Notation: $\bigcup_{i=1}^{n} B_i$ means $B_1 \cup B_2 \cup \ldots \cup B_n$.)
 

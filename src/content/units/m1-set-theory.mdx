@@ -182,7 +182,9 @@ This function $\Pr(A)$ is almost certainly a new kind of function to you. The fu
 To try to get some insight into the concept of probability, consider a random experiment on some sample space $S$ repeated **infinitely many times**. Let's start by doing $n$ trials of the random experiment and counting the number of times $r$ that some event $A \subset S$ occurs during the $n$ trials. Then we define $r/n$ to be the **relative frequency** of the event $A$. Obviously, $0 \leq r/n \leq 1$. Thus relative frequencies and probabilities both lie between zero and one.
 
 We can think of the probability of the event $A$ as the relative frequency of $A$ as $n$, the number of trials of the random experiment, gets very large. In symbols
-$$\Pr(A) = \lim_{n \to \infty} \frac{r}{n}.$$
+$$
+\Pr(A) = \lim_{n \to \infty} \frac{r}{n}.
+$$
 
 If you toss a fair coin, then the probability of "heads" is equal to the probability of "tails", i.e. $\Pr(H) = \Pr(T) = 0.5$. If you tossed the coin 10 times you might observe 6 heads, a relative frequency of $6/10 = 0.6$. But if you tossed it 100 times you might observe 53 heads, relative frequency $53/100 = 0.53$. If you kept going for a few hours more, and tossed it 1000 times you might observe 512 heads, giving a relative frequency of $512/1000 = 0.512$. **As the number of trials increases, the relative frequency tends to get closer and closer to the "true" probability.**
 
@@ -212,13 +214,21 @@ We consider several theorems that follow immediately from the axioms of probabil
 Let $A \subset S$. Then $\Pr(\overline{A}) = 1 - \Pr(A)$.
 
 **Proof.** We write $S$ as the union of two mutually exclusive events:
-$$A \cup \overline{A} = S.$$
+$$
+A \cup \overline{A} = S.
+$$
 Because $A$ and $\overline{A}$ are mutually exclusive, i.e. $A \cap \overline{A} = \emptyset$, we can use axiom 3 to state
-$$\Pr(A \cup \overline{A}) = \Pr(A) + \Pr(\overline{A}).$$
+$$
+\Pr(A \cup \overline{A}) = \Pr(A) + \Pr(\overline{A}).
+$$
 But $A \cup \overline{A} = S$, and $\Pr(S) = 1$ by Kolmogorov's 2nd axiom, so $\Pr(A \cup \overline{A}) = 1$. Therefore
-$$\Pr(A) + \Pr(\overline{A}) = 1$$
+$$
+\Pr(A) + \Pr(\overline{A}) = 1
+$$
 and
-$$\Pr(\overline{A}) = 1 - \Pr(A),$$
+$$
+\Pr(\overline{A}) = 1 - \Pr(A),
+$$
 as required.
 </Theorem>
 
@@ -226,24 +236,38 @@ as required.
 If $A \subset S$ and $B \subset S$ then $\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B})$.
 
 **Proof.** Write $A$ as the union of the two mutually exclusive sets:
-$$A = (A \cap B) \cup (A \cap \overline{B}).$$
+$$
+A = (A \cap B) \cup (A \cap \overline{B}).
+$$
 Clearly,
-$$(A \cap B) \cap (A \cap \overline{B}) = \emptyset.$$
+$$
+(A \cap B) \cap (A \cap \overline{B}) = \emptyset.
+$$
 Therefore, using axiom 3,
-$$\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B}).$$
+$$
+\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B}).
+$$
 
 Notice that Theorem 2 may also be expressed as
-$$\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B).$$
+$$
+\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B).
+$$
 </Theorem>
 
 <Theorem name="Theorem 3 — The Addition Rule">
 For any arbitrary events $A$ and $B$,
-$$\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B).$$
+$$
+\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B).
+$$
 
 **Proof.** Write $A \cup B$ as the union of two mutually exclusive sets:
-$$A \cup B = B \cup (A \cap \overline{B}).$$
+$$
+A \cup B = B \cup (A \cap \overline{B}).
+$$
 Because $B$ and $A \cap \overline{B}$ are mutually exclusive, we can again apply axiom 3 and say
-$$\Pr(A \cup B) = \Pr(B) + \Pr(A \cap \overline{B}).$$
+$$
+\Pr(A \cup B) = \Pr(B) + \Pr(A \cap \overline{B}).
+$$
 But, by Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B)$. The result follows.
 </Theorem>
 
@@ -257,24 +281,38 @@ But, by Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B)$. The resu
 If $B \subset A$, then $\Pr(B) \leq \Pr(A)$.
 
 **Proof.** If $B \subset A$ then we can write $A$ as the union of two mutually exclusive sets,
-$$A = B \cup (A \cap \overline{B}),$$
+$$
+A = B \cup (A \cap \overline{B}),
+$$
 and
-$$\Pr(A) = \Pr(B) + \Pr(A \cap \overline{B}) \geq \Pr(B)$$
+$$
+\Pr(A) = \Pr(B) + \Pr(A \cap \overline{B}) \geq \Pr(B)
+$$
 because $\Pr(A \cap \overline{B}) \geq 0$, as all probabilities are non-negative.
 </Theorem>
 
 <Theorem name="Theorem 5">
 If $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, i.e. $A_i \cap A_j = \emptyset$ for $i \neq j$, then
-$$\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n),$$
+$$
+\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n),
+$$
 or, in a more concise notation,
-$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} \Pr(A_i).$$
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} \Pr(A_i).
+$$
 
 **Proof.** The proof is by repeated use of axiom 3. The events $(A_1 \cup A_2 \cup \ldots \cup A_{n-1})$ and $A_n$ are mutually exclusive. Thus
-$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) + \Pr(A_n).$$
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) + \Pr(A_n).
+$$
 Next, the events $(A_1 \cup A_2 \cup \ldots \cup A_{n-2})$ and $A_{n-1}$ are mutually exclusive. Thus
-$$\Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}),$$
+$$
+\Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}),
+$$
 so that
-$$\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}) + \Pr(A_n).$$
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}) + \Pr(A_n).
+$$
 Continue the process, and the result follows.
 </Theorem>
 
@@ -309,7 +347,9 @@ All probability problems, in theory at least, can be solved by making use of The
 There is a wide class of problems for which we **do** know the probabilities of **all** the elementary events in a sample space. These are the problems for which it is reasonable to assume that **all the elementary events are equally likely**. If there are $N$ elementary events contained in $S$, and each one has the same probability of occurring, then the probability of each and every elementary event must be $1/N$.
 
 Equally probable elementary events occur in many games of chance — coins and dice are assumed to be unbiased; when a card is drawn from a pack of 52 playing cards, the probability of any particular card is assumed to be $1/52$. Let $A$ be some event in this scenario. Then $A$ must consist of the union of elementary events, each of probability $1/N$. If we could determine the **number of elementary events contained in $A$**, then we could write
-$$\Pr(A) = \frac{\text{number of elementary events contained in } A}{\text{number of elementary events contained in } S} = \frac{n(A)}{n(S)} = \frac{n(A)}{N},$$
+$$
+\Pr(A) = \frac{\text{number of elementary events contained in } A}{\text{number of elementary events contained in } S} = \frac{n(A)}{n(S)} = \frac{n(A)}{N},
+$$
 where we define the function $n(A)$ to mean the count of the number of elementary events contained in $A$. Clearly, $n(S) = N$.
 
 <Example title="Example 11A">
@@ -317,7 +357,9 @@ Consider tossing a fair die. Then $S = \{1, 2, 3, 4, 5, 6\}$ and $N = 6$. Let $A
 
 <Solution>
 The number of elementary events contained in $A$ is $n(A) = 3$. So
-$$\Pr(A) = \frac{n(A)}{N} = \frac{3}{6} = \frac{1}{2},$$
+$$
+\Pr(A) = \frac{n(A)}{N} = \frac{3}{6} = \frac{1}{2},
+$$
 which your intuition should tell you is correct!
 </Solution>
 </Example>

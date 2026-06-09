@@ -205,9 +205,14 @@ export function VizPanel() {
     if (quizOpen) setQuizExpanded(window.innerWidth < 768);
   }
 
+  // Width (md+): the reading column and this panel split the row by a fixed
+  // ratio (~2:3) rather than a viewport-based width. Two advantages: the
+  // interactive area is always the larger of the two, and when the sidebar
+  // collapses the freed space flows here instead of becoming dead gutter
+  // beside the (capped) reading column. `min-w` keeps the controls usable.
   return (
     <aside
-      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-shrink-0 md:w-[420px] lg:w-[540px] xl:w-[600px] ${
+      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-[3] md:min-w-[440px] ${
         vizSheetOpen ? "translate-y-0" : "translate-y-full"
       }`}
     >

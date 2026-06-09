@@ -3,7 +3,13 @@
  * visualisation into the right panel via `vizStore.setViz`.
  *
  * Usage in MDX:
- *   <TryThis vizId="histogram" params={{ bins: 12 }} description="…" />
+ *   <TryThis vizId="histogram-builder" dataset="risk" description="…" />
+ *
+ * Parameters are passed as **flat props** (`mode`, `n`, `dataset`, `chart`),
+ * not as a nested `params={{…}}` object: MDX in this project does not reliably
+ * evaluate object-literal attributes, so the object would silently arrive
+ * empty (the same reason `KeywordChip` uses flat props). `TryThis` assembles
+ * the `VizParams` object here from whichever flat props are supplied.
  *
  * The card highlights itself when its `vizId` matches the currently active
  * visualisation, giving the student a clear visual tether between the prose
@@ -19,8 +25,14 @@ import { IconSparkles, IconArrowRight } from "@/components/icons";
 interface TryThisProps {
   /** Key into `VIZ_REGISTRY` — must match a registered component. */
   vizId: string;
-  /** Parameters forwarded to the viz component (each viz supplies defaults). */
-  params?: VizParams;
+  /** Mode string forwarded to viz that accept a `mode` param. */
+  mode?: string;
+  /** Numeric param forwarded to viz that accept an `n` param. */
+  n?: number;
+  /** Dataset id forwarded to viz that accept a `dataset` param. */
+  dataset?: string;
+  /** Chart type forwarded to viz that accept a `chart` param. */
+  chart?: string;
   /** Button label. Defaults to "Try this". */
   label?: string;
   /** Optional one-line description shown above the button. */
@@ -29,7 +41,10 @@ interface TryThisProps {
 
 export function TryThis({
   vizId,
-  params = {},
+  mode,
+  n,
+  dataset,
+  chart,
   label = "Try this",
   description,
 }: TryThisProps) {
@@ -44,6 +59,11 @@ export function TryThis({
    * panel is always on screen.
    */
   function handleClick() {
+    const params: VizParams = {};
+    if (mode !== undefined) params.mode = mode;
+    if (n !== undefined) params.n = n;
+    if (dataset !== undefined) params.dataset = dataset;
+    if (chart !== undefined) params.chart = chart;
     setViz(vizId, params);
     setVizSheetOpen(true);
   }

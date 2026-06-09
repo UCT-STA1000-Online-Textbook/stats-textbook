@@ -20,6 +20,7 @@ import { Example } from "@/components/mdx/Example";
 import { Solution } from "@/components/mdx/Solution";
 import { Collapse } from "@/components/mdx/Collapse";
 import { Note } from "@/components/mdx/Note";
+import { ExcelPointer } from "@/components/mdx/ExcelPointer";
 import { KeywordChip } from "@/components/mdx/KeywordChip";
 
 export const mdxComponents: MDXComponents = {
@@ -31,6 +32,7 @@ export const mdxComponents: MDXComponents = {
   Solution,
   Collapse,
   Note,
+  ExcelPointer,
   KeywordChip,
 
   // Heading scale: h1 is the unit title and is rendered by `ReadingPanel`,
@@ -92,8 +94,10 @@ export const mdxComponents: MDXComponents = {
   // the prose column on narrow viewports.
   table: (props) => (
     <div className="my-5 overflow-x-auto rounded-xl border border-[color:var(--color-line)]">
+      {/* The last body row drops its cell bottom-borders so the divider doesn't
+          double up against the container's border. */}
       <table
-        className="w-full border-collapse text-[13.5px] tabular-nums"
+        className="w-full border-collapse text-[13.5px] tabular-nums [&_tbody_tr:last-child_td]:border-b-0"
         {...props}
       />
     </div>
@@ -112,7 +116,7 @@ export const mdxComponents: MDXComponents = {
   ),
   td: (props) => (
     <td
-      className="px-3 py-2 border-b border-[color:var(--color-line)] last:border-b-0 text-[color:var(--color-ink-700)]"
+      className="px-3 py-2 border-b border-[color:var(--color-line)] text-[color:var(--color-ink-700)]"
       {...props}
     />
   ),

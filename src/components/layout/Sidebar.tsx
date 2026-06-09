@@ -95,13 +95,16 @@ export function Sidebar() {
       {/* Icon rail — desktop only, shown when the sidebar is collapsed. */}
       {collapsed && (
         <div className="hidden lg:flex flex-col items-center h-full py-4">
-          <Link
-            href="/"
-            className="grid place-items-center w-9 h-9 rounded-lg bg-[color:var(--color-ink-900)] text-white"
-            title="STA1000 — home"
+          {/* The first item in the rail is the expand control itself — testers
+              expected the top button to open the nav, not navigate home. */}
+          <button
+            onClick={toggleSidebar}
+            title="Expand navigation"
+            aria-label="Expand navigation"
+            className="grid place-items-center w-9 h-9 rounded-lg bg-slate-100 text-[color:var(--color-ink-700)] hover:bg-slate-200 hover:text-[color:var(--color-ink-900)] transition-colors"
           >
-            <IconBookOpen size={16} strokeWidth={2} />
-          </Link>
+            <IconChevronRight size={18} strokeWidth={2.25} />
+          </button>
 
           <nav className="mt-4 flex flex-col gap-1.5">
             {MODULES.map((mod, modIdx) => {
@@ -122,15 +125,6 @@ export function Sidebar() {
               );
             })}
           </nav>
-
-          <button
-            onClick={toggleSidebar}
-            title="Expand navigation"
-            aria-label="Expand navigation"
-            className="mt-auto grid place-items-center w-9 h-9 rounded-md text-[color:var(--color-ink-400)] hover:bg-slate-100 hover:text-[color:var(--color-ink-700)] transition-colors"
-          >
-            <IconChevronRight size={16} strokeWidth={2} />
-          </button>
         </div>
       )}
 

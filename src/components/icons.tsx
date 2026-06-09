@@ -168,6 +168,15 @@ export const IconChart = (p: IconProps) => (
   </Base>
 );
 
+export const IconTable = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    <path d="M3 9h18" />
+    <path d="M3 15h18" />
+    <path d="M9 3v18" />
+  </Base>
+);
+
 export const IconAlert = (p: IconProps) => (
   <Base {...p}>
     <path d="m21.7 18-8-14a2 2 0 0 0-3.4 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z" />

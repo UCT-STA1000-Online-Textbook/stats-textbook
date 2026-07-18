@@ -12,7 +12,7 @@
 
 "use client";
 
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 
 /**
  * The single categorical colour palette used by every visualisation that
@@ -100,10 +100,15 @@ export function Slider({
   onChange: (v: number) => void;
   mono?: boolean;
 }) {
+  // Unique per instance so the `<label>` can be programmatically associated
+  // with its `<input>` even though many sliders render on one page.
+  const inputId = useId();
+
   return (
     <div>
       <div className="flex items-center justify-between mb-0.5">
         <label
+          htmlFor={inputId}
           className={`text-[12px] text-[color:var(--color-ink-700)] ${mono ? "font-mono" : ""}`}
         >
           {label}
@@ -113,6 +118,7 @@ export function Slider({
         </span>
       </div>
       <input
+        id={inputId}
         type="range"
         min={0}
         max={1}

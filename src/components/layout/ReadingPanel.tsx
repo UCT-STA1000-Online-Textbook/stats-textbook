@@ -72,8 +72,13 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frontmatter.slug]);
 
+  // Reading takes the larger flex share (5:4 vs the viz panel) — this is a
+  // textbook, so prose keeps a readable measure before the viz panel grows.
+  // The min-width guards the 768–1024px range where both panels share the
+  // row (their combined minimums fit the narrowest viewport), and the
+  // max-width caps the line length on wide screens.
   return (
-    <main className="flex-[2] min-w-0 max-w-[760px] overflow-y-auto">
+    <main className="flex-[5] min-w-0 md:min-w-[360px] max-w-[760px] overflow-y-auto">
       <article className="max-w-[680px] mx-auto px-5 py-8 sm:px-10 sm:py-12 animate-soft-fade">
         <header className="mb-10">
           {/* Breadcrumb: module · work-unit position · global position */}

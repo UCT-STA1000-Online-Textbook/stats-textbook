@@ -28,6 +28,7 @@ import { useVizStore } from "@/store/vizStore";
 import { useUiStore } from "@/store/uiStore";
 import { VIZ_REGISTRY } from "@/components/viz/VizRegistry";
 import { QuizPanel } from "./QuizPanel";
+import { useDialogA11y } from "./useDialogA11y";
 import {
   IconChart,
   IconChevronDown,
@@ -189,6 +190,14 @@ export function VizPanel() {
   const quizOpen = useVizStore((s) => s.quizOpen);
   const quizOpenNonce = useVizStore((s) => s.quizOpenNonce);
 
+  // Below `md` this panel is a slide-up bottom sheet that behaves as a modal
+  // dialog; at `md`+ it's an in-flow column and none of that applies.
+  const { containerRef, isModal } = useDialogA11y<HTMLElement>({
+    open: vizSheetOpen,
+    onClose: () => setVizSheetOpen(false),
+    breakpointQuery: "(max-width: 767px)",
+  });
+
   /**
    * Quiz layout within the panel. `false` → split (viz fixed on top, quiz
    * below); `true` → quiz fills the panel and the viz collapses to a strip.
@@ -213,7 +222,15 @@ export function VizPanel() {
   // beside the (capped) reading column. `min-w` keeps the controls usable.
   return (
     <aside
-      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-[3] md:min-w-[440px] ${
+      ref={containerRef}
+      // Dialog semantics apply only while the sheet is actually acting as a
+      // modal overlay (below `md` and open) — see `useDialogA11y`. At `md`+
+      // this is an in-flow column and must stay out of the a11y tree as one.
+      role={isModal ? "dialog" : undefined}
+      aria-modal={isModal ? true : undefined}
+      aria-label={isModal ? "Visualisation and quiz" : undefined}
+      tabIndex={isModal ? -1 : undefined}
+      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-[4] md:min-w-[360px] lg:min-w-[400px] ${
         vizSheetOpen ? "translate-y-0" : "translate-y-full"
       }`}
     >

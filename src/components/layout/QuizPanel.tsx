@@ -149,7 +149,14 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <div className="flex-1 h-1 rounded-full bg-[color:var(--color-line)] overflow-hidden">
+          <div
+            role="progressbar"
+            aria-label="Quiz progress"
+            aria-valuenow={submitted ? 100 : Math.round(progressPct)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            className="flex-1 h-1 rounded-full bg-[color:var(--color-line)] overflow-hidden"
+          >
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 passed

@@ -34,6 +34,7 @@ import {
   selectUnitProgress,
 } from "@/store/progressStore";
 import { useUiStore } from "@/store/uiStore";
+import { useDialogA11y } from "./useDialogA11y";
 import {
   IconCheck,
   IconChevronDown,
@@ -54,6 +55,15 @@ export function Sidebar() {
   const toggleSidebar = useUiStore((s) => s.toggleSidebar);
   const setSidebarCollapsed = useUiStore((s) => s.setSidebarCollapsed);
   const setNavDrawerOpen = useUiStore((s) => s.setNavDrawerOpen);
+
+  // Below `lg` the sidebar is an off-canvas drawer that behaves as a modal
+  // dialog (focus trap, Escape-to-close, restores focus on close); at `lg`+
+  // it's an in-flow column and none of that applies.
+  const { containerRef, isModal } = useDialogA11y<HTMLElement>({
+    open: navDrawerOpen,
+    onClose: () => setNavDrawerOpen(false),
+    breakpointQuery: "(max-width: 1023px)",
+  });
 
   // Derive the currently routed slug from the URL. We avoid `useParams`
   // because the sidebar lives outside the [slug] route segment.
@@ -94,6 +104,14 @@ export function Sidebar() {
 
   return (
     <aside
+      ref={containerRef}
+      // Dialog semantics apply only while the drawer is actually acting as a
+      // modal overlay (below `lg` and open) — see `useDialogA11y`. At `lg`+
+      // this is an in-flow column and must stay out of the a11y tree as one.
+      role={isModal ? "dialog" : undefined}
+      aria-modal={isModal ? true : undefined}
+      aria-label={isModal ? "Course navigation" : undefined}
+      tabIndex={isModal ? -1 : undefined}
       className={`fixed inset-y-0 left-0 z-40 flex flex-col overflow-hidden border-r border-[color:var(--color-line)] bg-white/95 backdrop-blur-sm transition-[transform,width] duration-300 lg:static lg:z-auto lg:translate-x-0 lg:flex-shrink-0 lg:bg-white/70 ${
         navDrawerOpen ? "translate-x-0" : "-translate-x-full"
       } w-64 ${collapsed ? "lg:w-14" : "lg:w-64"}`}
@@ -181,7 +199,14 @@ export function Sidebar() {
                 {courseTotals.completed}/{courseTotals.total}
               </span>
             </div>
-            <div className="mt-1.5 h-1.5 rounded-full bg-[color:var(--color-line)] overflow-hidden">
+            <div
+              role="progressbar"
+              aria-label="Course progress"
+              aria-valuenow={coursePct}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              className="mt-1.5 h-1.5 rounded-full bg-[color:var(--color-line)] overflow-hidden"
+            >
               <div
                 className="h-full rounded-full bg-blue-500 transition-all duration-700 ease-out"
                 style={{ width: `${coursePct}%` }}
@@ -211,6 +236,7 @@ export function Sidebar() {
                       : "text-[color:var(--color-ink-700)] hover:bg-slate-50"
                   }`}
                   aria-expanded={isOpen}
+                  aria-controls={`module-units-${mod.id}`}
                 >
                   <span
                     className={`grid place-items-center w-6 h-6 rounded-md text-[10px] font-semibold tabular-nums ${
@@ -236,7 +262,10 @@ export function Sidebar() {
                 </button>
 
                 {isOpen && (
-                  <ul className="mt-0.5 mb-2 ml-4 pl-3 border-l border-[color:var(--color-line)] space-y-0.5">
+                  <ul
+                    id={`module-units-${mod.id}`}
+                    className="mt-0.5 mb-2 ml-4 pl-3 border-l border-[color:var(--color-line)] space-y-0.5"
+                  >
                     {moduleUnits.map((unit) => {
                       const isActive = activeSlug === unit.slug;
                       const progress = selectUnitProgress(units, unit.slug);
@@ -266,6 +295,13 @@ export function Sidebar() {
                               attempted={hasAttempts}
                               active={isActive}
                             />
+                            <span className="sr-only">
+                              {isComplete
+                                ? "Completed. "
+                                : hasAttempts
+                                  ? "Attempted, not yet complete. "
+                                  : "Not yet attempted. "}
+                            </span>
                             <span className="flex-1 truncate">
                               {unit.title}
                             </span>

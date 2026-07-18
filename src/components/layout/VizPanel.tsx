@@ -187,6 +187,7 @@ export function VizPanel() {
   const vizSheetOpen = useUiStore((s) => s.vizSheetOpen);
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
   const quizOpen = useVizStore((s) => s.quizOpen);
+  const quizOpenNonce = useVizStore((s) => s.quizOpenNonce);
 
   /**
    * Quiz layout within the panel. `false` → split (viz fixed on top, quiz
@@ -256,7 +257,11 @@ export function VizPanel() {
             </div>
           )}
           <div className="flex-1 min-h-0">
+            {/* Keyed per open so relaunching from the reading panel always
+                starts a fresh attempt instead of showing stale submitted
+                state — see `quizOpenNonce` in vizStore. */}
             <QuizPanel
+              key={quizOpenNonce}
               expanded={quizExpanded}
               onToggleExpanded={() => setQuizExpanded((e) => !e)}
             />

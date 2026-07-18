@@ -66,7 +66,9 @@ export const useProgressStore = create<ProgressState>()(
             ...state.units,
             [slug]: {
               slug,
-              completed: score === total,
+              // Completion, like the score, is best-of-all-attempts: a lower
+              // retake must not revoke a previously earned completion.
+              completed: score === total || (existing?.completed ?? false),
               score: isBetter ? score : (existing?.score ?? 0),
               totalQuestions: total,
               attempts: (existing?.attempts ?? 0) + 1,
@@ -90,6 +92,18 @@ export const useProgressStore = create<ProgressState>()(
       getModuleProgress: (moduleId) =>
         selectModuleProgress(get().units, moduleId),
     }),
-    { name: "sta1000-progress" }
+    {
+      name: "sta1000-progress",
+      // `generateStaticParams` prerenders unit pages at build time, so the
+      // server-rendered HTML always has an empty `units: {}`. The default
+      // persist behaviour rehydrates from localStorage synchronously at
+      // module load — before React's first client render — which would make
+      // that render disagree with the prerendered HTML and trigger a
+      // hydration mismatch. `skipHydration` holds the store at its initial
+      // state until `rehydrateStores()` (called from a `useEffect` in
+      // `ThreePanelShell`, after hydration has completed) restores the saved
+      // progress — an ordinary post-mount update, not a hydration error.
+      skipHydration: true,
+    }
   )
 );

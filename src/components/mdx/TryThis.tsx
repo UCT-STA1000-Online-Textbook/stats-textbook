@@ -5,11 +5,12 @@
  * Usage in MDX:
  *   <TryThis vizId="histogram-builder" dataset="risk" description="…" />
  *
- * Parameters are passed as **flat props** (`mode`, `n`, `dataset`, `chart`),
- * not as a nested `params={{…}}` object: MDX in this project does not reliably
- * evaluate object-literal attributes, so the object would silently arrive
- * empty (the same reason `KeywordChip` uses flat props). `TryThis` assembles
- * the `VizParams` object here from whichever flat props are supplied.
+ * Parameters are passed as **flat props** (`mode`, `n`, `dataset`, `chart`,
+ * …), not as a nested `params={{…}}` object: MDX in this project does not
+ * reliably evaluate object-literal attributes, so the object would silently
+ * arrive empty (the same reason `KeywordChip` uses flat props). `TryThis`
+ * delegates assembly of the `VizParams` object to `buildVizParams` — see
+ * `vizParams.ts` for the full whitelist of forwardable prop names.
  *
  * The card highlights itself when its `vizId` matches the currently active
  * visualisation, giving the student a clear visual tether between the prose
@@ -18,21 +19,14 @@
 
 "use client";
 
-import { useVizStore, VizParams } from "@/store/vizStore";
+import { useVizStore } from "@/store/vizStore";
 import { useUiStore } from "@/store/uiStore";
 import { IconSparkles, IconArrowRight } from "@/components/icons";
+import { buildVizParams, VizParamProps } from "./vizParams";
 
-interface TryThisProps {
+interface TryThisProps extends VizParamProps {
   /** Key into `VIZ_REGISTRY` — must match a registered component. */
   vizId: string;
-  /** Mode string forwarded to viz that accept a `mode` param. */
-  mode?: string;
-  /** Numeric param forwarded to viz that accept an `n` param. */
-  n?: number;
-  /** Dataset id forwarded to viz that accept a `dataset` param. */
-  dataset?: string;
-  /** Chart type forwarded to viz that accept a `chart` param. */
-  chart?: string;
   /** Button label. Defaults to "Try this". */
   label?: string;
   /** Optional one-line description shown above the button. */
@@ -41,12 +35,9 @@ interface TryThisProps {
 
 export function TryThis({
   vizId,
-  mode,
-  n,
-  dataset,
-  chart,
   label = "Try this",
   description,
+  ...vizParamProps
 }: TryThisProps) {
   const setViz = useVizStore((s) => s.setViz);
   const activeViz = useVizStore((s) => s.activeViz);
@@ -59,12 +50,7 @@ export function TryThis({
    * panel is always on screen.
    */
   function handleClick() {
-    const params: VizParams = {};
-    if (mode !== undefined) params.mode = mode;
-    if (n !== undefined) params.n = n;
-    if (dataset !== undefined) params.dataset = dataset;
-    if (chart !== undefined) params.chart = chart;
-    setViz(vizId, params);
+    setViz(vizId, buildVizParams(vizParamProps));
     setVizSheetOpen(true);
   }
 

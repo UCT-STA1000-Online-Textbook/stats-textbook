@@ -9,12 +9,18 @@
  * The question text and option group both indent from that rail using
  * `pl-[34px]` (24px badge + 10px gap), so options visually align under the
  * question text rather than under the badge.
+ *
+ * When a submitted answer is wrong and the question carries a `vizHint`
+ * (authored in the unit's quiz frontmatter), a "See the visualisation"
+ * affordance appears next to the explanation. `QuizPanel` supplies
+ * `onShowHint` only for questions that have a hint, so its mere presence
+ * gates the button.
  */
 
 "use client";
 
 import type { QuizQuestion as QuizQuestionType } from "@/lib/mdx";
-import { IconCheck, IconClose } from "@/components/icons";
+import { IconCheck, IconClose, IconSparkles } from "@/components/icons";
 
 interface Props {
   question: QuizQuestionType;
@@ -25,6 +31,8 @@ interface Props {
   /** True after the parent quiz has been submitted; locks input + reveals feedback. */
   submitted: boolean;
   onAnswer: (value: number | boolean) => void;
+  /** Loads `question.vizHint` into the viz panel. Undefined when the question has no hint. */
+  onShowHint?: () => void;
 }
 
 /** Indent applied to options + explanation so they align under the question text. */
@@ -36,6 +44,7 @@ export function QuizQuestion({
   selected,
   submitted,
   onAnswer,
+  onShowHint,
 }: Props) {
   const isCorrect = submitted && selected === question.answer;
   const isWrong =
@@ -130,6 +139,17 @@ export function QuizQuestion({
               <span>{question.explanation}</span>
             </p>
           </div>
+          {/* Only rendered when the parent supplied a hint handler, i.e. the
+              answer was wrong and the question has a `vizHint`. */}
+          {isWrong && onShowHint && (
+            <button
+              onClick={onShowHint}
+              className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-blue-50 px-2.5 py-1.5 text-[12px] font-medium text-blue-700 border border-blue-200 hover:bg-blue-100 transition-colors"
+            >
+              <IconSparkles size={12} strokeWidth={2} />
+              See the visualisation
+            </button>
+          )}
         </div>
       )}
     </div>

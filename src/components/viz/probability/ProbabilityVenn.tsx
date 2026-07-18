@@ -15,18 +15,10 @@
 
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { VizGuide } from "../VizGuide";
-
-/**
- * Renders a horizontal bar that spans every character it wraps. Used for
- * compound complements in the formula rows; a Unicode combining macron
- * would only sit above a single preceding character.
- */
-function Bar({ children }: { children: ReactNode }) {
-  return <span className="overline">{children}</span>;
-}
+import { Bar, Row, SampleSpaceFrame, Slider, clamp01, toNum } from "../shared";
 
 // --- SVG geometry (viewBox units) ---
 const VB_W = 360;
@@ -156,27 +148,14 @@ export default function ProbabilityVenn({ params }: { params: VizParams }) {
             </mask>
           </defs>
 
-          <rect
-            x="10"
-            y="10"
-            width="340"
-            height="180"
-            rx="6"
-            fill="rgb(248, 250, 252)"
-            stroke="rgb(15, 23, 42)"
-            strokeWidth="1.5"
+          <SampleSpaceFrame
+            x={10}
+            y={10}
+            width={340}
+            height={180}
+            rx={6}
+            label={{ x: 345, y: 26, fontSize: 11 }}
           />
-          <text
-            x="345"
-            y="26"
-            textAnchor="end"
-            fontSize="11"
-            fontStyle="italic"
-            fontWeight="600"
-            fill="rgb(71, 85, 105)"
-          >
-            S
-          </text>
 
           {/* Region tints — opacity scaled with the region probability so
               denser regions look heavier without ever fully obscuring the
@@ -329,75 +308,6 @@ function RegionLabel({
   );
 }
 
-function Slider({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-0.5">
-        <label className="text-[12px] font-mono text-[color:var(--color-ink-700)]">
-          {label}
-        </label>
-        <span className="text-[12px] font-mono tabular-nums text-[color:var(--color-ink-900)]">
-          {value.toFixed(2)}
-        </span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={1}
-        step={0.01}
-        value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-blue-100 accent-blue-600 cursor-pointer"
-      />
-    </div>
-  );
-}
-
-function Row({
-  expr,
-  value,
-  highlight,
-}: {
-  expr: ReactNode;
-  value: number;
-  highlight?: boolean;
-}) {
-  return (
-    <div
-      className={`flex justify-between gap-2 px-3 py-1.5 rounded-md ${
-        highlight
-          ? "bg-blue-50/70 border border-blue-200/70"
-          : "text-[color:var(--color-ink-500)]"
-      }`}
-    >
-      <span className={highlight ? "text-[color:var(--color-ink-700)]" : ""}>
-        {expr}
-      </span>
-      <span
-        className={`tabular-nums ${
-          highlight ? "font-semibold text-blue-700" : ""
-        }`}
-      >
-        {value.toFixed(2)}
-      </span>
-    </div>
-  );
-}
-
-function clamp01(v: number) {
-  return Math.max(0, Math.min(1, v));
-}
-function toNum(v: unknown, fallback: number) {
-  return typeof v === "number" && Number.isFinite(v) ? v : fallback;
-}
 /** Clamp Pr(A ∩ B) into the feasible window for the given Pr(A), Pr(B). */
 function clampIntersection(pAB: number, pA: number, pB: number) {
   const lo = Math.max(0, pA + pB - 1);

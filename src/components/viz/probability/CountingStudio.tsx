@@ -26,6 +26,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import { createThreeScene } from "../threeScene";
 import { VizGuide } from "../VizGuide";
 import type { VizParams } from "@/store/vizStore";
 
@@ -179,57 +180,30 @@ export default function CountingStudio({ params }: { params: VizParams }) {
 
     setFilled(0);
 
-    let width = mount.clientWidth || 420;
-    let height = mount.clientHeight || 260;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 0);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap;
-    const canvas = renderer.domElement;
-    canvas.style.touchAction = "none";
-    canvas.style.cursor = "grab";
-    mount.appendChild(canvas);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 200);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 1.9));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.4);
-    dirLight.position.set(5, 13, 7);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.set(512, 512);
-    dirLight.shadow.camera.near = 1;
-    dirLight.shadow.camera.far = 44;
-    dirLight.shadow.camera.left = -14;
-    dirLight.shadow.camera.right = 14;
-    dirLight.shadow.camera.top = 10;
-    dirLight.shadow.camera.bottom = -10;
-    scene.add(dirLight);
-
-    // Disposal closures, run on cleanup.
-    const disposeFns: Array<() => void> = [];
-
-    // Floor — catches the tile shadows.
-    const floorGeom = new THREE.PlaneGeometry(60, 60);
-    const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x1e293b,
-      roughness: 0.97,
-      metalness: 0.04,
+    // Renderer/scene/camera/lights/floor-mesh/resize/RAF-pause boilerplate is
+    // shared with `RandomTrials` via `createThreeScene`; only the tile
+    // geometry, tween system, and pointer handling are bespoke here.
+    const threeScene = createThreeScene({
+      mount,
+      camera: { fov: 42, near: 0.1, far: 200 },
+      ambient: { intensity: 1.9 },
+      directional: {
+        intensity: 2.4,
+        position: [5, 13, 7],
+        shadowMapSize: 512,
+        shadowBounds: { near: 1, far: 44, left: -14, right: 14, top: 10, bottom: -10 },
+      },
+      floor: { size: 60, color: 0x1e293b, roughness: 0.97, metalness: 0.04 },
+      cursor: "grab",
     });
-    const floor = new THREE.Mesh(floorGeom, floorMat);
-    floor.rotation.x = -Math.PI / 2;
-    floor.receiveShadow = true;
-    scene.add(floor);
-    disposeFns.push(() => floorGeom.dispose(), () => floorMat.dispose());
+    const { scene, camera, canvas, addDisposer, ensureLoop, renderOnce, setOnFrame } =
+      threeScene;
 
     // Shared tile geometry — a thin rounded-ish slab.
     const TILE = 1.5;
     const TILE_H = 0.28;
     const tileGeom = new THREE.BoxGeometry(TILE, TILE_H, TILE);
-    disposeFns.push(() => tileGeom.dispose());
+    addDisposer(() => tileGeom.dispose());
 
     // --- n tray tiles (the palette of distinct numbered objects) ---
     const TRAY_Z = 3.4;
@@ -264,20 +238,20 @@ export default function CountingStudio({ params }: { params: VizParams }) {
       scene.add(tile);
       trayTiles.push(tile);
     }
-    disposeFns.push(
+    addDisposer(
       ...tileTextures.map((t) => () => t.dispose()),
       ...trayMats.map((m) => () => m.dispose()),
     );
 
     // --- r slot pads, and a mobile tile that rests on each when filled ---
     const padGeom = new THREE.CylinderGeometry(TILE * 0.78, TILE * 0.82, 0.18, 36);
-    disposeFns.push(() => padGeom.dispose());
+    addDisposer(() => padGeom.dispose());
     const padMat = new THREE.MeshStandardMaterial({
       color: 0x334155,
       roughness: 0.8,
       metalness: 0.1,
     });
-    disposeFns.push(() => padMat.dispose());
+    addDisposer(() => padMat.dispose());
 
     const padTileMats: THREE.MeshStandardMaterial[] = [];
     const padTiles: THREE.Mesh[] = [];
@@ -302,7 +276,7 @@ export default function CountingStudio({ params }: { params: VizParams }) {
       scene.add(pt);
       padTiles.push(pt);
     }
-    disposeFns.push(...padTileMats.map((m) => () => m.dispose()));
+    addDisposer(...padTileMats.map((m) => () => m.dispose()));
 
     // --- placement state (owned imperatively by the scene) ---
     /** placed[j] = tray-tile index in slot j, or -1 if the slot is empty. */
@@ -411,17 +385,17 @@ export default function CountingStudio({ params }: { params: VizParams }) {
     }
     applyCamera();
 
-    // --- render loop, paused when nothing moves ---
-    let rafId = 0;
-    let running = false;
-    function renderOnce() {
-      renderer.render(scene, camera);
-    }
-    function frame() {
+    // --- tween loop, paused when nothing is animating ---
+    // `deltaMs` is the real elapsed time since the previous frame (from the
+    // shared `createThreeScene` loop), so a tween advances by actual elapsed
+    // time rather than assuming a fixed 60Hz refresh rate — on a 120Hz
+    // display or after a dropped frame, `16 / TWEEN_MS` per frame would have
+    // made tiles slide faster or slower than `TWEEN_MS` actually specifies.
+    setOnFrame((deltaMs) => {
       let active = false;
       for (let k = tweens.length - 1; k >= 0; k--) {
         const tw = tweens[k];
-        tw.t = Math.min(1, tw.t + 16 / TWEEN_MS);
+        tw.t = Math.min(1, tw.t + deltaMs / TWEEN_MS);
         const e = tw.t < 0.5 ? 2 * tw.t * tw.t : 1 - Math.pow(-2 * tw.t + 2, 2) / 2;
         tw.mesh.position.lerpVectors(tw.from, tw.to, e);
         // a small lift so the tile arcs rather than slides flat
@@ -429,19 +403,8 @@ export default function CountingStudio({ params }: { params: VizParams }) {
         if (tw.t >= 1) tweens.splice(k, 1);
         else active = true;
       }
-      renderOnce();
-      if (active) {
-        rafId = requestAnimationFrame(frame);
-      } else {
-        running = false;
-      }
-    }
-    function ensureLoop() {
-      if (!running) {
-        running = true;
-        rafId = requestAnimationFrame(frame);
-      }
-    }
+      return active;
+    });
     renderOnce();
 
     // --- pointer: a tap places / removes, a drag orbits ---
@@ -500,27 +463,12 @@ export default function CountingStudio({ params }: { params: VizParams }) {
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
 
-    // --- keep the canvas sized to its container ---
-    const ro = new ResizeObserver(() => {
-      width = mount.clientWidth || width;
-      height = mount.clientHeight || height;
-      renderer.setSize(width, height);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderOnce();
-    });
-    ro.observe(mount);
-
     return () => {
-      cancelAnimationFrame(rafId);
-      ro.disconnect();
       canvas.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       apiRef.current = null;
-      disposeFns.forEach((fn) => fn());
-      renderer.dispose();
-      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      threeScene.dispose();
     };
   }, [scenario, n, rEff, def.repeats]);
 

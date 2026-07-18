@@ -17,6 +17,13 @@
  * below) or lets the quiz fill the panel with the viz collapsed to a strip.
  * The title-bar toggle flips between the two; `VizPanel` owns that state and
  * passes it in via `expanded` / `onToggleExpanded`.
+ *
+ * Wrong answers on a question with a `vizHint` (authored in the unit's quiz
+ * frontmatter — see `QuizQuestionSchema` in `src/lib/mdx.ts`) get a "See the
+ * visualisation" affordance once the quiz is submitted. Clicking it loads
+ * that viz via `vizStore.setViz` and, if the quiz is currently in the
+ * expanded layout (viz collapsed to a strip), reuses `onToggleExpanded` to
+ * fall back to the split layout so the viz is actually visible.
  */
 
 "use client";
@@ -26,6 +33,7 @@ import { useVizStore } from "@/store/vizStore";
 import { useProgressStore, QuizAnswer } from "@/store/progressStore";
 import { useQuizContext } from "@/components/mdx/QuizContext";
 import { QuizQuestion } from "@/components/mdx/QuizQuestion";
+import { toVizParams } from "@/components/mdx/vizParams";
 import {
   IconClose,
   IconCheck,
@@ -44,6 +52,7 @@ interface QuizPanelProps {
 
 export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
   const { slug, questions } = useQuizContext();
+  const setViz = useVizStore((s) => s.setViz);
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
   const completeUnit = useProgressStore((s) => s.completeUnit);
 
@@ -78,6 +87,19 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
   const handleRetry = () => {
     setAnswers({});
     setSubmitted(false);
+  };
+
+  /**
+   * Loads a question's hinted visualisation. If the quiz is currently
+   * filling the panel (viz collapsed to a strip), fall back to the split
+   * layout so the newly-loaded viz is on screen rather than hidden.
+   */
+  const handleShowHint = (
+    vizId: string,
+    vizHintParams?: Record<string, unknown>
+  ) => {
+    setViz(vizId, toVizParams(vizHintParams));
+    if (expanded) onToggleExpanded();
   };
 
   const score = submitted
@@ -157,6 +179,11 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
             selected={answers[q.id]}
             submitted={submitted}
             onAnswer={(val) => handleAnswer(q.id, val)}
+            onShowHint={
+              q.vizHint
+                ? () => handleShowHint(q.vizHint!, q.vizHintParams)
+                : undefined
+            }
           />
         ))}
       </div>

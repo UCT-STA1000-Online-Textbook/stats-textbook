@@ -48,6 +48,12 @@ export const useUiStore = create<UiState>()(
       // Only the desktop rail preference is durable; the overlay flags are
       // session-scoped and would be jarring if restored.
       partialize: (s) => ({ sidebarCollapsed: s.sidebarCollapsed }),
+      // See the matching comment in `progressStore.ts`: without this, the
+      // prerendered HTML (`sidebarCollapsed: false`) can disagree with the
+      // client's first render once localStorage has a saved `true`, causing
+      // a hydration mismatch. `rehydrateStores()` restores the real value
+      // right after hydration completes instead.
+      skipHydration: true,
     }
   )
 );

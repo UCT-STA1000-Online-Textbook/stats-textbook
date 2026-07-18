@@ -1,41 +1,30 @@
 /**
  * Inline hyperlink that loads a visualisation into the right panel.
  *
- * Accepts flat `mode` and `n` props rather than a nested params object —
- * MDX fails to parse object literals (`{{ mode: "A" }}`) when the component
- * appears inline inside a markdown blockquote, so we build the params object
- * here instead of receiving it pre-assembled.
+ * Accepts flat viz-configuring props (`mode`, `n`, `dataset`, …) rather than
+ * a nested params object — MDX fails to parse object literals
+ * (`{{ mode: "A" }}`) when the component appears inline inside a markdown
+ * blockquote, so `buildVizParams` assembles the params object from the flat
+ * props instead. See `vizParams.ts` for the full whitelist.
  */
 
 "use client";
 
 import type { ReactNode } from "react";
 import { useVizStore } from "@/store/vizStore";
+import { buildVizParams, VizParamProps } from "./vizParams";
 
-interface KeywordChipProps {
+interface KeywordChipProps extends VizParamProps {
   children: ReactNode;
   /** Key into `VIZ_REGISTRY`. */
   vizId: string;
-  /** Mode string forwarded to visualisations that accept a `mode` param. */
-  mode?: string;
-  /** Numeric param forwarded to visualisations that accept an `n` param. */
-  n?: number;
-  /** Dataset id forwarded to viz that accept a `dataset` param (Module 2). */
-  dataset?: string;
-  /** Chart type forwarded to viz that accept a `chart` param (Module 2). */
-  chart?: string;
 }
 
-export function KeywordChip({ children, vizId, mode, n, dataset, chart }: KeywordChipProps) {
+export function KeywordChip({ children, vizId, ...vizParamProps }: KeywordChipProps) {
   const setViz = useVizStore((s) => s.setViz);
 
   function handleClick() {
-    const params: Record<string, string | number> = {};
-    if (mode !== undefined) params.mode = mode;
-    if (n !== undefined) params.n = n;
-    if (dataset !== undefined) params.dataset = dataset;
-    if (chart !== undefined) params.chart = chart;
-    setViz(vizId, params);
+    setViz(vizId, buildVizParams(vizParamProps));
   }
 
   return (

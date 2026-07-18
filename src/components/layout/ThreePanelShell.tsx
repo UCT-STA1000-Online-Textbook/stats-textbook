@@ -14,15 +14,24 @@
  * Receives validated frontmatter + compiled MDX from the Server Component
  * (`src/app/unit/[slug]/page.tsx`). All client state lives in Zustand stores;
  * this shell stays presentational.
+ *
+ * Both `progressStore` and `uiStore` persist to localStorage with
+ * `skipHydration: true` (see the comments there), so their prerendered HTML
+ * always matches the client's first render — no auto-hydrated value can
+ * disagree with what the server sent. This is the one shell every unit page
+ * mounts, so it is the natural single place to restore the real persisted
+ * values immediately after hydration completes.
  */
 
 "use client";
 
+import { useEffect } from "react";
 import { Sidebar } from "./Sidebar";
 import { ReadingPanel } from "./ReadingPanel";
 import { VizPanel } from "./VizPanel";
 import { QuizProvider } from "@/components/mdx/QuizContext";
 import { useUiStore } from "@/store/uiStore";
+import { useProgressStore } from "@/store/progressStore";
 import { IconMenu, IconChart } from "@/components/icons";
 import type { UnitFrontmatter } from "@/lib/mdx";
 
@@ -36,6 +45,13 @@ export function ThreePanelShell({ frontmatter, content }: ThreePanelShellProps) 
   const vizSheetOpen = useUiStore((s) => s.vizSheetOpen);
   const setNavDrawerOpen = useUiStore((s) => s.setNavDrawerOpen);
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
+
+  // Runs once per mount, client-only — exactly where it's safe to read
+  // localStorage and adopt the student's real progress/sidebar preference.
+  useEffect(() => {
+    useProgressStore.persist.rehydrate();
+    useUiStore.persist.rehydrate();
+  }, []);
 
   return (
     <QuizProvider slug={frontmatter.slug} questions={frontmatter.quiz}>

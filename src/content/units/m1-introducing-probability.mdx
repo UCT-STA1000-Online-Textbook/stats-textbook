@@ -17,6 +17,9 @@ quiz:
       - "∅ (empty set)"
     answer: 1
     explanation: "The intersection contains elements belonging to both sets. L and M both contain b and c, so L ∩ M = {b, c}. Open the Venn explorer and select 'A ∩ B' to see this lens-shaped region highlighted."
+    vizHint: "venn-diagram"
+    vizHintParams:
+      mode: "intersection"
   - id: "q2"
     type: "true-false"
     question: "If G ⊂ H and H ⊂ G, we can conclude that G = H."
@@ -32,6 +35,9 @@ quiz:
       - "{x | 5 < x < 20} — just the range of Q"
     answer: 1
     explanation: "An element must satisfy both P and Q. P requires x ≥ 0 and x ≤ 10; Q requires x > 5 and x < 20. The binding constraints are x > 5 (Q excludes 5) and x ≤ 10 (P closes at 10). Click 'Plot P, Q and P ∩ Q' to see the solid and hollow endpoints on the number line."
+    vizHint: "set-builder-line"
+    vizHintParams:
+      mode: "intersection"
   - id: "q4"
     type: "mcq"
     question: "Given sample space S and any set A ⊂ S, which statement is always true?"
@@ -52,6 +58,9 @@ quiz:
       - "A ∩ B̄"
     answer: 1
     explanation: "An element outside A ∪ B must be outside A AND outside B — meaning it belongs to Ā ∩ B̄. In the Venn explorer, the 'Neither' button highlights exactly Ā ∩ B̄, the region outside both circles. Exercise 2.4(c) and 2.4(d) confirm both De Morgan laws."
+    vizHint: "venn-diagram"
+    vizHintParams:
+      mode: "neither"
   - id: "q6"
     type: "mcq"
     question: "Sets A₁, A₂, …, Aₙ are pairwise disjoint (Aᵢ ∩ Aⱼ = ∅ for i ≠ j) and their union covers all of S. What are they called?"
@@ -62,6 +71,9 @@ quiz:
       - "Independent subsets"
     answer: 0
     explanation: "Both conditions are required: pairwise disjoint (no two sets share an element) and exhaustive (together they cover all of S). Open the 'Partition S' visualisation — the colour strips are exactly this: disjoint pieces that together fill the whole rectangle."
+    vizHint: "set-partition"
+    vizHintParams:
+      n: 4
 prevUnit: null
 nextUnit: "m1-set-theory"
 ---

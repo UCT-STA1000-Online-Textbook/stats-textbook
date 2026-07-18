@@ -19,7 +19,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { VizGuide } from "../VizGuide";
 import { useReplayTween } from "../useReplayTween";
@@ -78,26 +78,37 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
 
   const values = dataset.values;
   const n = values.length;
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min;
 
-  // Width guidelines from the notes.
-  const sturge = range / (1 + 1.44 * Math.log(n));
-  const genstat = range / Math.sqrt(n);
+  // Binning, the width guidelines, and the median sort are all O(n) to
+  // O(n log n) work that only actually changes when the dataset or class
+  // width changes — not on every render. The entrance tween below re-renders
+  // this component ~30× per mount, so without memoisation this recomputed
+  // (and re-sorted, for the median) on every animation frame.
+  const stats = useMemo(() => {
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min;
 
-  // Lower boundary aligned to the chosen width (start ≤ min).
-  const start = Math.floor(min / width) * width;
-  const nBins = Math.floor((max - start) / width) + 1;
-  const freqs = new Array<number>(nBins).fill(0);
-  for (const v of values) {
-    const k = Math.min(nBins - 1, Math.floor((v - start) / width));
-    freqs[k]++;
-  }
-  const maxFreq = Math.max(...freqs);
+    // Width guidelines from the notes.
+    const sturge = range / (1 + 1.44 * Math.log(n));
+    const genstat = range / Math.sqrt(n);
 
-  const mean = values.reduce((s, v) => s + v, 0) / n;
-  const med = median(values);
+    // Lower boundary aligned to the chosen width (start ≤ min).
+    const start = Math.floor(min / width) * width;
+    const nBins = Math.floor((max - start) / width) + 1;
+    const freqs = new Array<number>(nBins).fill(0);
+    for (const v of values) {
+      const k = Math.min(nBins - 1, Math.floor((v - start) / width));
+      freqs[k]++;
+    }
+    const maxFreq = Math.max(...freqs);
+
+    const mean = values.reduce((s, v) => s + v, 0) / n;
+    const med = median(values);
+
+    return { min, max, sturge, genstat, start, nBins, freqs, maxFreq, mean, med };
+  }, [values, n, width]);
+  const { min, max, sturge, genstat, start, nBins, freqs, maxFreq, mean, med } = stats;
 
   const progress = useReplayTween([datasetId, width]);
 

@@ -24,6 +24,7 @@ import { useRef, useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { useSvgDrag, clampN } from "../useDrag";
 import { VizGuide } from "../VizGuide";
+import { Row, SampleSpaceFrame, clamp01, toNum } from "../shared";
 
 // --- SVG geometry (viewBox units) ---
 const VB_W = 300;
@@ -115,15 +116,7 @@ export default function IndependenceSquare({ params }: { params: VizParams }) {
           className="w-full max-w-[320px]"
         >
           {/* Sample space */}
-          <rect
-            x={X0}
-            y={Y0}
-            width={SQ}
-            height={SQ}
-            fill="rgb(248, 250, 252)"
-            stroke={INK}
-            strokeWidth="1.5"
-          />
+          <SampleSpaceFrame x={X0} y={Y0} width={SQ} height={SQ} />
 
           {/* B inside column A — the A ∩ B rectangle */}
           <rect
@@ -264,10 +257,10 @@ export default function IndependenceSquare({ params }: { params: VizParams }) {
             {pAB.toFixed(2)} {independent ? "=" : "≠"} {pAxpB.toFixed(2)}
           </span>
         </div>
-        <Row label="Pr(B | A)" value={pBgA} />
-        <Row label="Pr(B | A̅)" value={pBgAbar} />
-        <Row label="Pr(A)" value={pA} />
-        <Row label="Pr(B)" value={pB} />
+        <Row expr="Pr(B | A)" value={pBgA} compact />
+        <Row expr="Pr(B | A̅)" value={pBgAbar} compact />
+        <Row expr="Pr(A)" value={pA} compact />
+        <Row expr="Pr(B)" value={pB} compact />
       </div>
 
       <p className="text-[11px] leading-relaxed text-[color:var(--color-ink-500)]">
@@ -306,19 +299,3 @@ function Handle({
   );
 }
 
-/** Mono readout row, `label` left and the two-decimal `value` right. */
-function Row({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="flex justify-between gap-2 px-3 text-[color:var(--color-ink-500)]">
-      <span>{label}</span>
-      <span className="tabular-nums">{value.toFixed(2)}</span>
-    </div>
-  );
-}
-
-function clamp01(v: number) {
-  return Math.max(0, Math.min(1, v));
-}
-function toNum(v: unknown, fallback: number) {
-  return typeof v === "number" && Number.isFinite(v) ? v : fallback;
-}

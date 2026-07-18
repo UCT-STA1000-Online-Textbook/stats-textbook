@@ -16,6 +16,7 @@ import { useRef, useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { useSvgDrag, clampN } from "../useDrag";
 import { VizGuide } from "../VizGuide";
+import { SampleSpaceFrame } from "../shared";
 
 /** Tints used for the strips. Cycled if `n` exceeds the palette length. */
 const PALETTE = [
@@ -163,27 +164,14 @@ export default function SetPartition({ params }: { params: VizParams }) {
           className="w-full h-auto max-h-[300px]"
         >
           {/* S boundary */}
-          <rect
+          <SampleSpaceFrame
             x={X0}
             y={Y0}
             width={X1 - X0}
             height={Y1 - Y0}
-            fill="rgb(248, 250, 252)"
-            stroke="rgb(15, 23, 42)"
-            strokeWidth="1.5"
-            rx="6"
+            rx={6}
+            label={{ x: X1 - 8, y: Y0 + 16, fontSize: 13 }}
           />
-          <text
-            x={X1 - 8}
-            y={Y0 + 16}
-            textAnchor="end"
-            fontSize="13"
-            fontStyle="italic"
-            fontWeight="600"
-            fill="rgb(71, 85, 105)"
-          >
-            S
-          </text>
 
           {/* Partition strips */}
           {strips.map((s, i) => (

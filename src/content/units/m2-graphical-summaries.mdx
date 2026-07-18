@@ -27,6 +27,10 @@ quiz:
       - "28"
     answer: 1
     explanation: "Relative frequency = frequency ÷ total = 28 / 81 ≈ 0.35. Open the pie/bar explorer and read the 'Rel. freq' column — Engineering is the largest slice at 0.35."
+    vizHint: "categorical-display"
+    vizHintParams:
+      dataset: "mba"
+      chart: "bar"
   - id: "q3"
     type: "true-false"
     question: "A histogram differs from a bar chart in that its bars touch (no gaps) and represent intervals on a number line rather than separate named categories."
@@ -42,6 +46,9 @@ quiz:
       - "The two guidelines disagree, so neither can be trusted"
     answer: 1
     explanation: "Both formulas only suggest an approximate width; you are free to choose between half and double their value and to round to a tidy multiple of 2, 5 or 10. Here L = 50 is the natural choice. Drag the width slider to see 'too spikey' versus 'too blurred' for yourself."
+    vizHint: "histogram-builder"
+    vizHintParams:
+      dataset: "gmat"
   - id: "q5"
     type: "mcq"
     question: "A histogram has a long tail stretching to the right. This shape is described as:"
@@ -52,6 +59,9 @@ quiz:
       - "uniform"
     answer: 2
     explanation: "A long tail to the right means the distribution is skewed to the right (positively skewed) — exactly what the GMAT histogram shows. Switch on 'Mean & median' in the histogram builder: the mean is pulled toward the long right tail."
+    vizHint: "histogram-builder"
+    vizHintParams:
+      dataset: "gmat"
   - id: "q6"
     type: "mcq"
     question: "The histogram of the 75 share-risk values (Example 4B) shows two distinct peaks. This shape is called:"
@@ -62,6 +72,9 @@ quiz:
       - "truncated"
     answer: 1
     explanation: "Two clear peaks make the distribution bimodal. Here the lower peak is industrial shares and the upper peak is gold shares — a feature impossible to see in the raw list of 75 numbers but obvious once it is displayed. Load the 'Share risk' dataset in the histogram builder to see it."
+    vizHint: "histogram-builder"
+    vizHintParams:
+      dataset: "risk"
 prevUnit: "m1-conditional-probability"
 nextUnit: "m2-summary-measures"
 ---

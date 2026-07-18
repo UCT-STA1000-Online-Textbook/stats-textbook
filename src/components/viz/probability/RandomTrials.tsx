@@ -28,6 +28,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import * as CANNON from "cannon-es";
+import { createThreeScene } from "../threeScene";
 import { VizGuide } from "../VizGuide";
 import * as Plot from "@observablehq/plot";
 import type { VizParams } from "@/store/vizStore";
@@ -168,39 +169,25 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     if (!mount) return;
     const isCoin = experiment === "coin";
 
-    let width = mount.clientWidth || 400;
-    let height = mount.clientHeight || 240;
-
-    // Renderer — alpha so the container's CSS gradient shows through; pixel
-    // ratio capped at 2 so high-DPI phones don't render a punishing 3× buffer.
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 0);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFShadowMap; // soft by default in modern three
-    const canvas = renderer.domElement;
-    canvas.style.touchAction = "none"; // let Pointer Events own touch gestures
-    canvas.style.cursor = "pointer"; // the whole view is tap-to-throw
-    mount.appendChild(canvas);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
+    // Renderer/scene/camera/lights/floor-mesh/resize/RAF-pause boilerplate is
+    // shared with `CountingStudio` via `createThreeScene`; only the physics
+    // world, the thrown object, and tap-to-throw input are bespoke here.
+    const threeScene = createThreeScene({
+      mount,
+      camera: { fov: 45, near: 0.1, far: 200 },
+      ambient: { intensity: 1.7 },
+      directional: {
+        intensity: 2.6,
+        position: [6, 14, 6],
+        shadowMapSize: 512,
+        shadowBounds: { near: 1, far: 40, left: -8, right: 8, top: 8, bottom: -8 },
+      },
+      floor: { size: TRAY, color: 0x1e293b, roughness: 0.95, metalness: 0.05 },
+      cursor: "pointer", // the whole view is tap-to-throw
+    });
+    const { scene, camera, canvas, addDisposer, ensureLoop, setOnFrame } = threeScene;
     camera.position.set(0, 12, 9.5);
     camera.lookAt(0, 0, 0);
-
-    scene.add(new THREE.AmbientLight(0xffffff, 1.7));
-    const dirLight = new THREE.DirectionalLight(0xffffff, 2.6);
-    dirLight.position.set(6, 14, 6);
-    dirLight.castShadow = true;
-    dirLight.shadow.mapSize.set(512, 512);
-    dirLight.shadow.camera.near = 1;
-    dirLight.shadow.camera.far = 40;
-    dirLight.shadow.camera.left = -8;
-    dirLight.shadow.camera.right = 8;
-    dirLight.shadow.camera.top = 8;
-    dirLight.shadow.camera.bottom = -8;
-    scene.add(dirLight);
 
     // Physics world. Heavy gravity keeps trials snappy in the small viewport.
     const world = new CANNON.World({ gravity: new CANNON.Vec3(0, -45, 0) });
@@ -216,10 +203,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       }),
     );
 
-    // Disposal closures collected as objects are built; run on cleanup.
-    const disposeFns: Array<() => void> = [];
-
-    // Floor: infinite physics plane + a felt-coloured visual quad.
+    // Floor physics body — the hook already built the matching visual quad.
     const floorBody = new CANNON.Body({
       mass: 0,
       material: trayMat,
@@ -227,18 +211,6 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     });
     floorBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
     world.addBody(floorBody);
-
-    const floorGeom = new THREE.PlaneGeometry(TRAY, TRAY);
-    const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x1e293b,
-      roughness: 0.95,
-      metalness: 0.05,
-    });
-    const floorMesh = new THREE.Mesh(floorGeom, floorMat);
-    floorMesh.rotation.x = -Math.PI / 2;
-    floorMesh.receiveShadow = true;
-    scene.add(floorMesh);
-    disposeFns.push(() => floorGeom.dispose(), () => floorMat.dispose());
 
     // Four invisible physics walls keep the object inside the camera's view.
     const addWall = (x: number, z: number, ry: number) => {
@@ -284,7 +256,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
         48,
       );
       objMesh = new THREE.Mesh(coinGeom, coinMats);
-      disposeFns.push(
+      addDisposer(
         () => coinGeom.dispose(),
         ...coinMats.map((m) => () => {
           m.map?.dispose();
@@ -317,7 +289,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       );
       const dieGeom = new THREE.BoxGeometry(DIE, DIE, DIE);
       objMesh = new THREE.Mesh(dieGeom, dieMats);
-      disposeFns.push(
+      addDisposer(
         () => dieGeom.dispose(),
         ...dieMats.map((m) => () => {
           m.map?.dispose();
@@ -414,10 +386,14 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     };
     canvas.addEventListener("pointerdown", onPointerDown);
 
-    // --- Animation loop: runs only while something is moving ---
+    // --- Physics stepping: fixed 1/60s steps via a time accumulator, so the
+    //     simulation advances at the same rate regardless of display refresh
+    //     rate. `deltaMs` is capped before accrual so a backgrounded tab (huge
+    //     elapsed time on the next frame) catches up over a few steps instead
+    //     of spiralling through hundreds of steps at once. ---
     const STEP = 1 / 60;
-    let rafId = 0;
-    let loopRunning = false;
+    const MAX_FRAME_S = 0.25; // clamp a single frame's elapsed time to 250ms
+    let accumulator = 0;
 
     const syncMesh = () => {
       objMesh.position.set(
@@ -433,9 +409,13 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       );
     };
 
-    const frame = () => {
-      rafId = 0;
-      world.step(STEP);
+    setOnFrame((deltaMs) => {
+      const frameS = Math.min(deltaMs / 1000, MAX_FRAME_S);
+      accumulator += frameS;
+      while (accumulator >= STEP) {
+        world.step(STEP);
+        accumulator -= STEP;
+      }
       syncMesh();
 
       const motion =
@@ -456,23 +436,11 @@ export default function RandomTrials({ params }: { params: VizParams }) {
           setLastRoll(labels[outcome]);
         }
         isRolling = false;
+        accumulator = 0; // idling — don't carry a stale remainder into the next throw
       }
 
-      renderer.render(scene, camera);
-
-      if (isRolling) {
-        rafId = requestAnimationFrame(frame);
-      } else {
-        loopRunning = false; // idle — stop burning frames until next interaction
-      }
-    };
-
-    /** Restart the render loop if it has gone idle. */
-    function ensureLoop() {
-      if (loopRunning) return;
-      loopRunning = true;
-      rafId = requestAnimationFrame(frame);
-    }
+      return isRolling; // false ⇒ the shared loop goes idle after this frame
+    });
 
     // Imperative controls for the buttons. `spin` is cosmetic only — the bulk
     // "Simulate" tally is computed in React state, so the spin must not be
@@ -507,32 +475,32 @@ export default function RandomTrials({ params }: { params: VizParams }) {
     syncMesh();
     ensureLoop(); // draw the initial frame
 
-    // Keep the renderer and camera matched to the panel width.
-    const resizeObserver = new ResizeObserver(() => {
-      width = mount.clientWidth;
-      height = mount.clientHeight;
-      if (width === 0 || height === 0) return;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-      renderer.render(scene, camera);
-    });
-    resizeObserver.observe(mount);
-
     // Full teardown — leaking GPU buffers or animation frames here would
     // compound on every TryThis click and every experiment switch.
     return () => {
-      resizeObserver.disconnect();
-      if (rafId) cancelAnimationFrame(rafId);
       canvas.removeEventListener("pointerdown", onPointerDown);
       apiRef.current = null;
-      disposeFns.forEach((fn) => fn());
-      renderer.dispose();
-      if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+      threeScene.dispose();
     };
   }, [experiment]);
 
-  // --- Observable Plot bar chart, redrawn when the tally or experiment changes ---
+  // --- Observable Plot bar chart ---
+  // Split into two effects so a tally update doesn't tear down and recreate
+  // the ResizeObserver: `redrawChartRef` holds the latest redraw closure
+  // (rebuilt whenever the data changes — Observable Plot has no cheap partial
+  // update, so a full rebuild is the correct cost there), and the
+  // mount-scoped observer below just replays whatever that ref currently
+  // points to on a container resize.
+  const redrawChartRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    const container = chartRef.current;
+    if (!container) return;
+    const observer = new ResizeObserver(() => redrawChartRef.current());
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const container = chartRef.current;
     if (!container) return;
@@ -597,10 +565,8 @@ export default function RandomTrials({ params }: { params: VizParams }) {
       container.appendChild(chart);
     };
 
+    redrawChartRef.current = render;
     render();
-    const observer = new ResizeObserver(render);
-    observer.observe(container);
-    return () => observer.disconnect();
   }, [counts, experiment]);
 
   const total = counts.reduce((a, b) => a + b, 0);

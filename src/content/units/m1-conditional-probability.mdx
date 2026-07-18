@@ -36,12 +36,17 @@ quiz:
       - "0.1"
       - "0.4"
     answer: 2
-    explanation: "Rearranging the definition Pr(A | B) = Pr(A ∩ B) / Pr(B) gives Pr(A ∩ B) = Pr(A | B) × Pr(B) = 0.5 × 0.2 = 0.1."
+    explanation: "Rearranging the definition Pr(A | B) = Pr(A ∩ B) / Pr(B) gives Pr(A ∩ B) = Pr(A | B) × Pr(B) = 0.5 × 0.2 = 0.1. Open the independence square with the base probability at 0.2 and the conditional probability at 0.5 (relabelling the square's A and B as this question's B and A) — the shared rectangle works out to exactly Pr(A ∩ B) = 0.1."
+    vizHint: "independence-square"
+    vizHintParams:
+      pa: 0.2
+      pbga: 0.5
   - id: "q4"
     type: "true-false"
     question: "Events A and B are independent if Pr(A ∩ B) = Pr(A) × Pr(B)."
     answer: true
-    explanation: "True — that is the definition of independence. It is equivalent to Pr(B | A) = Pr(B): knowing A has occurred leaves the probability of B unchanged."
+    explanation: "True — that is the definition of independence. It is equivalent to Pr(B | A) = Pr(B): knowing A has occurred leaves the probability of B unchanged. Open the independence square and drag Pr(B|A) until it equals Pr(B|Ā) — that's the moment A and B become independent."
+    vizHint: "independence-square"
   - id: "q5"
     type: "true-false"
     question: "If two events, each with positive probability, are mutually exclusive, then they are independent."
@@ -57,6 +62,11 @@ quiz:
       - "0.48"
     answer: 0
     explanation: "By Bayes' theorem, Pr(in-house | defective) = (0.06 × 0.8) / (0.06 × 0.8 + 0.08 × 0.2) = 0.048 / 0.064 = 0.75. This is Example 49B."
+    vizHint: "bayes-grid"
+    vizHintParams:
+      pc: 0.8
+      pdc: 0.06
+      pdcbar: 0.08
 prevUnit: "m1-permutations-combinations"
 nextUnit: "m2-graphical-summaries"
 ---

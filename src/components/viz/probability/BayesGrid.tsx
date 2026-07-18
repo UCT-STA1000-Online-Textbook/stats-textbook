@@ -24,6 +24,7 @@
 import { useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { VizGuide } from "../VizGuide";
+import { Slider, clamp01, toNum } from "../shared";
 
 /**
  * Population size. 250 = 25 × 10, and divides so that Example 49B's rates
@@ -128,9 +129,9 @@ export default function BayesGrid({ params }: { params: VizParams }) {
       </div>
 
       <div className="space-y-2">
-        <Slider label="Pr(C) — made in-house" value={pC} onChange={setPC} />
-        <Slider label="Pr(D | C) — in-house defect rate" value={pDC} onChange={setPDC} />
-        <Slider label="Pr(D | C̄) — bought-in defect rate" value={pDCbar} onChange={setPDCbar} />
+        <Slider label="Pr(C) — made in-house" value={pC} onChange={setPC} mono={false} />
+        <Slider label="Pr(D | C) — in-house defect rate" value={pDC} onChange={setPDC} mono={false} />
+        <Slider label="Pr(D | C̄) — bought-in defect rate" value={pDCbar} onChange={setPDCbar} mono={false} />
       </div>
 
       <div className="flex items-center justify-center">
@@ -343,42 +344,3 @@ function Chip({
   );
 }
 
-/** Labelled 0–1 range slider, matching the project's slider styling. */
-function Slider({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-0.5">
-        <label className="text-[12px] text-[color:var(--color-ink-700)]">
-          {label}
-        </label>
-        <span className="text-[12px] font-mono tabular-nums text-[color:var(--color-ink-900)]">
-          {value.toFixed(2)}
-        </span>
-      </div>
-      <input
-        type="range"
-        min={0}
-        max={1}
-        step={0.01}
-        value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full h-1.5 rounded-full appearance-none bg-blue-100 accent-blue-600 cursor-pointer"
-      />
-    </div>
-  );
-}
-
-function clamp01(v: number) {
-  return Math.max(0, Math.min(1, v));
-}
-function toNum(v: unknown, fallback: number) {
-  return typeof v === "number" && Number.isFinite(v) ? v : fallback;
-}

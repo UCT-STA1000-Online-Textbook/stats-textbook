@@ -17,6 +17,9 @@ quiz:
       - "3125"
     answer: 2
     explanation: "Arranging all n distinct objects in order is Counting Rule 1: the number of permutations is n! = 5! = 5 × 4 × 3 × 2 × 1 = 120."
+    vizHint: "counting-studio"
+    vizHintParams:
+      scenario: "arrange"
   - id: "q2"
     type: "mcq"
     question: "A club of 10 members must elect a president, a secretary and a treasurer — three different people in three distinct roles. In how many ways can this be done?"
@@ -27,6 +30,9 @@ quiz:
       - "30"
     answer: 0
     explanation: "The roles are distinct, so order matters, and no one holds two roles, so there is no repetition. This is Counting Rule 2 with n = 10, r = 3: (10)ᵣ = 10! / (10 − 3)! = 10 × 9 × 8 = 720."
+    vizHint: "counting-studio"
+    vizHintParams:
+      scenario: "order"
   - id: "q3"
     type: "mcq"
     question: "Which of these situations is counted with combinations rather than permutations?"
@@ -37,6 +43,9 @@ quiz:
       - "Forming a 4-digit PIN from the digits 0–9"
     answer: 1
     explanation: "A subcommittee is just a set of people — the order in which they are chosen is irrelevant — so it is a combination. The other three all care about order (medal ranks, wall positions, digit places), making them permutation problems."
+    vizHint: "counting-studio"
+    vizHintParams:
+      scenario: "choose"
   - id: "q4"
     type: "true-false"
     question: "Choosing r objects and then arranging them explains the identity C(n, r) × r! = (n)ᵣ."
@@ -52,6 +61,9 @@ quiz:
       - "24"
     answer: 2
     explanation: "Repetition is allowed and order matters, so this is Counting Rule 4 with n = 10 types and r = 4 slots: 10⁴ = 10 000 — exactly the count of the numbers 0000 to 9999."
+    vizHint: "counting-studio"
+    vizHintParams:
+      scenario: "code"
   - id: "q6"
     type: "mcq"
     question: "A work team of 9 must be formed from 15 available people. How many different teams are possible?"

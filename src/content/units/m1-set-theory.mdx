@@ -22,6 +22,7 @@ quiz:
     question: "As the number of trials n increases, the relative frequency r/n always equals the true probability exactly."
     answer: false
     explanation: "False. The relative frequency only tends toward the true probability as a limit — any finite run will almost certainly show some deviation. Open 'Run trials yourself' and hit Simulate 100× a few times: each bar drifts toward the dashed theoretical line without ever locking onto it permanently."
+    vizHint: "random-trials"
   - id: "q3"
     type: "mcq"
     question: "Pr(A) = 0.5, Pr(B) = 0.6, Pr(A ∩ B) = 0.3. Using the Addition Rule (Theorem 3), what is Pr(A ∪ B)?"
@@ -32,6 +33,11 @@ quiz:
       - "0.5"
     answer: 1
     explanation: "Theorem 3: Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B) = 0.5 + 0.6 − 0.3 = 0.8. Open the probability Venn diagram and drag the sliders to these exact values — the Pr(A ∪ B) box should read 0.80."
+    vizHint: "probability-venn"
+    vizHintParams:
+      pA: 0.5
+      pB: 0.6
+      pAB: 0.3
   - id: "q4"
     type: "mcq"
     question: "An elementary event in a sample space S is defined as an event that contains..."
@@ -62,6 +68,9 @@ quiz:
       - "2/3 ≈ 0.67"
     answer: 2
     explanation: "Using the equiprobable formula: Pr(A) = n(A)/N = 3/6 = 1/2. The event {2,4,6} contains 3 of the 6 equally likely elementary events. This matches Example 11A exactly."
+    vizHint: "random-trials"
+    vizHintParams:
+      experiment: "die"
   - id: "q7"
     type: "true-false"
     question: "It follows from Kolmogorov's axioms that Pr(∅) = 0."

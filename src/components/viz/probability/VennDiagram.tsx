@@ -24,6 +24,7 @@ import { useState, useRef, type ReactNode } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { useSvgDrag, clampN } from "../useDrag";
 import { VizGuide } from "../VizGuide";
+import { Bar, SampleSpaceFrame } from "../shared";
 
 type Mode =
   | "A"
@@ -51,15 +52,6 @@ interface ModeMeta {
   desc: string;
   /** The regions this operation picks out — the ones that get shaded. */
   highlight: Region[];
-}
-
-/**
- * Renders a horizontal bar that spans every character it wraps. Use for any
- * compound complement like `\overline{A \cup B}` — the Unicode combining
- * macron only attaches to a single preceding character.
- */
-function Bar({ children }: { children: ReactNode }) {
-  return <span className="overline">{children}</span>;
 }
 
 const MODES: ModeMeta[] = [
@@ -348,27 +340,14 @@ export default function VennDiagram({ params }: { params: VizParams }) {
           className="w-full h-auto max-h-[300px]"
         >
           {/* Sample-space box. */}
-          <rect
+          <SampleSpaceFrame
             x={S.x}
             y={S.y}
             width={S.w}
             height={S.h}
-            rx="8"
-            fill={PAPER}
-            stroke="rgb(15, 23, 42)"
-            strokeWidth="1.5"
+            rx={8}
+            label={{ x: 370, y: 36, fontSize: 13 }}
           />
-          <text
-            x="370"
-            y="36"
-            textAnchor="end"
-            fontSize="13"
-            fontStyle="italic"
-            fontWeight="600"
-            fill="rgb(71, 85, 105)"
-          >
-            S
-          </text>
 
           {/* The highlighted set, in one colour; everything else stays blank.
               When "neither" is part of it, shade the whole box and punch out

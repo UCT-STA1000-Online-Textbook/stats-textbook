@@ -10,7 +10,9 @@ import { mdxComponents } from "./mdxComponents";
 
 const QuizQuestionSchema = z.object({
   id: z.string(),
-  type: z.enum(["mcq", "true-false", "numeric"]),
+  // Only types QuizQuestion.tsx can render. Adding a new type here requires a
+  // matching input UI, otherwise questions of that type block quiz submission.
+  type: z.enum(["mcq", "true-false"]),
   question: z.string(),
   options: z.array(z.string()).optional(),
   answer: z.union([z.number(), z.boolean()]),

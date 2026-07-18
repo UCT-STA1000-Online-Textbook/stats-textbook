@@ -37,8 +37,9 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
   const setViz = useVizStore((s) => s.setViz);
   const resetViz = useVizStore((s) => s.resetViz);
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
-  const getUnitProgress = useProgressStore((s) => s.getUnitProgress);
-  const progress = getUnitProgress(frontmatter.slug);
+  // Subscribe to the unit's progress record itself (not the store's getter
+  // method) so the completion badges update live when a quiz is submitted.
+  const progress = useProgressStore((s) => s.units[frontmatter.slug] ?? null);
 
   // Look up neighbouring units once per navigation so the prev/next cards can
   // show the actual unit titles instead of generic "Previous"/"Next" labels.

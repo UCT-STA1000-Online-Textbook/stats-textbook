@@ -28,7 +28,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ALL_UNITS, MODULES } from "@/content/units";
-import { useProgressStore } from "@/store/progressStore";
+import {
+  useProgressStore,
+  selectModuleProgress,
+  selectUnitProgress,
+} from "@/store/progressStore";
 import { useUiStore } from "@/store/uiStore";
 import {
   IconCheck,
@@ -40,8 +44,10 @@ import {
 
 export function Sidebar() {
   const pathname = usePathname();
-  const getModuleProgress = useProgressStore((s) => s.getModuleProgress);
-  const getUnitProgress = useProgressStore((s) => s.getUnitProgress);
+  // Subscribe to the data, not the store's getter methods — the getters are
+  // stable references, so they would never trigger a re-render when a quiz
+  // completion lands. Progress is derived from `units` via pure selectors.
+  const units = useProgressStore((s) => s.units);
 
   const collapsed = useUiStore((s) => s.sidebarCollapsed);
   const navDrawerOpen = useUiStore((s) => s.navDrawerOpen);
@@ -70,7 +76,7 @@ export function Sidebar() {
   // Course-wide totals shown in the brand block + footer.
   const courseTotals = MODULES.reduce(
     (acc, m) => {
-      const { completed, total } = getModuleProgress(m.id);
+      const { completed, total } = selectModuleProgress(units, m.id);
       return { completed: acc.completed + completed, total: acc.total + total };
     },
     { completed: 0, total: 0 }
@@ -188,7 +194,7 @@ export function Sidebar() {
         <nav className="flex-1 overflow-y-auto py-2">
           {MODULES.map((mod, modIdx) => {
             const moduleUnits = ALL_UNITS.filter((u) => u.moduleId === mod.id);
-            const { completed, total } = getModuleProgress(mod.id);
+            const { completed, total } = selectModuleProgress(units, mod.id);
             const hasActive = activeModuleId === mod.id;
             // Override wins; otherwise default to "expanded if it owns the active unit".
             const isOpen = overrides[mod.id] ?? hasActive;
@@ -233,7 +239,7 @@ export function Sidebar() {
                   <ul className="mt-0.5 mb-2 ml-4 pl-3 border-l border-[color:var(--color-line)] space-y-0.5">
                     {moduleUnits.map((unit) => {
                       const isActive = activeSlug === unit.slug;
-                      const progress = getUnitProgress(unit.slug);
+                      const progress = selectUnitProgress(units, unit.slug);
                       const isComplete = progress?.completed ?? false;
                       const hasAttempts = (progress?.attempts ?? 0) > 0;
 

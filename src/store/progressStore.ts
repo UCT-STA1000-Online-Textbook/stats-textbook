@@ -26,7 +26,31 @@ interface ProgressState {
   getUnitProgress: (slug: string) => UnitProgress | null;
   getCompletedUnits: () => string[];
   getModuleProgress: (moduleId: string) => { completed: number; total: number };
-  resetUnit: (slug: string) => void;
+}
+
+/**
+ * Pure selector: progress record for one unit, or null if never attempted.
+ *
+ * Components must derive progress from a reactive `units` subscription
+ * (`useProgressStore((s) => s.units)`) rather than calling the store's getter
+ * methods in render — the getters are stable function references, so
+ * subscribing to them never re-renders when progress actually changes.
+ */
+export function selectUnitProgress(
+  units: Record<string, UnitProgress>,
+  slug: string
+): UnitProgress | null {
+  return units[slug] ?? null;
+}
+
+/** Pure selector: completed / total unit counts for one module. */
+export function selectModuleProgress(
+  units: Record<string, UnitProgress>,
+  moduleId: string
+): { completed: number; total: number } {
+  const moduleUnits = ALL_UNITS.filter((u) => u.moduleId === moduleId);
+  const completed = moduleUnits.filter((u) => units[u.slug]?.completed).length;
+  return { completed, total: moduleUnits.length };
 }
 
 export const useProgressStore = create<ProgressState>()(
@@ -53,27 +77,18 @@ export const useProgressStore = create<ProgressState>()(
         }));
       },
 
-      getUnitProgress: (slug) => get().units[slug] ?? null,
+      // Imperative getters for non-render call sites (and the Phase 2 API
+      // swap). Render code should use the pure `select*` helpers above with a
+      // reactive `units` subscription instead.
+      getUnitProgress: (slug) => selectUnitProgress(get().units, slug),
 
       getCompletedUnits: () =>
         Object.values(get().units)
           .filter((u) => u.completed)
           .map((u) => u.slug),
 
-      getModuleProgress: (moduleId) => {
-        const moduleUnits = ALL_UNITS.filter((u) => u.moduleId === moduleId);
-        const completed = moduleUnits.filter(
-          (u) => get().units[u.slug]?.completed
-        ).length;
-        return { completed, total: moduleUnits.length };
-      },
-
-      resetUnit: (slug) =>
-        set((state) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { [slug]: _, ...rest } = state.units;
-          return { units: rest };
-        }),
+      getModuleProgress: (moduleId) =>
+        selectModuleProgress(get().units, moduleId),
     }),
     { name: "sta1000-progress" }
   )

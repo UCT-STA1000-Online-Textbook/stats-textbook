@@ -27,8 +27,10 @@ export function Quiz() {
   const { slug, questions } = useQuizContext();
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
-  const getUnitProgress = useProgressStore((s) => s.getUnitProgress);
-  const progress = getUnitProgress(slug);
+  // Subscribe to the unit's progress record itself (not the store's getter
+  // method) so the launcher re-renders — best score, "Retake" label — the
+  // moment a quiz submission lands.
+  const progress = useProgressStore((s) => s.units[slug] ?? null);
 
   // Units without quiz questions (e.g. placeholders) skip the launcher entirely.
   if (questions.length === 0) return null;

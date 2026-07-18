@@ -275,7 +275,7 @@ export default function SetBuilderLine({ params }: { params: VizParams }) {
             ]}
           />
         </div>
-        <p className="mt-0.5 font-mono text-[12.5px] leading-relaxed text-[color:var(--color-ink-900)]">
+        <p className="mt-0.5 font-mono text-[13px] leading-relaxed text-[color:var(--color-ink-900)]">
           {resultExpr}
         </p>
         <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">

@@ -17,16 +17,14 @@
  * future summary-measures viz in WU2, reuse the same authoritative numbers.
  */
 
-/** A colour ramp for categorical slices/bars; index wraps for long lists. */
-export const CATEGORY_COLORS = [
-  "rgb(37, 99, 235)", // blue-600
-  "rgb(217, 119, 6)", // amber-600
-  "rgb(5, 150, 105)", // emerald-600
-  "rgb(220, 38, 38)", // red-600
-  "rgb(124, 58, 237)", // violet-600
-  "rgb(8, 145, 178)", // cyan-600
-  "rgb(190, 24, 93)", // pink-700
-] as const;
+import { CATEGORICAL_PALETTE } from "../shared";
+
+/**
+ * Colour ramp for categorical slices/bars; index wraps for long lists.
+ * Re-exports the app-wide `CATEGORICAL_PALETTE` (see `shared.tsx`) under
+ * this dataset module's established name so existing imports keep working.
+ */
+export const CATEGORY_COLORS = CATEGORICAL_PALETTE;
 
 /** One labelled category and its count (or percentage). */
 export interface Category {

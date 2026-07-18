@@ -30,7 +30,7 @@ export function KeywordChip({ children, vizId, ...vizParamProps }: KeywordChipPr
   return (
     <button
       onClick={handleClick}
-      className="not-italic font-[inherit] text-indigo-600 underline underline-offset-2 decoration-indigo-300 hover:text-indigo-800 hover:decoration-indigo-500 transition-colors cursor-pointer"
+      className="not-italic font-[inherit] text-blue-600 underline underline-offset-2 decoration-blue-300 hover:text-blue-800 hover:decoration-blue-500 transition-colors cursor-pointer"
     >
       {children}
     </button>

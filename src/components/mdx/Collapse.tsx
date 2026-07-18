@@ -57,7 +57,7 @@ export function Collapse({ title, hint, children }: CollapseProps) {
 
       {/* Mounted only when open so collapsed maths isn't measured up-front. */}
       {open && (
-        <div className="px-4 pb-1 border-t border-[color:var(--color-line)]">
+        <div className="callout px-4 pb-1 border-t border-[color:var(--color-line)]">
           {children}
         </div>
       )}

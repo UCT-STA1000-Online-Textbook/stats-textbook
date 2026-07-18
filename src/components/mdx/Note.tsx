@@ -10,7 +10,7 @@ import { IconNote } from "@/components/icons";
 
 export function Note({ children }: { children: ReactNode }) {
   return (
-    <aside className="my-5 rounded-xl border border-[color:var(--color-line)] bg-slate-50/60 px-4 py-3 flex gap-3">
+    <aside className="callout my-5 rounded-xl border border-[color:var(--color-line)] bg-slate-50/60 px-4 py-3 flex gap-3">
       <span className="flex-shrink-0 grid place-items-center w-6 h-6 rounded-md bg-white border border-[color:var(--color-line)] text-[color:var(--color-ink-500)]">
         <IconNote size={12} strokeWidth={2} />
       </span>

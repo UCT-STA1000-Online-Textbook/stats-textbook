@@ -6,7 +6,7 @@
  * shows a status dot driven by `progressStore`:
  *
  *   complete  → green tick
- *   active    → indigo ring (the unit currently routed to)
+ *   active    → blue ring (the unit currently routed to)
  *   attempted → amber dot (quiz attempted but not yet 100%)
  *   untouched → empty circle
  *
@@ -122,7 +122,7 @@ export function Sidebar() {
                   title={mod.title}
                   className={`grid place-items-center w-9 h-9 rounded-md text-[11px] font-semibold tabular-nums transition-colors ${
                     isActive
-                      ? "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200"
+                      ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200"
                       : "bg-slate-100 text-[color:var(--color-ink-500)] hover:bg-slate-200"
                   }`}
                 >
@@ -183,7 +183,7 @@ export function Sidebar() {
             </div>
             <div className="mt-1.5 h-1.5 rounded-full bg-[color:var(--color-line)] overflow-hidden">
               <div
-                className="h-full rounded-full bg-indigo-500 transition-all duration-700 ease-out"
+                className="h-full rounded-full bg-blue-500 transition-all duration-700 ease-out"
                 style={{ width: `${coursePct}%` }}
               />
             </div>
@@ -215,7 +215,7 @@ export function Sidebar() {
                   <span
                     className={`grid place-items-center w-6 h-6 rounded-md text-[10px] font-semibold tabular-nums ${
                       hasActive
-                        ? "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200"
+                        ? "bg-blue-50 text-blue-700 ring-1 ring-blue-200"
                         : "bg-slate-100 text-[color:var(--color-ink-500)]"
                     }`}
                   >
@@ -249,7 +249,7 @@ export function Sidebar() {
                           {isActive && (
                             <span
                               aria-hidden
-                              className="absolute -left-[13px] top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-full bg-indigo-500"
+                              className="absolute -left-[13px] top-1/2 -translate-y-1/2 w-[2px] h-5 rounded-full bg-blue-500"
                             />
                           )}
                           <Link
@@ -257,7 +257,7 @@ export function Sidebar() {
                             onClick={() => setNavDrawerOpen(false)}
                             className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-md text-[13px] leading-snug transition-colors ${
                               isActive
-                                ? "bg-indigo-50/70 text-indigo-900 font-medium"
+                                ? "bg-blue-50/70 text-blue-900 font-medium"
                                 : "text-[color:var(--color-ink-700)] hover:bg-slate-50 hover:text-[color:var(--color-ink-900)]"
                             }`}
                           >
@@ -317,8 +317,8 @@ function StatusDot({
   }
   if (active) {
     return (
-      <span className="grid place-items-center w-4 h-4 rounded-full ring-2 ring-indigo-400 ring-offset-1 ring-offset-white">
-        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+      <span className="grid place-items-center w-4 h-4 rounded-full ring-2 ring-blue-400 ring-offset-1 ring-offset-white">
+        <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
       </span>
     );
   }

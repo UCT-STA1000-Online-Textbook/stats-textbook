@@ -123,7 +123,7 @@ export const mdxComponents: MDXComponents = {
 
   blockquote: (props) => (
     <blockquote
-      className="my-5 border-l-2 border-indigo-300 pl-4 italic text-[color:var(--color-ink-500)]"
+      className="my-5 border-l-2 border-blue-300 pl-4 italic text-[color:var(--color-ink-500)]"
       {...props}
     />
   ),
@@ -161,7 +161,7 @@ export const mdxComponents: MDXComponents = {
 
   a: (props) => (
     <a
-      className="text-indigo-600 underline-offset-2 decoration-indigo-300 hover:decoration-indigo-500 hover:text-indigo-700 transition-colors"
+      className="text-blue-600 underline-offset-2 decoration-blue-300 hover:decoration-blue-500 hover:text-blue-700 transition-colors"
       {...props}
     />
   ),

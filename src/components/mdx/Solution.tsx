@@ -44,7 +44,7 @@ export function Solution({ children }: SolutionProps) {
       {/* Mounted only when open so collapsed KaTeX/maths isn't measured or
           read out by assistive tech. */}
       {open && (
-        <div className="mt-2 rounded-lg bg-blue-50/60 px-3 py-2.5 [&>p]:mb-0 [&>p:not(:last-child)]:mb-2">
+        <div className="callout mt-2 rounded-lg bg-blue-50/60 px-3 py-2.5 [&>p]:mb-0 [&>p:not(:last-child)]:mb-2">
           {children}
         </div>
       )}

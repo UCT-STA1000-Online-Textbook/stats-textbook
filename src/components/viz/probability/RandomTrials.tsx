@@ -551,12 +551,13 @@ export default function RandomTrials({ params }: { params: VizParams }) {
           Plot.barY(data, {
             x: "outcome",
             y: "pct",
-            fill: "rgb(249, 115, 22)", // orange-500
+            fill: "rgb(37, 99, 235)", // accent (blue-600) — the observed frequencies
             rx: 2,
           }),
-          // Theoretical probability — the line the bars converge on as n grows.
+          // Theoretical probability — a neutral dark line the bars converge on
+          // as n grows, kept off-accent so it reads as a reference, not data.
           Plot.ruleY([theoreticalPct], {
-            stroke: "rgb(15, 23, 42)",
+            stroke: "rgb(42, 49, 71)", // ink-700
             strokeDasharray: "4 3",
           }),
           Plot.ruleY([0]),
@@ -646,7 +647,7 @@ export default function RandomTrials({ params }: { params: VizParams }) {
           object, surfaced as a button for discoverability and accessibility. */}
       <button
         onClick={() => apiRef.current?.flip()}
-        className="shrink-0 px-3 py-2 rounded-md bg-orange-500 text-white text-[13px] font-semibold hover:bg-orange-600 transition-colors"
+        className="shrink-0 px-3 py-2 rounded-md bg-blue-600 text-white text-[13px] font-semibold hover:bg-blue-700 transition-colors"
       >
         {isCoin ? "Flip the coin" : "Roll the die"}
       </button>

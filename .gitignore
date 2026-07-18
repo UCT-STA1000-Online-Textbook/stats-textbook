@@ -46,4 +46,7 @@ CLAUDE.md
 
 .playwright-mcp/
 
+# Ad-hoc browser-test screenshots saved to the repo root
+/*.png
+
 docs/

@@ -237,7 +237,7 @@ export default function IndependenceSquare({ params }: { params: VizParams }) {
         </span>
         <button
           onClick={levelCut}
-          className="rounded-md border border-[color:var(--color-line)] bg-white px-2.5 py-1 text-[12px] font-medium text-[color:var(--color-ink-700)] hover:border-indigo-400 transition-colors"
+          className="rounded-md border border-[color:var(--color-line)] bg-white px-2.5 py-1 text-[12px] font-medium text-[color:var(--color-ink-700)] hover:border-blue-400 transition-colors"
         >
           Level the cut
         </button>

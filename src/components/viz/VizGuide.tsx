@@ -43,9 +43,9 @@ export function VizGuide({ steps }: VizGuideProps) {
         type="button"
         onClick={toggle}
         aria-expanded={open}
-        className="inline-flex items-center gap-1 rounded-md border border-[color:var(--color-line)] bg-white px-2 py-1 text-[11px] font-medium text-[color:var(--color-ink-500)] transition-colors hover:border-indigo-300 hover:text-[color:var(--color-ink-900)]"
+        className="inline-flex items-center gap-1 rounded-md border border-[color:var(--color-line)] bg-white px-2 py-1 text-[11px] font-medium text-[color:var(--color-ink-500)] transition-colors hover:border-blue-300 hover:text-[color:var(--color-ink-900)]"
       >
-        <span className="grid place-items-center w-3.5 h-3.5 rounded-full bg-indigo-500 text-[9px] font-bold text-white">
+        <span className="grid place-items-center w-3.5 h-3.5 rounded-full bg-blue-500 text-[10px] font-bold text-white">
           i
         </span>
         How to use
@@ -63,13 +63,13 @@ export function VizGuide({ steps }: VizGuideProps) {
               openUp ? "bottom-full mb-1" : "top-full mt-1"
             }`}
           >
-            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-indigo-600">
+            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
               How this works
             </p>
             <ol className="space-y-1.5 text-[12px] leading-snug text-[color:var(--color-ink-700)]">
               {steps.map((step, i) => (
                 <li key={i} className="flex gap-1.5">
-                  <span className="font-semibold text-indigo-500">
+                  <span className="font-semibold text-blue-500">
                     {i + 1}.
                   </span>
                   <span>{step}</span>

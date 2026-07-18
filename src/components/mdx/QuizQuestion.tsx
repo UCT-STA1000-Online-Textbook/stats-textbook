@@ -190,10 +190,10 @@ function OptionButton({
 
   // Visual tone — explicit ladder rather than nested ternaries for legibility.
   let tone =
-    "bg-white border-[color:var(--color-line)] text-[color:var(--color-ink-700)] hover:border-indigo-300 hover:bg-indigo-50/30";
+    "bg-white border-[color:var(--color-line)] text-[color:var(--color-ink-700)] hover:border-blue-300 hover:bg-blue-50/30";
   if (selected && !correct && !wrong)
     tone =
-      "bg-indigo-50/70 border-indigo-300 text-indigo-900 ring-1 ring-indigo-200/60";
+      "bg-blue-50/70 border-blue-300 text-blue-900 ring-1 ring-blue-200/60";
   if (correct) tone = "bg-emerald-50 border-emerald-300 text-emerald-900";
   if (wrong) tone = "bg-red-50 border-red-300 text-red-900";
 
@@ -211,8 +211,8 @@ function OptionButton({
               : wrong
                 ? "bg-red-500 text-white"
                 : selected
-                  ? "bg-indigo-500 text-white"
-                  : "bg-slate-100 text-[color:var(--color-ink-500)] group-hover:bg-indigo-100 group-hover:text-indigo-700"
+                  ? "bg-blue-500 text-white"
+                  : "bg-slate-100 text-[color:var(--color-ink-500)] group-hover:bg-blue-100 group-hover:text-blue-700"
           }`}
         >
           {correct ? (

@@ -18,7 +18,7 @@ interface TheoremProps {
 
 export function Theorem({ name, children }: TheoremProps) {
   return (
-    <aside className="my-5 rounded-xl bg-white border border-[color:var(--color-line-strong)] overflow-hidden">
+    <aside className="callout my-5 rounded-xl bg-white border border-[color:var(--color-line-strong)] overflow-hidden">
       <header className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-b border-[color:var(--color-line)]">
         <span className="grid place-items-center w-5 h-5 rounded-md bg-[color:var(--color-ink-900)] text-white">
           <IconScale size={11} strokeWidth={2.25} />

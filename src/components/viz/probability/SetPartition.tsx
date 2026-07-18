@@ -16,17 +16,7 @@ import { useRef, useState } from "react";
 import type { VizParams } from "@/store/vizStore";
 import { useSvgDrag, clampN } from "../useDrag";
 import { VizGuide } from "../VizGuide";
-import { SampleSpaceFrame } from "../shared";
-
-/** Tints used for the strips. Cycled if `n` exceeds the palette length. */
-const PALETTE = [
-  "rgb(59, 130, 246)", // blue-500
-  "rgb(99, 102, 241)", // indigo-500
-  "rgb(20, 184, 166)", // teal-500
-  "rgb(236, 72, 153)", // pink-500
-  "rgb(16, 185, 129)", // emerald-500
-  "rgb(249, 115, 22)", // orange-500
-];
+import { SampleSpaceFrame, CATEGORICAL_PALETTE } from "../shared";
 
 // --- Sample-space rectangle (viewBox units) ---
 const X0 = 40;
@@ -181,7 +171,7 @@ export default function SetPartition({ params }: { params: VizParams }) {
                 y={Y0}
                 width={s.right - s.left}
                 height={Y1 - Y0}
-                fill={PALETTE[i % PALETTE.length]}
+                fill={CATEGORICAL_PALETTE[i % CATEGORICAL_PALETTE.length]}
                 fillOpacity="0.16"
               />
               <text
@@ -193,7 +183,7 @@ export default function SetPartition({ params }: { params: VizParams }) {
                 fill="rgb(15, 23, 42)"
               >
                 A
-                <tspan fontSize="9" dy="3">
+                <tspan fontSize="10" dy="3">
                   {i + 1}
                 </tspan>
               </text>
@@ -210,7 +200,7 @@ export default function SetPartition({ params }: { params: VizParams }) {
                   y={b.y}
                   width={piece.right - piece.left}
                   height={b.h}
-                  fill={PALETTE[i % PALETTE.length]}
+                  fill={CATEGORICAL_PALETTE[i % CATEGORICAL_PALETTE.length]}
                   fillOpacity="0.5"
                 />
               ) : null,

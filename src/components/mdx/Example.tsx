@@ -14,7 +14,7 @@ interface ExampleProps {
 
 export function Example({ title, children }: ExampleProps) {
   return (
-    <aside className="my-5 rounded-xl bg-white border border-blue-200/70 overflow-hidden">
+    <aside className="callout my-5 rounded-xl bg-white border border-blue-200/70 overflow-hidden">
       <header className="flex items-center gap-2 px-4 py-2 bg-blue-50/70 border-b border-blue-200/60">
         <span className="grid place-items-center w-5 h-5 rounded-md bg-blue-500 text-white">
           <IconLightbulb size={11} strokeWidth={2.25} />

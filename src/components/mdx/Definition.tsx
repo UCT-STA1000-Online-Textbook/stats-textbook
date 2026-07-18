@@ -17,7 +17,7 @@ interface DefinitionProps {
 
 export function Definition({ term, children }: DefinitionProps) {
   return (
-    <aside className="my-5 rounded-xl bg-white border border-emerald-200/70 overflow-hidden">
+    <aside className="callout my-5 rounded-xl bg-white border border-emerald-200/70 overflow-hidden">
       <header className="flex items-center gap-2 px-4 py-2 bg-emerald-50/70 border-b border-emerald-200/60">
         <span className="grid place-items-center w-5 h-5 rounded-md bg-emerald-500 text-white">
           <IconBookOpen size={11} strokeWidth={2.25} />

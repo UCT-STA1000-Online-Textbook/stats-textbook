@@ -58,22 +58,22 @@ export function TryThis({
     <div
       className={`my-5 rounded-xl border p-4 transition-colors ${
         isActive
-          ? "bg-indigo-50/60 border-indigo-200"
-          : "bg-white border-[color:var(--color-line)] hover:border-indigo-200"
+          ? "bg-blue-50/60 border-blue-200"
+          : "bg-white border-[color:var(--color-line)] hover:border-blue-200"
       }`}
     >
       <div className="flex items-start gap-3">
         <span
           className={`flex-shrink-0 grid place-items-center w-8 h-8 rounded-lg transition-colors ${
             isActive
-              ? "bg-indigo-600 text-white"
-              : "bg-indigo-50 text-indigo-600"
+              ? "bg-blue-600 text-white"
+              : "bg-blue-50 text-blue-600"
           }`}
         >
           <IconSparkles size={15} strokeWidth={2} />
         </span>
         <div className="flex-1 min-w-0">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-600">
             Interactive
           </p>
           {description && (
@@ -83,7 +83,7 @@ export function TryThis({
           )}
           <button
             onClick={handleClick}
-            className="mt-2.5 group inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-indigo-700"
+            className="mt-2.5 group inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-blue-700"
           >
             {label}
             <IconArrowRight
@@ -93,7 +93,7 @@ export function TryThis({
             />
           </button>
           {isActive && (
-            <p className="mt-2 text-[11px] font-medium text-indigo-700">
+            <p className="mt-2 text-[11px] font-medium text-blue-700">
               Active in the right panel →
             </p>
           )}

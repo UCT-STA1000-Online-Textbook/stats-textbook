@@ -232,7 +232,7 @@ export default function BayesGrid({ params }: { params: VizParams }) {
 
       {/* Bayes' theorem — Pr(C | D) in natural-frequency form */}
       <div className="rounded-lg border border-[color:var(--color-line)] px-3 py-2 text-[12px] text-[color:var(--color-ink-700)]">
-        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-indigo-600">
+        <p className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-blue-600">
           Bayes&apos; theorem · Pr(C | D)
         </p>
         <p className="font-mono leading-relaxed">
@@ -243,7 +243,7 @@ export default function BayesGrid({ params }: { params: VizParams }) {
         </p>
         <p className="mt-0.5 font-mono">
           = {defC} / ({defC} + {defCbar}) ={" "}
-          <span className="font-semibold text-indigo-700 tabular-nums">
+          <span className="font-semibold text-blue-700 tabular-nums">
             {defTotal > 0 ? prCgivenD.toFixed(2) : "undefined"}
           </span>
         </p>
@@ -335,8 +335,8 @@ function Chip({
       onClick={onClick}
       className={`rounded-md px-2.5 py-1 text-[12px] font-medium border transition-colors ${
         active
-          ? "bg-indigo-600 text-white border-indigo-600"
-          : "bg-white text-[color:var(--color-ink-700)] border-[color:var(--color-line)] hover:border-indigo-400"
+          ? "bg-blue-600 text-white border-blue-600"
+          : "bg-white text-[color:var(--color-ink-700)] border-[color:var(--color-line)] hover:border-blue-400"
       }`}
     >
       {children}

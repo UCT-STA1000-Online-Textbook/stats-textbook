@@ -5,14 +5,60 @@
  * per file as each viz was built; this module is the single source so a
  * future tweak (e.g. slider styling) doesn't need to be repeated five times.
  *
- * This is a visual no-op extraction: every component here renders pixel-
- * identical output to the local copy it replaces. A follow-up pass may
- * restyle them together.
+ * Also home to the two cross-cutting design tokens for visualisations: the
+ * shared `CATEGORICAL_PALETTE` (colours for unlabelled groups) and the
+ * `VIZ_TEXT` type scale (documented px roles for in-viz labels).
  */
 
 "use client";
 
 import type { ReactNode } from "react";
+
+/**
+ * The single categorical colour palette used by every visualisation that
+ * distinguishes more than two unlabelled groups (`SetPartition`'s partition
+ * strips, `CategoricalDisplay`'s pie/bar charts, and any future one). Kept
+ * here — rather than duplicated per component — so two vizzes shown side by
+ * side never disagree about what "category 3" looks like. `exploringData.ts`
+ * re-exports this as `CATEGORY_COLORS` for its Module-2 dataset consumers;
+ * both names point at the same array.
+ *
+ * Excludes the app's blue accent (reserved for chrome/selection state) and
+ * red (reserved for "defective"/"wrong" semantics elsewhere in the app) so a
+ * categorical chart never collides visually with those meanings — indices
+ * wrap via `%` for palettes longer than this list.
+ */
+export const CATEGORICAL_PALETTE = [
+  "rgb(37, 99, 235)", // blue-600
+  "rgb(217, 119, 6)", // amber-600
+  "rgb(5, 150, 105)", // emerald-600
+  "rgb(220, 38, 38)", // red-600
+  "rgb(124, 58, 237)", // violet-600
+  "rgb(8, 145, 178)", // cyan-600
+  "rgb(190, 24, 93)", // pink-700
+] as const;
+
+/**
+ * Viz type scale — four font-size roles (px) used across every SVG/canvas
+ * visualisation, so labels read consistently instead of drifting through
+ * nine near-identical ad-hoc sizes. Apply as a Tailwind arbitrary value
+ * (`text-[10px]`) or as an SVG `fontSize` prop (`fontSize={VIZ_TEXT.axisTick}`).
+ *
+ *   axisTick 10px — chart axis ticks and tiny in-diagram annotations
+ *   caption  11px — small uppercase section captions, meta labels
+ *   label    12px — general small UI text inside a viz (slider labels, body)
+ *   readout  13px — emphasised numeric/formula readouts
+ *
+ * A handful of hero numbers (e.g. `RandomTrials`'s trial-count tally) sit
+ * deliberately outside this scale — they are a distinct, larger display
+ * size, not a mislabelled instance of one of these four roles.
+ */
+export const VIZ_TEXT = {
+  axisTick: 10,
+  caption: 11,
+  label: 12,
+  readout: 13,
+} as const;
 
 /** Clamp a number into [0, 1] — used to sanitise `VizParams` probabilities. */
 export function clamp01(v: number): number {

@@ -117,7 +117,7 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
       <div className="flex-shrink-0 px-4 pt-3 pb-3 border-b border-[color:var(--color-line)]">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <span className="grid place-items-center w-6 h-6 rounded-md bg-indigo-50 text-indigo-600">
+            <span className="grid place-items-center w-6 h-6 rounded-md bg-blue-50 text-blue-600">
               <IconTrophy size={13} strokeWidth={2} />
             </span>
             <h3 className="text-[13px] font-semibold tracking-tight text-[color:var(--color-ink-900)]">
@@ -156,7 +156,7 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
                   ? "bg-emerald-500"
                   : submitted
                     ? "bg-amber-500"
-                    : "bg-indigo-500"
+                    : "bg-blue-500"
               }`}
               style={{ width: `${submitted ? 100 : progressPct}%` }}
             />
@@ -194,7 +194,7 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
           <button
             onClick={handleSubmit}
             disabled={!allAnswered}
-            className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 disabled:bg-slate-200 disabled:text-slate-500 disabled:cursor-not-allowed"
+            className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-500 disabled:cursor-not-allowed"
           >
             {allAnswered
               ? "Submit answers"

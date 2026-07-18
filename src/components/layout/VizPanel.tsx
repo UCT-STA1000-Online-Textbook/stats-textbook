@@ -157,7 +157,7 @@ function VizPlaceholder() {
       </p>
       <p className="mt-1.5 text-[13px] leading-relaxed text-[color:var(--color-ink-500)] max-w-[260px]">
         Click a{" "}
-        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 font-medium text-[12px] align-baseline">
+        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 text-blue-700 font-medium text-[12px] align-baseline">
           <IconSparkles size={10} strokeWidth={2} />
           Try this
         </span>{" "}

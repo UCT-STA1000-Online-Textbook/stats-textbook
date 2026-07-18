@@ -112,7 +112,7 @@ function MobileTopBar({ title }: { title: string }) {
         aria-pressed={vizSheetOpen}
         className={`md:hidden inline-flex items-center gap-1.5 rounded-md px-2.5 h-9 text-[12px] font-medium transition-colors ${
           vizSheetOpen
-            ? "bg-indigo-600 text-white"
+            ? "bg-blue-600 text-white"
             : "text-[color:var(--color-ink-700)] hover:bg-slate-100"
         }`}
       >

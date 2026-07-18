@@ -155,7 +155,7 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
           />
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
-          <span className="text-[10.5px] uppercase tracking-wide text-[color:var(--color-ink-500)]">
+          <span className="text-[11px] uppercase tracking-wide text-[color:var(--color-ink-500)]">
             Suggested:
           </span>
           <button
@@ -191,7 +191,7 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
             .map((f) => (
               <g key={f}>
                 <line x1={M.left} y1={yOf(f)} x2={W - M.right} y2={yOf(f)} stroke="var(--color-line)" strokeWidth="0.5" />
-                <text x={M.left - 5} y={yOf(f)} textAnchor="end" dominantBaseline="central" fontSize="9.5" fill="var(--color-ink-500)" className="tabular-nums">
+                <text x={M.left - 5} y={yOf(f)} textAnchor="end" dominantBaseline="central" fontSize="10" fill="var(--color-ink-500)" className="tabular-nums">
                   {f}
                 </text>
               </g>
@@ -225,7 +225,7 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
             .map((k) => {
               const bx = start + k * width;
               return (
-                <text key={k} x={xOf(bx)} y={M.top + PLOT_H + 13} textAnchor="middle" fontSize="9.5" fill="var(--color-ink-500)" className="tabular-nums">
+                <text key={k} x={xOf(bx)} y={M.top + PLOT_H + 13} textAnchor="middle" fontSize="10" fill="var(--color-ink-500)" className="tabular-nums">
                   {fmt(bx)}
                 </text>
               );

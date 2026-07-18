@@ -139,9 +139,9 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
           {prev ? (
             <Link
               href={`/unit/${prev.slug}`}
-              className="group hover-lift rounded-xl border border-[color:var(--color-line)] bg-white px-4 py-3 hover:border-indigo-300 hover:shadow-sm"
+              className="group hover-lift rounded-xl border border-[color:var(--color-line)] bg-white px-4 py-3 hover:border-blue-300 hover:shadow-sm"
             >
-              <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[color:var(--color-ink-500)] group-hover:text-indigo-600 transition-colors">
+              <span className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[color:var(--color-ink-500)] group-hover:text-blue-600 transition-colors">
                 <IconArrowLeft size={12} strokeWidth={2.25} />
                 Previous
               </span>
@@ -157,9 +157,9 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
           {next ? (
             <Link
               href={`/unit/${next.slug}`}
-              className="group hover-lift rounded-xl border border-[color:var(--color-line)] bg-white px-4 py-3 text-right hover:border-indigo-300 hover:shadow-sm sm:col-start-2"
+              className="group hover-lift rounded-xl border border-[color:var(--color-line)] bg-white px-4 py-3 text-right hover:border-blue-300 hover:shadow-sm sm:col-start-2"
             >
-              <span className="flex items-center justify-end gap-1.5 text-[11px] font-medium uppercase tracking-wider text-indigo-600">
+              <span className="flex items-center justify-end gap-1.5 text-[11px] font-medium uppercase tracking-wider text-blue-600">
                 Next
                 <IconArrowRight size={12} strokeWidth={2.25} />
               </span>
@@ -178,13 +178,13 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
 
 /**
  * Editorial status pill that maps the frontmatter `status` to a colour:
- * indigo (final), amber (draft, in-progress), neutral (placeholder).
+ * blue (final), amber (draft, in-progress), neutral (placeholder).
  */
 function StatusBadge({ status }: { status: UnitFrontmatter["status"] }) {
   if (status === "complete") {
     return (
-      <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 border border-indigo-200/70 px-2.5 py-1 text-[11px] font-medium text-indigo-700">
-        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+      <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200/70 px-2.5 py-1 text-[11px] font-medium text-blue-700">
+        <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
         Final
       </span>
     );

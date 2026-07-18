@@ -54,7 +54,7 @@ export function Quiz() {
           <IconTrophy size={16} strokeWidth={2} />
         </span>
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-indigo-600">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-blue-600">
             Lock it in
           </p>
           <p className="text-[15px] font-semibold tracking-tight text-[color:var(--color-ink-900)]">

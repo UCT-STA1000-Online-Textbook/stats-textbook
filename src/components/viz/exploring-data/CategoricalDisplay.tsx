@@ -165,7 +165,7 @@ export default function CategoricalDisplay({ params }: { params: VizParams }) {
         </div>
         <table className="mt-1 w-full text-[12px] text-[color:var(--color-ink-900)]">
           <thead>
-            <tr className="text-[10.5px] uppercase tracking-wide text-[color:var(--color-ink-500)]">
+            <tr className="text-[11px] uppercase tracking-wide text-[color:var(--color-ink-500)]">
               <th className="text-left font-medium py-0.5">Category</th>
               <th className="text-right font-medium py-0.5">{dataset.valueLabel}</th>
               <th className="text-right font-medium py-0.5">Rel. freq</th>
@@ -252,7 +252,7 @@ function PieChart({
                 y={ly}
                 textAnchor="middle"
                 dominantBaseline="central"
-                fontSize="10.5"
+                fontSize="10"
                 fontWeight="600"
                 fill="white"
               >
@@ -317,7 +317,7 @@ function BarGraph({
           </g>
         );
       })}
-      <text x={labelW} y={H - 1} fontSize="9.5" fill="var(--color-ink-500)">
+      <text x={labelW} y={H - 1} fontSize="10" fill="var(--color-ink-500)">
         {valueLabel} →
       </text>
     </svg>

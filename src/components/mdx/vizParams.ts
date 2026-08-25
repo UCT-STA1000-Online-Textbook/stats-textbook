@@ -36,6 +36,10 @@ export interface VizParamProps {
   experiment?: string;
   /** CountingStudio: initial counting rule scenario. */
   scenario?: string;
+  /** BoxPlotBuilder: "off" starts with outlier/stray flagging disabled. */
+  flag?: string;
+  /** MeanMedianBalance: initial preset id ("symmetric" | "skewed" | "outlier"). */
+  preset?: string;
   /** ProbabilityVenn: initial Pr(A). */
   pA?: number;
   /** ProbabilityVenn: initial Pr(B). */
@@ -64,6 +68,8 @@ const VIZ_PARAM_KEYS: (keyof VizParamProps)[] = [
   "chart",
   "experiment",
   "scenario",
+  "flag",
+  "preset",
   "pA",
   "pB",
   "pAB",

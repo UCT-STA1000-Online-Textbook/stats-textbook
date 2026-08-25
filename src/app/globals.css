@@ -125,13 +125,20 @@ body {
   hyphens: auto;
 }
 
-/* Callout cards (Definition/Theorem/Example/Note/Solution/ExcelPointer) render
-   their MDX children's <p> tags inside .reading-body too, so the justify rule
-   above would otherwise leak into their narrower, padded bodies and read
-   badly. Every callout wrapper carries a `.callout` marker class; this
-   override wins by appearing after the base rule and matching a more
-   specific (class + descendant) selector. */
-.reading-body .callout p {
+/* Justification is for running prose only. Two kinds of paragraph sit inside
+   .reading-body but are not running prose, and justifying them reads badly:
+
+   - Callout cards (Definition/Theorem/Example/Note/Solution/ExcelPointer),
+     whose bodies are narrow and padded. Each wrapper carries a `.callout`
+     marker class.
+   - Blockquotes, which this book uses for short keyword lists rather than
+     quotations. Stretching a comma-separated list opens large gaps between
+     the terms.
+
+   Both overrides win by appearing after the base rule and matching a more
+   specific (class/element + descendant) selector. */
+.reading-body .callout p,
+.reading-body blockquote p {
   text-align: left;
   -webkit-hyphens: none;
   hyphens: none;

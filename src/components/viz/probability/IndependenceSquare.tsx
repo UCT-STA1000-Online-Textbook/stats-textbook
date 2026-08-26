@@ -103,7 +103,7 @@ export default function IndependenceSquare({ params }: { params: VizParams }) {
             "The vertical divider sets Pr(A): drag it left or right.",
             "Event B is the shaded region rising from the base.",
             "Drag the two round handles to set B's height inside A (Pr(B|A)) and inside Ā (Pr(B|Ā)).",
-            "Level the two handles so B's top is one straight line, then A and B are independent.",
+            "Level the two handles so B's top is one straight line: then A and B are independent.",
             "Watch Pr(A∩B) and Pr(A)×Pr(B): they are equal exactly when the cut is level.",
           ]}
         />
@@ -265,7 +265,7 @@ export default function IndependenceSquare({ params }: { params: VizParams }) {
 
       <p className="text-[11px] leading-relaxed text-[color:var(--color-ink-500)]">
         A and B are independent exactly when B fills the <em>same fraction</em>{" "}
-        of column A as of column Ā, one straight cut. Then Pr(B|A) = Pr(B|Ā) =
+        of column A as of column Ā: one straight cut. Then Pr(B|A) = Pr(B|Ā) =
         Pr(B). This is not the same as <em>mutually exclusive</em>: that is a
         Venn-diagram idea (A and B simply not overlapping), and it cannot be
         read off this square.

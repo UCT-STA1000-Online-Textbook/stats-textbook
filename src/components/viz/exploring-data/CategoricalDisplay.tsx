@@ -158,7 +158,7 @@ export default function CategoricalDisplay({ params }: { params: VizParams }) {
             steps={[
               "Pick a dataset along the top.",
               "Switch between a pie chart and a bar graph.",
-              "Tick 'Sort by frequency' to order categories from largest to smallest — easier to compare.",
+              "Tick 'Sort by frequency' to order categories from largest to smallest, which makes them easier to compare.",
               "Read each category's count and relative frequency in the table.",
             ]}
           />

@@ -309,12 +309,12 @@ export default function MeanMedianBalance({ params }: { params: VizParams }) {
       <div className="rounded-lg bg-blue-50/70 border border-blue-200/70 px-3 py-2">
         <div className="flex items-baseline justify-between gap-2">
           <p className="text-[11px] font-semibold uppercase tracking-wider text-blue-700">
-            {balanced ? "Balanced — the fulcrum is at the mean" : "Tilting — drag the fulcrum to the mean"}
+            {balanced ? "Balanced: the fulcrum is at the mean" : "Tilting: drag the fulcrum to the mean"}
           </p>
           <VizGuide
             steps={[
               "Drag any blue weight along the beam to change the data.",
-              "Drag the grey triangle — the fulcrum — until the beam sits level.",
+              "Drag the grey triangle (the fulcrum) until the beam sits level.",
               "It only balances when the fulcrum is exactly at the mean x̄.",
               "Load 'One outlier' and drag the lone point right: the mean follows it, the median hardly moves.",
               "Press 'Balance it' to snap the fulcrum back to the mean.",
@@ -334,7 +334,7 @@ export default function MeanMedianBalance({ params }: { params: VizParams }) {
         </div>
         <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">
           {Math.abs(mean - median) < 0.5
-            ? "Mean and median agree — this batch is close to symmetric."
+            ? "Mean and median agree: this batch is close to symmetric."
             : `The mean sits ${fmtStat(Math.abs(mean - median), 1)} ${mean > median ? "above" : "below"} the median, so the data is skewed to the ${mean > median ? "right" : "left"}.`}
         </p>
         {!edited && (

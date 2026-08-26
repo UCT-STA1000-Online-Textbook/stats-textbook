@@ -270,7 +270,7 @@ export default function BoxPlotBuilder({ params }: { params: VizParams }) {
           steps={[
             "Pick a batch of data along the top.",
             "The box spans the lower to upper quartile, with a line at the median.",
-            "Tick 'Flag outliers & strays' — whiskers then stop at the fences and the flagged values are drawn as dots.",
+            "Tick 'Flag outliers & strays' to stop the whiskers at the fences and draw the flagged values as dots.",
             "Tick 'Mean ± s' to compare the mean against the median; they separate when the data is skew.",
             "Choose 'GMAT by faculty' to compare six batches on one scale.",
           ]}

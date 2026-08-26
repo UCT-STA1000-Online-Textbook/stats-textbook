@@ -70,7 +70,7 @@ export function Quiz() {
             <IconCheck size={11} strokeWidth={2.5} />
           </span>
           <span className="text-[13px] font-medium text-emerald-800">
-            Completed — {progress.score}/{progress.totalQuestions} on best of{" "}
+            Completed: {progress.score}/{progress.totalQuestions} on best of{" "}
             {progress.attempts}{" "}
             {progress.attempts === 1 ? "attempt" : "attempts"}
           </span>

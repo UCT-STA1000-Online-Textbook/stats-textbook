@@ -126,7 +126,7 @@ const MODES: ModeMeta[] = [
     key: "mutually-exclusive",
     label: "Mut. excl.",
     expr: "A ∩ B = ∅",
-    desc: "Mutually exclusive sets — drag the circles apart so they share nothing.",
+    desc: "Mutually exclusive sets: drag the circles apart so they share nothing.",
     highlight: ["aOnly", "bOnly"],
   },
   {
@@ -140,7 +140,7 @@ const MODES: ModeMeta[] = [
     key: "universal-set",
     label: "S & ∅",
     expr: "S and ∅",
-    desc: "S is the universal set — it contains every element under consideration. ∅ is the empty set, which contains no elements.",
+    desc: "S is the universal set: it contains every element under consideration. ∅ is the empty set, which contains no elements.",
     highlight: ["aOnly", "bOnly", "lens", "neither"],
   },
 ];
@@ -480,7 +480,7 @@ export default function VennDiagram({ params }: { params: VizParams }) {
           </p>
           <VizGuide
             steps={[
-              "Drag circle A or B — the shaded region updates as you move them.",
+              "Drag circle A or B: the shaded region updates as you move them.",
               "Pick an operation above; only the region it refers to is shaded.",
               "A dot is solid when it falls inside the highlighted region, hollow when it doesn't.",
             ]}

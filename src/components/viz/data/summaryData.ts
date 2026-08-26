@@ -73,7 +73,7 @@ export const FOOTBALL_POINTS = single(
   "Football points (n = 22)",
   "league points",
   [63, 60, 48, 50, 59, 53, 51, 79, 51, 74, 50, 71, 41, 73, 71, 50, 52, 61, 57, 51, 60, 29],
-  "Half the clubs scored between 50.25 and 62.5 points — the box holds the central 50%.",
+  "Half the clubs scored between 50.25 and 62.5 points: the box holds the central 50%.",
 );
 
 /**
@@ -110,7 +110,7 @@ const COMPUTER_USAGE = single(
   "hours",
   [53, 2, 36, 7, 25, 20, 38, 36, 33, 48, 84, 154, 31, 35, 44, 48, 69, 95, 4, 60,
    18, 51, 47, 37, 11, 41, 34, 73, 38, 125],
-  "One outlier (JR894, 154 hours) and eight strays — exactly the list the lecturer wanted.",
+  "One outlier (JR894, 154 hours) and eight strays: exactly the list the lecturer wanted.",
   ["AD483", "AM044", "AS677", "CI144", "CS572", "EK817", "FV246", "GM337", "GR803",
    "HN050", "JK314", "JR894", "JV670", "KM232", "LJ419", "LW032", "MA276", "MJ076",
    "PH544", "PS279", "RR676", "SA831", "SC186", "SS154", "TB864", "VO822", "WG794",
@@ -127,7 +127,7 @@ const WHEAT_PROTEIN = single(
   "protein (% of mass)",
   [9.2, 8.0, 10.9, 11.6, 10.4, 9.5, 8.5, 7.7, 8.0, 11.3, 10.0, 12.8, 8.2, 10.5,
    10.2, 11.9, 8.1, 12.6, 8.4, 9.6, 11.3, 9.7, 10.8, 83, 10.8, 11.5, 21.5, 9.4, 9.7],
-  "Both 83 and 21.5 are flagged as outliers — they are a misplaced decimal point and transposed digits.",
+  "Both 83 and 21.5 are flagged as outliers: they are a misplaced decimal point and transposed digits.",
 );
 
 /** Example 20C — January rainfall (mm) at Paarl, 1884–1905. */
@@ -146,7 +146,7 @@ const DIVIDEND_YIELDS = single(
   "Dividend yields (n = 15)",
   "dividend yield (%)",
   [3.3, 8.4, 10.7, 6.0, 9.6, 7.6, 7.1, 6.6, 8.6, 5.8, 6.7, 2.9, 7.5, 8.2, 3.0],
-  "Mean 6.80% against a median of 7.1% — barely any difference, because the data is near-symmetric.",
+  "Mean 6.80% against a median of 7.1%: barely any difference, because the data is near-symmetric.",
 );
 
 /**
@@ -159,7 +159,7 @@ const WEEKLY_VOLUME = single(
   "Weekly volume (n = 15)",
   "shares traded per week",
   [2300, 2100, 3100, 1200, 31800, 0, 100, 111400, 700, 100, 700, 0, 40600, 84100, 45900],
-  "Mean 21 607 against a median of 2 100 — a few huge trades drag the mean ten times above the middle.",
+  "Mean 21 607 against a median of 2 100: a few huge trades drag the mean ten times above the middle.",
 );
 
 /** Lookup of every WU2 dataset by id, for the selector menu. */

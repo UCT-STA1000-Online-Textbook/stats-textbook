@@ -215,7 +215,7 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
               </span>
               <div>
                 <p className="text-sm font-semibold text-emerald-900">
-                  Perfect — section complete
+                  Perfect: section complete
                 </p>
                 <p className="text-[11px] text-emerald-700/90">
                   Progress saved. On to the next work unit.

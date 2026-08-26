@@ -36,7 +36,7 @@ quiz:
       - "0.1"
       - "0.4"
     answer: 2
-    explanation: "Rearranging the definition Pr(A | B) = Pr(A ∩ B) / Pr(B) gives Pr(A ∩ B) = Pr(A | B) × Pr(B) = 0.5 × 0.2 = 0.1. Open the independence square with the base probability at 0.2 and the conditional probability at 0.5 (relabelling the square's A and B as this question's B and A) — the shared rectangle works out to exactly Pr(A ∩ B) = 0.1."
+    explanation: "Rearranging the definition Pr(A | B) = Pr(A ∩ B) / Pr(B) gives Pr(A ∩ B) = Pr(A | B) × Pr(B) = 0.5 × 0.2 = 0.1. Open the independence square with the base probability at 0.2 and the conditional probability at 0.5 (relabelling the square's A and B as this question's B and A): the shared rectangle works out to exactly Pr(A ∩ B) = 0.1."
     vizHint: "independence-square"
     vizHintParams:
       pa: 0.2
@@ -45,13 +45,13 @@ quiz:
     type: "true-false"
     question: "Events A and B are independent if Pr(A ∩ B) = Pr(A) × Pr(B)."
     answer: true
-    explanation: "True — that is the definition of independence. It is equivalent to Pr(B | A) = Pr(B): knowing A has occurred leaves the probability of B unchanged. Open the independence square and drag Pr(B|A) until it equals Pr(B|Ā) — that's the moment A and B become independent."
+    explanation: "True: that is the definition of independence. It is equivalent to Pr(B | A) = Pr(B): knowing A has occurred leaves the probability of B unchanged. Open the independence square and drag Pr(B|A) until it equals Pr(B|Ā): that's the moment A and B become independent."
     vizHint: "independence-square"
   - id: "q5"
     type: "true-false"
     question: "If two events, each with positive probability, are mutually exclusive, then they are independent."
     answer: false
-    explanation: "False — they are the opposite. If A and B are mutually exclusive, learning that A occurred forces the probability of B down to 0, which is the strongest possible dependence. Mutually exclusive events are never independent."
+    explanation: "False: they are the opposite. If A and B are mutually exclusive, learning that A occurred forces the probability of B down to 0, which is the strongest possible dependence. Mutually exclusive events are never independent."
   - id: "q6"
     type: "mcq"
     question: "A factory buys 20% of its tubes from outside (8% of those are defective) and makes 80% in-house (6% of those are defective). A tube is found to be defective. Using Bayes' theorem, what is the probability it was made in-house?"
@@ -80,10 +80,10 @@ Conditional probabilities give us a way of **updating** or **revising** probabil
 <Example title="Example 42A">
 We draw one card from a pack of 52. The probability that it is the King of Clubs is $1/52$. Now suppose someone draws the card for you and tells you only that it is a club. What is the probability that it is the King of Clubs now?
 
-Obviously $1/13$ — the information has **reduced our sample space** from the 52 cards to the 13 clubs.
+Obviously $1/13$: the information has **reduced our sample space** from the 52 cards to the 13 clubs.
 </Example>
 
-This idea — shrinking the sample space to the event we know has occurred, and reassessing probabilities inside it — is captured by the following definition.
+This idea (shrinking the sample space to the event we know has occurred, and reassessing probabilities inside it) is captured by the following definition.
 
 <Definition term="Conditional probability">
 Let $A$ and $B$ be two events in a sample space $S$. The **conditional probability of $B$ given that $A$ has occurred**, written $\Pr(B \mid A)$, is
@@ -102,7 +102,7 @@ exactly as our intuition said.
 </Example>
 
 <Example title="Example 43C">
-You — a woman with a medical background — are one of 198 applicants for an MBA programme, of whom 81 will be selected. You hear, on good authority, that there were 70 women applicants, of whom 38 were selected. Assess your probability of being accepted before and after you receive this information, using the definition of conditional probability.
+You (a woman with a medical background) are one of 198 applicants for an MBA programme, of whom 81 will be selected. You hear, on good authority, that there were 70 women applicants, of whom 38 were selected. Assess your probability of being accepted before and after you receive this information, using the definition of conditional probability.
 </Example>
 
 <Example title="Example 44B">
@@ -158,7 +158,7 @@ $$
 
 ## Bayes' theorem
 
-For any two events $A$ and $B$ there are two conditional probabilities to consider: $\Pr(B \mid A)$ and $\Pr(A \mid B)$. **Bayes' theorem** — named for the Rev. Thomas Bayes, who did pioneering work in probability in the 1700s — connects the two, and is one of the most useful tools for finding conditional probabilities.
+For any two events $A$ and $B$ there are two conditional probabilities to consider: $\Pr(B \mid A)$ and $\Pr(A \mid B)$. **Bayes' theorem** (named for the Rev. Thomas Bayes, who did pioneering work in probability in the 1700s) connects the two, and is one of the most useful tools for finding conditional probabilities.
 
 <Theorem name="Bayes' Theorem">
 If $A$ and $B$ are two events, then
@@ -173,12 +173,12 @@ $$
 Now rewrite each intersection with the definition of conditional probability: $\Pr(A \cap B) = \Pr(B \mid A)\,\Pr(A)$ and $\Pr(\overline{A} \cap B) = \Pr(B \mid \overline{A})\,\Pr(\overline{A})$. Substituting these gives the result.
 </Theorem>
 
-The denominator is simply $\Pr(B)$, rebuilt from the two ways $B$ can happen — alongside $A$, or alongside $\overline{A}$. That decomposition, $B = (A \cap B) \cup (\overline{A} \cap B)$, is the **law of total probability**.
+The denominator is simply $\Pr(B)$, rebuilt from the two ways $B$ can happen: alongside $A$, or alongside $\overline{A}$. That decomposition, $B = (A \cap B) \cup (\overline{A} \cap B)$, is the **law of total probability**.
 
 <TryThis
   vizId="bayes-grid"
   label="Open the Bayes Frequency Grid"
-  description="See Example 49B as a population of 250 television sets. Set the in-house share and the two defect rates, then click a category to condition on it — the grid keeps only that subgroup and reads off the conditional probability. Conditioning on 'defective' versus 'in-house' gives different answers, and that gap is exactly what Bayes' theorem resolves."
+  description="See Example 49B as a population of 250 television sets. Set the in-house share and the two defect rates, then click a category to condition on it: the grid keeps only that subgroup and reads off the conditional probability. Conditioning on 'defective' versus 'in-house' gives different answers, and that gap is exactly what Bayes' theorem resolves."
 />
 
 <Example title="Example 49B">
@@ -265,7 +265,7 @@ A family has two dogs (Rex and Rover) and a cat called Garfield, none of them fo
 
 ## Independent events
 
-Intuitively, two events are **independent** if they have nothing to do with each other — the occurrence of one tells us nothing about the other. If event $A$ has no bearing on event $B$, then knowing that $A$ has occurred should leave the probability of $B$ unchanged:
+Intuitively, two events are **independent** if they have nothing to do with each other: the occurrence of one tells us nothing about the other. If event $A$ has no bearing on event $B$, then knowing that $A$ has occurred should leave the probability of $B$ unchanged:
 $$
 \Pr(B \mid A) = \Pr(B).
 $$
@@ -285,11 +285,11 @@ $$
 <TryThis
   vizId="independence-square"
   label="Open the Independence Square"
-  description="The unit square is the whole sample space. Drag the divider to set Pr(A), then drag the two handles to set how much of column A and column Ā is filled by B. Level them into one straight cut and A and B become independent — Pr(A∩B) lines up exactly with Pr(A)×Pr(B)."
+  description="The unit square is the whole sample space. Drag the divider to set Pr(A), then drag the two handles to set how much of column A and column Ā is filled by B. Level them into one straight cut and A and B become independent: Pr(A∩B) lines up exactly with Pr(A)×Pr(B)."
 />
 
-Many students confuse **independent** events with **mutually exclusive** events. It helps to remember that "mutually exclusive" is a concept from *set theory* — it can be drawn on a Venn diagram — whereas "independence" is a concept from *probability theory* and **cannot** be shown on a Venn diagram.
+Many students confuse **independent** events with **mutually exclusive** events. It helps to remember that "mutually exclusive" is a concept from *set theory* (it can be drawn on a Venn diagram), whereas "independence" is a concept from *probability theory* and **cannot** be shown on a Venn diagram.
 
-In fact, two events with positive probability that are mutually exclusive can **never** be independent. The events "the gold price rises today" and "it rains in Cape Town this afternoon" are genuinely independent — they have nothing to do with each other — and their intersection is not empty, so they are not mutually exclusive. By contrast, "heads" and "tails" on a single coin toss *are* mutually exclusive: tell me the coin came up heads and my probability of tails drops instantly from 0.5 to zero. That is the strongest possible dependence — so mutually exclusive events are certainly not independent.
+In fact, two events with positive probability that are mutually exclusive can **never** be independent. The events "the gold price rises today" and "it rains in Cape Town this afternoon" are genuinely independent (they have nothing to do with each other), and their intersection is not empty, so they are not mutually exclusive. By contrast, "heads" and "tails" on a single coin toss *are* mutually exclusive: tell me the coin came up heads and my probability of tails drops instantly from 0.5 to zero. That is the strongest possible dependence, so mutually exclusive events are certainly not independent.
 
 <Quiz />

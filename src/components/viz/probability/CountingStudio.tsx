@@ -48,28 +48,28 @@ const SCENARIOS: ScenarioDef[] = [
   {
     id: "arrange",
     tab: "Arrange n",
-    real: (n) => `Line up all ${n} books on a shelf — every book used once.`,
+    real: (n) => `Line up all ${n} books on a shelf: every book used once.`,
     repeats: false,
     ordered: true,
   },
   {
     id: "order",
     tab: "Order r of n",
-    real: (n, r) => `Pose ${r} of ${n} people for a photo — positions matter.`,
+    real: (n, r) => `Pose ${r} of ${n} people for a photo: positions matter.`,
     repeats: false,
     ordered: true,
   },
   {
     id: "choose",
     tab: "Choose r of n",
-    real: (n, r) => `Pick a work team of ${r} from ${n} — order does not matter.`,
+    real: (n, r) => `Pick a work team of ${r} from ${n}: order does not matter.`,
     repeats: false,
     ordered: false,
   },
   {
     id: "code",
     tab: "Code, r of n",
-    real: (n, r) => `Build a code of ${r} symbols from ${n} types — repeats allowed.`,
+    real: (n, r) => `Build a code of ${r} symbols from ${n} types: repeats allowed.`,
     repeats: true,
     ordered: true,
   },
@@ -504,7 +504,7 @@ export default function CountingStudio({ params }: { params: VizParams }) {
         </div>
         <VizGuide
           steps={[
-            "Pick a counting rule with the buttons above — each is a real-world example.",
+            "Pick a counting rule with the buttons above: each is a real-world example.",
             "Click a numbered tile to drop it into the next slot; click a placed tile to take the last one back.",
             "Use the n and r steppers to resize the pool and the slots.",
             "Watch the panel: the choices for each slot multiply out into the rule's formula.",
@@ -572,7 +572,7 @@ export default function CountingStudio({ params }: { params: VizParams }) {
         <p className="mt-1 text-[color:var(--color-ink-500)]">
           {scenario === "choose" ? (
             <>
-              {filled} of {rEff} chosen — order does not matter, so every
+              {filled} of {rEff} chosen: order does not matter, so every
               ordering of the same group counts once.
             </>
           ) : filled === 0 ? (
@@ -592,8 +592,7 @@ export default function CountingStudio({ params }: { params: VizParams }) {
               )}
               {filled === rEff && (
                 <span className="text-[color:var(--color-ink-700)]">
-                  {" "}
-                  — you have built 1 of {total.toLocaleString("en")} possible
+                  . You have built 1 of {total.toLocaleString("en")} possible
                   arrangements.
                 </span>
               )}

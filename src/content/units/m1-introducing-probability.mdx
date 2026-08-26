@@ -29,10 +29,10 @@ quiz:
     type: "mcq"
     question: "P = {x | 0 ≤ x ≤ 10} and Q = {x | 5 < x < 20}. Which correctly describes P ∩ Q?"
     options:
-      - "{x | 5 ≤ x ≤ 10} — both endpoints included"
-      - "{x | 5 < x ≤ 10} — open at 5, closed at 10"
-      - "{x | 0 ≤ x < 20} — full span of both sets"
-      - "{x | 5 < x < 20} — just the range of Q"
+      - "{x | 5 ≤ x ≤ 10}: both endpoints included"
+      - "{x | 5 < x ≤ 10}: open at 5, closed at 10"
+      - "{x | 0 ≤ x < 20}: full span of both sets"
+      - "{x | 5 < x < 20}: just the range of Q"
     answer: 1
     explanation: "An element must satisfy both P and Q. P requires x ≥ 0 and x ≤ 10; Q requires x > 5 and x < 20. The binding constraints are x > 5 (Q excludes 5) and x ≤ 10 (P closes at 10). Click 'Plot P, Q and P ∩ Q' to see the solid and hollow endpoints on the number line."
     vizHint: "set-builder-line"
@@ -47,7 +47,7 @@ quiz:
       - "A ∪ Ā = ∅"
       - "A ∩ Ā = A"
     answer: 1
-    explanation: "The complement Ā collects all elements of S not in A, so together A and Ā account for every element of S with no overlap — their union is exactly S. Switch to the Ā mode in the Venn explorer: A and its complement tile the entire rectangle with no gaps."
+    explanation: "The complement Ā collects all elements of S not in A, so together A and Ā account for every element of S with no overlap: their union is exactly S. Switch to the Ā mode in the Venn explorer: A and its complement tile the entire rectangle with no gaps."
   - id: "q5"
     type: "mcq"
     question: "De Morgan's law: the complement of A ∪ B equals which of the following?"
@@ -57,7 +57,7 @@ quiz:
       - "Ā ∪ B̄"
       - "A ∩ B̄"
     answer: 1
-    explanation: "An element outside A ∪ B must be outside A AND outside B — meaning it belongs to Ā ∩ B̄. In the Venn explorer, the 'Neither' button highlights exactly Ā ∩ B̄, the region outside both circles. Exercise 2.4(c) and 2.4(d) confirm both De Morgan laws."
+    explanation: "An element outside A ∪ B must be outside A AND outside B: meaning it belongs to Ā ∩ B̄. In the Venn explorer, the 'Neither' button highlights exactly Ā ∩ B̄, the region outside both circles. Exercise 2.4(c) and 2.4(d) confirm both De Morgan laws."
     vizHint: "venn-diagram"
     vizHintParams:
       mode: "neither"
@@ -70,7 +70,7 @@ quiz:
       - "A symmetric difference family"
       - "Independent subsets"
     answer: 0
-    explanation: "Both conditions are required: pairwise disjoint (no two sets share an element) and exhaustive (together they cover all of S). Open the 'Partition S' visualisation — the colour strips are exactly this: disjoint pieces that together fill the whole rectangle."
+    explanation: "Both conditions are required: pairwise disjoint (no two sets share an element) and exhaustive (together they cover all of S). Open the 'Partition S' visualisation. The colour strips are exactly this: disjoint pieces that together fill the whole rectangle."
     vizHint: "set-partition"
     vizHintParams:
       n: 4
@@ -80,7 +80,7 @@ nextUnit: "m1-set-theory"
 
 ## What is Statistics?
 
-We define **statistics** as the science of decision making in the face of uncertainty. The emphasis is not on the collection of data (although the statistician has an important role in advising on the data collection process), but on taking matters one step further — interpreting the data. Statistics may be thought of as data-based decision making. Perhaps it is a pity that our discipline is called Statistics. A far better name would have been Decision Science. Statistics really comes into its own when the decisions to be made are not clear-cut and obvious, and there is uncertainty (even after the data has been gathered) about which of several alternative decisions is the best one to choose.
+We define **statistics** as the science of decision making in the face of uncertainty. The emphasis is not on the collection of data (although the statistician has an important role in advising on the data collection process), but on taking matters one step further: interpreting the data. Statistics may be thought of as data-based decision making. Perhaps it is a pity that our discipline is called Statistics. A far better name would have been Decision Science. Statistics really comes into its own when the decisions to be made are not clear-cut and obvious, and there is uncertainty (even after the data has been gathered) about which of several alternative decisions is the best one to choose.
 
 For example, the decision about which card to play in a game of bridge to maximize your chance of winning, or the decision about where to locate a factory so as to maximize the likelihood that your company's share of the market will reach a target value, are not simple decisions. In both situations, you can gather as much data as you can (the cards in your hand, and those already played in the first case; proximity to raw materials and to markets in the second), and take a best possible decision on the basis of this data, but there is still no guarantee of success. In both cases, your opposition may react in unexpected ways, and you risk defeat.
 
@@ -96,7 +96,7 @@ Therefore, before you can become a statistician, you have to learn a hefty chunk
   vizId="venn-diagram"
   mode="intersection"
   label="Open the Venn explorer"
-  description="Click any operation — intersection, union, complement, symmetric difference — to see which region of the sample space it picks out."
+  description="Click any operation (intersection, union, complement, symmetric difference) to see which region of the sample space it picks out."
 />
 
 ### Definition of sets
@@ -226,7 +226,7 @@ No, $5 \notin P \cap Q$, but, yes, $10 \in P \cap Q$.
   vizId="set-builder-line"
   mode="intersection"
   label="Plot P, Q and P ∩ Q"
-  description="Place P and Q on a number line and watch the endpoints — solid means included, hollow means excluded — explain why P ∩ Q is open at 5 and closed at 10."
+  description="Place P and Q on a number line and watch the endpoints (solid means included, hollow means excluded); explain why P ∩ Q is open at 5 and closed at 10."
 />
 
 ### The empty set, mutually exclusive sets
@@ -241,7 +241,7 @@ Another reserved symbol is the letter $S$. It is used for the set containing all
 
 ### Unions
 
-The concept **union** contrasts with the concept intersection. The union of two sets $A$ and $B$ is the set that contains the elements that belong to $A$ or to $B$. Here we use the word "or" in an inclusive sense — we do not exclude from the union those elements that belong to both $A$ and $B$.
+The concept **union** contrasts with the concept intersection. The union of two sets $A$ and $B$ is the set that contains the elements that belong to $A$ or to $B$. Here we use the word "or" in an inclusive sense: we do not exclude from the union those elements that belong to both $A$ and $B$.
 
 If $A = \{1, 2, 3\}$ and $B = \{2, 3, 4, 5\}$ then the union of $A$ and $B$ is the set $C = \{1, 2, 3, 4, 5\}$. We write
 $$
@@ -282,7 +282,7 @@ Because the set $D$ excludes the endpoints of the interval from zero to one, $\o
   vizId="venn-diagram"
   mode="complement-A"
   label="Highlight the complement"
-  description="Switch to Ā in the Venn explorer to see how the complement covers everything in S that is not in A — and try (A ∩ B)̄ to see why complementing the intersection is the same as the union of complements (De Morgan)."
+  description="Switch to Ā in the Venn explorer to see how the complement covers everything in S that is not in A, and try (A ∩ B)̄ to see why complementing the intersection is the same as the union of complements (De Morgan)."
 />
 
 <Example title="Example 9C">

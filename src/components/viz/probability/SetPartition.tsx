@@ -289,7 +289,7 @@ export default function SetPartition({ params }: { params: VizParams }) {
           </p>
           <VizGuide
             steps={[
-              "Drag a divider to resize the pieces — any disjoint cover works, not just equal slices.",
+              "Drag a divider to resize the pieces: any disjoint cover works, not just equal slices.",
               "Tick 'Overlay arbitrary set B', then drag B to move it or its corner handle to resize it.",
               "Each coloured slice of B is one piece Aᵢ ∩ B.",
             ]}
@@ -297,7 +297,7 @@ export default function SetPartition({ params }: { params: VizParams }) {
         </div>
         {showB && (
           <p className="mt-1.5 font-mono">
-            B = (A<sub>1</sub> ∩ B) ∪ … ∪ (A<sub>{n}</sub> ∩ B) &nbsp;—&nbsp; B
+            B = (A<sub>1</sub> ∩ B) ∪ … ∪ (A<sub>{n}</sub> ∩ B).&nbsp;&nbsp;B
             currently meets {hitCount} of {n} pieces.
           </p>
         )}

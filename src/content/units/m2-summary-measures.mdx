@@ -21,7 +21,7 @@ quiz:
     type: "true-false"
     question: "A quartile calculated by QUARTILE.INC is always one of the observed data values."
     answer: false
-    explanation: "False. The rank (n − 1) × p + 1 is often fractional, and Excel then interpolates between the two neighbouring observations. For the football points the lower quartile is 50.25 — a value no club actually scored."
+    explanation: "False. The rank (n − 1) × p + 1 is often fractional, and Excel then interpolates between the two neighbouring observations. For the football points the lower quartile is 50.25, a value no club actually scored."
     vizHint: "box-plot-builder"
     vizHintParams:
       dataset: "football"
@@ -30,10 +30,10 @@ quiz:
     type: "mcq"
     question: "The five-number summary of the football points is (29, 50.25, 55, 62.5, 79). What does the box of the box-and-whisker plot span?"
     options:
-      - "29 to 79 — the full range"
-      - "50.25 to 62.5 — the central 50% of the clubs"
-      - "29 to 55 — the lower half"
-      - "55 to 79 — the upper half"
+      - "29 to 79 (the full range)"
+      - "50.25 to 62.5 (the central 50% of the clubs)"
+      - "29 to 55 (the lower half)"
+      - "55 to 79 (the upper half)"
     answer: 1
     explanation: "The box runs from the lower quartile to the upper quartile, so it holds the central half of the data. The whiskers, not the box, reach out toward the extremes."
     vizHint: "box-plot-builder"
@@ -57,12 +57,12 @@ quiz:
     type: "mcq"
     question: "The 15 weekly share volumes have a mean of 21 607 and a median of 2 100. What does this tell you?"
     options:
-      - "There has been a calculation error — they should be close"
+      - "There has been a calculation error, and they should be close"
       - "The data is strongly skewed to the right, and the mean has been dragged up by a few very large values"
       - "The data is symmetric"
       - "The median must be wrong because most values are above it"
     answer: 1
-    explanation: "Nothing has gone wrong: the mean and median simply locate the 'middle' by different rules. A few enormous trades pull the mean far above the median. The median is robust — it would not move even if a million shares had been traded."
+    explanation: "Nothing has gone wrong: the mean and median simply locate the 'middle' by different rules. A few enormous trades pull the mean far above the median. The median is robust: it would not move even if a million shares had been traded."
     vizHint: "mean-median-balance"
     vizHintParams:
       preset: "outlier"
@@ -70,7 +70,7 @@ quiz:
     type: "true-false"
     question: "The range is a more robust measure of spread than the interquartile range."
     answer: false
-    explanation: "False — it is the other way round. The range depends only on the two extreme values, so it is maximally sensitive to outliers. The interquartile range measures the central half of the data and is unaffected by what happens in the tails."
+    explanation: "False: it is the other way round. The range depends only on the two extreme values, so it is maximally sensitive to outliers. The interquartile range measures the central half of the data and is unaffected by what happens in the tails."
   - id: "q7"
     type: "mcq"
     question: "Why do statisticians keep both the variance s² and the standard deviation s, when one is just the square root of the other?"
@@ -80,7 +80,7 @@ quiz:
       - "s is used for samples and s² for populations"
       - "s² is always more accurate"
     answer: 1
-    explanation: "If the data is in rands, s² is in 'squared rands' — hard to picture — while s is back in rands. But the algebra of statistical theory is much tidier without a square root, so the variance survives alongside it."
+    explanation: "If the data is in rands, s² is in 'squared rands' (hard to picture) while s is back in rands. But the algebra of statistical theory is much tidier without a square root, so the variance survives alongside it."
 prevUnit: "m2-graphical-summaries"
 nextUnit: "m3-pmf-pdf"
 ---
@@ -127,7 +127,7 @@ This means that quartiles may or may not themselves be observable data points in
 | 3 | Third quartile (75th percentile) |
 | 4 | Maximum value (100th percentile / maximum / upper extreme) |
 
-These five numbers provide a useful summary of the batch of data, called — with complete lack of imagination — the **five-number summary**. We write them from smallest to largest:
+These five numbers provide a useful summary of the batch of data, called (with complete lack of imagination) the **five-number summary**. We write them from smallest to largest:
 
 $$
 (x_{(1)},\; x_{(l)},\; x_{(m)},\; x_{(u)},\; x_{(n)}).
@@ -137,12 +137,12 @@ Here $x_{(l)}$ is the lower quartile, $x_{(m)}$ the median, and $x_{(u)}$ the up
 
 <ExcelPointer title="The five-number summary in one column">
 1. Put the data in a column, say `A2:A23`.
-2. In five cells alongside, enter `=QUARTILE.INC($A$2:$A$23, 0)` through `=QUARTILE.INC($A$2:$A$23, 4)` — note the `$` signs, which lock the data range so you can fill the formula down.
+2. In five cells alongside, enter `=QUARTILE.INC($A$2:$A$23, 0)` through `=QUARTILE.INC($A$2:$A$23, 4)`. Note the `$` signs, which lock the data range so you can fill the formula down.
 3. Read the five results off in order: that is your five-number summary.
 4. `=MEDIAN(A2:A23)` is a shortcut for `quart = 2`, and `=MIN(…)` / `=MAX(…)` for `quart = 0` and `4`.
 </ExcelPointer>
 
-<Example title="Example 13A — five-number summary of the football points">
+<Example title="Example 13A: five-number summary of the football points">
 At the end of the 1983/84 English football season, the points scored by each of the 22 clubs were:
 
 | Club | Points | Club | Points |
@@ -183,7 +183,7 @@ $$
   dataset="football"
   flag="off"
   label="See the five-number summary"
-  description="The box spans the two quartiles and the thick line marks the median, with the whiskers running out to the two extremes. Ignore the 'Flag outliers & strays' tick-box for now — we come to it later in this unit."
+  description="The box spans the two quartiles and the thick line marks the median, with the whiskers running out to the two extremes. Ignore the 'Flag outliers & strays' tick-box for now; we come to it later in this unit."
 />
 
 **Why is this a big deal?** Because those five numbers tell us that:
@@ -194,12 +194,12 @@ $$
 4. All the scores lay between 29 and 79.
 
 <Note>
-**Excel and *Introstat* will not always agree.** *Introstat* finds the quartiles using rank rules of its own, which never interpolate — they always land on an observation or half-way between two of them. For these football points the book reports $(29, 50, 55, 63, 79)$, whereas `QUARTILE.INC` gives $(29, 50.25, 55, 62.5, 79)$.
+**Excel and *Introstat* will not always agree.** *Introstat* finds the quartiles using rank rules of its own, which never interpolate: they always land on an observation or half-way between two of them. For these football points the book reports $(29, 50, 55, 63, 79)$, whereas `QUARTILE.INC` gives $(29, 50.25, 55, 62.5, 79)$.
 
 Neither is "wrong": they are different conventions. **In this course we use the Excel values**, because that is the tool you will actually compute with. Expect the odd mismatch if you compare against the printed book.
 </Note>
 
-<Example title="Example 14B — comparing engineers with arts students">
+<Example title="Example 14B: comparing engineers with arts students">
 Find the five-number summaries of the GMAT scores for the engineering and the arts students of the MBA class (Table 1.1, Example 1A), and compare them.
 
 <Solution>
@@ -220,7 +220,7 @@ This reinforces the interpretation we reached from the histograms: engineers ten
 
 Five-number summaries can be displayed graphically by means of **box-and-whisker plots**. (This ridiculous name was invented by the American statistician John Tukey, who also invented both the name "stem-and-leaf plot" and the plot itself. Tukey was not only an inventor of crazy names; he made an enormous impact on the theory and practice of statistics.)
 
-<Example title="Example 16A — a box-and-whisker plot of the football points">
+<Example title="Example 16A: a box-and-whisker plot of the football points">
 Produce a box-and-whisker plot for the football points, using the five-number summary (29, 50.25, 55, 62.5, 79) computed in Example 13A.
 
 <Solution>
@@ -245,7 +245,7 @@ Open the plot below to see the result.
 
 Box-and-whisker plots are especially useful when we want to compare two or more sets of data. To achieve this comparison we construct the plots **side by side**. It is essential to use the same vertical scale for all the plots being compared.
 
-<Example title="Example 17B — comparing all six faculties">
+<Example title="Example 17B: comparing all six faculties">
 Draw a series of box-and-whisker plots to compare the GMAT scores of each category of MBA student.
 
 <Solution>
@@ -262,7 +262,7 @@ The five-number summaries for all six categories of the Table 1.1 data are:
 
 Shown side by side, the plots reveal the differences between the categories. Students with a medical background had the highest median GMAT score, followed by engineers, with arts students having the lowest median.
 
-The skewness to the right that we commented on earlier for the class as a whole — now showing as a long whisker pointing upwards — is also evident for the engineering, science, arts and commerce students, the categories with the larger sample sizes.
+The skewness to the right that we commented on earlier for the class as a whole (now showing as a long whisker pointing upwards) is also evident for the engineering, science, arts and commerce students, the categories with the larger sample sizes.
 </Solution>
 </Example>
 
@@ -278,7 +278,7 @@ The skewness to the right that we commented on earlier for the class as a whole 
 
 In many data sets there are one or more values that appear to be very different from the bulk of the observations. Intuitively we recognise these values because they are a long way from the median of the data set as a whole.
 
-These outlying values may be valid, but they could equally represent errors that have crept into the data — when the observation was made, when the numbers were transcribed from one sheet of paper to another, when they were entered into a computer, or even when they were transferred from one computer to another. On the other hand, if outlying values are genuine observations, they may be of special interest and importance. In any event, these observations need to be checked, and either confirmed or rejected. It is useful to have rules that will aid us to identify such observations.
+These outlying values may be valid, but they could equally represent errors that have crept into the data: when the observation was made, when the numbers were transcribed from one sheet of paper to another, when they were entered into a computer, or even when they were transferred from one computer to another. On the other hand, if outlying values are genuine observations, they may be of special interest and importance. In any event, these observations need to be checked, and either confirmed or rejected. It is useful to have rules that will aid us to identify such observations.
 
 There are a number of differing approaches that could be taken here, but for the purposes of this course we will adopt the following convention.
 
@@ -320,7 +320,7 @@ The largest and smallest observations which are **not** strays are called the **
 Notice that this rule is deliberately **asymmetric**: the upper cut-offs are built from $x_{(u)} - x_{(m)}$ and the lower ones from $x_{(m)} - x_{(l)}$. On skew data the two halves of the box have different widths, so the flagging distances differ too.
 </Note>
 
-<Example title="Example 18A — who is over-using the computer?">
+<Example title="Example 18A: who is over-using the computer?">
 The university computing service provides data on the amount of computer usage (hours) by each of 30 students on a course:
 
 | Student | Hours | Student | Hours | Student | Hours |
@@ -367,9 +367,9 @@ $$
 x_{(m)} - 3\,(x_{(m)} - x_{(l)}) = 38 - 3(38 - 31.5) = 18.5.
 $$
 
-There are eight strays: five at the low-usage end — AM044 (2), PH544 (4), CI144 (7), TB864 (11) and RR676 (18) — and three at the high-usage end: JK314 (84), MJ076 (95) and ZP559 (125). Note that ZP559's 125 hours sits exactly *on* the outlier cut-off, and the rule is a strict inequality, so it is a stray rather than an outlier.
+There are eight strays: five at the low-usage end, namely AM044 (2), PH544 (4), CI144 (7), TB864 (11) and RR676 (18), and three at the high-usage end, namely JK314 (84), MJ076 (95) and ZP559 (125). Note that ZP559's 125 hours sits exactly *on* the outlier cut-off, and the rule is a strict inequality, so it is a stray rather than an outlier.
 
-The fences — the outermost observations that are not strays — are 20 and 73 hours.
+The fences (the outermost observations that are not strays) are 20 and 73 hours.
 
 The lecturer now has a list of students whose computer utilisation appears to warrant a conversation.
 </Solution>
@@ -379,10 +379,10 @@ The lecturer now has a list of students whose computer utilisation appears to wa
   vizId="box-plot-builder"
   dataset="usage"
   label="Flag the outliers and strays"
-  description="The whiskers stop at the fences and every flagged student is drawn and named — the outlier boldly, the strays lightly. Untick the flagging box to see how the outlier would otherwise hide at the end of a very long whisker."
+  description="The whiskers stop at the fences and every flagged student is drawn and named: the outlier boldly, the strays lightly. Untick the flagging box to see how the outlier would otherwise hide at the end of a very long whisker."
 />
 
-<Example title="Example 19C — two numbers that cannot be right">
+<Example title="Example 19C: two numbers that cannot be right">
 A company that produces breakfast cereals is interested in the protein content of wheat, the basic raw material of its products. The protein content (as a percentage of mass) of 29 samples of wheat was recorded as follows:
 
 | | | | | |
@@ -413,7 +413,7 @@ The statistician asked that these values be investigated. Checking back to the o
   vizId="box-plot-builder"
   dataset="wheat"
   label="Catch the two data-entry errors"
-  description="With 83 in the batch the whole box is squashed into the bottom of the axis — a good sign in itself that something is wrong with the data."
+  description="With 83 in the batch the whole box is squashed into the bottom of the axis, a good sign in itself that something is wrong with the data."
 />
 
 ## "Statistics" in statistics
@@ -452,20 +452,20 @@ The sample mean locates the "middle" of the batch in a special way. It is equiva
   vizId="mean-median-balance"
   preset="symmetric"
   label="Balance the ruler"
-  description="Drag the fulcrum until the beam sits level — it only balances when the fulcrum is exactly at the mean. Then drag the weights themselves and watch both the mean and the median respond."
+  description="Drag the fulcrum until the beam sits level. It only balances when the fulcrum is exactly at the mean. Then drag the weights themselves and watch both the mean and the median respond."
 />
 
 The mean is much easier to calculate than the median. It requires a single pass through the data, adding up the values; the median requires the data to be sorted first, which often takes several passes.
 
 <ExcelPointer title="Location and spread in Excel">
-1. `=AVERAGE(A2:A16)` — the sample mean $\bar{x}$.
-2. `=MEDIAN(A2:A16)` — the median $x_{(m)}$.
-3. `=VAR.S(A2:A16)` — the sample variance $s^2$ (the `.S` means *sample*, so it divides by $n - 1$).
-4. `=STDEV.S(A2:A16)` — the sample standard deviation $s$.
-5. `=MAX(…) - MIN(…)` — the range $R$; `=QUARTILE.INC(…,3) - QUARTILE.INC(…,1)` — the interquartile range $I$.
+1. `=AVERAGE(A2:A16)`: the sample mean $\bar{x}$.
+2. `=MEDIAN(A2:A16)`: the median $x_{(m)}$.
+3. `=VAR.S(A2:A16)`: the sample variance $s^2$ (the `.S` means *sample*, so it divides by $n - 1$).
+4. `=STDEV.S(A2:A16)`: the sample standard deviation $s$.
+5. `=MAX(…) - MIN(…)`: the range $R$; `=QUARTILE.INC(…,3) - QUARTILE.INC(…,1)`: the interquartile range $I$.
 </ExcelPointer>
 
-<Example title="Example 21A — dividend yields">
+<Example title="Example 21A: dividend yields">
 Find the sample mean of the dividend yields of 15 shares in the paper-and-packaging sector of the Johannesburg Stock Exchange, and also the median. Compare them. The yields are percentages.
 
 | Share | Yield | Share | Yield | Share | Yield |
@@ -483,13 +483,13 @@ $$
 \bar{x} = \frac{3.3 + 8.4 + 10.7 + \cdots + 8.2 + 3.0}{15} = \frac{102.0}{15} = 6.80\%.
 $$
 
-The median has rank $(15 - 1)(0.5) + 1 = 8$ — a whole number, so no interpolation is needed — and the eighth smallest yield is $x_{(m)} = 7.1\%$.
+The median has rank $(15 - 1)(0.5) + 1 = 8$, a whole number, so no interpolation is needed, and the eighth smallest yield is $x_{(m)} = 7.1\%$.
 
 In this example there is little difference between the two measures of location. But this is not always the case…
 </Solution>
 </Example>
 
-<Example title="Example 22A — when the mean and the median disagree">
+<Example title="Example 22A: when the mean and the median disagree">
 Find the mean and the median of the weekly volume of the same 15 shares. The weekly volume is the number of shares traded in a week.
 
 | Share | Volume | Share | Volume | Share | Volume |
@@ -509,7 +509,7 @@ $$
 
 shares traded per week. Sorting the data and taking the middle (8th) value gives a median of $x_{(m)} = 2\,100$ shares per week.
 
-The mean is more than ten times larger than the median. **What has gone wrong? Nothing** — it is simply that the mean and the median locate the "middle" of the data by different rules. Here the mean has been dragged upwards by a few very large values, so that only five of the fifteen numbers are larger than the mean. But even if a million Metal Box shares had been traded during the week, the median would have stayed exactly where it is.
+The mean is more than ten times larger than the median. **What has gone wrong? Nothing.** It is simply that the mean and the median locate the "middle" of the data by different rules. Here the mean has been dragged upwards by a few very large values, so that only five of the fifteen numbers are larger than the mean. But even if a million Metal Box shares had been traded during the week, the median would have stayed exactly where it is.
 </Solution>
 </Example>
 
@@ -521,7 +521,7 @@ A statistic is **robust** if it is insensitive to outlying values in the data se
   vizId="mean-median-balance"
   preset="outlier"
   label="Drag the outlier and watch the mean chase it"
-  description="Load 'One outlier' and drag the lone right-hand weight further right. The mean follows it across the axis while the median barely stirs — that is exactly what robustness means."
+  description="Load 'One outlier' and drag the lone right-hand weight further right. The mean follows it across the axis while the median barely stirs: that is exactly what robustness means."
 />
 
 The mean and the median tend to be close to each other when the distribution of values is symmetric and there are no outlying observations, and they differ increasingly as the distribution becomes more and more skew. The observations in the long tail of a skew distribution drag the mean in the direction of the tail, so the sample mean of a very skew distribution might give a totally misleading impression of the "middle" of the data set.
@@ -535,14 +535,14 @@ The sample mean does have mathematical advantages over the median: it is far eas
 Measures of spread give insight into the variability of a set of data. Two of them can be defined in an obvious way from the five-number summary.
 
 <Definition term="Range">
-$R = x_{(n)} - x_{(1)}$ — the distance from the smallest observation to the largest.
+$R = x_{(n)} - x_{(1)}$: the distance from the smallest observation to the largest.
 </Definition>
 
 <Definition term="Interquartile range">
-$I = x_{(u)} - x_{(l)}$ — the length of the interval covering the central half of the data values.
+$I = x_{(u)} - x_{(l)}$: the length of the interval covering the central half of the data values.
 </Definition>
 
-The range is unreliable as a measure of spread because it depends only on the smallest and largest values in the sample, and is thus as sensitive as it can possibly be to outlying values — it is the ultimate example of a non-robust statistic. The interquartile range, by contrast, is not sensitive to outliers at all: it is a **robust** measure of spread.
+The range is unreliable as a measure of spread because it depends only on the smallest and largest values in the sample, and is thus as sensitive as it can possibly be to outlying values: it is the ultimate example of a non-robust statistic. The interquartile range, by contrast, is not sensitive to outliers at all: it is a **robust** measure of spread.
 
 ### Variance and standard deviation
 
@@ -556,11 +556,11 @@ $$
 In words: the sum of the squared differences between each data value and the sample mean, divided by one less than the number of terms in the sum. The **sample standard deviation** $s$ is the square root of the sample variance.
 </Definition>
 
-The variance and the standard deviation are always positive, because every term in the sum is squared — even though some of the individual differences are negative.
+The variance and the standard deviation are always positive, because every term in the sum is squared, even though some of the individual differences are negative.
 
-It is a nuisance to have two measures of spread, one of which is just the square root of the other. Why keep both? The **standard deviation** is easier to use intuitively, largely because it is measured in the same units as the original data. The **variance** is measured in "squared units", an awkward quantity to visualise: if the data consists of prices in rands, the variance has units "squared rands", but the standard deviation is in rands. Even worse, if the data consists of percentages, the variance has units "%²" whereas the standard deviation has the intelligible units "%". But mathematical statisticians prefer the variance — not having to carry a square root through the algebra makes their lives simpler — so the two co-exist, and we have to come to terms with both.
+It is a nuisance to have two measures of spread, one of which is just the square root of the other. Why keep both? The **standard deviation** is easier to use intuitively, largely because it is measured in the same units as the original data. The **variance** is measured in "squared units", an awkward quantity to visualise: if the data consists of prices in rands, the variance has units "squared rands", but the standard deviation is in rands. Even worse, if the data consists of percentages, the variance has units "%²" whereas the standard deviation has the intelligible units "%". But mathematical statisticians prefer the variance (not having to carry a square root through the algebra makes their lives simpler), so the two co-exist, and we have to come to terms with both.
 
-<Example title="Example 23A — variance of the dividend yields">
+<Example title="Example 23A: variance of the dividend yields">
 Compute the sample variance $s^2$ and the standard deviation $s$ for the dividend yields of the 15 shares of Example 21A.
 
 <Solution>
@@ -616,7 +616,7 @@ $$
 
 </Collapse>
 
-<Example title="Example 24A — the same variance, the short way">
+<Example title="Example 24A: the same variance, the short way">
 Calculate the sample variance of the 15 dividend yields again, this time using the short-cut formula.
 
 <Solution>
@@ -626,7 +626,7 @@ $$
 \sum_{i=1}^{15} x_i = 3.3 + 8.4 + \cdots + 3.0 = 102.0,
 $$
 
-and the sum of their squares — square them first, then add:
+and the sum of their squares (square them first, then add):
 
 $$
 \sum_{i=1}^{15} x_i^2 = 3.3^2 + 8.4^2 + \cdots + 3.0^2 = 769.22.
@@ -652,7 +652,7 @@ However, the variance and the standard deviation share the mean's disadvantage: 
 The intervals $(x_{(1)}, x_{(n)})$, $(\bar{x} - s,\; \bar{x} + s)$ and $(x_{(l)}, x_{(u)})$ cover exactly 100%, approximately 68% (two-thirds), and exactly 50% of the observations respectively. But it is **not** possible to make direct comparisons between the range, the standard deviation and the interquartile range.
 </Note>
 
-<Example title="Example 25B — location and spread for all six faculties">
+<Example title="Example 25B: location and spread for all six faculties">
 Calculate the sample means, sample standard deviations, medians, interquartile ranges and ranges of the GMAT scores for each faculty category of Example 1A, and comment on the results.
 
 <Solution>
@@ -681,7 +681,7 @@ Repeating for every category:
 | Medicine | 5 | 638.0 | 640 | 53.1 | 90 | 120 |
 | Other | 6 | 580.0 | 585 | 83.2 | 92.5 | 230 |
 
-**Location.** The sample means show that students with first degrees in medicine had the highest mean GMAT score (638.0), followed by engineering (601.8), then science (583.1). The lowest mean was recorded for arts students (555.6). The medians follow the same pattern and, apart from arts, mean and median are relatively close. In the box-and-whisker plots of Example 17B we saw that the arts distribution appeared strongly skewed to the right — and the gap between its mean (555.6) and its median (535) is exactly the consequence we would expect.
+**Location.** The sample means show that students with first degrees in medicine had the highest mean GMAT score (638.0), followed by engineering (601.8), then science (583.1). The lowest mean was recorded for arts students (555.6). The medians follow the same pattern and, apart from arts, mean and median are relatively close. In the box-and-whisker plots of Example 17B we saw that the arts distribution appeared strongly skewed to the right, and the gap between its mean (555.6) and its median (535) is exactly the consequence we would expect.
 
 **Spread.** The category "Other" has the largest standard deviation (83.2), followed by engineering (65.0); the smallest was commerce (40.0). The interquartile ranges and ranges follow a broadly similar pattern. A plausible explanation for "Other" having the largest spread is that it encompasses a wide diversity of students not belonging to any single faculty category.
 
@@ -699,17 +699,17 @@ These conclusions provide a partial description of this MBA class of 81 students
 
 ## Exploratory data analysis
 
-The techniques we have learnt in this chapter have largely been aimed at getting a feel for a sample of data — a process somewhat grandly called **exploratory data analysis**.
+The techniques we have learnt in this chapter have largely been aimed at getting a feel for a sample of data, a process somewhat grandly called **exploratory data analysis**.
 
 In the age of instant arithmetic and the personal computer, the temptation is to reach for sophisticated statistical methods and accept the answers uncritically. We have seen in this chapter that the presence of one or more outliers can have a devastating effect on the sample mean and the sample standard deviation, the most frequently used summary statistics of all. Likewise, we have seen how skewness affects these statistics.
 
-Most statistical methods make a variety of assumptions, and many of them can be checked — visually at least — by exactly the techniques described here. You are strongly encouraged to use them **before** you do any more complex analysis.
+Most statistical methods make a variety of assumptions, and many of them can be checked (visually at least) by exactly the techniques described here. You are strongly encouraged to use them **before** you do any more complex analysis.
 
 <Collapse title="Practice" hint="Examples 15C, 20C, 26C & 27C">
 
 **15C.** Find the five-number summaries, using Excel, for the three batches below.
 
-(a) *Example 10C* — examination marks of a group of 25 students:
+(a) *Example 10C*: examination marks of a group of 25 students:
 
 | | | | | |
 |---|---|---|---|---|
@@ -719,7 +719,7 @@ Most statistical methods make a variety of assumptions, and many of them can be 
 | 61 | 51 | 72 | 53 | 39 |
 | 67 | 27 | 43 | 69 | 53 |
 
-(b) *Example 11C* — maximum temperatures (°C) at 20 southern African towns on one summer's day:
+(b) *Example 11C*: maximum temperatures (°C) at 20 southern African towns on one summer's day:
 
 | Town | °C | Town | °C |
 |---|---|---|---|
@@ -734,7 +734,7 @@ Most statistical methods make a variety of assumptions, and many of them can be 
 | Upington | 28 | Pietermaritzburg | 27 |
 | Keetmanshoop | 28 | Ladysmith | 30 |
 
-(c) *Example 12C* — quoted prices (rands) from 37 TV repair shops:
+(c) *Example 12C*: quoted prices (rands) from 37 TV repair shops:
 
 | | | | | | |
 |---|---|---|---|---|---|
@@ -787,7 +787,7 @@ The data is strongly skewed to the right: four Januaries recorded no rain at all
 **26C.** Calculate the sample mean and standard deviation, the median, the range and the interquartile range of the Paarl rainfall data of Example 20C.
 
 <Solution>
-$\sum x_i = 518.8$ over $n = 22$, so $\bar{x} = 23.58$ mm, against a median of only $8.5$ mm — the signature of a strongly right-skewed batch.
+$\sum x_i = 518.8$ over $n = 22$, so $\bar{x} = 23.58$ mm, against a median of only $8.5$ mm, the signature of a strongly right-skewed batch.
 
 $s = 36.57$ mm; $R = 145.1$ mm; $I = 26.175 - 2.7 = 23.475$ mm.
 

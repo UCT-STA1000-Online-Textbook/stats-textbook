@@ -16,7 +16,7 @@ quiz:
       - "A student's GMAT score"
       - "The height of a pine tree in metres"
     answer: 1
-    explanation: "Qualitative data classifies objects using labels or names — make of car is a category, not a number. The other three arise from counting or measuring, so they are quantitative."
+    explanation: "Qualitative data classifies objects using labels or names: make of car is a category, not a number. The other three arise from counting or measuring, so they are quantitative."
   - id: "q2"
     type: "mcq"
     question: "In the MBA class of 81 students, 28 have an Engineering first degree. What is the relative frequency of the Engineering category?"
@@ -26,7 +26,7 @@ quiz:
       - "0.20"
       - "28"
     answer: 1
-    explanation: "Relative frequency = frequency ÷ total = 28 / 81 ≈ 0.35. Open the pie/bar explorer and read the 'Rel. freq' column — Engineering is the largest slice at 0.35."
+    explanation: "Relative frequency = frequency ÷ total = 28 / 81 ≈ 0.35. Open the pie/bar explorer and read the 'Rel. freq' column: Engineering is the largest slice at 0.35."
     vizHint: "categorical-display"
     vizHintParams:
       dataset: "mba"
@@ -41,7 +41,7 @@ quiz:
     question: "For the GMAT scores (n = 81, range = 300) the Sturge guideline gives L ≈ 40.9 and the GENSTAT guideline gives L ≈ 33.3. What should you conclude?"
     options:
       - "You must use exactly L = 40.9"
-      - "Both are only guidelines — a convenient 'nice' width such as 50 is a sensible choice"
+      - "Both are only guidelines: a convenient 'nice' width such as 50 is a sensible choice"
       - "Narrower class intervals always produce a better histogram"
       - "The two guidelines disagree, so neither can be trusted"
     answer: 1
@@ -58,7 +58,7 @@ quiz:
       - "skewed to the right"
       - "uniform"
     answer: 2
-    explanation: "A long tail to the right means the distribution is skewed to the right (positively skewed) — exactly what the GMAT histogram shows. Switch on 'Mean & median' in the histogram builder: the mean is pulled toward the long right tail."
+    explanation: "A long tail to the right means the distribution is skewed to the right (positively skewed), exactly what the GMAT histogram shows. Switch on 'Mean & median' in the histogram builder: the mean is pulled toward the long right tail."
     vizHint: "histogram-builder"
     vizHintParams:
       dataset: "gmat"
@@ -71,7 +71,7 @@ quiz:
       - "skewed to the left"
       - "truncated"
     answer: 1
-    explanation: "Two clear peaks make the distribution bimodal. Here the lower peak is industrial shares and the upper peak is gold shares — a feature impossible to see in the raw list of 75 numbers but obvious once it is displayed. Load the 'Share risk' dataset in the histogram builder to see it."
+    explanation: "Two clear peaks make the distribution bimodal. Here the lower peak is industrial shares and the upper peak is gold shares, a feature impossible to see in the raw list of 75 numbers but obvious once it is displayed. Load the 'Share risk' dataset in the histogram builder to see it."
     vizHint: "histogram-builder"
     vizHintParams:
       dataset: "risk"
@@ -81,13 +81,13 @@ nextUnit: "m2-summary-measures"
 
 ## Display, summarise and interpret
 
-Before getting deeply involved in any problem, it is wise to step back and glimpse "the big picture" — and so it is with statistics. As a starting point, statisticians make a "quick and dirty" summary of the data they are about to analyse, to get a *feel* for what they are dealing with. This initial overview usually involves three things:
+Before getting deeply involved in any problem, it is wise to step back and glimpse "the big picture", and so it is with statistics. As a starting point, statisticians make a "quick and dirty" summary of the data they are about to analyse, to get a *feel* for what they are dealing with. This initial overview usually involves three things:
 
-- constructing a **visual display** of the data — a graph or a table;
+- constructing a **visual display** of the data: a graph or a table;
 - **summarising** the data with a few pertinent "key" numbers; and
 - gaining **insight** into the potential of the data.
 
-This work unit deals with the first of these — visual displays. The "key numbers" come in the [next unit](/unit/m2-summary-measures).
+This work unit deals with the first of these: visual displays. The "key numbers" come in the [next unit](/unit/m2-summary-measures).
 
 > **Keywords:** qualitative & quantitative data, frequency distribution, relative frequency, <KeywordChip vizId="categorical-display" dataset="mba" chart="pie">pie chart</KeywordChip>, <KeywordChip vizId="categorical-display" dataset="mba" chart="bar">bar graph</KeywordChip>, <KeywordChip vizId="histogram-builder" dataset="gmat">histogram</KeywordChip>, class intervals, skewness.
 
@@ -96,11 +96,11 @@ This work unit deals with the first of these — visual displays. The "key numbe
 Data is information. There are data drips and data floods, and statisticians must deal with both. When data comes in floods, the problem is to extract the salient features; when it comes in drips, the problem is to know what interpretations are valid. Besides the *amount* of data, there are different *types*. For now we distinguish two.
 
 <Definition term="Qualitative data">
-Usually non-numerical data that arises when we classify objects using labels or names as categories — for example make of car, colour of eyes, gender, nationality or cause of death. Sometimes the categories are semi-numerical (ordinal), such as company size recorded as small, medium or large.
+Usually non-numerical data that arises when we classify objects using labels or names as categories: for example make of car, colour of eyes, gender, nationality or cause of death. Sometimes the categories are semi-numerical (ordinal), such as company size recorded as small, medium or large.
 </Definition>
 
 <Definition term="Quantitative data">
-Always numerical data, whose values can be ranked or ordered. Quantitative data usually arises from counting or measuring — for example flying time between airports, number of rooms in a house, the salary of an accountant or the volume of water in a dam.
+Always numerical data, whose values can be ranked or ordered. Quantitative data usually arises from counting or measuring: for example flying time between airports, number of rooms in a house, the salary of an accountant or the volume of water in a dam.
 </Definition>
 
 The right kind of display depends on the type of data, so always ask this question first.
@@ -109,10 +109,10 @@ The right kind of display depends on the type of data, so always ask this questi
 
 Two efficient ways of displaying qualitative data are the **pie chart** and the **bar graph**.
 
-<Example title="Example 1A — MBA students">
+<Example title="Example 1A: MBA students">
 Table 1.1 in *Introstat* lists data on a class of 81 MBA students. For each student it records the faculty of their first degree (Arts, Commerce, Engineering, Medicine, Science or "Other") and their score on the GMAT entrance examination. Our brief is to construct a visual summary of how the students are distributed across the first-degree categories.
 
-<Collapse title="Table 1.1 — the raw data" hint="all 81 students">
+<Collapse title="Table 1.1: the raw data" hint="all 81 students">
 
 | # | Degree | GMAT | # | Degree | GMAT | # | Degree | GMAT |
 |---|---|---|---|---|---|---|---|---|
@@ -165,14 +165,14 @@ First, note that *first-degree category* is **qualitative** data, so the frequen
 1. Enter each category name once in a column, e.g. cells `A2:A7`.
 2. Beside the first category, count how many observations match it with `=COUNTIF(data_range, A2)`, then fill the formula down.
 3. Add a total with `=SUM(B2:B7)`.
-4. In the next column compute relative frequencies as `=B2/$B$8` (frequency ÷ total — note the `$` signs that lock the total cell), and round to a convenient 2 decimal places.
+4. In the next column compute relative frequencies as `=B2/$B$8` (frequency ÷ total; note the `$` signs that lock the total cell), and round to a convenient 2 decimal places.
 </ExcelPointer>
 
 Once you have the table, plotting is straightforward.
 
 **Pie chart.** There is no hard-and-fast rule about where to start or which direction to sweep, but a pie communicates most effectively when the slices are arranged in *decreasing* order of size.
 
-**Bar graph.** Bars may be horizontal or vertical. There is no quantitative scale tying the bars together, the bars are not connected, and their widths carry no meaning. Because the nominal categories have no natural order, we are free to arrange them as we please — and, as with the pie chart, ordering them by decreasing relative frequency makes comparison easier.
+**Bar graph.** Bars may be horizontal or vertical. There is no quantitative scale tying the bars together, the bars are not connected, and their widths carry no meaning. Because the nominal categories have no natural order, we are free to arrange them as we please; as with the pie chart, ordering them by decreasing relative frequency makes comparison easier.
 
 <ExcelPointer title="Pie chart and bar graph">
 1. Select the category labels and their frequencies (or relative frequencies).
@@ -191,7 +191,7 @@ Once you have the table, plotting is straightforward.
 
 Visually, both displays make the same point immediately: **engineers form the largest group** in this class. A plausible explanation is that engineers receive little management training as undergraduates and make up for it with an MBA. Sometimes a chart merely confirms the obvious; at other times it reveals something completely unexpected.
 
-<Example title="Example 2C — the JSE All-Share Index">
+<Example title="Example 2C: the JSE All-Share Index">
 Table 1.2 gives the composition of the All-Share Index of the Johannesburg Stock Exchange, made up of seven major-sector indices. Using the aggregated figures below:
 
 (a) construct a bar chart of the **number of shares** in each major sector; and
@@ -212,7 +212,7 @@ Table 1.2 gives the composition of the All-Share Index of the Johannesburg Stock
 <Solution>
 Build the two bar charts with the explorer below (switch the dataset between "share count" and "% weighting").
 
-The two charts tell **different stories**. By *number of shares*, the Industrial and Financial sectors dominate. But by *weighting* in the index, Mining Financial and All-Gold leap ahead, while Financial — despite having the most shares — carries a small weighting. The lesson: counting how many shares a sector contains is not the same as measuring its importance to the index.
+The two charts tell **different stories**. By *number of shares*, the Industrial and Financial sectors dominate. But by *weighting* in the index, Mining Financial and All-Gold leap ahead, while Financial (despite having the most shares) carries a small weighting. The lesson: counting how many shares a sector contains is not the same as measuring its importance to the index.
 </Solution>
 </Example>
 
@@ -221,7 +221,7 @@ The two charts tell **different stories**. By *number of shares*, the Industrial
   dataset="jse-count"
   chart="bar"
   label="Compare share count vs weighting"
-  description="Switch between 'JSE — share count' and 'JSE — % weighting' and watch the ranking of the sectors flip."
+  description="Switch between 'JSE: share count' and 'JSE: % weighting' and watch the ranking of the sectors flip."
 />
 
 ## Visual displays of quantitative data: histograms
@@ -231,15 +231,15 @@ Histograms are a time-honoured way of displaying *quantitative* data. A histogra
 - there is **no gap** between adjacent bars; and
 - the bars correspond to **intervals on the number line**, not to named categories.
 
-These intervals — the **class intervals** — are all of equal length. We recommend a four-step procedure.
+These intervals (the **class intervals**) are all of equal length. We recommend a four-step procedure.
 
-**Step 1 — Find the size and extremes.** Determine the sample size $n$ (the number of observations) and the smallest and largest values, $x_{\min}$ and $x_{\max}$.
+**Step 1: Find the size and extremes.** Determine the sample size $n$ (the number of observations) and the smallest and largest values, $x_{\min}$ and $x_{\max}$.
 
 <Note>
 A **sample** is a number of elements taken from the population of interest. Each element provides an observed value for the variable we are studying, and together these values form our **dataset**. We hope the sample is *representative* of the population, so that conclusions drawn from the sample are valid for the whole population. Throughout this book the symbol $n$ always denotes the sample size. (Methods for obtaining a representative sample are covered in Chapter 11.)
 </Note>
 
-**Step 2 — Choose the class-interval width.** Two guidelines help fix an approximate width $L$. Mr Sturge suggests
+**Step 2: Choose the class-interval width.** Two guidelines help fix an approximate width $L$. Mr Sturge suggests
 
 $$
 L = \frac{x_{\max} - x_{\min}}{1 + \log_2 n} = \frac{x_{\max} - x_{\min}}{1 + 1.44\,\ln n},
@@ -251,13 +251,13 @@ $$
 L = \frac{x_{\max} - x_{\min}}{\sqrt{n}}.
 $$
 
-If the intervals are too narrow the histogram looks *spikey*; if too wide it looks *blurred*. Treat both formulas as guidelines only: feel free to choose a width between half and double their suggestion, and prefer tidy multiples of 2, 5 or 10. **All intervals must be the same width** — unequal widths destroy the visual message.
+If the intervals are too narrow the histogram looks *spikey*; if too wide it looks *blurred*. Treat both formulas as guidelines only: feel free to choose a width between half and double their suggestion, and prefer tidy multiples of 2, 5 or 10. **All intervals must be the same width**: unequal widths destroy the visual message.
 
-**Step 3 — Count the values in each class.** This produces a frequency distribution. (In some software the class intervals are called **bins** and $L$ is the **bin width**.) We agree that a value landing exactly on a boundary is allocated to the *higher* class — so the classes are really $450\text{–}499$, $500\text{–}549$, and so on.
+**Step 3: Count the values in each class.** This produces a frequency distribution. (In some software the class intervals are called **bins** and $L$ is the **bin width**.) We agree that a value landing exactly on a boundary is allocated to the *higher* class, so the classes are really $450\text{–}499$, $500\text{–}549$, and so on.
 
-**Step 4 — Plot the histogram**, choosing suitable scales for each axis.
+**Step 4: Plot the histogram**, choosing suitable scales for each axis.
 
-<Example title="Example 3A — a histogram of the GMAT scores">
+<Example title="Example 3A: a histogram of the GMAT scores">
 Using the 81 GMAT scores from Example 1A:
 
 **Step 1.** $n = 81$; the lowest score is $x_{\min} = 450$ and the highest is $x_{\max} = 750$.
@@ -285,20 +285,20 @@ A width of $L = 50$ is a sensible, tidy choice. Starting at 450, the class bound
 </Example>
 
 <ExcelPointer title="Class counts with the FREQUENCY array formula">
-1. Type the class **upper boundaries** into a column — the "bins" — e.g. 499, 549, 599, 649, 699, 749, 799.
+1. Type the class **upper boundaries** into a column (the "bins"), e.g. 499, 549, 599, 649, 699, 749, 799.
 2. Select the *block* of empty cells next to them (one cell per bin).
 3. Type `=FREQUENCY(data_range, bins_range)` and confirm with **Ctrl + Shift + Enter**.
 4. Excel fills the whole selected block at once with the class counts.
 </ExcelPointer>
 
 <Note>
-**Array formulae.** `FREQUENCY` is an *array formula* — it returns several values at once across a block of cells, so you must select the whole block first and confirm with **Ctrl + Shift + Enter** (older Excel then shows the formula wrapped in braces `{…}`). In newer "dynamic array" versions of Excel a plain **Enter** lets the result *spill* down automatically. Either way, you cannot edit just one cell of the block on its own.
+**Array formulae.** `FREQUENCY` is an *array formula*: it returns several values at once across a block of cells, so you must select the whole block first and confirm with **Ctrl + Shift + Enter** (older Excel then shows the formula wrapped in braces `{…}`). In newer "dynamic array" versions of Excel a plain **Enter** lets the result *spill* down automatically. Either way, you cannot edit just one cell of the block on its own.
 </Note>
 
 <ExcelPointer title="Plot the histogram (don't draw it)">
 1. Select the bins and their `FREQUENCY` counts.
 2. Choose **Insert ▸ Column chart**.
-3. Right-click a bar ▸ **Format Data Series** ▸ set **Gap Width = 0** so the bars touch — a histogram has no gaps.
+3. Right-click a bar ▸ **Format Data Series** ▸ set **Gap Width = 0** so the bars touch: a histogram has no gaps.
 4. Add axis titles: the variable (GMAT score) along the horizontal axis, frequency up the vertical axis.
 </ExcelPointer>
 
@@ -306,14 +306,14 @@ A width of $L = 50$ is a sensible, tidy choice. Starting at 450, the class bound
   vizId="histogram-builder"
   dataset="gmat"
   label="Build the GMAT histogram"
-  description="Drag the class-width slider and tap the Sturge / GENSTAT chips. Notice how a width that is too small looks spikey and one too large looks blurred — and how L = 50 gives a clean picture."
+  description="Drag the class-width slider and tap the Sturge / GENSTAT chips. Notice how a width that is too small looks spikey and one too large looks blurred, and how L = 50 gives a clean picture."
 />
 
 ### Reading the shape
 
-The striking feature of the GMAT histogram is that it is **not symmetric**: it is **skewed to the right**, with a long tail stretching off to the right. A seasoned statistician would expect test scores to have a tail at *both* ends, so the sharp truncation near 500 is telling — it suggests the MBA programme only accepts applicants scoring 500 or more, suppressing the left tail. The lone score of 450 would also be queried: a data-entry error, or perhaps an applicant who was outstanding in some other part of the selection process.
+The striking feature of the GMAT histogram is that it is **not symmetric**: it is **skewed to the right**, with a long tail stretching off to the right. A seasoned statistician would expect test scores to have a tail at *both* ends, so the sharp truncation near 500 is telling: it suggests the MBA programme only accepts applicants scoring 500 or more, suppressing the left tail. The lone score of 450 would also be queried: a data-entry error, or perhaps an applicant who was outstanding in some other part of the selection process.
 
-<Example title="Example 4B — a histogram of share risk">
+<Example title="Example 4B: a histogram of share risk">
 Financial analysts measure the *riskiness* of a share by the standard deviation of its monthly price changes (a measure of spread we meet in the next unit). The dataset below holds the risk values, in per cent per month, of a sample of 75 JSE shares. Construct a suitable histogram.
 
 <Solution>
@@ -338,7 +338,7 @@ Financial analysts measure the *riskiness* of a share by the standard deviation 
 | 28–29 | 2 |
 | **Total** | **75** |
 
-**Step 4 and interpretation.** The histogram has **two clear peaks** — it is **bimodal**. This was invisible in the raw list of 75 numbers. Further investigation showed gold shares were responsible for the right-hand peak and industrial shares for the left: gold shares are generally far more volatile than industrial shares.
+**Step 4 and interpretation.** The histogram has **two clear peaks**: it is **bimodal**. This was invisible in the raw list of 75 numbers. Further investigation showed gold shares were responsible for the right-hand peak and industrial shares for the left: gold shares are generally far more volatile than industrial shares.
 </Solution>
 </Example>
 

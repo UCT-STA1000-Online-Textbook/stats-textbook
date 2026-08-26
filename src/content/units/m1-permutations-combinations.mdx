@@ -22,7 +22,7 @@ quiz:
       scenario: "arrange"
   - id: "q2"
     type: "mcq"
-    question: "A club of 10 members must elect a president, a secretary and a treasurer — three different people in three distinct roles. In how many ways can this be done?"
+    question: "A club of 10 members must elect a president, a secretary and a treasurer, three different people in three distinct roles. In how many ways can this be done?"
     options:
       - "720"
       - "120"
@@ -42,7 +42,7 @@ quiz:
       - "Arranging 6 paintings in a row on a wall"
       - "Forming a 4-digit PIN from the digits 0–9"
     answer: 1
-    explanation: "A subcommittee is just a set of people — the order in which they are chosen is irrelevant — so it is a combination. The other three all care about order (medal ranks, wall positions, digit places), making them permutation problems."
+    explanation: "A subcommittee is just a set of people (the order in which they are chosen is irrelevant), so it is a combination. The other three all care about order (medal ranks, wall positions, digit places), making them permutation problems."
     vizHint: "counting-studio"
     vizHintParams:
       scenario: "choose"
@@ -60,7 +60,7 @@ quiz:
       - "10000"
       - "24"
     answer: 2
-    explanation: "Repetition is allowed and order matters, so this is Counting Rule 4 with n = 10 types and r = 4 slots: 10⁴ = 10 000 — exactly the count of the numbers 0000 to 9999."
+    explanation: "Repetition is allowed and order matters, so this is Counting Rule 4 with n = 10 types and r = 4 slots: 10⁴ = 10 000: exactly the count of the numbers 0000 to 9999."
     vizHint: "counting-studio"
     vizHintParams:
       scenario: "code"
@@ -80,7 +80,7 @@ nextUnit: "m1-conditional-probability"
 
 > **Keywords:** Permutations, combinations, factorial, ordered and unordered selections, repetition, the counting rules.
 
-In the previous unit we saw that when all the elementary events of a sample space are equally likely, $\Pr(A) = n(A)/N$ — a probability is just one count of elementary events divided by another. But even when every elementary event is equally probable, it is usually **impractical to list and count** them all by hand. The theory of **permutations** and **combinations** comes to the rescue: it lets us count the elementary events in a sample space, or in an event, quickly and reliably. This unit develops the first four *counting rules*.
+In the previous unit we saw that when all the elementary events of a sample space are equally likely, $\Pr(A) = n(A)/N$: a probability is just one count of elementary events divided by another. But even when every elementary event is equally probable, it is usually **impractical to list and count** them all by hand. The theory of **permutations** and **combinations** comes to the rescue: it lets us count the elementary events in a sample space, or in an event, quickly and reliably. This unit develops the first four *counting rules*.
 
 ## Permutations of n objects
 
@@ -135,10 +135,10 @@ $$
 </Theorem>
 
 <Example title="Example 16A">
-The focusing mechanism on Ron's camera is broken, so he can only photograph people at one fixed distance — he takes pictures of exactly 3 people at a time. If 10 people are present, how many different pictures are possible? (A rearrangement of the same people counts as a different picture.)
+The focusing mechanism on Ron's camera is broken, so he can only photograph people at one fixed distance: he takes pictures of exactly 3 people at a time. If 10 people are present, how many different pictures are possible? (A rearrangement of the same people counts as a different picture.)
 
 <Solution>
-Order matters — a rearrangement is a different picture — and no one appears twice, so we want the number of permutations of 10 objects taken 3 at a time:
+Order matters (a rearrangement is a different picture), and no one appears twice, so we want the number of permutations of 10 objects taken 3 at a time:
 $$
 (10)_3 = \frac{10!}{(10-3)!} = 10 \times 9 \times 8 = 720.
 $$
@@ -153,21 +153,21 @@ This asks for the number of permutations of 19 objects taken 19 at a time:
 $$
 (19)_{19} = \frac{19!}{(19-19)!} = \frac{19!}{0!} = 19! \approx 1.22 \times 10^{17}.
 $$
-That is more than a hundred quadrillion orderings — listing them all really would be impractical.
+That is more than a hundred quadrillion orderings: listing them all really would be impractical.
 </Solution>
 </Example>
 
 <TryThis
   vizId="counting-studio"
   label="Open the Counting Studio"
-  description="Fill a row of slots from a tray of numbered tiles in 3D. Switch between all four counting rules — arrange, order, choose and code — adjust n and r, and watch the choices multiply slot by slot into each rule's formula. Drag the scene to rotate it."
+  description="Fill a row of slots from a tray of numbered tiles in 3D. Switch between all four counting rules (arrange, order, choose and code), adjust n and r, and watch the choices multiply slot by slot into each rule's formula. Drag the scene to rotate it."
 />
 
 ## Combinations of n objects taken r at a time
 
 Sometimes we want only to count the number of ways of **choosing** $r$ objects from $n$, *without regard to their arrangement*. In other words, we want the number of $r$-element **subsets** that can be formed. This is the number of **combinations of $n$ objects taken $r$ at a time**, written $\binom{n}{r}$ ("$n$ combination $r$").
 
-To find it, recall that computing $(n)_r$ involved two operations — choosing $r$ objects and then arranging them. Now we care only about the first operation. Any particular subset of $r$ objects can itself be arranged in $r!$ ways, so there are exactly $r!$ times as many permutations as combinations:
+To find it, recall that computing $(n)_r$ involved two operations: choosing $r$ objects and then arranging them. Now we care only about the first operation. Any particular subset of $r$ objects can itself be arranged in $r!$ ways, so there are exactly $r!$ times as many permutations as combinations:
 $$
 \binom{n}{r} \times r! = (n)_r = \frac{n!}{(n-r)!}.
 $$
@@ -187,7 +187,7 @@ $$
 In how many ways can a 9-person work team be formed from 15 people?
 
 <Solution>
-A team is just a set of people — the order in which they are chosen does not matter — so we want the number of ways of choosing 9 from 15:
+A team is just a set of people (the order in which they are chosen does not matter), so we want the number of ways of choosing 9 from 15:
 $$
 \binom{15}{9} = \frac{15!}{9!\,6!} = 5005.
 $$
@@ -259,7 +259,7 @@ ways. This makes sense: it is exactly the count of the numbers from 0000 to 9999
 (b) A system of car number plates uses three letters of the alphabet (excluding I and O) followed by three digits. How many number plates are possible?
 
 <Solution>
-(a) Repeated letters are allowed — words like BEER are permissible — so each of the 4 slots has all 26 letters available:
+(a) Repeated letters are allowed (words like BEER are permissible), so each of the 4 slots has all 26 letters available:
 $$
 26^4 = 456\,976.
 $$
@@ -275,7 +275,7 @@ or nearly 14 million number plates.
 <Note>
 **Choosing the right counting rule.** Two questions settle which rule applies:
 
-1. *Does order matter?* Placing objects in distinct positions — slots, ranks, roles — is a **permutation**. Simply selecting a group is a **combination**.
+1. *Does order matter?* Placing objects in distinct positions (slots, ranks, roles) is a **permutation**. Simply selecting a group is a **combination**.
 2. *Are repetitions allowed?* Can the same object fill more than one slot?
 
 - Order matters, no repetition, all $n$ objects → Rule 1, $n!$.

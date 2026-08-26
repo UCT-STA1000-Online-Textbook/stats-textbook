@@ -21,7 +21,7 @@ quiz:
     type: "true-false"
     question: "As the number of trials n increases, the relative frequency r/n always equals the true probability exactly."
     answer: false
-    explanation: "False. The relative frequency only tends toward the true probability as a limit — any finite run will almost certainly show some deviation. Open 'Run trials yourself' and hit Simulate 100× a few times: each bar drifts toward the dashed theoretical line without ever locking onto it permanently."
+    explanation: "False. The relative frequency only tends toward the true probability as a limit: any finite run will almost certainly show some deviation. Open 'Run trials yourself' and hit Simulate 100× a few times: each bar drifts toward the dashed theoretical line without ever locking onto it permanently."
     vizHint: "random-trials"
   - id: "q3"
     type: "mcq"
@@ -32,7 +32,7 @@ quiz:
       - "0.3"
       - "0.5"
     answer: 1
-    explanation: "Theorem 3: Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B) = 0.5 + 0.6 − 0.3 = 0.8. Open the probability Venn diagram and drag the sliders to these exact values — the Pr(A ∪ B) box should read 0.80."
+    explanation: "Theorem 3: Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B) = 0.5 + 0.6 − 0.3 = 0.8. Open the probability Venn diagram and drag the sliders to these exact values: the Pr(A ∪ B) box should read 0.80."
     vizHint: "probability-venn"
     vizHintParams:
       pA: 0.5
@@ -93,7 +93,7 @@ The following are examples of random experiments and their sample spaces.
 
 (b) A phone number is chosen at random. The number is dialled, and the person who answers is asked whether he/she is currently watching television. If the telephone is unanswered after 45 seconds, the outcome, "no reply", is recorded. The set of possible outcomes, the sample space, is $S = \{\text{yes},\, \text{no},\, \text{won't say},\, \text{no reply}\}$.
 
-(c) A light bulb is allowed to burn until it burns out. The lifetime of the bulb is recorded. The possible outcomes are the set of non-negative real numbers (i.e. the set of positive numbers plus zero — the bulb might not burn at all). The sample space is thus $S = \{t \mid t \geq 0\}$.
+(c) A light bulb is allowed to burn until it burns out. The lifetime of the bulb is recorded. The possible outcomes are the set of non-negative real numbers (i.e. the set of positive numbers plus zero; the bulb might not burn at all). The sample space is thus $S = \{t \mid t \geq 0\}$.
 
 (d) A die is placed in a shaker, which is agitated violently, and thrown out onto the table. The dots on the upturned face are counted. The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
 
@@ -110,11 +110,11 @@ The **empty set** is the set containing no elements. It is often denoted by $\{\
 
 An **elementary event** is an event with exactly one member; the events $D = \{3\}$ and $E = \{5\}$ are elementary events. $A$ and $C$ are not elementary events, nor are $\emptyset$ and $S$.
 
-Given two events $A$ and $B$ we say that $A$ and $B$ are **mutually exclusive** if $A \cap B = \emptyset$, that is, no elementary events are contained in the intersection of $A$ and $B$. For example, if $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $A \cap B = \emptyset$. This makes sense, because $A$ is the event of getting an odd number, $B$ is the event of getting an even number — and obviously you cannot get an odd number **and** an even number on the same throw of a die.
+Given two events $A$ and $B$ we say that $A$ and $B$ are **mutually exclusive** if $A \cap B = \emptyset$, that is, no elementary events are contained in the intersection of $A$ and $B$. For example, if $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $A \cap B = \emptyset$. This makes sense, because $A$ is the event of getting an odd number, $B$ is the event of getting an even number, and obviously you cannot get an odd number **and** an even number on the same throw of a die.
 
 ## When does an event "occur"?
 
-We give a special meaning to the concept "the occurrence of an event". We say that the event $A = \{1, 3, 5\}$ has **occurred** if the outcome of a trial is **any** member of $A$. So if we toss a die and get a 3, then we can say that the event $A$ has occurred — we have obtained an odd number. Simultaneously, the events $C$ and $D$, as defined above, have also occurred.
+We give a special meaning to the concept "the occurrence of an event". We say that the event $A = \{1, 3, 5\}$ has **occurred** if the outcome of a trial is **any** member of $A$. So if we toss a die and get a 3, then we can say that the event $A$ has occurred: we have obtained an odd number. Simultaneously, the events $C$ and $D$, as defined above, have also occurred.
 
 <Example title="Example 2B">
 What is the sample space for each of the following random experiments?
@@ -128,7 +128,7 @@ What is the sample space for each of the following random experiments?
 
 (b) It is convenient to let $U = \text{up}$, $D = \text{down}$ and $N = \text{no change}$. Then $S = \{\text{UU},\, \text{UD},\, \text{UN},\, \text{DU},\, \text{DD},\, \text{DN},\, \text{NU},\, \text{ND},\, \text{NN}\}$, where, for example, $\text{DU}$ means "first share down, second share up".
 
-Notice how we construct the most detailed possible sample space — the set of outcomes $\{$both up, one up & one down, one up & one unchanged, one down & one unchanged, both unchanged, both down$\}$ is **not** acceptable because each of these could represent several distinguishable outcomes. For example, "one up & one down" could represent either "UD" or "DU".
+Notice how we construct the most detailed possible sample space: the set of outcomes $\{$both up, one up & one down, one up & one unchanged, one down & one unchanged, both unchanged, both down$\}$ is **not** acceptable because each of these could represent several distinguishable outcomes. For example, "one up & one down" could represent either "UD" or "DU".
 </Solution>
 </Example>
 
@@ -182,9 +182,9 @@ Suppose that $S$ is the sample space for a random experiment. For all events $A 
 3. If $A \cap B = \emptyset$ (i.e. if $A$ and $B$ are mutually exclusive events) then $\Pr(A \cup B) = \Pr(A) + \Pr(B)$.
 </Theorem>
 
-A consequence of the Kolmogorov axioms is that $\Pr(\emptyset) = 0$. The function $\Pr(A)$ provides a means of attaching probabilities to events in $S$. The first two axioms tell us that probabilities lie between zero and one, and that these extreme probabilities occur for the impossible and certain events, respectively. The probabilities of all other events are graded between these two extremes — unlikely events have probabilities close to zero, and events which are nearly certain have probabilities close to one. If an event is as likely to occur as it is not to occur, then it has probability 0.5. Thus for an unbiased coin, for which "heads" and "tails" are equally likely, the probability of the event "heads" is equal to the probability of the event "tails" is equal to 0.5!
+A consequence of the Kolmogorov axioms is that $\Pr(\emptyset) = 0$. The function $\Pr(A)$ provides a means of attaching probabilities to events in $S$. The first two axioms tell us that probabilities lie between zero and one, and that these extreme probabilities occur for the impossible and certain events, respectively. The probabilities of all other events are graded between these two extremes: unlikely events have probabilities close to zero, and events which are nearly certain have probabilities close to one. If an event is as likely to occur as it is not to occur, then it has probability 0.5. Thus for an unbiased coin, for which "heads" and "tails" are equally likely, the probability of the event "heads" is equal to the probability of the event "tails" is equal to 0.5!
 
-This function $\Pr(A)$ is almost certainly a new kind of function to you. The functions you have seen before, e.g. $y = 3(x^2 + 5)$, take one real number, $x$, and map them onto another real number, $y$. If it helps you, you can think of the function $y = f(x)$ as a kind of mincing machine — you put a number ($x$) in, you get another number ($y$) out. Now you must think of the function $\Pr(A)$ as a new kind of mincing machine — you put a **set** ($A$) in, and out pops a **number** between zero and one (inclusive of these end limits)!
+This function $\Pr(A)$ is almost certainly a new kind of function to you. The functions you have seen before, e.g. $y = 3(x^2 + 5)$, take one real number, $x$, and map them onto another real number, $y$. If it helps you, you can think of the function $y = f(x)$ as a kind of mincing machine: you put a number ($x$) in, you get another number ($y$) out. Now you must think of the function $\Pr(A)$ as a new kind of mincing machine: you put a **set** ($A$) in, and out pops a **number** between zero and one (inclusive of these end limits)!
 
 ## Relative frequencies
 
@@ -200,10 +200,10 @@ If you toss a fair coin, then the probability of "heads" is equal to the probabi
 <TryThis
   vizId="random-trials"
   label="Run trials yourself"
-  description="Flip a fair coin or roll a fair die — tap the object (or press Flip / Roll) for a real trial, or simulate hundreds at once. Watch each outcome's relative frequency settle toward the theoretical probability; the more trials you run, the closer the bars get to the dashed line. Use the toggle at the top to switch between the coin and the die."
+  description="Flip a fair coin or roll a fair die: tap the object (or press Flip / Roll) for a real trial, or simulate hundreds at once. Watch each outcome's relative frequency settle toward the theoretical probability; the more trials you run, the closer the bars get to the dashed line. Use the toggle at the top to switch between the coin and the die."
 />
 
-### A class experiment — birthdays in April, May and June
+### A class experiment: birthdays in April, May and June
 
 Almost exactly a quarter of the days of the year fall into April, May or June ($91/365.25 = 0.249$, allowing for leap years every fourth year). Thus we expect the probability that an individual's birthday falls into one of these three months to be pretty close to 0.249. Let's do an experiment within the class, and fill in this table.
 
@@ -263,7 +263,7 @@ $$
 $$
 </Theorem>
 
-<Theorem name="Theorem 3 — The Addition Rule">
+<Theorem name="Theorem 3: The Addition Rule">
 For any arbitrary events $A$ and $B$,
 $$
 \Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B).
@@ -283,7 +283,7 @@ But, by Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B)$. The resu
 <TryThis
   vizId="probability-venn"
   label="Test the addition rule"
-  description="Drag Pr(A), Pr(B) and Pr(A ∩ B) and watch the four region probabilities and Pr(A ∪ B) update live. Notice why Pr(A ∩ B) gets clamped — the four regions can't sum to more than 1."
+  description="Drag Pr(A), Pr(B) and Pr(A ∩ B) and watch the four region probabilities and Pr(A ∪ B) update live. Notice why Pr(A ∩ B) gets clamped: the four regions can't sum to more than 1."
 />
 
 <Theorem name="Theorem 4">
@@ -355,7 +355,7 @@ All probability problems, in theory at least, can be solved by making use of The
 
 There is a wide class of problems for which we **do** know the probabilities of **all** the elementary events in a sample space. These are the problems for which it is reasonable to assume that **all the elementary events are equally likely**. If there are $N$ elementary events contained in $S$, and each one has the same probability of occurring, then the probability of each and every elementary event must be $1/N$.
 
-Equally probable elementary events occur in many games of chance — coins and dice are assumed to be unbiased; when a card is drawn from a pack of 52 playing cards, the probability of any particular card is assumed to be $1/52$. Let $A$ be some event in this scenario. Then $A$ must consist of the union of elementary events, each of probability $1/N$. If we could determine the **number of elementary events contained in $A$**, then we could write
+Equally probable elementary events occur in many games of chance: coins and dice are assumed to be unbiased; when a card is drawn from a pack of 52 playing cards, the probability of any particular card is assumed to be $1/52$. Let $A$ be some event in this scenario. Then $A$ must consist of the union of elementary events, each of probability $1/N$. If we could determine the **number of elementary events contained in $A$**, then we could write
 $$
 \Pr(A) = \frac{\text{number of elementary events contained in } A}{\text{number of elementary events contained in } S} = \frac{n(A)}{n(S)} = \frac{n(A)}{N},
 $$
@@ -380,7 +380,7 @@ If all the $N$ elementary events contained in a sample space have probability $1
 
 1. Determine the sample space $S$ made up out of elementary events. Determine the number $N = n(S)$ of elementary events contained in $S$. You might have to list and count them, or you might be able to use one of the "counting rules" given below. If the $N$ elementary events are equally probable, then each one occurs with probability $1/N$.
 
-2. Determine $A$, the subset of $S$, the event whose probability is to be found. Count the number of elementary events contained in $A$ — suppose $n(A)$ elementary events make up the event $A$.
+2. Determine $A$, the subset of $S$, the event whose probability is to be found. Count the number of elementary events contained in $A$: suppose $n(A)$ elementary events make up the event $A$.
 
 3. Then $\Pr(A) = n(A)/N$.
 </Note>

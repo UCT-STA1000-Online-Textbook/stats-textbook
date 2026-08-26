@@ -66,7 +66,7 @@ export const MBA_FACULTIES: CategoricalDataset = {
   label: "MBA first degrees",
   valueLabel: "students",
   caption:
-    "Engineers form the largest single group — the visual display makes that obvious at a glance.",
+    "Engineers form the largest single group: the visual display makes that obvious at a glance.",
   categories: [
     { name: "Engineering", value: 28 },
     { name: "Science", value: 16 },
@@ -85,7 +85,7 @@ export const MBA_FACULTIES: CategoricalDataset = {
  */
 export const JSE_BY_COUNT: CategoricalDataset = {
   id: "jse-count",
-  label: "JSE sectors — share count",
+  label: "JSE sectors: share count",
   valueLabel: "shares",
   caption:
     "By number of shares, Industrial and Financial dominate. But does counting shares measure importance?",
@@ -103,7 +103,7 @@ export const JSE_BY_COUNT: CategoricalDataset = {
 /** Same seven sectors, now by their percentage weighting in the index. */
 export const JSE_BY_WEIGHT: CategoricalDataset = {
   id: "jse-weight",
-  label: "JSE sectors — % weighting",
+  label: "JSE sectors: % weighting",
   valueLabel: "% of index",
   isPercent: true,
   caption:
@@ -128,7 +128,7 @@ export const MBA_GMAT: QuantitativeDataset = {
   unit: "GMAT score",
   width: { min: 10, max: 100, step: 10, default: 50 },
   caption:
-    "A long tail stretches to the right and the left tail is truncated near 500 — the MBA entry cutoff.",
+    "A long tail stretches to the right and the left tail is truncated near 500, the MBA entry cutoff.",
   values: [
     610, 510, 610, 580, 720, 620, 540, 500, 750, 640, 550, 650, 600, 600, 510,
     570, 620, 590, 660, 550, 560, 630, 540, 560, 650, 540, 680, 710, 600, 550,
@@ -146,7 +146,7 @@ export const SHARE_RISK: QuantitativeDataset = {
   unit: "risk (% per month)",
   width: { min: 1, max: 6, step: 1, default: 2 },
   caption:
-    "Two clear peaks — the distribution is bimodal: industrial shares cluster low, gold shares high.",
+    "Two clear peaks: the distribution is bimodal, industrial shares cluster low, gold shares high.",
   values: [
     23, 22, 17, 18, 21, 25, 23, 25, 12, 23, 27, 14, 28, 9, 23, 19, 23, 11, 16,
     11, 15, 15, 12, 12, 12, 21, 13, 11, 13, 13, 27, 20, 17, 8, 13, 28, 14, 9,
@@ -162,7 +162,7 @@ export const EXAM_MARKS: QuantitativeDataset = {
   unit: "mark (%)",
   width: { min: 2, max: 20, step: 2, default: 10 },
   caption:
-    "Practice dataset — choose a sensible class width and describe the shape yourself.",
+    "Practice dataset: choose a sensible class width and describe the shape yourself.",
   values: [
     68, 72, 39, 50, 69, 52, 51, 50, 41, 52, 65, 37, 45, 78, 48, 55, 53, 61, 71,
     42, 57, 34, 57, 66, 87,
@@ -176,7 +176,7 @@ export const TREE_HEIGHTS: QuantitativeDataset = {
   unit: "height (m)",
   width: { min: 0.5, max: 2, step: 0.5, default: 0.5 },
   caption:
-    "Practice dataset — note how decimal data still groups into equal-width classes.",
+    "Practice dataset: note how decimal data still groups into equal-width classes.",
   values: [
     18.3, 19.1, 17.3, 19.4, 17.6, 20.1, 19.9, 20.0, 19.5, 19.3, 17.7, 19.1,
     17.4, 19.3, 18.7, 18.2, 20.0, 17.7, 20.0, 17.5, 18.5, 17.8, 20.1, 19.4,

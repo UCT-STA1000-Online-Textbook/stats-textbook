@@ -119,19 +119,19 @@ export default function BayesGrid({ params }: { params: VizParams }) {
         </p>
         <VizGuide
           steps={[
-            "Each square is one TV — blue if its tube was made in-house, amber if bought in.",
+            "Each square is one TV: blue if its tube was made in-house, amber if bought in.",
             "A red outline marks a defective tube.",
             "Drag the sliders to change the in-house share and the two defect rates.",
             "Click a category below to condition: the grid keeps only that subgroup and reads off the conditional probability.",
-            "Compare 'Defective' with 'In-house' — the two fractions differ. That gap is what Bayes' theorem resolves.",
+            "Compare 'Defective' with 'In-house': the two fractions differ. That gap is what Bayes' theorem resolves.",
           ]}
         />
       </div>
 
       <div className="space-y-2">
-        <Slider label="Pr(C) — made in-house" value={pC} onChange={setPC} mono={false} />
-        <Slider label="Pr(D | C) — in-house defect rate" value={pDC} onChange={setPDC} mono={false} />
-        <Slider label="Pr(D | C̄) — bought-in defect rate" value={pDCbar} onChange={setPDCbar} mono={false} />
+        <Slider label="Pr(C): made in-house" value={pC} onChange={setPC} mono={false} />
+        <Slider label="Pr(D | C): in-house defect rate" value={pDC} onChange={setPDC} mono={false} />
+        <Slider label="Pr(D | C̄): bought-in defect rate" value={pDCbar} onChange={setPDCbar} mono={false} />
       </div>
 
       <div className="flex items-center justify-center">

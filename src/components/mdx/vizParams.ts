@@ -64,6 +64,10 @@ export interface VizParamProps {
   c?: number;
   /** PdfArea: initial position of the upper shading handle. */
   d?: number;
+  /** VarianceSpread: initial spread, 0 (all mass on the mean) to 1 (uniform). */
+  t?: number;
+  /** SkewnessMorpher: initial skew, -1 (left tail) to 1 (right tail). */
+  skew?: number;
 }
 
 /** Ordered list of every key `VizParamProps` declares. */
@@ -88,6 +92,8 @@ const VIZ_PARAM_KEYS: (keyof VizParamProps)[] = [
   "select",
   "c",
   "d",
+  "t",
+  "skew",
 ];
 
 /**

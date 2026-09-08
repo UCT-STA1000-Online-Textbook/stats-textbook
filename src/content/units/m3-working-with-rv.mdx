@@ -5,10 +5,347 @@ moduleId: "m3"
 moduleTitle: "Random Variables"
 unitNumber: 8
 moduleUnitNumber: 2
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "For a discrete random variable X, the mean is defined as:"
+    options:
+      - "The sum of all the values X can take, divided by how many there are"
+      - "The sum of each value multiplied by the probability of that value"
+      - "The value of x for which p(x) is largest"
+      - "The middle value once the values are sorted"
+    answer: 1
+    explanation: "E[X] = Σ x p(x). Each value is weighted by how likely it is, which is why a value with probability 0.5 counts for far more than one with probability 0.01. Option 0 describes an unweighted average, which would only be right if every value were equally likely."
+  - id: "q2"
+    type: "mcq"
+    question: "An unbiased die is rolled. What is E[X], where X is the number of dots?"
+    options:
+      - "3, because that is the middle of 1 to 6"
+      - "3.5"
+      - "6, because that is the largest value"
+      - "1/6, because every face is equally likely"
+    answer: 1
+    explanation: "E[X] = (1 + 2 + 3 + 4 + 5 + 6)/6 = 3.5. Notice that 3.5 is not a value the die can ever show. The mean of a random variable does not have to be one of its possible values."
+  - id: "q3"
+    type: "true-false"
+    question: "The variance of a random variable can be negative."
+    answer: false
+    explanation: "False. The variance is Σ(x − μ)² p(x), a sum of squared quantities multiplied by probabilities. Every term is non-negative, so the total cannot be negative. If you ever compute a negative variance, you have made an arithmetic slip, most often by forgetting to subtract μ² at the end of the short-cut formula."
+  - id: "q4"
+    type: "mcq"
+    question: "A random variable has E[X] = 4 and Var[X] = 9. Let Y = 3X + 5. What are E[Y] and Var[Y]?"
+    options:
+      - "E[Y] = 17 and Var[Y] = 32"
+      - "E[Y] = 17 and Var[Y] = 81"
+      - "E[Y] = 17 and Var[Y] = 27"
+      - "E[Y] = 12 and Var[Y] = 81"
+    answer: 1
+    explanation: "E[Y] = aE[X] + b = 3(4) + 5 = 17. Var[Y] = a²Var[X] = 9 × 9 = 81. The constant b shifts the whole distribution along and so changes the mean, but it does not change the spread at all, which is why b never appears in the variance."
+  - id: "q5"
+    type: "mcq"
+    question: "Two distributions have the same mean. One is sharply peaked and the other is flat. Which has the larger variance?"
+    options:
+      - "The peaked one, because its probabilities are larger"
+      - "The flat one, because its values sit further from the mean on average"
+      - "They are equal, because the means are equal"
+      - "You cannot tell without knowing the values"
+    answer: 1
+    explanation: "The variance measures average squared distance from the mean. A flat distribution puts real probability on values far from μ, so the terms (x − μ)² are large. A peaked one concentrates the probability near μ, where (x − μ)² is close to zero."
+    vizHint: "variance-spread"
+    vizHintParams:
+      t: 0.9
+  - id: "q6"
+    type: "mcq"
+    question: "A distribution has a long tail on the right-hand side. How do the mean and median compare?"
+    options:
+      - "The mean is below the median"
+      - "The mean is above the median"
+      - "They are equal"
+      - "The median is always zero"
+    answer: 1
+    explanation: "A long right tail means positive skewness. The far-out values on the right pull the mean up, because the mean uses their actual size, whereas the median only counts how many values fall on each side. So the mean ends up above the median."
+    vizHint: "skewness-morpher"
+    vizHintParams:
+      skew: 1
+  - id: "q7"
+    type: "mcq"
+    question: "X has mean 0.5 and variance 0.05. What is its coefficient of variation?"
+    options:
+      - "0.10"
+      - "0.4472"
+      - "0.025"
+      - "2.236"
+    answer: 1
+    explanation: "The coefficient of variation is the standard deviation divided by the mean, not the variance divided by the mean. Here σ = √0.05 = 0.2236, so CV = 0.2236 / 0.5 = 0.4472."
 prevUnit: "m3-pmf-pdf"
 nextUnit: "m4-uniform"
 ---
 
-Content coming soon.
+## Mean and variance of a random variable
+
+In [Module 2](/unit/m2-summary-measures) we learnt about measures of location and spread for **samples of data**. We now build the equivalent ideas for **random variables**.
+
+The two most important measures get the same names, the mean and the variance, but be careful: the formulae are completely different from the ones that defined the mean $\bar{x}$ and the variance $s^2$ of a sample. The justification for reusing the names is fairly subtle, and will be made clear in [Module 5](/unit/m5-sampling-distribution).
+
+Discrete and continuous random variables are handled separately, but the notation is the same for both. The mean of a random variable $X$ is written $\mu$ or $E[X]$ ("the expected value of $X$"), and the variance is written $\sigma^2$ or $\text{Var}[X]$.
+
+> **Keywords:** <KeywordChip vizId="variance-spread" t={0.5}>mean of a random variable</KeywordChip>, expected value, <KeywordChip vizId="variance-spread" t={0.9}>variance</KeywordChip>, standard deviation, coefficient of variation, <KeywordChip vizId="skewness-morpher" skew={1}>skewness</KeywordChip>, heavy-tailed and light-tailed distributions.
+
+<Definition term="Mean of a random variable">
+For a **discrete** random variable with probability mass function $p(x)$:
+
+$$
+\mu = E[X] = \sum_{x} x\, p(x).
+$$
+
+In words: take each value the random variable can have, multiply it by the probability of getting that value, and add up the results.
+
+For a **continuous** random variable with probability density function $f(x)$, non-zero on the interval $(a, b)$:
+
+$$
+\mu = E[X] = \int_{a}^{b} x\, f(x)\,dx.
+$$
+</Definition>
+
+<Definition term="Variance of a random variable">
+For a **discrete** random variable:
+
+$$
+\sigma^{2} = \text{Var}[X] = \sum_{x} (x - \mu)^{2}\, p(x),
+$$
+
+and for a **continuous** random variable:
+
+$$
+\sigma^{2} = \text{Var}[X] = \int_{a}^{b} (x - \mu)^{2} f(x)\,dx.
+$$
+
+The sum, or the integral, is taken over the values for which the probability function is non-zero.
+</Definition>
+
+As was the case with the variance of a sample in [Module 2](/unit/m2-summary-measures), there is an alternative formula that provides a short cut for most problems. For $X$ discrete:
+
+$$
+\sigma^{2} = \text{Var}[X] = \sum_{x} x^{2} p(x) - \mu^{2},
+$$
+
+and for $X$ continuous:
+
+$$
+\sigma^{2} = \text{Var}[X] = \int_{a}^{b} x^{2} f(x)\,dx - \mu^{2}.
+$$
+
+You should be able to prove that each pair of formulae is equivalent. In practice the short-cut version is nearly always less work, because you avoid squaring a bracket containing $\mu$ inside the sum.
+
+For both kinds of random variable, the **standard deviation** is the square root of the variance:
+
+$$
+\sigma = \sqrt{\text{Var}[X]}.
+$$
+
+<Note>
+**Linear functions of a random variable.** Let $X$ have $E[X] = \mu$ and $\text{Var}[X] = \sigma^{2}$, and define a new random variable $Y = aX + b$, where $a$ and $b$ are constants. Then
+
+$$
+E[Y] = aE[X] + b = a\mu + b, \qquad \text{Var}[Y] = a^{2}\text{Var}[X] = a^{2}\sigma^{2}.
+$$
+
+Notice that $b$ changes the mean but not the variance. Adding a constant slides the whole distribution along the axis without changing how spread out it is.
+</Note>
+
+<Definition term="Coefficient of variation">
+The coefficient of variation of $X$ is the ratio of the standard deviation to the mean:
+
+$$
+\text{CV} = \frac{\sqrt{\text{Var}[X]}}{E[X]} = \frac{\sigma}{\mu}.
+$$
+
+It has uses in sampling theory, and is often multiplied by 100 and quoted as a percentage. It is only sensibly defined when the lower limit of $X$ is zero.
+</Definition>
+
+<Example title="Example 1A: a continuous random variable">
+Suppose $X$ has probability density function
+
+$$
+f(x) = \begin{cases} 6x(1 - x) & 0 \le x \le 1\\ 0 & \text{otherwise.} \end{cases}
+$$
+
+Find (a) the mean, (b) the variance and (c) the coefficient of variation.
+
+<Solution>
+(a) Using the definition for a continuous random variable:
+
+$$
+E[X] = \int_{0}^{1} x \cdot 6x(1 - x)\,dx = 6\int_{0}^{1}(x^{2} - x^{3})\,dx = 6\left[\frac{x^{3}}{3} - \frac{x^{4}}{4}\right]_{0}^{1} = 6\left(\frac13 - \frac14\right) = \frac12.
+$$
+
+(b) Using the short-cut formula:
+
+$$
+\int_{0}^{1} x^{2} \cdot 6x(1 - x)\,dx = 6\int_{0}^{1}(x^{3} - x^{4})\,dx = 6\left[\frac{x^{4}}{4} - \frac{x^{5}}{5}\right]_{0}^{1} = 6\left(\frac14 - \frac15\right) = \frac{3}{10},
+$$
+
+so
+
+$$
+\text{Var}[X] = \frac{3}{10} - \left(\frac12\right)^{2} = \frac{3}{10} - \frac14 = \frac{1}{20}.
+$$
+
+(c) The coefficient of variation is
+
+$$
+\text{CV} = \frac{\sqrt{1/20}}{1/2} = \frac{0.2236}{0.5} = 0.4472.
+$$
+
+The mean of $\tfrac12$ is no surprise: this density is symmetric about $x = \tfrac12$.
+</Solution>
+</Example>
+
+<Example title="Example 2A: the fair die again">
+The discrete random variable $X$ has probability mass function $p(x) = \tfrac16$ for $x = 1, 2, 3, 4, 5, 6$, and 0 otherwise. Find (a) the mean, (b) the variance and (c) the coefficient of variation.
+
+<Solution>
+(a) Using the definition for a discrete random variable:
+
+$$
+E[X] = \sum_{x=1}^{6} x \cdot \tfrac16 = \frac{1 + 2 + 3 + 4 + 5 + 6}{6} = 3.5.
+$$
+
+(b) Using the short-cut formula:
+
+$$
+\text{Var}[X] = \sum_{x=1}^{6} x^{2}\,\tfrac16 - \mu^{2} = \frac{1 + 4 + 9 + 16 + 25 + 36}{6} - 3.5^{2} = \frac{91}{6} - 12.25 = 2.917.
+$$
+
+(c) The coefficient of variation is
+
+$$
+\text{CV} = \frac{\sqrt{2.917}}{3.5} = \frac{1.708}{3.5} = 0.488.
+$$
+</Solution>
+</Example>
+
+<Note>
+In the next two examples it helps to remember that the mean is just the sum of the values the random variable can take, each multiplied by the probability of taking it. That is all an "expected value" is, and it is why an expected value need not be a value the variable can actually reach: a die never shows 3.5.
+</Note>
+
+<Example title="Example 3C: is the call worth making?">
+You are contemplating whether it is worth your while driving out to the Northern Suburbs to call on a client. You estimate that there is a 40% chance the client will buy your product. Commission on the sale is R500, but the petrol will cost you R150.
+
+(a) Should you call on the client?
+(b) What probability of purchase would give an expected net gain of zero for the call?
+
+<Solution>
+(a) Let $X$ be your net gain. The petrol is paid either way, so
+
+$$
+X = \begin{cases} 500 - 150 = 350 & \text{with probability } 0.4\\ -150 & \text{with probability } 0.6. \end{cases}
+$$
+
+$$
+E[X] = 0.4(350) + 0.6(-150) = 140 - 90 = 50.
+$$
+
+The expected net gain is **R50**, which is positive, so yes: on these figures the call is worth making. Note that you never actually gain R50. You either gain R350 or lose R150. The R50 is what you would average if you made this same call many times.
+
+(b) Let $q$ be the probability of purchase. Then
+
+$$
+E[X] = q(350) + (1 - q)(-150) = 500q - 150.
+$$
+
+Setting this to zero gives $q = \tfrac{150}{500} = 0.3$. So at a **30%** chance of a sale you would break even in the long run, and below 30% the trip is not worth making.
+</Solution>
+</Example>
+
+<Example title="Example 4C: choosing between two shares">
+You are considering investing in one of two shares. For share A you estimate a probability of 0.3 that it will decline by 15% and 0.7 that it will rise by 30%. For share B you estimate 0.4 that it will decline by 15% and 0.6 that it will rise by 30%. The "return" is the percentage price change.
+
+(a) Calculate the expected return for each share.
+(b) Calculate the standard deviation of the returns for each share.
+(c) Which share is the more risky, and why?
+(d) Calculate the coefficient of variation for each share.
+(e) Which share would you buy, and why?
+
+<Solution>
+(a) Expected returns:
+
+$$
+E[A] = 0.3(-15) + 0.7(30) = -4.5 + 21 = 16.5\%
+$$
+
+$$
+E[B] = 0.4(-15) + 0.6(30) = -6 + 18 = 12\%
+$$
+
+(b) Using the short-cut formula for each:
+
+$$
+\text{Var}[A] = 0.3(225) + 0.7(900) - 16.5^{2} = 697.5 - 272.25 = 425.25, \quad \sigma_{A} = 20.62
+$$
+
+$$
+\text{Var}[B] = 0.4(225) + 0.6(900) - 12^{2} = 630 - 144 = 486, \quad \sigma_{B} = 22.05
+$$
+
+(c) **Share B is more risky.** Its standard deviation, 22.05, is larger than share A's 20.62, so its return is more variable.
+
+(d) Coefficients of variation:
+
+$$
+\text{CV}_{A} = \frac{20.62}{16.5} = 1.25, \qquad \text{CV}_{B} = \frac{22.05}{12} = 1.84.
+$$
+
+(e) **Share A**, on every count. It has the higher expected return *and* the lower standard deviation, so there is no trade-off to weigh up here: A beats B on both return and risk. The coefficient of variation says the same thing in one number, since A carries less risk per unit of expected return.
+
+One caution: the definition says the coefficient of variation is only sensibly defined when the lower limit of the random variable is zero. A return can be negative, so treat these two figures as a rough comparison rather than a precise measure.
+</Solution>
+</Example>
+
+## A geometrical interpretation of the mean and the variance
+
+The formula for the mean is mathematically equivalent to a physical balancing act. For a continuous random variable, $E[X] = \int x f(x)\,dx$ is the same as cutting the shape of the graph of $f(x)$ out of a sheet of tin or cardboard of uniform thickness, and finding the point along the $x$-axis where it balances. For a discrete random variable, $E[X] = \sum x\,p(x)$ is the same as hanging a mass of $p(x)$ at each point $x$ along a ruler and finding the point where the ruler balances.
+
+You met exactly this balancing picture for the mean of a sample in [Module 2](/unit/m2-summary-measures), where you could drag the fulcrum along a beam until it sat on the mean. The idea carries over unchanged: the only difference is that the weights are now probabilities rather than data points.
+
+What is new here is the **variance**. The variance can be thought of as a measure of the average distance of $X$ from its mean:
+
+- If the probability function is very **peaked**, the terms $(x - \mu)^{2}$ are on average small, so the variance is **small**.
+- If the probability function is very **flat**, the terms $(x - \mu)^{2}$ tend to be large, so the variance is **large**.
+
+<TryThis
+  vizId="variance-spread"
+  t={0.5}
+  label="Flatten the distribution and watch the variance"
+  description="The mean stays pinned at 2 the whole way, because the distribution is always symmetric. Only the spread changes. Each bar shows its own contribution to the variance, and the bar sitting on the mean always contributes exactly zero."
+/>
+
+<Note>
+Students of Applied Mathematics will recognise the relationship between "means" and centres of gravity, and between "variances" and moments of inertia. They are the same calculations wearing different names.
+</Note>
+
+## Skewness
+
+Just as a histogram can be skew, so can the distribution of a random variable, and we use the same terminology as in [Module 2](/unit/m2-summary-measures).
+
+<Definition term="Skewness">
+A random variable is **positively skewed** if it has a long tail on the right-hand side, and **negatively skewed** if it has a long tail on the left-hand side.
+
+A **symmetric** distribution is just that: the tail on the left is a mirror image of the tail on the right.
+</Definition>
+
+Statisticians sometimes also need to describe the shape of the tails themselves. Two distributions can have the same mean and the same variance and still have quite different tails. We distinguish between **heavy-tailed** distributions, where the probability of an observation far from the mean is relatively large, and **light-tailed** distributions, where observations far from the mean are unlikely.
+
+<TryThis
+  vizId="skewness-morpher"
+  skew={1}
+  label="Swing the tail from left to right"
+  description="Drag the slider through the symmetric shape in the middle and out to the other side. Watch the mean and the median separate, with the mean always ending up on the long-tail side of the median. Which one is larger is the practical test for skewness you can apply to real data."
+/>
+
+<Note>
+The mean-versus-median gap is the quickest check for skewness you have. If the mean sits well above the median, suspect a long right tail; if it sits well below, suspect a long left tail. This is exactly what happened with the share-volume data in [Module 2](/unit/m2-summary-measures), where a handful of enormous trades dragged the mean to ten times the median.
+</Note>
+
+<Quiz />

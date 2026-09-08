@@ -5,10 +5,904 @@ moduleId: "m3"
 moduleTitle: "Random Variables"
 unitNumber: 7
 moduleUnitNumber: 1
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "What is a random variable?"
+    options:
+      - "Any number that is hard to predict"
+      - "A numerical variable whose value is determined by the outcome of a random experiment"
+      - "A variable that can only take whole-number values"
+      - "The probability of an elementary event"
+    answer: 1
+    explanation: "A random variable attaches a number to every elementary event in the sample space. It is a function whose domain is the sample space and whose range is the real line. The randomness comes from the experiment, not from the variable itself."
+  - id: "q2"
+    type: "mcq"
+    question: "Three coins are tossed and X is the number of heads. The sample space has 8 equally likely elementary events. What is Pr[X = 1]?"
+    options:
+      - "1/8, because there is one way to get a head"
+      - "3/8, because HTT, THT and TTH all give one head"
+      - "1/3, because there are three coins"
+      - "1/2, because a coin is equally likely to land either way"
+    answer: 1
+    explanation: "Different elementary events can be given the same value of X. Three of the eight outcomes have exactly one head, so Pr[X = 1] = 3/8. This is exactly why a random variable does not need a different number for every elementary event."
+    vizHint: "pmf-bar-explorer"
+    vizHintParams:
+      preset: "coins3"
+  - id: "q3"
+    type: "mcq"
+    question: "Which of these is a continuous random variable?"
+    options:
+      - "The number of seats sold for a play in a 328-seat theatre"
+      - "The last digit of a randomly selected telephone number"
+      - "The length of time you wait at an autobank"
+      - "The number of letters in the Greek alphabet"
+    answer: 2
+    explanation: "A waiting time can, in principle, be measured to any degree of accuracy: between any two possible times there is another. Seat counts and last digits are discrete. The number of letters in the Greek alphabet is not a random variable at all, because it is a fixed constant."
+  - id: "q4"
+    type: "true-false"
+    question: "For a continuous random variable X with density f(x), the height f(3) is the probability that X equals 3."
+    answer: false
+    explanation: "False, and this is the single most common mistake in this unit. For a continuous random variable, probability is area, not height. The probability of any exact value is zero, and f(x) can even be larger than 1, as it is for the flat density where f(x) = 4."
+    vizHint: "pdf-area"
+    vizHintParams:
+      preset: "uniform"
+  - id: "q5"
+    type: "mcq"
+    question: "A function p(x) is a probability mass function. Which condition does PMF3 state?"
+    options:
+      - "p(x) is defined for every value of x"
+      - "Every value of p(x) lies in the interval [0, 1]"
+      - "The values of p(x) add up to 1"
+      - "p(x) is non-zero at only finitely many points"
+    answer: 2
+    explanation: "PMF3 is the summation condition: adding p(x) over every value of x where it is non-zero must give exactly 1. PMF1 is the definition condition and PMF2 is the [0, 1] condition."
+    vizHint: "pmf-bar-explorer"
+    vizHintParams:
+      preset: "ramp"
+  - id: "q6"
+    type: "mcq"
+    question: "X is discrete and takes only integer values, with p(x) non-zero for x = 1, 2, 3, 4, 5. Which sum gives Pr[2 < X < 5]?"
+    options:
+      - "p(2) + p(3) + p(4) + p(5)"
+      - "p(3) + p(4)"
+      - "p(2) + p(3) + p(4)"
+      - "p(3) + p(4) + p(5)"
+    answer: 1
+    explanation: "Both inequalities are strict, so 2 and 5 are excluded and only x = 3 and x = 4 remain. For a discrete random variable the type of inequality matters, which is not true for a continuous one."
+  - id: "q7"
+    type: "true-false"
+    question: "A probability density function f(x) must never take a value greater than 1."
+    answer: false
+    explanation: "False. PDF2 only requires f(x) to be non-negative. What must equal 1 is the area under the curve, not the height. The density f(x) = 4 on the interval from 0 to 0.25 is a perfectly good density: its height is 4 and its area is 4 × 0.25 = 1."
+    vizHint: "pdf-area"
+    vizHintParams:
+      preset: "uniform"
 prevUnit: "m2-summary-measures"
 nextUnit: "m3-working-with-rv"
 ---
 
-Content coming soon.
+## Words or numbers
+
+In [Module 1](/unit/m1-set-theory) we defined a sample space as the set of all the elementary events that can result from a random experiment. Sometimes we described those elementary events with numbers (the time a light bulb lasts, the number of items a customer buys, the proportion of voters supporting a proposal). Sometimes we described them with words (the state of the economy, the colour of a vehicle a customer orders).
+
+To handle events mathematically, we need a number attached to every elementary event. When the elementary events are already quantities, the choice is obvious: the survival time of the bulb, the count of items bought, the number of girls in a family of four children.
+
+When the elementary events are described in words, we have to assign the numbers ourselves. The economy might be "in recession", "stable" or "booming", and we could label those 1, 2 and 3. An applicant for a post could be male or female, and we could label those 0 and 1. The point of assigning numbers is always the same: it clears the way for a general mathematical theory of probability.
+
+Once every elementary event carries a number, we follow the usual algebraic habit and let $X$ stand for those numbers. We call $X$ a **random variable**. It is a *variable* because it can take on different values, and it is *random* because which value it takes depends on the outcome of a random experiment. By convention, statisticians use capital letters near the end of the alphabet for random variables, and their favourite is $X$.
+
+> **Keywords:** <KeywordChip vizId="pmf-bar-explorer" preset="die">random variable</KeywordChip>, elementary event, discrete random variable, continuous random variable, <KeywordChip vizId="pmf-bar-explorer" preset="ramp">probability mass function</KeywordChip>, <KeywordChip vizId="pmf-bar-explorer" preset="bargraph">bar graph</KeywordChip>, <KeywordChip vizId="pdf-area" preset="parabola">probability density function</KeywordChip>, area under the curve.
+
+## Defining a random variable
+
+<Definition term="Random variable">
+A random variable $X$ is a numerical variable whose value is determined by the outcome of a random experiment.
+
+Put differently: a random variable is a **function whose domain is the sample space and whose range is the real line**.
+</Definition>
+
+Once we are working with a random variable, events (which we defined as subsets of the sample space) become subsets of the real line, usually a set of points or an interval. So "$X = 1$", "$X < 4$" and "$5 \le X \le 10$" are all events, and because they are events they have probabilities. We write
+
+$$
+\Pr[X = 1], \qquad \Pr[X < 4], \qquad \Pr[5 \le X \le 10],
+$$
+
+and read the last one as "the probability that $X$ lies between 5 and 10, including both end points".
+
+Statisticians also use small letters ($x$, $a$, $b$) for the particular values a random variable might take. So $\Pr[X = x]$ is the probability that $X$ takes the particular value $x$. When only one random variable is in play and there is no ambiguity, we shorten $\Pr[X = x]$ to $p(x)$.
+
+<Example title="Example 1A: tossing a die">
+Toss a die. We attach numbers to the elementary events in the obvious way: the face showing one dot gets the value 1, the face showing two dots gets 2, and so on.
+
+If the die is unbiased then $\Pr[X = 1] = \tfrac{1}{6}$, so $p(1) = \tfrac16$. We can write the whole thing in one line:
+
+$$
+\Pr[X = x] = \tfrac{1}{6}, \qquad x = 1, 2, 3, 4, 5, 6.
+$$
+</Example>
+
+It is important to see that the definition does **not** require a different number for each elementary event. In fact we often want several elementary events to share a value. The next four examples all work that way.
+
+<Example title="Example 2A: three tosses of a coin">
+Toss an unbiased coin three times. Let the random variable $X$ be the number of heads. We attach values to the elementary events like this:
+
+| Elementary event | HHH | HHT | HTH | THH | HTT | THT | TTH | TTT |
+|---|---|---|---|---|---|---|---|---|
+| $X$ | 3 | 2 | 2 | 2 | 1 | 1 | 1 | 0 |
+
+The event "$X = 1$" corresponds to the subset $\{HTT, THT, TTH\}$ of $S$, so $\Pr[X = 1] = \tfrac38$. In the same way $p(0) = \tfrac18$, $p(2) = \tfrac38$ and $p(3) = \tfrac18$.
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="coins3"
+  label="See the three-coin distribution"
+  description="Each bar is one value of X, and its height is the probability of that value. Notice that the two middle bars are three times as tall as the outer ones, because three of the eight outcomes give one head and three give two heads."
+/>
+
+<Example title="Example 3B: a tip from your pocket">
+Suppose you have 5 coins in your pocket: two 50c coins, two R2 coins and an R5 coin. You pull out two coins at random as a tip. Let the random variable $X$ be the value of the tip. What values can $X$ take, and with what probabilities?
+
+<Solution>
+Denote the coins $50_1$, $50_2$, $2_1$, $2_2$ and $5$. The sample space, with the value of $X$ under each elementary event, is:
+
+| Pair | $50_1 50_2$ | $50_1 2_1$ | $50_1 2_2$ | $50_2 2_1$ | $50_2 2_2$ | $2_1 2_2$ | $50_1 5$ | $50_2 5$ | $2_1 5$ | $2_2 5$ |
+|---|---|---|---|---|---|---|---|---|---|---|
+| $X$ | R1.00 | R2.50 | R2.50 | R2.50 | R2.50 | R4.00 | R5.50 | R5.50 | R7.00 | R7.00 |
+
+Each of the ten pairs is equally likely, so we just count how many pairs give each value:
+
+$$
+\Pr[X = 1.00] = 0.1, \quad \Pr[X = 2.50] = 0.4, \quad \Pr[X = 4.00] = 0.1,
+$$
+
+$$
+\Pr[X = 5.50] = 0.2, \quad \Pr[X = 7.00] = 0.2.
+$$
+
+Four different pairs give a tip of R2.50, which is why that value is four times as likely as a tip of R1.00.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="tip"
+  label="See the tip distribution"
+  description="The five possible tips, with the R2.50 bar four times the height of the R1.00 bar. Drag the handles a and b to add up a range of tips, for example the probability that the tip is at least R5.50."
+/>
+
+<Example title="Example 4B: a clueless snooker player">
+A clueless snooker player hits the balls around at random until one goes into a pocket. There are 15 red balls (worth 1 point each) and one each of yellow, green, brown, blue, pink and black (worth 2 to 7 respectively). What is the sample space? Let $X$ be the score. What values can $X$ take, and with what probabilities?
+
+<Solution>
+Denoting the reds red 1, red 2, up to red 15, the sample space and the values assigned to it are
+
+$$
+S = \{\text{red 1}, \ldots, \text{red 15}, \text{yellow}, \text{green}, \text{brown}, \text{blue}, \text{pink}, \text{black}\}
+$$
+
+with $X = 1$ for every red, then 2, 3, 4, 5, 6 and 7 for the six colours. Assuming every ball is equally likely to be potted,
+
+$$
+\Pr[X = 1] = \tfrac{15}{21}, \qquad \Pr[X = 2] = \cdots = \Pr[X = 7] = \tfrac{1}{21}.
+$$
+
+Fifteen different elementary events share the value $X = 1$, which is what makes that bar so much taller than the rest.
+</Solution>
+</Example>
+
+<Example title="Example 5C: a car salesperson's commission">
+A car salesperson is scheduled to see two clients today. She sells only two models, an "executive" (E) and a "basic" (B). Each executive model sold earns her a commission of R20 000, and each basic model R10 000. If the sale is lost (L) she earns nothing. Suppose $\Pr(E) = 0.2$, $\Pr(B) = 0.3$ and $\Pr(L) = 0.5$, and that the two sales are independent. Let $X$ be the total commission earned today. What values can $X$ take, and with what probabilities?
+
+<Solution>
+There are nine elementary events, one for each pair of outcomes. Because the sales are independent we multiply the two probabilities:
+
+| Outcome | EE | EB | BE | EL | LE | BB | BL | LB | LL |
+|---|---|---|---|---|---|---|---|---|---|
+| $X$ | 40 000 | 30 000 | 30 000 | 20 000 | 20 000 | 20 000 | 10 000 | 10 000 | 0 |
+| $\Pr$ | 0.04 | 0.06 | 0.06 | 0.10 | 0.10 | 0.09 | 0.15 | 0.15 | 0.25 |
+
+Collecting the elementary events that share a value of $X$:
+
+$$
+p(x) = \begin{cases}
+0.25 & x = 0\\
+0.30 & x = 10\,000\\
+0.29 & x = 20\,000\\
+0.12 & x = 30\,000\\
+0.04 & x = 40\,000\\
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+Three quite different outcomes (EL, LE and BB) all give a commission of R20 000, which is why those three probabilities are added together.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="commission"
+  label="See the commission distribution"
+  description="Drag the handles a and b to answer questions like 'what is the probability she earns at least R20 000 today?'. The answer is the sum of the selected bars."
+/>
+
+## Discrete and continuous random variables
+
+Random variables fall into two categories, **discrete** and **continuous**. The mathematics for the two is very different, which is what the rest of this unit is about.
+
+**Discrete random variables** take isolated values along the real line, usually (but not always) whole numbers. For example:
+
+- the number of customers entering a store between 09h00 and 10h00
+- the number of occupied tables at a restaurant
+- the number of clients a salesperson visits in a day
+- the number of applicants who answer a job advertisement
+
+Discrete random variables with non-integer values do exist. This happens when the variable is a ratio of two counts: we might measure the effectiveness of a television advertisement as the number of cars sold divided by the number of times the advertisement was shown. Both parts are whole numbers, so the ratio is a rational number.
+
+A **continuous random variable** can (in principle at least) be measured to any degree of accuracy. Between any two possible values $x_1$ and $x_2$ there is always another possible value $x_3$. The set of possible values is usually an interval of the real line. For example:
+
+- the distance a car travels on one litre of petrol
+- the proportion of gold in a sample of ore
+- the volume of milk that actually goes into a nominally one litre carton
+- the time a customer waits in a queue at a fast food outlet
+- the direction of the wind at midday
+
+<Note>
+The distinction matters because we describe the two types with different mathematical objects, and we will keep the notation apart to remind ourselves:
+
+- discrete random variables are described by a **probability mass function**, written $p(x)$
+- continuous random variables are described by a **probability density function**, written $f(x)$
+</Note>
+
+<Example title="Example 6C: which is which?">
+Which of the following are random variables? Of those that are, which are continuous and which are discrete? Write down the set of values each one can take.
+
+(a) The number of customers arriving at a supermarket during the morning.
+(b) The number of letters in the Greek alphabet.
+(c) The opening price of gold in New York on Monday next week.
+(d) The number of seats sold for a performance of a play in a theatre seating 328.
+(e) The length of time you wait at an autobank.
+(f) The ratio between the circumference and the diameter of a circle.
+(g) The last digit of a randomly selected telephone number.
+
+<Solution>
+(b) and (f) are **not random variables**. The Greek alphabet always has 24 letters and the ratio in (f) is always $\pi$. Neither depends on the outcome of a random experiment: they are constants.
+
+(a), (d) and (g) are **discrete**, taking values in $\{0, 1, 2, \ldots\}$, $\{0, 1, \ldots, 328\}$ and $\{0, 1, \ldots, 9\}$ respectively.
+
+(c) and (e) are **continuous**, both taking values in an interval of the positive real line.
+</Solution>
+</Example>
+
+## Probability mass functions
+
+<Definition term="Probability mass function">
+A function $p(x)$ is a **probability mass function** (often shortened to p.m.f.) if it satisfies three conditions:
+
+**PMF1:** $p(x)$ is defined for all values of $x$, but $p(x) \ne 0$ at only a finite or "countably infinite" set of points.
+
+**PMF2:** every value of $p(x)$ lies in the unit interval, that is $0 \le p(x) \le 1$.
+
+**PMF3:** $\sum p(x) = 1$, where the sum is taken over all values of $x$ for which $p(x) \ne 0$.
+</Definition>
+
+<Example title="Example 7A: the probability mass function of a fair die">
+An unbiased die is rolled and $X$ is the number of dots on the upturned face. Find the probability mass function.
+
+<Solution>
+Setting $\Pr[X = x] = p(x)$ gives us what we need directly. Because the die is unbiased, $p(1) = p(2) = \cdots = p(6) = \tfrac16$. Every other value of $X$ is an impossible event: $p(-1) = 0$ (you cannot roll a $-1$), $p(0) = 0$, $p(113) = 0$, and so on. So
+
+$$
+p(x) = \begin{cases}
+\tfrac{1}{6} & x = 1, 2, 3, 4, 5, 6\\
+0 & \text{all other values of } x.
+\end{cases}
+$$
+
+Checking the three conditions: $p(x)$ is non-zero at only six isolated points, so **PMF1** holds. Every value is either 0 or $\tfrac16$, both in $[0, 1]$, so **PMF2** holds. And
+
+$$
+\sum_{x=1}^{6} p(x) = \tfrac16 + \tfrac16 + \tfrac16 + \tfrac16 + \tfrac16 + \tfrac16 = 1,
+$$
+
+so **PMF3** holds.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="die"
+  label="Check the three conditions"
+  description="Six bars of equal height. Drag a and b to the two ends and the total is exactly 1, which is PMF3. Drag them onto the same bar and you get a single point probability of one sixth."
+/>
+
+<Example title="Example 8B: a race horse's chances">
+"Heavily-backed favourite Enforce came through along the inside, but was overwhelmed by Susan's Dream, quoted at 9 to 1." Express the anticipated performance of the race horse Susan's Dream as a probability mass function.
+
+<Solution>
+Let $X = 0$ be the event that Susan's Dream loses and $X = 1$ that she wins. Quoted odds of 9 to 1 mean the bookmaker estimates losing as 9 times more likely than winning, so $\Pr[X = 0] = \tfrac{9}{10}$ and $\Pr[X = 1] = \tfrac{1}{10}$:
+
+$$
+p(x) = \begin{cases}
+9/10 & x = 0\\
+1/10 & x = 1\\
+0 & \text{all other values of } x.
+\end{cases}
+$$
+
+PMF1 holds because $p(x)$ is non-zero at only two points, PMF2 because both values lie in the unit interval, and PMF3 because the two values add to one.
+</Solution>
+</Example>
+
+For a discrete random variable, the probability of the event $a \le X \le b$ is found by **adding up** the relevant values of the mass function:
+
+$$
+\Pr[a \le X \le b] = \sum_{x=a}^{b} p(x).
+$$
+
+<Note>
+Be careful with the difference between $\le$ and $<$. If $X$ takes only integer values then
+
+$$
+\Pr[a < X < b] = \sum_{x=a+1}^{b-1} p(x),
+$$
+
+because both end points are now excluded. And if you have to find $\Pr[X \ge b]$, the lower limit of the sum is $b$ but the upper limit is the largest value of $x$ for which $p(x)$ is defined.
+</Note>
+
+<Example title="Example 11A: a mass function that rises with x">
+(a) Check that the function
+
+$$
+p(x) = \begin{cases} x/15 & x = 1, 2, 3, 4, 5\\ 0 & \text{otherwise} \end{cases}
+$$
+
+is the probability mass function of some random variable $X$, and sketch it.
+(b) Find $\Pr[2 \le X \le 4]$.
+(c) Find $\Pr[X \ge 3]$.
+
+<Solution>
+(a) **PMF1:** $p(x)$ is defined for all $x$ and is non-zero at only five values. **PMF2:** the five values are $\tfrac{1}{15}, \tfrac{2}{15}, \tfrac{3}{15}, \tfrac{4}{15}, \tfrac{5}{15}$, all in $[0, 1]$. **PMF3:**
+
+$$
+\sum_{x=1}^{5} p(x) = \sum_{x=1}^{5} \frac{x}{15} = \frac{1 + 2 + 3 + 4 + 5}{15} = 1.
+$$
+
+(b) Add the three middle values:
+
+$$
+\Pr[2 \le X \le 4] = \sum_{x=2}^{4} \frac{x}{15} = \frac{2 + 3 + 4}{15} = \frac{9}{15} = \frac{3}{5}.
+$$
+
+(c) Here the upper limit is 5, the largest value for which $p(x)$ is defined:
+
+$$
+\Pr[X \ge 3] = \sum_{x=3}^{5} \frac{x}{15} = \frac{3 + 4 + 5}{15} = \frac{12}{15} = \frac{4}{5}.
+$$
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="ramp"
+  select="none"
+  label="Add up a range of bars"
+  description="Start with one bar selected. Drag the handles out to x = 2 and x = 4 and watch the read-out build the sum 2/15 + 3/15 + 4/15 term by term. Then check part (c) by covering x = 3 to x = 5."
+/>
+
+<Example title="Example 12B: a mass function with infinitely many values">
+Show that the function
+
+$$
+p(x) = \begin{cases} \left(\tfrac{1}{2}\right)^{x} & x = 1, 2, 3, \ldots\\ 0 & \text{otherwise} \end{cases}
+$$
+
+is a probability mass function.
+
+<Solution>
+**PMF1:** $p(x)$ is defined for all $x$ and is non-zero on the positive integers, a countably infinite set. (A set is countably infinite if there is an orderly way of counting its members. The integers are countable; the unit interval is not.)
+
+**PMF2:** $p(x)$ takes the values $\tfrac12, \tfrac14, \tfrac18, \ldots$, all of which lie in the unit interval.
+
+**PMF3:** the sum is an infinite geometric series with first term $a = \tfrac12$ and ratio $r = \tfrac12$, so it converges to $a/(1 - r)$:
+
+$$
+\sum_{x=1}^{\infty} \left(\tfrac{1}{2}\right)^{x} = \tfrac12 + \tfrac14 + \tfrac18 + \cdots = \frac{1/2}{1 - 1/2} = 1.
+$$
+
+So a mass function can have infinitely many non-zero values and still add to one.
+</Solution>
+</Example>
+
+## Bar graphs
+
+A probability mass function is conveniently plotted as a **bar graph**. This gives an easily interpretable visual impression of the shape of the distribution. The height of each bar is the probability of that value, so the heights must add to one.
+
+<Example title="Example 18A: plotting a bar graph">
+Plot a bar graph for the probability mass function
+
+$$
+p(x) = \begin{cases} \dbinom{4}{x} (0.6)^{x} (0.4)^{4-x} & x = 0, 1, 2, 3, 4\\ 0 & \text{otherwise.} \end{cases}
+$$
+
+<Solution>
+Work out the five probabilities first:
+
+| $x$ | 0 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| $p(x)$ | 0.026 | 0.154 | 0.346 | 0.346 | 0.130 |
+
+Then plot them as five bars, with the height of each bar equal to the probability of that value. Naturally the heights add to one.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pmf-bar-explorer"
+  preset="bargraph"
+  label="Plot the bar graph"
+  description="The shape of this distribution leans to the right, with most of the probability on x = 2 and x = 3. Compare it with the flat shape of the fair die by switching presets."
+/>
+
+## Probability density functions
+
+Continuous random variables are described by probability density functions. The mathematics is very different from the discrete case, and keeping separate notation ($f(x)$ rather than $p(x)$) reminds us to keep those differences in view.
+
+<Definition term="Probability density function">
+A function $f(x)$ is a **probability density function** (sometimes shortened to p.d.f.) if it satisfies three conditions:
+
+**PDF1:** $f(x)$ is defined for all values of $x$.
+
+**PDF2:** all values of $f(x)$ lie in the interval $[0, \infty)$, that is $0 \le f(x) < \infty$.
+
+**PDF3:** $\displaystyle\int_{-\infty}^{\infty} f(x)\,dx = 1$. In words, the **area under the curve** of a density function is one.
+</Definition>
+
+Often $f(x)$ is non-zero only on some interval $(a, b)$. It is then enough to check PDF3 on that interval, because the density contributes nothing outside it:
+
+$$
+\int_{-\infty}^{\infty} f(x)\,dx = \int_{a}^{b} f(x)\,dx = 1.
+$$
+
+For discrete random variables we found probabilities by adding up values of $p(x)$. For continuous random variables we find them by **integrating**: the area under the graph between $c$ and $d$ is the probability that $X$ lies between $c$ and $d$:
+
+$$
+\Pr[c \le X \le d] = \int_{c}^{d} f(x)\,dx.
+$$
+
+This is what motivates PDF3. The random variable must lie somewhere between $-\infty$ and $\infty$, so that event is certain and its probability must be 1.
+
+<Example title="Example 20A: a flat density">
+Show that
+
+$$
+f(x) = \begin{cases} 4 & 0 \le x \le 0.25\\ 0 & \text{otherwise} \end{cases}
+$$
+
+is a probability density function, and sketch it.
+
+<Solution>
+**PDF1:** $f(x)$ is defined for all $x$. **PDF2:** $f(x)$ takes only the values 0 and 4, both non-negative. **PDF3:**
+
+$$
+\int_{0}^{0.25} 4\,dx = \Big[\,4x\,\Big]_{0}^{0.25} = 1.
+$$
+
+The graph is a rectangle of height 4 and width 0.25, and $4 \times 0.25 = 1$ is exactly the area condition.
+</Solution>
+</Example>
+
+<Note>
+Notice that $f(x) = 4$ here. A density is **not** a probability, and nothing stops it exceeding 1. What has to equal one is the area, not the height.
+</Note>
+
+<TryThis
+  vizId="pdf-area"
+  preset="uniform"
+  label="Check the area of the flat density"
+  description="A rectangle is the one case where you can check the area by eye: height 4 times width 0.25 gives 1. Drag c and d inward and watch the area shrink in proportion to the width."
+/>
+
+<Example title="Example 21B: survival in a risky market">
+In a risky sector of the share market, the proportion of companies that survive a year (that is, are not delisted) is a continuous random variable between zero and one. A statistician suggests
+
+$$
+f(x) = \begin{cases} 20x^{3}(1 - x) & 0 \le x \le 1\\ 0 & \text{otherwise} \end{cases}
+$$
+
+as a model for $X$, the annual proportion of companies that survive.
+
+(a) Check that $f(x)$ is a probability density function.
+(b) What is the probability that between 30% and 50% of companies survive a year?
+(c) What is the probability that fewer than 10% survive a year?
+
+<Solution>
+(a) PDF1 and PDF2 are clear ($f(x)$ is defined everywhere and is non-negative on $[0, 1]$). For PDF3:
+
+$$
+\int_{0}^{1} 20x^{3}(1 - x)\,dx = \int_{0}^{1} (20x^{3} - 20x^{4})\,dx = \Big[\,5x^{4} - 4x^{5}\,\Big]_{0}^{1} = 5 - 4 = 1.
+$$
+
+(b) Integrate between 0.3 and 0.5:
+
+$$
+\Pr[0.3 < X < 0.5] = \Big[\,5x^{4} - 4x^{5}\,\Big]_{0.3}^{0.5} = 0.157.
+$$
+
+(c) Integrate from 0 to 0.1:
+
+$$
+\Pr[X < 0.1] = \Big[\,5x^{4} - 4x^{5}\,\Big]_{0}^{0.1} = 0.00046.
+$$
+
+So it is very unlikely indeed that fewer than a tenth of the companies survive.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pdf-area"
+  preset="survival"
+  label="Sweep out the survival probabilities"
+  description="Drag c to 0.30 and d to 0.50 to reproduce part (b). Then drag c back to 0 and d to 0.10 for part (c), and notice how little area there is out in that left tail."
+/>
+
+<Example title="Example 22B: weekly demand for petrol">
+A remote country service station is supplied with petrol once a week. Weekly demand, measured in thousands of litres, has probability density function
+
+$$
+f(x) = \begin{cases} \tfrac{1}{2500}(10 - x)^{3} & 0 \le x \le 10\\ 0 & \text{otherwise.} \end{cases}
+$$
+
+(a) Show that $f(x)$ is a probability density function.
+(b) What is the probability that between 3 and 5 thousand litres are sold in a week?
+(c) If less than 2 thousand litres are sold, the petrol company does not bother to deliver. What is the probability of this?
+(d) The station has a 7 thousand litre tank. What is the probability it runs out in a week, assuming it started full?
+(e) What size tank is needed to be 98% certain of meeting weekly demand?
+(f) What is the probability of selling exactly 5 thousand litres in a week?
+
+<Solution>
+Throughout, the antiderivative is $\displaystyle \int \tfrac{1}{2500}(10-x)^3\,dx = -\tfrac{1}{10000}(10-x)^{4}$.
+
+(a) **PDF1** holds, and **PDF2** holds because $10 - x \ge 0$ on $[0, 10]$. For **PDF3**:
+
+$$
+\frac{1}{2500}\int_{0}^{10} (10 - x)^{3}\,dx = \left[-\frac{(10-x)^4}{10000}\right]_{0}^{10} = 0 + \frac{10^4}{10000} = 1.
+$$
+
+(b) $\Pr[3 \le X \le 5] = \left[-\dfrac{(10-x)^4}{10000}\right]_{3}^{5} = \dfrac{7^4 - 5^4}{10000} = 0.1776$.
+
+(c) $\Pr[0 \le X \le 2] = \dfrac{10^4 - 8^4}{10000} = 0.5904$. More than half the time, no delivery is needed.
+
+(d) The tank runs dry when demand exceeds 7 thousand litres:
+
+$$
+\Pr[X \ge 7] = \frac{3^4}{10000} = 0.0081.
+$$
+
+On average the tank is emptied about once in every 123 weeks.
+
+(e) We want $\Pr[0 \le X \le c] = 0.98$, equivalently $\Pr[c \le X \le 10] = 0.02$:
+
+$$
+\frac{(10 - c)^4}{10000} = 0.02 \implies 10 - c = (200)^{1/4} = 3.76,
+$$
+
+so $c = 6.24$. A **6 240 litre** tank is needed.
+
+(f) The probability of selling exactly 5 thousand litres is
+
+$$
+\Pr[5 \le X \le 5] = \int_{5}^{5} f(x)\,dx = 0.
+$$
+</Solution>
+</Example>
+
+<Note>
+Part (f) is a general principle, not a quirk of this example. **For a continuous random variable, the probability of any exact value is zero.** This feels wrong at first, but it follows from the fact that our ability to measure is always discrete: a digital petrol pump measures to the nearest tenth of a litre, not to infinite precision.
+
+A useful corollary is that for continuous random variables the type of inequality makes no difference:
+
+$$
+\Pr[c \le X \le d] = \Pr[c < X \le d] = \Pr[c \le X < d] = \Pr[c < X < d].
+$$
+
+This is **not** true for discrete random variables, where you have to stay alert to which end points are included.
+</Note>
+
+<TryThis
+  vizId="pdf-area"
+  preset="petrol"
+  label="Answer the petrol questions by dragging"
+  description="Set c = 3 and d = 5 for part (b), or drag c to 7 and d to 10 for part (d). Then drag c and d onto the same point: the strip has no width, the area is zero, and you have part (f)."
+/>
+
+<Example title="Example 23B: a curved density">
+(a) Could the following serve as a probability density function?
+
+$$
+f(x) = \begin{cases} 6x(1 - x) & 0 \le x \le 1\\ 0 & \text{otherwise} \end{cases}
+$$
+
+(b) What is the probability that (i) $0 \le X \le 0.2$, and (ii) $0.4 \le X \le 0.6$?
+
+<Solution>
+(a) **PDF1:** $f(x)$ is defined for all $x$. **PDF2:** on $[0, 1]$ every value lies between 0 and 1.5, so none is negative. **PDF3:**
+
+$$
+\int_{0}^{1} 6x(1 - x)\,dx = 6\int_{0}^{1}(x - x^{2})\,dx = 6\left[\frac{x^{2}}{2} - \frac{x^{3}}{3}\right]_{0}^{1} = 6\left(\frac12 - \frac13\right) = 1.
+$$
+
+All three conditions hold.
+
+(b) (i) $\Pr[0 \le X \le 0.2] = 6\displaystyle\int_{0}^{0.2}(x - x^{2})\,dx = 0.104$.
+
+(ii) $\Pr[0.4 \le X \le 0.6] = 6\displaystyle\int_{0.4}^{0.6}(x - x^{2})\,dx = 0.296$.
+
+The second interval is the same width as the first but sits under the tallest part of the curve, so it carries almost three times as much probability.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="pdf-area"
+  preset="parabola"
+  label="Compare two intervals of equal width"
+  description="Set c = 0 and d = 0.2, note the area, then slide the pair across to c = 0.4 and d = 0.6. Same width, very different probability: that is what the height of a density controls."
+/>
+
+<Note>
+There is no requirement for a density to be a smooth curve. A great variety of shapes is possible, including flat ones and ones with corners. The only restrictions are that $f(x)$ must be non-negative and that the total area must be one.
+
+It is worth grasping firmly that the value of $f(x)$, the height of the curve at $x$, **cannot** be read as the probability that $X$ equals $x$. That reading was available for the bar graph of a discrete mass function, and it does not carry across.
+</Note>
+
+<Example title="Example 24B: finding the constant">
+Let $X$ have probability density function
+
+$$
+f(x) = \begin{cases} k e^{-x/2} & x \ge 0\\ 0 & \text{otherwise.} \end{cases}
+$$
+
+What value must $k$ take?
+
+<Solution>
+Choose $k$ so that the total area is one:
+
+$$
+\int_{0}^{\infty} k e^{-x/2}\,dx = \Big[\,-2k e^{-x/2}\,\Big]_{0}^{\infty} = 0 - (-2k) = 2k = 1,
+$$
+
+so $k = \tfrac12$.
+</Solution>
+</Example>
+
+## A selection of further examples
+
+<Example title="Example 9C: setting a fishing quota">
+The Minister of Environment Affairs has to set a fishing quota for the coming season. The biomass of fish is currently estimated at 20 million tonnes. The fish may have a good breeding season (probability 0.3) and produce 10 m tonnes of young, or a bad one and produce only 1 m tonnes. A "warm-water event" may occur with probability 0.1 and kill 15 m tonnes; otherwise 1 m tonnes will die. Find the probability mass function of $X$, the biomass before the quota is set, assuming all events are independent. If the minister's policy is that the biomass must stay at 10 m tonnes or more with probability 0.8, what should he decide?
+
+<Solution>
+Each combination of a breeding outcome and a mortality outcome gives one value of $X = 20 + \text{born} - \text{died}$. Because the events are independent we multiply their probabilities:
+
+| Breeding | Mortality | $X$ | $\Pr$ |
+|---|---|---|---|
+| Bad (0.7) | Warm-water event (0.1) | $20 + 1 - 15 = 6$ | 0.07 |
+| Good (0.3) | Warm-water event (0.1) | $20 + 10 - 15 = 15$ | 0.03 |
+| Bad (0.7) | Normal (0.9) | $20 + 1 - 1 = 20$ | 0.63 |
+| Good (0.3) | Normal (0.9) | $20 + 10 - 1 = 29$ | 0.27 |
+
+$$
+p(x) = \begin{cases}
+0.07 & x = 6\\
+0.03 & x = 15\\
+0.63 & x = 20\\
+0.27 & x = 29\\
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+If the quota is $q$, the biomass left afterwards is $X - q$, and the policy requires $\Pr[X - q \ge 10] \ge 0.8$, that is $\Pr[X \ge 10 + q] \ge 0.8$.
+
+Taking $q = 10$ gives $\Pr[X \ge 20] = 0.63 + 0.27 = 0.90$, which satisfies the policy. Any larger quota would need $\Pr[X \ge 21] = 0.27$, which fails. So the minister should **set the quota at 10 m tonnes**.
+</Solution>
+</Example>
+
+<Example title="Example 13C: rolling a pair of dice">
+Find the sample space for the experiment of rolling a pair of dice. Find the probability mass function of $X$, the sum of the two values, and of $Y$, the product. Find $\Pr[X \ge 10]$ and $\Pr[Y \ge 13]$.
+
+<Solution>
+The sample space has 36 equally likely elementary events, one for each ordered pair. The quickest way to see both random variables at once is to lay the 36 outcomes out on a grid, with the first die down the side and the second across the top.
+
+**The sum $X$:**
+
+| $+$ | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| **1** | 2 | 3 | 4 | 5 | 6 | 7 |
+| **2** | 3 | 4 | 5 | 6 | 7 | 8 |
+| **3** | 4 | 5 | 6 | 7 | 8 | 9 |
+| **4** | 5 | 6 | 7 | 8 | 9 | 10 |
+| **5** | 6 | 7 | 8 | 9 | 10 | 11 |
+| **6** | 7 | 8 | 9 | 10 | 11 | 12 |
+
+Counting how many cells hold each value and dividing by 36:
+
+| $x$ | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| $p(x)$ | 1/36 | 2/36 | 3/36 | 4/36 | 5/36 | 6/36 | 5/36 | 4/36 | 3/36 | 2/36 | 1/36 |
+
+$$
+\Pr[X \ge 10] = \frac{3 + 2 + 1}{36} = \frac{6}{36} = \frac{1}{6}.
+$$
+
+**The product $Y$:**
+
+| $\times$ | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|
+| **1** | 1 | 2 | 3 | 4 | 5 | 6 |
+| **2** | 2 | 4 | 6 | 8 | 10 | 12 |
+| **3** | 3 | 6 | 9 | 12 | 15 | 18 |
+| **4** | 4 | 8 | 12 | 16 | 20 | 24 |
+| **5** | 5 | 10 | 15 | 20 | 25 | 30 |
+| **6** | 6 | 12 | 18 | 24 | 30 | 36 |
+
+Counting the cells for each distinct product:
+
+| $y$ | 1 | 2 | 3 | 4 | 5 | 6 | 8 | 9 | 10 | 12 | 15 | 16 | 18 | 20 | 24 | 25 | 30 | 36 |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| count | 1 | 2 | 2 | 3 | 2 | 4 | 2 | 1 | 2 | 4 | 2 | 1 | 2 | 2 | 2 | 1 | 2 | 1 |
+
+The counts add to 36, as they must. The products of 13 or more are 15, 16, 18, 20, 24, 25, 30 and 36, and their counts add to $2 + 1 + 2 + 2 + 2 + 1 + 2 + 1 = 13$ cells, so
+
+$$
+\Pr[Y \ge 13] = \frac{13}{36} = 0.361.
+$$
+
+Notice that the sum has a symmetric, triangular distribution while the product is heavily bunched at the low end: most pairs of dice multiply to something small.
+</Solution>
+</Example>
+
+<ExcelPointer title="Building the dice grid" screenshot={false}>
+1. Type the numbers 1 to 6 into cells `B1:G1`, and again down `A2:A7`.
+2. In cell `B2` type `=$A2+B$1` and press Enter. The `$` signs lock the lookup onto the row header and the column header.
+3. Select `B2` and drag its fill handle across to `G2`, then drag the whole row down to row 7. You now have all 36 sums.
+4. For the products, repeat in a second block with `=$A2*B$1`.
+5. Count the cells at or above a threshold with `=COUNTIF(B2:G7,">=10")`, then divide by 36 to get the probability.
+</ExcelPointer>
+
+<Example title="Example 16C: finding the constant of a mass function">
+(a) For what value of $k$ is
+
+$$
+p(x) = \begin{cases} k/x! & x = 0, 1, 2, 3, 4\\ 0 & \text{otherwise} \end{cases}
+$$
+
+a probability mass function?
+(b) Find $\Pr[X < 2]$.
+
+<Solution>
+(a) PMF3 requires the five values to add to one:
+
+$$
+\sum_{x=0}^{4} \frac{k}{x!} = k\left(\frac{1}{1} + \frac{1}{1} + \frac{1}{2} + \frac{1}{6} + \frac{1}{24}\right) = k \cdot \frac{65}{24} = 1,
+$$
+
+so $k = \tfrac{24}{65} \approx 0.369$.
+
+(b) The inequality is strict, so only $x = 0$ and $x = 1$ count:
+
+$$
+\Pr[X < 2] = p(0) + p(1) = 2k = \frac{48}{65} \approx 0.738.
+$$
+</Solution>
+</Example>
+
+<Example title="Example 17C: waiting for the first buyer">
+10% of the customers entering a supermarket buy a particular brand of margarine. A market researcher stands at the exit and asks people whether they bought it. Let $X$ be the number of people she approaches up to and including the first one who did. Find the probability mass function of $X$.
+
+<Solution>
+For $X$ to equal $x$, the first $x - 1$ people must all be non-buyers (probability 0.9 each) and the $x$-th must be a buyer (probability 0.1). The customers are independent, so we multiply:
+
+$$
+p(x) = \begin{cases} (0.9)^{x-1}(0.1) & x = 1, 2, 3, \ldots\\ 0 & \text{otherwise.} \end{cases}
+$$
+
+Like Example 12B, this is non-zero on a countably infinite set. Checking PMF3 with the geometric series formula $a/(1-r)$, with $a = 0.1$ and $r = 0.9$:
+
+$$
+\sum_{x=1}^{\infty} (0.9)^{x-1}(0.1) = \frac{0.1}{1 - 0.9} = 1. \checkmark
+$$
+</Solution>
+</Example>
+
+<Example title="Example 26C: mass function or density function?">
+Verify that each of the following satisfies the conditions for being either a probability mass function or a probability density function.
+
+(a) $p(x) = x/6$ for $x = 1, 2, 3$, and 0 otherwise.
+(b) $f(x) = 1$ for $0 \le x \le 1$, and 0 otherwise.
+(c) $f(x) = |x|$ for $-1 \le x \le 1$, and 0 otherwise.
+(d) $f(x) = -\log x$ for $0 < x \le 1$, and 0 otherwise.
+(e) $p(x) = 1/n$ for $x = 1, 2, \ldots, n$, and 0 otherwise.
+(f) $f(x) = \tfrac12 \sin x$ for $0 \le x \le \pi$, and 0 otherwise.
+
+<Solution>
+(a) A **mass** function: $\tfrac16 + \tfrac26 + \tfrac36 = 1$.
+
+(b) A **density**: a rectangle of height 1 and width 1, so the area is 1.
+
+(c) A **density**: two triangles, each of base 1 and height 1, giving $2 \times \tfrac12 = 1$.
+
+(d) A **density**: $\displaystyle\int_{0}^{1} -\log x\,dx = \Big[\,x - x\log x\,\Big]_{0}^{1} = 1$.
+
+(e) A **mass** function: $n$ values each equal to $1/n$, so they add to 1.
+
+(f) A **density**: $\displaystyle\int_{0}^{\pi} \tfrac12 \sin x\,dx = \tfrac12\Big[-\cos x\Big]_{0}^{\pi} = \tfrac12(1 + 1) = 1$.
+
+In every case the check is the same: non-negative everywhere, and the total (a sum for the discrete ones, an integral for the continuous ones) equal to one.
+</Solution>
+</Example>
+
+<Example title="Example 27C: a density with an unknown constant">
+The probability density function of $X$ is
+
+$$
+f(x) = \begin{cases} kx(1 - x^{2}) & 0 \le x \le 1\\ 0 & \text{elsewhere.} \end{cases}
+$$
+
+(a) Show that $k$ must be 4.
+(b) Calculate $\Pr\left[0 < X < \tfrac12\right]$.
+(c) Find the value of $A$ for which $\Pr[0 < X < A] = \tfrac12$.
+
+<Solution>
+(a) Set the total area to one:
+
+$$
+k\int_{0}^{1} (x - x^{3})\,dx = k\left[\frac{x^{2}}{2} - \frac{x^{4}}{4}\right]_{0}^{1} = k\left(\frac12 - \frac14\right) = \frac{k}{4} = 1,
+$$
+
+so $k = 4$.
+
+(b) $\Pr\left[0 < X < \tfrac12\right] = 4\left[\dfrac{x^{2}}{2} - \dfrac{x^{4}}{4}\right]_{0}^{0.5} = 4(0.125 - 0.015625) = 0.4375$.
+
+(c) We need $4\left(\dfrac{A^{2}}{2} - \dfrac{A^{4}}{4}\right) = \dfrac12$, that is $2A^{2} - A^{4} = \tfrac12$. Writing $u = A^{2}$ gives $u^{2} - 2u + \tfrac12 = 0$, so
+
+$$
+u = \frac{2 \pm \sqrt{2}}{2}.
+$$
+
+Only $u = (2 - \sqrt2)/2 = 0.2929$ lies in $[0, 1]$, so $A = \sqrt{0.2929} = 0.541$.
+
+Note that $A$ is the value that splits the area in half. It sits a little above the midpoint of the interval, which fits part (b): only 0.4375 of the area lies below 0.5, so the halfway mark has to be a bit further right.
+</Solution>
+</Example>
+
+<Example title="Example 29C: pool contracts carried forward">
+A small pool building company is equally likely to complete 2 or 3 pool contracts each month. It receives between 1 and 4 new contracts each month, with $\Pr(1) = 0.1$, $\Pr(2) = 0.2$, $\Pr(3) = 0.5$ and $\Pr(4) = 0.2$. At the start of this month it has two contracts carried forward from last month. Let $X$ be the number of contracts carried forward to next month. Find the probability mass function of $X$. What is the probability that no contracts are carried forward? Assume the number of new contracts is independent of the number of pools completed, and that a month's contracts all arrive at the start of the month.
+
+<Solution>
+The company has $2 + N$ contracts in hand, where $N$ is the number of new ones, and completes $C$ of them, where $C$ is 2 or 3 with probability 0.5 each. So $X = 2 + N - C$.
+
+| $N$ | $\Pr(N)$ | $C = 2$ (prob 0.5) | $C = 3$ (prob 0.5) |
+|---|---|---|---|
+| 1 | 0.1 | $X = 1$ | $X = 0$ |
+| 2 | 0.2 | $X = 2$ | $X = 1$ |
+| 3 | 0.5 | $X = 3$ | $X = 2$ |
+| 4 | 0.2 | $X = 4$ | $X = 3$ |
+
+Each cell has probability $\Pr(N) \times 0.5$. Collecting the cells that share a value of $X$:
+
+$$
+p(x) = \begin{cases}
+0.05 & x = 0\\
+0.15 & x = 1\\
+0.35 & x = 2\\
+0.35 & x = 3\\
+0.10 & x = 4\\
+0 & \text{otherwise.}
+\end{cases}
+$$
+
+These add to 1, as required. The probability that **no contracts are carried forward** is $p(0) = 0.05$, which happens only when just one new contract arrives and three get completed.
+</Solution>
+</Example>
+
+<Quiz />

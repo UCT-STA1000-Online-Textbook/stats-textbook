@@ -58,6 +58,12 @@ export interface VizParamProps {
   pdc?: number;
   /** BayesGrid: initial Pr(D|C̄). */
   pdcbar?: number;
+  /** PmfBarExplorer: "none" opens with a single bar selected instead of all. */
+  select?: string;
+  /** PdfArea: initial position of the lower shading handle. */
+  c?: number;
+  /** PdfArea: initial position of the upper shading handle. */
+  d?: number;
 }
 
 /** Ordered list of every key `VizParamProps` declares. */
@@ -79,6 +85,9 @@ const VIZ_PARAM_KEYS: (keyof VizParamProps)[] = [
   "pc",
   "pdc",
   "pdcbar",
+  "select",
+  "c",
+  "d",
 ];
 
 /**

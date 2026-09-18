@@ -81,7 +81,29 @@ export function Bar({ children }: { children: ReactNode }) {
 }
 
 /**
- * Labelled 0–1 range slider, shared styling across the probability vizzes.
+ * One plain sentence telling the student what to do with this viz, shown
+ * on the panel itself rather than hidden behind the "How to use" button.
+ *
+ * `VizGuide` still carries the full step list, but a student should never
+ * have to go looking before they know what the thing is for. Keep this to a
+ * single short sentence naming the one action worth taking first; everything
+ * else belongs in the guide.
+ */
+export function VizHint({ children }: { children: ReactNode }) {
+  return (
+    <p className="text-[12px] leading-snug text-[color:var(--color-ink-500)]">
+      {children}
+    </p>
+  );
+}
+
+/**
+ * Labelled range slider, shared styling across the probability vizzes.
+ *
+ * Defaults to the 0–1 probability slider the Module 1 vizzes use. The
+ * `min`/`max`/`step`/`format` props widen it to any range, which the Module 4
+ * distributions need for a whole-number n and a rate λ; leaving them out
+ * reproduces the original 0–1, two-decimal behaviour exactly.
  *
  * `mono` controls whether the label uses the monospace font — `ProbabilityVenn`
  * labels its sliders with math notation ("Pr(A ∩ B)") in mono, while
@@ -94,11 +116,23 @@ export function Slider({
   value,
   onChange,
   mono = true,
+  min = 0,
+  max = 1,
+  step = 0.01,
+  format,
 }: {
   label: ReactNode;
   value: number;
   onChange: (v: number) => void;
   mono?: boolean;
+  /** Lowest selectable value. Defaults to 0. */
+  min?: number;
+  /** Highest selectable value. Defaults to 1. */
+  max?: number;
+  /** Slider granularity. Defaults to 0.01. */
+  step?: number;
+  /** Renders the value shown beside the label. Defaults to two decimals. */
+  format?: (v: number) => string;
 }) {
   // Unique per instance so the `<label>` can be programmatically associated
   // with its `<input>` even though many sliders render on one page.
@@ -114,15 +148,15 @@ export function Slider({
           {label}
         </label>
         <span className="text-[12px] font-mono tabular-nums text-[color:var(--color-ink-900)]">
-          {value.toFixed(2)}
+          {format ? format(value) : value.toFixed(2)}
         </span>
       </div>
       <input
         id={inputId}
         type="range"
-        min={0}
-        max={1}
-        step={0.01}
+        min={min}
+        max={max}
+        step={step}
         value={value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         className="w-full h-1.5 rounded-full appearance-none bg-blue-100 accent-blue-600 cursor-pointer"

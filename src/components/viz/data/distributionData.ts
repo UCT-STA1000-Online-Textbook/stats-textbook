@@ -1,6 +1,6 @@
 /**
- * Preset distributions for the Module 3 visualisations (`PmfBarExplorer` and
- * `PdfArea`).
+ * Preset distributions for the Module 3 and Module 4 visualisations
+ * (`PmfBarExplorer`, `PdfArea` and `UniformExplorer`).
  *
  * Every preset here is taken from a worked example in the unit, so the numbers
  * a student sees in the right panel are the same ones they just read in the
@@ -230,5 +230,107 @@ export const PDF_PRESETS: PdfPreset[] = [
     cdf: (x) => (1e4 - Math.pow(10 - x, 4)) / 1e4,
     axisLabel: "x = weekly demand, in thousands of litres",
     format: (x) => x.toFixed(2),
+  },
+];
+
+/**
+ * A named Uniform distribution, ready to plot as a rectangle.
+ *
+ * Unlike `PdfPreset`, the endpoints here are not fixed: the student drags
+ * `a` and `b` themselves, and the height follows from them. So a preset only
+ * supplies where to *start*, plus the fixed window the rectangle is drawn in.
+ */
+export interface UniformPreset {
+  id: string;
+  /** Short name for the preset picker. */
+  label: string;
+  /** Which worked example this comes from, shown under the chart. */
+  source: string;
+  /**
+   * The visible stretch of the x-axis. It stays fixed while `a` and `b` are
+   * dragged, which is the whole point: against an unmoving axis the rectangle
+   * is visibly seen to get lower as it gets wider.
+   */
+  view: [number, number];
+  /**
+   * Starting endpoints of the interval, both inside `view`. The gap between
+   * them must be at least `MIN_WIDTH` of the `view` span (see
+   * `UniformExplorer`), which is the narrowest interval it allows; a tighter
+   * pair would draw a rectangle taller than the y-axis.
+   */
+  start: [number, number];
+  /** Starting edges of the shaded sub-interval, both inside `start`. */
+  shade: [number, number];
+  /** Axis caption naming what the random variable measures. */
+  axisLabel: string;
+  /**
+   * What one draw from this distribution *is*, in the language of the
+   * example: "Weigh one tub", not "Draw a value". A student should never
+   * have to work out what is being sampled.
+   */
+  drawOne: string;
+  /** The same action done 500 times, for the batch button. */
+  drawMany: string;
+  /** Plural noun for the things drawn, used in the running score. */
+  drawNoun: string;
+  /**
+   * Letter to call the random variable in the read-out. Example 15C works
+   * with a final mark Y built from an examination mark X, and printing "X"
+   * beside it would contradict the text, so each preset names its own.
+   * Defaults to "X".
+   */
+  variable?: string;
+  /** How to render an x-axis value; defaults to one decimal. */
+  format?: (x: number) => string;
+}
+
+/**
+ * Uniform distributions for `UniformExplorer`, one per worked example in
+ * Module 4, WU1 (`m4-uniform`).
+ */
+export const UNIFORM_PRESETS: UniformPreset[] = [
+  {
+    id: "margarine",
+    label: "Margarine",
+    source: "Example 12A",
+    view: [490, 515],
+    start: [495, 510],
+    // Pr[X < 500] = 5/15 = 1/3, the answer printed in the text.
+    shade: [495, 500],
+    axisLabel: "x = mass of a tub, in grams",
+    drawOne: "Weigh one tub",
+    drawMany: "Weigh 500",
+    drawNoun: "tubs",
+    format: (x) => x.toFixed(1),
+  },
+  {
+    id: "portfolio",
+    label: "Shares",
+    source: "Example 14C",
+    view: [0, 40],
+    start: [5, 35],
+    // Pr[X < 13.5] = 8.5/30 = 0.283: the investor does better on fixed deposit.
+    shade: [5, 13.5],
+    axisLabel: "x = annual return on the portfolio, in %",
+    drawOne: "Try one year",
+    drawMany: "Try 500 years",
+    drawNoun: "years",
+    format: (x) => x.toFixed(1),
+  },
+  {
+    id: "final-mark",
+    label: "Final mark",
+    source: "Example 15C",
+    view: [40, 70],
+    // Y = 15 + 0.7X with X ~ U(45, 65), so Y ~ U(46.5, 60.5).
+    start: [46.5, 60.5],
+    // Pr[50 ≤ Y ≤ 60] = 10/14 = 0.714, the third-class pass.
+    shade: [50, 60],
+    axisLabel: "y = final mark for the course, in %",
+    drawOne: "Mark one student",
+    drawMany: "Mark 500",
+    drawNoun: "students",
+    variable: "Y",
+    format: (x) => x.toFixed(1),
   },
 ];

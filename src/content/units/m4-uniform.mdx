@@ -5,10 +5,276 @@ moduleId: "m4"
 moduleTitle: "Probability Distributions"
 unitNumber: 9
 moduleUnitNumber: 1
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "The random variable X has the Uniform distribution on the interval (2, 10). What is f(x) for a value of x inside that interval?"
+    options:
+      - "1/2, because the interval starts at 2"
+      - "1/8, because the interval is 8 units wide"
+      - "1/10, because the interval ends at 10"
+      - "1/12, because 2 + 10 = 12"
+    answer: 1
+    explanation: "The height of a Uniform density is 1/(b - a), so here it is 1/(10 - 2) = 1/8. The height is not chosen for convenience: it is the only value that makes the area of the rectangle equal to 1, which every density must satisfy."
+    vizHint: "uniform-explorer"
+  - id: "q2"
+    type: "true-false"
+    question: "If you double the width of the interval (a, b), the height of the Uniform density also doubles."
+    answer: false
+    explanation: "False, and it is worth being sure why. The area of the rectangle has to stay at 1, so width and height move in opposite directions: doubling the width halves the height. Drag the endpoints in the visualisation and watch the height fall as the rectangle stretches."
+    vizHint: "uniform-explorer"
+  - id: "q3"
+    type: "mcq"
+    question: "The mass of a tub of margarine is equally likely to be anywhere between 495 g and 510 g. What is the probability that a randomly chosen tub weighs less than 500 g?"
+    options:
+      - "1/2, because 500 is close to the middle"
+      - "1/3, because 5 of the 15 grams of the interval fall below 500"
+      - "1/15, because the interval is 15 g wide"
+      - "5/510, because 5 g of the 510 g fall below the mark"
+    answer: 1
+    explanation: "For a Uniform distribution a probability is just a ratio of lengths. The part of the interval below 500 g is 500 - 495 = 5 g long, and the whole interval is 510 - 495 = 15 g long, so the probability is 5/15 = 1/3."
+    vizHint: "uniform-explorer"
+    vizHintParams:
+      preset: "margarine"
+  - id: "q4"
+    type: "mcq"
+    question: "If X has the Uniform distribution on (a, b), what is E[X]?"
+    options:
+      - "(b - a)/2"
+      - "(a + b)/2"
+      - "(b - a)²/12"
+      - "1/(b - a)"
+    answer: 1
+    explanation: "The rectangle is symmetric about its midpoint, so the mean sits exactly halfway along: E[X] = (a + b)/2. The expression (b - a)²/12 is the variance, and 1/(b - a) is the height of the density."
+  - id: "q5"
+    type: "mcq"
+    question: "Two Uniform distributions, U(0, 6) and U(10, 16), are compared. Which statement is correct?"
+    options:
+      - "They have the same mean and the same variance"
+      - "They have different means and the same variance"
+      - "They have the same mean and different variances"
+      - "They have different means and different variances"
+    answer: 1
+    explanation: "The means are 3 and 13, which differ. But the variance depends only on the width of the interval, and both intervals are 6 units wide, so both variances are 6²/12 = 3. Sliding an interval along the axis moves the mean and leaves the spread alone."
+  - id: "q6"
+    type: "true-false"
+    question: "The main reason the Uniform distribution matters is that many real quantities happen to be uniformly distributed."
+    answer: false
+    explanation: "False. Genuinely uniform quantities are not especially common. The Uniform distribution earns its place because we generate numbers from it to draw random samples, and random sampling is the foundation of the inference work later in the course."
 prevUnit: "m3-working-with-rv"
 nextUnit: "m4-binomial"
 ---
 
-Content coming soon.
+## Five distributions worth knowing
+
+A number of probability mass and density functions have proved themselves useful as "models" for a large variety of practical problems in life. We consider five of the most frequently encountered probability distributions in this module: the Uniform, Binomial, Poisson, Exponential and Normal distributions.
+
+Each one is a ready-made shape. Rather than working out a probability function from first principles every time, we learn to recognise the situation, pick the distribution that models it, and read off the answer. This unit starts with the simplest of the five.
+
+> **Keywords:** <KeywordChip vizId="uniform-explorer">Uniform distribution</KeywordChip>, continuous random variable, probability density function, <KeywordChip vizId="uniform-explorer" preset="portfolio">area as probability</KeywordChip>, random sampling.
+
+## The Uniform distribution
+
+This is the simplest possible continuous distribution. It is used to model the situation where all values in some interval $(a, b)$ are equally likely to occur. At first glance the Uniform distribution looks uninspiringly simple; but it is this very simplicity that gives it its importance. We generate numbers from a Uniform distribution to aid us in selecting random samples, which, we will see later, are an essential part of the area of statistics known as inference.
+
+<Definition term="Uniform distribution">
+If the continuous random variable $X$ is equally likely to take on any value in the interval $(a, b)$, then $X$ has the Uniform distribution, written $X \sim U(a, b)$, with probability density function
+
+$$
+f(x) = \frac{1}{b - a}, \qquad a \le x \le b
+$$
+
+$$
+f(x) = 0, \qquad \text{otherwise.}
+$$
+</Definition>
+
+The density is flat, so the picture is a rectangle sitting on the interval $(a, b)$. Its width is $b - a$, and because the area under any density must be 1, its height has no freedom at all: it has to be $1/(b - a)$.
+
+That is the one thing worth holding on to in this unit. The height is not a number someone chose. It is forced by the width.
+
+<TryThis
+  vizId="uniform-explorer"
+  preset="margarine"
+  label="Stretch the interval"
+  description="Drag the grips a and b and watch the height of the rectangle. Widen the interval and the density drops, narrow it and the density climbs, because the area has to stay at 1."
+/>
+
+<Example title="Example 12A: a tub of margarine">
+Suppose the mass of a nominally 500 g tub of margarine is equally likely to take on any value in the interval (495, 510). What is the probability that a randomly chosen tub will have a mass less than 500 g?
+
+<Solution>
+Let the random variable $X$ be the mass of a tub of margarine. Because $X \sim U(495, 510)$,
+
+$$
+f(x) = \frac{1}{510 - 495} = \frac{1}{15}, \qquad 495 < x < 510
+$$
+
+$$
+f(x) = 0, \qquad \text{otherwise.}
+$$
+
+The probability is the area of the part of the rectangle lying to the left of 500:
+
+$$
+\Pr[X < 500] = \int_{495}^{500} \frac{1}{15} \, dx = \left[ \frac{x}{15} \right]_{495}^{500} = \frac{500 - 495}{15} = \frac{1}{3}.
+$$
+
+The integral is worth doing once, but notice what it came to: the length of the piece we wanted, divided by the length of the whole interval. For a Uniform distribution, that shortcut always works.
+</Solution>
+</Example>
+
+## Two properties of the Uniform distribution
+
+<Example title="Example 13C: checking the density and finding its mean and variance">
+If $X \sim U(a, b)$, investigate the following properties of $X$:
+
+(a) Show that the function given for the Uniform distribution satisfies the conditions for a probability density function.
+
+(b) Show that $E[X] = \tfrac{1}{2}(b + a)$ and that $\text{Var}[X] = (b - a)^2 / 12$.
+
+<Solution>
+**(a)** There are two conditions to check. First, the density must never be negative. Because $b > a$, the quantity $1/(b - a)$ is positive, and everywhere outside the interval $f(x) = 0$, so $f(x) \ge 0$ for every $x$.
+
+Second, the total area must be 1:
+
+$$
+\int_{a}^{b} \frac{1}{b - a} \, dx = \left[ \frac{x}{b - a} \right]_{a}^{b} = \frac{b - a}{b - a} = 1.
+$$
+
+Both conditions hold, so this is a genuine probability density function.
+
+**(b)** For the mean we integrate $x f(x)$ over the interval:
+
+$$
+E[X] = \int_{a}^{b} \frac{x}{b - a} \, dx = \left[ \frac{x^2}{2(b - a)} \right]_{a}^{b} = \frac{b^2 - a^2}{2(b - a)}.
+$$
+
+Because $b^2 - a^2 = (b - a)(b + a)$, the factor $(b - a)$ cancels and
+
+$$
+E[X] = \tfrac{1}{2}(b + a),
+$$
+
+which is just the midpoint of the interval, exactly where symmetry says the mean of a rectangle should be.
+
+For the variance we first find $E[X^2]$:
+
+$$
+E[X^2] = \int_{a}^{b} \frac{x^2}{b - a} \, dx = \left[ \frac{x^3}{3(b - a)} \right]_{a}^{b} = \frac{b^3 - a^3}{3(b - a)} = \frac{b^2 + ab + a^2}{3},
+$$
+
+using $b^3 - a^3 = (b - a)(b^2 + ab + a^2)$. Then
+
+$$
+\text{Var}[X] = E[X^2] - (E[X])^2 = \frac{b^2 + ab + a^2}{3} - \frac{(b + a)^2}{4}.
+$$
+
+Putting the two terms over a common denominator of 12:
+
+$$
+\text{Var}[X] = \frac{4(b^2 + ab + a^2) - 3(b + a)^2}{12} = \frac{4b^2 + 4ab + 4a^2 - 3b^2 - 6ab - 3a^2}{12},
+$$
+
+$$
+\text{Var}[X] = \frac{b^2 - 2ab + a^2}{12} = \frac{(b - a)^2}{12}.
+$$
+
+Notice that the variance depends only on the *width* of the interval, not on where it sits. Sliding a Uniform distribution along the axis moves its mean and leaves its spread untouched.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="uniform-explorer"
+  preset="portfolio"
+  label="Watch the mean and variance"
+  description="The arrow on the axis marks the mean. Drag a and b and it stays at the midpoint, while the variance changes only when the interval changes width, not when it slides along."
+/>
+
+## Using the distribution
+
+<Example title="Example 14C: fixed deposit or shares?">
+An investor knows that his share portfolio is equally likely to yield an annual return anywhere in the interval between 5% and 35%. The fixed deposit rate is 13.5%. What is the probability that he would be better off investing his funds in a fixed deposit account (rather than in his share portfolio) over the forthcoming year?
+
+<Solution>
+Let $X$ be the annual return on the portfolio, so $X \sim U(5, 35)$ and
+
+$$
+f(x) = \frac{1}{35 - 5} = \frac{1}{30}, \qquad 5 < x < 35.
+$$
+
+The fixed deposit is the better choice whenever the portfolio returns less than 13.5%:
+
+$$
+\Pr[X < 13.5] = \frac{13.5 - 5}{30} = \frac{8.5}{30} = 0.283.
+$$
+
+So there is roughly a 28% chance he would have done better leaving the money on fixed deposit. Put the other way round, the shares beat the fixed deposit about 72% of the time, which is the kind of trade-off an investor is actually weighing up.
+</Solution>
+</Example>
+
+<Example title="Example 15C: a final mark for the course">
+The final mark ($Y$) for a particular statistics course comprises of a 30% weighting for the class record and a 70% weighting for the examination. A student believes that she is equally likely to obtain a mark anywhere between 45% and 65% for her examination ($X$).
+
+(a) Find the probability density function for her final mark ($Y$) if she has a class record of 50%.
+
+(b) Find the probability she gets a third-class pass (between 50% and 60%) as a final mark.
+
+(c) Find the probability that she gets a lower second (between 60% and 70%).
+
+(d) What is the probability that she fails (below 50%)?
+
+<Solution>
+**(a)** Her examination mark is $X \sim U(45, 65)$, and her class record is a fixed 50. So the final mark is
+
+$$
+Y = 0.3 \times 50 + 0.7 X = 15 + 0.7X.
+$$
+
+This is a linear function of $X$, so $Y$ is still Uniform; we only need its two endpoints. When $X = 45$, $Y = 15 + 31.5 = 46.5$, and when $X = 65$, $Y = 15 + 45.5 = 60.5$. Therefore $Y \sim U(46.5, 60.5)$ and
+
+$$
+f(y) = \frac{1}{60.5 - 46.5} = \frac{1}{14}, \qquad 46.5 < y < 60.5
+$$
+
+$$
+f(y) = 0, \qquad \text{otherwise.}
+$$
+
+Note how much narrower her final mark is than her examination mark: a 20-point spread has been squeezed to 14, because only 70% of the final mark is uncertain.
+
+**(b)** A third-class pass runs from 50 to 60, and all of that lies inside the interval:
+
+$$
+\Pr[50 \le Y \le 60] = \frac{60 - 50}{14} = \frac{10}{14} = 0.714.
+$$
+
+**(c)** A lower second runs from 60 to 70, but her final mark cannot exceed 60.5, so only the sliver from 60 to 60.5 counts:
+
+$$
+\Pr[60 \le Y \le 70] = \frac{60.5 - 60}{14} = \frac{0.5}{14} = 0.036.
+$$
+
+**(d)** She fails below 50:
+
+$$
+\Pr[Y < 50] = \frac{50 - 46.5}{14} = \frac{3.5}{14} = 0.250.
+$$
+
+There is a one-in-four chance she fails. Although if the examiners have compassion, and pass her on a mark between 49 and 50, the probability of failing drops to $2.5/14 = 0.179$.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="uniform-explorer"
+  preset="final-mark"
+  label="Check the final-mark answers"
+  description="The interval is her final mark, U(46.5, 60.5). Drag c and d to each of the three ranges in Example 15C and read the probability off the panel, then press Run a few thousand times and watch the observed proportion close on it."
+/>
+
+<Note>
+Every probability in this unit came out as one length divided by another. That only works because the density is flat. Once the curve has a shape, as the ones in the next three units do, the area has to be worked out properly.
+</Note>
+
+<Quiz />

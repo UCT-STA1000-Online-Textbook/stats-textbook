@@ -49,6 +49,9 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   "variance-spread": lazy(() => import("./distributions/VarianceSpread")),
   "skewness-morpher": lazy(() => import("./distributions/SkewnessMorpher")),
 
+  // M4 — Uniform distribution (m4-uniform)
+  "uniform-explorer": lazy(() => import("./distributions/UniformExplorer")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

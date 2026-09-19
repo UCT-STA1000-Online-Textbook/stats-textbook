@@ -52,6 +52,9 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // M4 — Uniform distribution (m4-uniform)
   "uniform-explorer": lazy(() => import("./distributions/UniformExplorer")),
 
+  // M4 — Binomial distribution (m4-binomial)
+  "binomial-explorer": lazy(() => import("./distributions/BinomialExplorer")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

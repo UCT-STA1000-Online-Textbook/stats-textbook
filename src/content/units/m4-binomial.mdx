@@ -5,10 +5,316 @@ moduleId: "m4"
 moduleTitle: "Probability Distributions"
 unitNumber: 10
 moduleUnitNumber: 2
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Which of these situations does NOT satisfy the conditions for a binomial process?"
+    options:
+      - "Tossing a coin 20 times and counting the heads"
+      - "Testing 15 components off a production line and counting the defective ones"
+      - "Drawing 5 cards from a pack without replacement and counting the aces"
+      - "Calling on 8 clients independently and counting the sales"
+    answer: 2
+    explanation: "Drawing without replacement breaks the third condition: once a card is gone, the probability of an ace on the next draw has changed. The probability of success must stay the same from trial to trial, which is what sampling with replacement (or a very large population) gives you."
+  - id: "q2"
+    type: "mcq"
+    question: "X has the Binomial distribution with n = 6 and p = 0.2. What is Pr[X = 2]?"
+    options:
+      - "0.04, which is 0.2 squared"
+      - "0.2458"
+      - "0.3932"
+      - "0.0154"
+    answer: 1
+    explanation: "Pr[X = 2] is the number of arrangements times the probability of one of them: C(6,2) × 0.2² × 0.8⁴ = 15 × 0.04 × 0.4096 = 0.2458. Answering 0.04 forgets both the 15 arrangements and the four failures that must also happen."
+    vizHint: "binomial-explorer"
+    vizHintParams:
+      preset: "salesperson"
+  - id: "q3"
+    type: "true-false"
+    question: "The bar graph of a Binomial distribution is symmetric only when p = 0.5."
+    answer: true
+    explanation: "True. At p = 0.5 success and failure are interchangeable, so the graph reads the same from either end. Any other value of p tips the graph toward one side: a small p piles the bars up at the left, a large p at the right."
+    vizHint: "binomial-explorer"
+  - id: "q4"
+    type: "mcq"
+    question: "A bottle holds 12 pills and 10% of pills are chipped. What is the probability that a bottle contains at least 2 chipped pills?"
+    options:
+      - "0.2301, the probability of exactly 2"
+      - "0.3410"
+      - "0.2824"
+      - "0.7176, which is 1 minus the probability of none"
+    answer: 1
+    explanation: "Work with the complement. Pr[X ≥ 2] = 1 − Pr[X = 0] − Pr[X = 1] = 1 − 0.2824 − 0.3766 = 0.3410. Subtracting only Pr[X = 0] gives 0.7176, which is Pr[X ≥ 1]: it still counts the bottles holding exactly one chipped pill."
+    vizHint: "binomial-explorer"
+    vizHintParams:
+      preset: "pills"
+  - id: "q5"
+    type: "mcq"
+    question: "For X with the Binomial distribution B(n, p), what is E[X]?"
+    options:
+      - "np"
+      - "np(1 − p)"
+      - "p/n"
+      - "n(1 − p)"
+    answer: 0
+    explanation: "E[X] = np, which is the answer common sense would give: 20 tosses of a fair coin average 20 × 0.5 = 10 heads. The expression np(1 − p) is the variance."
+  - id: "q6"
+    type: "true-false"
+    question: "In a binomial process, 'success' always means something good."
+    answer: false
+    explanation: "False. A success is simply the outcome being counted, whatever it is. In the pill example a 'success' is a chipped pill, and in the quality-control example it is a defective component. The label is a bookkeeping convention, not a judgement."
 prevUnit: "m4-uniform"
 nextUnit: "m4-poisson-exponential"
 ---
 
-Content coming soon.
+## When the Binomial distribution applies
+
+The Binomial distribution may be used as a probability model in situations where the following three conditions are satisfied.
+
+**1. Each trial has exactly two outcomes.** We have a random experiment whose sample space holds exactly two outcomes, one of which we label "success" and the other "failure", so $S = \{\text{success}, \text{failure}\}$. For example, a door-to-door salesperson calls on a prospective client: the client either purchases the product (success) or does not (failure).
+
+**2. The trials are independent.** The random experiment is repeated $n$ times, and the outcome of any one repetition is not influenced by the outcome of any other. We say we have $n$ independent trials. For example, the salesperson calls on $n = 6$ prospective clients, who make their purchasing decisions independently (there is no communication between them).
+
+**3. The probability of success stays the same.** Each client is equally likely to purchase the product. We write $\Pr(\text{success}) = p$, so $\Pr(\text{failure}) = 1 - p$. It is often convenient to let $q = 1 - p$.
+
+Our random variable $X$ is the number of successes observed in $n$ trials. When these conditions hold we say we have a **binomial process**, and that $X$ has the Binomial distribution. In the example above, $X$ is the number of calls that resulted in a sale. Because 6 calls were made, $X$ must take one of the values $0, 1, \ldots, 6$, so $X$ is a discrete random variable.
+
+> **Keywords:** <KeywordChip vizId="binomial-explorer" preset="salesperson">binomial process</KeywordChip>, success and failure, independent trials, <KeywordChip vizId="binomial-explorer">parameters</KeywordChip>, probability mass function, <KeywordChip vizId="binomial-explorer" preset="pills">bar graph</KeywordChip>, quality control.
+
+Binomial processes turn up everywhere. From a commercial point of view one of the most important is in the field of quality. The quality of a product or service, whether it is a tomato, a nail, a personal computer, a car, an insurance policy or the punctuality of a train, can be classified as "satisfactory" or "defective". The Binomial distribution is what lets us decide whether a consignment of goods meets the desired specifications.
+
+<Definition term="Binomial distribution">
+In a binomial process we have $n$ independent trials, each trial has two outcomes, success or failure, and $\Pr[\text{success}] = p$ for all trials. Let the random variable $X$ be the number of successes in $n$ trials.
+
+Then $X$ has the Binomial distribution, and $\Pr[X = x]$ is given by the probability mass function
+
+$$
+p(x) = \binom{n}{x} p^{x} (1 - p)^{n - x}, \qquad x = 0, 1, \ldots, n
+$$
+
+$$
+p(x) = 0, \qquad \text{otherwise.}
+$$
+</Definition>
+
+Once we give values to $n$ and $p$ (with $n \ge 1$ and $0 < p < 1$), one particular Binomial distribution is specified. We call $n$ and $p$ the **parameters** of the distribution. There is a neat shorthand that saves writing "the random variable $X$ is distributed binomially with parameters $n$ and $p$": we write $X \sim B(n, p)$.
+
+<Note>
+"Success" is just the name for whatever we have chosen to count. In one example below a success is a chipped pill, and in another it is a defective component. Nobody is pleased about either. Pick whichever outcome you are counting, call it the success, and make sure $p$ is that outcome's probability.
+</Note>
+
+<Example title="Example 1A: a door-to-door salesperson">
+A door-to-door salesperson calls on 6 clients per session. Each client makes their purchasing decision independently of the others, with probability 0.2 of purchasing the product. What are the probabilities that 0, 1, 2, 3, 4, 5 or 6 clients purchase the product?
+
+<Solution>
+All three conditions for a binomial process hold, so $X$, the number of clients who purchase, has $X \sim B(6, 0.2)$.
+
+Rather than going straight to the formula, let us build $\Pr[X = 2]$ from first principles.
+
+First, 2 clients out of 6 can purchase in many different arrangements. Let $A_1$ be the event that the first 2 clients purchase and clients 3 to 6 refuse, so
+
+$$
+A_1 = S \cap S \cap F \cap F \cap F \cap F.
+$$
+
+Other arrangements of 2 successes and 4 failures include
+
+$$
+A_2 = F \cap S \cap S \cap F \cap F \cap F, \qquad A_3 = F \cap F \cap S \cap S \cap F \cap F.
+$$
+
+How many such arrangements are there? Counting rule 6 tells us there are $\binom{6}{2} = 15$, so the list runs from $A_1$ to $A_{15}$.
+
+Second, we compute $\Pr(A_1)$. Because the clients act independently,
+
+$$
+\Pr(A_1) = \Pr(S)\Pr(S)\Pr(F)\Pr(F)\Pr(F)\Pr(F) = p^{2}(1-p)^{4} = 0.2^{2} \times 0.8^{4}.
+$$
+
+Every one of the 15 arrangements has this same probability, so $\Pr(A_1) = \Pr(A_2) = \cdots = \Pr(A_{15})$.
+
+Third, the events $A_1, \ldots, A_{15}$ are mutually exclusive: no client can both purchase and refuse. So we add them:
+
+$$
+\Pr[X = 2] = \Pr(A_1) + \cdots + \Pr(A_{15}) = \binom{6}{2} 0.2^{2} \, 0.8^{4} = 15 \times 0.04 \times 0.4096 = 0.2458.
+$$
+
+Stop a while and satisfy yourself that this is exactly what you get by substituting $n = 6$, $p = 0.2$ and $x = 2$ into the formula in the box. The remaining probabilities work the same way:
+
+| $x$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
+|---|---|---|---|---|---|---|---|
+| $p(x)$ | 0.2621 | 0.3932 | 0.2458 | 0.0819 | 0.0154 | 0.0015 | 0.0001 |
+
+The probability that all six clients purchase is tiny (0.0001), but it will occasionally happen: roughly once in every 10 000 sessions of 6 calls. The probability that none of the 6 purchase is 0.2621, so in about a quarter of sessions no sales are made at all. And
+
+$$
+\Pr[X \ge 2] = 1 - p(0) - p(1) = 1 - 0.2621 - 0.3932 = 0.3446,
+$$
+
+so in about a third of sessions the salesperson makes two or more sales. Adding the five terms $p(2)$ to $p(6)$ gets there too, but it is five roundings instead of two, so it lands a shade out at 0.3447. Taking the complement is both quicker and more accurate.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="binomial-explorer"
+  preset="salesperson"
+  label="See the salesperson's distribution"
+  description="Bars 2 to 6 are selected, which is the Pr[X ≥ 2] = 0.3446 worked out above. Click any bar to move the nearer end of the selection, and watch how quickly the probabilities die away past three sales."
+/>
+
+<Example title="Example 2B: tendering for contracts">
+What is the probability of a contractor being awarded only one out of five contracts? Assume that the probability of being awarded a contract is 0.5.
+
+<Solution>
+Let a success be "awarded a contract", so $p = \tfrac{1}{2}$ and $q = 1 - p = \tfrac{1}{2}$. We have $n = 5$ trials, and $X$, the number of successes, has $X \sim B(5, \tfrac{1}{2})$. Then
+
+$$
+\Pr[X = x] = p(x) = \binom{5}{x} \left(\tfrac{1}{2}\right)^{x} \left(\tfrac{1}{2}\right)^{5-x}, \qquad x = 0, 1, \ldots, 5
+$$
+
+so
+
+$$
+\Pr[X = 1] = p(1) = \binom{5}{1} \left(\tfrac{1}{2}\right)^{1} \left(\tfrac{1}{2}\right)^{4} = \frac{5}{32}.
+$$
+
+Keep the brackets around each $\tfrac{1}{2}$. It is the whole fraction that is raised to the power, not just the 2 underneath.
+</Solution>
+</Example>
+
+<Example title="Example 3B: checking that it is a probability mass function">
+Check that the Binomial distribution
+
+$$
+p(x) = \binom{n}{x} p^{x}(1-p)^{n-x}, \qquad x = 0, 1, 2, \ldots, n
+$$
+
+with $p(x) = 0$ otherwise, is a probability mass function.
+
+<Solution>
+There are three conditions to check.
+
+**(i)** It is defined everywhere, and is non-zero only on the finite set $\{0, 1, \ldots, n\}$.
+
+**(ii)** It has no negative terms, because $p$ and $1 - p$ are both probabilities.
+
+**(iii)** The values must add to 1. For convenience let $q = 1 - p$. Then
+
+$$
+\sum_{x=0}^{n} \binom{n}{x} p^{x} q^{n-x} = \binom{n}{0}p^{0}q^{n} + \binom{n}{1}p^{1}q^{n-1} + \cdots + \binom{n}{n}p^{n}q^{0}.
+$$
+
+By the binomial theorem this sum is exactly $(p + q)^{n}$. Since $q = 1 - p$ we have $p + q = 1$, so the sum is $1^{n} = 1$, as required.
+
+The binomial theorem is where the distribution gets its name.
+</Solution>
+</Example>
+
+## The shape of the distribution
+
+To get a feel for the Binomial distribution, it helps to watch what the two parameters do to its shape. Fixing $n$ at 15 and varying $p$ gives a graph that leans left for small $p$, stands symmetric at $p = 0.5$, and leans right for large $p$.
+
+<TryThis
+  vizId="binomial-explorer"
+  label="Play with n and p"
+  description="Press Run to release the mice and watch your results pile up on the bars. Then drag p from 0.05 up to 0.95 with n held at 15 and watch the graph swing from one side to the other, standing symmetric only as it passes 0.5."
+/>
+
+The opening view is the mouse-in-the-maze experiment: 8 mice are released into a maze, each with probability 0.3 of finding its way out, and we count how many get out. Press **Run** and the panel performs those 8 trials for real, marking which mice made it. Each run adds a ring above the bar for that many successes.
+
+One run tells you nothing. Fifty runs start to show a shape. A few thousand and the rings lie almost exactly on the bars. That is worth doing yourself, because it is the difference between being told the formula is right and watching it come true. You can also load the 1500 runs recorded in Tutorial 6 straight into the same tally.
+
+<Example title="Example 4B: chipped pills">
+A certain type of pill is packed in bottles of 12 pills each. 10% of the pills are chipped in the manufacturing process.
+
+(a) Explain why the Binomial distribution can provide a reasonable model for the random variable $X$, the number of chipped pills found in a bottle of 12. What are the appropriate parameters?
+
+(b) What is $\Pr[X = x]$?
+
+(c) What are the probabilities of (i) 2 chipped pills, (ii) no chipped pills, (iii) at least 2 chipped pills?
+
+<Solution>
+**(a)** Check the three conditions.
+
+1. The random experiment is examining a pill and deciding whether it is chipped. There are two outcomes, as required. Because chipped pills are what we are counting, we let "chipped" be the success and "unchipped" the failure.
+2. There are 12 pills in the bottle, so we repeat the experiment 12 times. It is reasonable to assume the pills are chipped independently of each other.
+3. It is also reasonable that the probability of a pill being chipped is the same for each pill.
+
+So the Binomial distribution with $n = 12$ and $p = 0.10$ is a sensible model.
+
+**(b)** Because $X \sim B(12, 0.10)$,
+
+$$
+p(x) = \binom{12}{x} 0.10^{x} \, 0.90^{12-x}, \qquad x = 0, 1, \ldots, 12
+$$
+
+and $p(x) = 0$ otherwise.
+
+**(c)**
+
+$$
+\text{(i)} \quad \Pr[X = 2] = \binom{12}{2} 0.10^{2} \, 0.90^{10} = 0.2301
+$$
+
+$$
+\text{(ii)} \quad \Pr[X = 0] = \binom{12}{0} 0.10^{0} \, 0.90^{12} = 0.2824
+$$
+
+$$
+\text{(iii)} \quad \Pr[X \ge 2] = 1 - \Pr[X = 0] - \Pr[X = 1] = 1 - 0.2824 - 0.3766 = 0.3410.
+$$
+
+Part (iii) is the one to study. "At least 2" covers eleven different values of $X$, and adding eleven terms is work we can avoid: subtract the two we do not want from 1 instead.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="binomial-explorer"
+  preset="pills"
+  label="Check the chipped-pill answers"
+  description="Bars 2 to 12 are selected, giving the 0.3410 from part (c)(iii). Click bar 0 twice to isolate it and you get the 0.2824 from part (ii)."
+/>
+
+<Example title="Example 5C: two quality control procedures">
+A TV manufacturer is supplied with a certain component by a specialist producer. Each incoming consignment is subjected to the following quality control procedure. A random sample of 10 components is individually tested. If there are one or more defective components among the 10 tested, the entire consignment is rejected. If there are no defective components in the sample, the consignment is accepted.
+
+(a) What are the probabilities of a consignment being rejected if the true proportions of defective components are (i) 1%, (ii) 10%, (iii) 30%?
+
+(b) If a sample of 20 components (instead of 10) were tested, and the consignment rejected if two or more proved defective, calculate the probabilities of rejecting a consignment for the same proportions of defective components.
+
+(c) Which quality control procedure do you think is the better?
+
+<Solution>
+**(a)** Let a success be "component is defective", so $X \sim B(10, p)$. The consignment is rejected unless there are no defectives at all, so
+
+$$
+\Pr[\text{reject}] = 1 - \Pr[X = 0] = 1 - \binom{10}{0} q^{10} = 1 - q^{10}.
+$$
+
+| True defective rate | 1% | 10% | 30% |
+|---|---|---|---|
+| $\Pr[\text{reject}]$ | 0.0956 | 0.6513 | 0.9718 |
+
+**(b)** Now $X \sim B(20, p)$ and the consignment is rejected on two or more defectives, so
+
+$$
+\Pr[\text{reject}] = 1 - \binom{20}{0} q^{20} - \binom{20}{1} p \, q^{19}.
+$$
+
+| True defective rate | 1% | 10% | 30% |
+|---|---|---|---|
+| $\Pr[\text{reject}]$ | 0.0169 | 0.6083 | 0.9924 |
+
+**(c)** Compare the two rows. The second procedure is less likely to reject a good consignment (0.0169 against 0.0956 at a 1% defective rate) and more likely to reject a very poor one (0.9924 against 0.9718 at 30%). On both counts it is the better discriminator. However, it costs twice as much to carry out, because twice as many components are tested. So there is a trade-off, and which procedure is right depends on what a wrong decision costs relative to the testing.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="binomial-explorer"
+  preset="quality-control"
+  label="Compare the two procedures"
+  description="This is the first procedure at a 10% defective rate, with bars 1 to 10 selected: the 0.6513 chance of rejection. Push n up to 20 and select from bar 2 to compare it with the second procedure."
+/>
+
+<Quiz />

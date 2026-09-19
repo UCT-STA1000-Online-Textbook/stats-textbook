@@ -334,3 +334,102 @@ export const UNIFORM_PRESETS: UniformPreset[] = [
     format: (x) => x.toFixed(1),
   },
 ];
+
+/**
+ * A worked example the `BinomialExplorer` can open at, i.e. a choice of the
+ * two parameters n and p.
+ */
+export interface BinomialPreset {
+  id: string;
+  /** Short name for the preset picker. */
+  label: string;
+  /** Which worked example this comes from, shown under the chart. */
+  source: string;
+  /** Number of trials. */
+  n: number;
+  /** Probability of success on a single trial. */
+  p: number;
+  /** What one trial is, e.g. "client called on". Used in the read-out. */
+  trial: string;
+  /** What counts as a success, e.g. "buys the product". */
+  success: string;
+  /** Bars selected on opening, as an inclusive range of x values. */
+  select: [number, number];
+  /**
+   * Optional observed counts from a real simulation run, indexed by x, for
+   * the viz to draw over the theoretical bars. Only the presets that come
+   * from one of the lecturer's tutorial datasets carry this.
+   */
+  observed?: number[];
+}
+
+/**
+ * Binomial distributions for `BinomialExplorer`, one per worked example in
+ * Module 4, WU2 (`m4-binomial`).
+ *
+ * The mouse-in-the-maze entry is not from the textbook: it matches the
+ * lecturer's Tutorial 6 simulation, which runs 1500 experiments of 8 mice
+ * with a 0.3 chance of finding the way out.
+ */
+export const BINOMIAL_PRESETS: BinomialPreset[] = [
+  {
+    id: "mouse-maze",
+    label: "Mouse maze",
+    source: "Tutorial 6 simulation",
+    n: 8,
+    p: 0.3,
+    trial: "mouse released into the maze",
+    success: "finds its way out",
+    // Opens on "3 or more of the 8 get out" rather than the whole range: the
+    // read-out leads with this figure, and Pr[0 ≤ X ≤ 8] = 1 tells nobody
+    // anything.
+    select: [3, 8],
+    // The 1500 experiments in Tutorial 6, counted by how many of the 8 mice
+    // got out. Their mean is 2.3867 against a theoretical np of 2.4.
+    observed: [89, 307, 434, 389, 183, 86, 9, 2, 1],
+  },
+  {
+    id: "salesperson",
+    label: "Salesperson",
+    source: "Example 1A",
+    n: 6,
+    p: 0.2,
+    trial: "client called on",
+    success: "buys the product",
+    // Pr[X ≥ 2] = 0.3446: two or more sales in a session.
+    select: [2, 6],
+  },
+  {
+    id: "contracts",
+    label: "Contracts",
+    source: "Example 2B",
+    n: 5,
+    p: 0.5,
+    trial: "contract tendered for",
+    success: "is awarded",
+    // Pr[X = 1] = 5/32, the answer printed in the text.
+    select: [1, 1],
+  },
+  {
+    id: "pills",
+    label: "Pills",
+    source: "Example 4B",
+    n: 12,
+    p: 0.1,
+    trial: "pill in the bottle",
+    success: "is chipped",
+    // Pr[X ≥ 2] = 0.3410 in the text.
+    select: [2, 12],
+  },
+  {
+    id: "quality-control",
+    label: "Quality",
+    source: "Example 5C",
+    n: 10,
+    p: 0.1,
+    trial: "component tested",
+    success: "is defective",
+    // The consignment is rejected on one or more defectives: Pr[X ≥ 1] = 0.6513.
+    select: [1, 10],
+  },
+];

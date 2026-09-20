@@ -77,8 +77,15 @@ function binomialPmf(n: number, p: number): number[] {
   return out;
 }
 
+/** Every whole number from `from` to `to`, inclusive. */
+function rangeOf(from: number, to: number): number[] {
+  const out: number[] = [];
+  for (let x = from; x <= to; x++) out.push(x);
+  return out;
+}
+
 /**
- * Interactive Binomial bar graph: set n and p, then select a run of bars to
+ * Interactive Binomial bar graph: set n and p, then click bars on and off to
  * read off a probability.
  *
  * @param params.preset — id of the example to open at, from
@@ -91,14 +98,17 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
   const [presetId, setPresetId] = useState(initial.id);
   const [n, setN] = useState(initial.n);
   const [p, setP] = useState(initial.p);
-  // Inclusive range of selected bars. Both ends are clamped against n on
-  // every render rather than in the setters, because lowering n with the
-  // slider can strand either end past the last bar. Clamping only the upper
-  // end is not enough: the two are swapped below, so a stranded lower end
-  // becomes the upper one and the read-out would claim a range like
-  // "1 ≤ X ≤ 20" on a chart with 5 trials.
-  const [lo, setLo] = useState(initial.select[0]);
-  const [rawHi, setRawHi] = useState(initial.select[1]);
+  /**
+   * Which bars are currently chosen, as a set of x values.
+   *
+   * A set rather than a range because clicking a bar simply turns that bar
+   * on or off. A range forced every click to move whichever end was nearer,
+   * which meant clicking a bar inside the range moved an end the student was
+   * not pointing at. The presets still declare a range; it is expanded here.
+   */
+  const [chosen, setChosen] = useState<Set<number>>(
+    () => new Set(rangeOf(initial.select[0], initial.select[1])),
+  );
   /**
    * Bumped whenever a preset is loaded, purely to restart the entrance tween.
    * The tween keys off this rather than off n and p directly, so dragging a
@@ -113,17 +123,37 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
   const [lastRun, setLastRun] = useState<boolean[] | null>(null);
 
   const preset = BINOMIAL_PRESETS.find((b) => b.id === presetId);
-  const hi = Math.min(rawHi, n);
-  const loClamped = Math.min(lo, n);
-  const selLo = Math.min(loClamped, hi);
-  const selHi = Math.max(loClamped, hi);
 
   const pmf = useMemo(() => binomialPmf(n, p), [n, p]);
 
-  /** Total probability of the selected bars. */
-  const selected = pmf.slice(selLo, selHi + 1).reduce((s, v) => s + v, 0);
+  /**
+   * The chosen bars that still exist, in order. Filtered rather than pruned
+   * so that lowering n and raising it again brings a choice back, while the
+   * read-out can never name an outcome the chart does not have.
+   */
+  const picked = useMemo(
+    () => [...chosen].filter((x) => x <= n).sort((a, b) => a - b),
+    [chosen, n],
+  );
+
+  /** Total probability of the chosen bars. */
+  const selected = picked.reduce((sum, x) => sum + pmf[x], 0);
   const mean = n * p;
   const variance = n * p * (1 - p);
+
+  /** True when the chosen bars form one unbroken run, which reads better as a range. */
+  const isRun =
+    picked.length > 1 && picked[picked.length - 1] - picked[0] === picked.length - 1;
+
+  /** How to name the chosen set in the read-out. */
+  const pickedLabel =
+    picked.length === 0
+      ? null
+      : picked.length === 1
+        ? `X = ${picked[0]}`
+        : isRun
+          ? `${picked[0]} ≤ X ≤ ${picked[picked.length - 1]}`
+          : `X ∈ {${picked.join(", ")}}`;
 
   /**
    * The selected probability written out as a sum, the way `PmfBarExplorer`
@@ -134,17 +164,13 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
    * "at least two" style questions.
    */
   const working = (() => {
-    const terms = selHi - selLo + 1;
-    if (terms === 1) return null;
-    if (terms <= 4) {
-      return pmf
-        .slice(selLo, selHi + 1)
-        .map((v) => v.toFixed(4))
-        .join(" + ");
+    if (picked.length <= 1) return null;
+    if (picked.length <= 4) {
+      return picked.map((x) => pmf[x].toFixed(4)).join(" + ");
     }
-    const outside = [...pmf.slice(0, selLo), ...pmf.slice(selHi + 1)];
-    if (outside.length > 0 && outside.length <= 4) {
-      return `1 − ${outside.map((v) => v.toFixed(4)).join(" − ")}`;
+    const left = rangeOf(0, n).filter((x) => !chosen.has(x));
+    if (left.length > 0 && left.length <= 4) {
+      return `1 − ${left.map((x) => pmf[x].toFixed(4)).join(" − ")}`;
     }
     return null;
   })();
@@ -197,8 +223,7 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
     setPresetId(id);
     setN(b.n);
     setP(b.p);
-    setLo(b.select[0]);
-    setRawHi(b.select[1]);
+    setChosen(new Set(rangeOf(b.select[0], b.select[1])));
     setReplayKey((k) => k + 1);
     clearRuns(b.n);
   }
@@ -235,17 +260,20 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
   }
 
   /**
-   * Clicking a bar moves the nearer end of the selection to it, so a range can
-   * be built up with two clicks and adjusted with one.
+   * Clicking a bar turns that bar on or off, and nothing else moves.
    *
-   * This deliberately keeps the preset loaded. Selecting a different range is
-   * not a change of parameters, so the worked example it came from is still
-   * the right label, and the simulation overlay is still comparing like with
-   * like.
+   * This deliberately keeps the preset loaded: choosing different outcomes
+   * is not a change of parameters, so the worked example it came from is
+   * still the right label, and the simulation overlay is still comparing
+   * like with like.
    */
-  function pickBar(x: number) {
-    if (Math.abs(x - selLo) <= Math.abs(x - selHi)) setLo(x);
-    else setRawHi(x);
+  function toggleBar(x: number) {
+    setChosen((prev) => {
+      const next = new Set(prev);
+      if (next.has(x)) next.delete(x);
+      else next.add(x);
+      return next;
+    });
   }
 
   /**
@@ -348,7 +376,8 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto max-h-[520px] select-none">
           <title>
             Bar graph of the Binomial distribution with n = {n} and p = {p.toFixed(2)}, with
-            bars {selLo} to {selHi} selected, totalling {selected.toFixed(4)}
+            {picked.length} bar{picked.length === 1 ? "" : "s"} selected, totalling{" "}
+            {selected.toFixed(4)}
           </title>
 
           {/* Horizontal gridlines and y-axis ticks */}
@@ -393,12 +422,12 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
 
           {/* One bar per value of x, selected ones filled solid */}
           {pmf.map((prob, x) => {
-            const inRange = x >= selLo && x <= selHi;
+            const isChosen = chosen.has(x);
             return (
               <g
                 key={x}
                 className="cursor-pointer"
-                onClick={() => pickBar(x)}
+                onClick={() => toggleBar(x)}
                 style={{ touchAction: "none" }}
               >
                 {/* Invisible full-height hit area: a short bar is a tiny target. */}
@@ -416,7 +445,7 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
                   height={(AXIS_Y - yOf(prob)) * progress}
                   rx="2"
                   fill={ACCENT}
-                  fillOpacity={inRange ? 0.85 : 0.22}
+                  fillOpacity={isChosen ? 0.85 : 0.22}
                 />
                 {x % tickEvery === 0 && (
                   <text
@@ -424,7 +453,7 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
                     y={AXIS_Y + 14}
                     textAnchor="middle"
                     fontSize={VIZ_TEXT.axisTick}
-                    fill={inRange ? ACCENT_DARK : "var(--color-ink-500)"}
+                    fill={isChosen ? ACCENT_DARK : "var(--color-ink-500)"}
                     className="tabular-nums"
                   >
                     {x}
@@ -440,7 +469,7 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
                     textAnchor="middle"
                     fontSize={VIZ_TEXT.axisTick}
                     fontWeight="600"
-                    fill={inRange ? ACCENT_DARK : "var(--color-ink-500)"}
+                    fill={isChosen ? ACCENT_DARK : "var(--color-ink-500)"}
                     className="tabular-nums"
                   >
                     {prob.toFixed(3)}
@@ -547,8 +576,8 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
               "Pick an example along the top, or set n and p yourself with the sliders.",
               "Press Run to perform the trials for real. The markers show which ones succeeded.",
               "Run it again and again: the rings are your results, and they drift onto the bars.",
-              "Click a bar to move the nearer end of the selection to it; click a second bar for a range.",
-              "The selected bars add up to Pr[a ≤ X ≤ b], shown below.",
+              "Click a bar to select it, and click it again to unselect it. Any set of bars works.",
+              "The selected bars are added together, and the total is shown below.",
               "Slide p to 0.5 and back: that is the only value where the shape is symmetric.",
             ]}
           />
@@ -556,9 +585,15 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
         {/* The answer to the question the unit just asked, given room to be
             read at a glance. Everything else is supporting detail. */}
         <p className="mt-1 text-[15px] leading-snug text-[color:var(--color-ink-900)]">
-          Pr[{selLo === selHi ? `X = ${selLo}` : `${selLo} ≤ X ≤ ${selHi}`}] ={" "}
-          {working && <span className="tabular-nums">{working} = </span>}
-          <span className="font-semibold tabular-nums">{selected.toFixed(4)}</span>
+          {pickedLabel === null ? (
+            "No bars selected."
+          ) : (
+            <>
+              Pr[{pickedLabel}] ={" "}
+              {working && <span className="tabular-nums">{working} = </span>}
+              <span className="font-semibold tabular-nums">{selected.toFixed(4)}</span>
+            </>
+          )}
         </p>
         <p className="mt-1 text-[12px] text-[color:var(--color-ink-700)] tabular-nums">
           X ~ B({n}, {p.toFixed(2)}) &nbsp;·&nbsp;{" "}
@@ -570,11 +605,13 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
             Module 1 to 3 viz do. Without it the panel reports numbers but
             never interprets them. */}
         <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">
-          {selLo === 0 && selHi === n
-            ? "Every bar is selected, so they add to 1. That is Example 3B: the binomial probabilities always sum to one."
-            : working?.startsWith("1 −")
-              ? "Quicker as the complement: subtract the few outcomes you do not want from 1, rather than adding the many you do."
-              : `Add the selected bars together. The ones left out hold the remaining ${(1 - selected).toFixed(4)}.`}
+          {picked.length === 0
+            ? "Click any bar to add it to the total. Click it again to take it out."
+            : picked.length === n + 1
+              ? "Every bar is selected, so they add to 1. That is Example 3B: the binomial probabilities always sum to one."
+              : working?.startsWith("1 −")
+                ? "Quicker as the complement: subtract the few outcomes you do not want from 1, rather than adding the many you do."
+                : `Add the selected bars together. The ones left out hold the remaining ${(1 - selected).toFixed(4)}.`}
         </p>
         {runs > 0 && (
           <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">

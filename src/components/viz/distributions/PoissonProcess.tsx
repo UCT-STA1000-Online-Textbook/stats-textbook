@@ -97,6 +97,13 @@ function barCount(lambda: number): number {
   return Math.min(MAX_BARS, Math.ceil(lambda + 4 * Math.sqrt(lambda)) + 2);
 }
 
+/** Every whole number from `from` to `to`, inclusive. */
+function rangeOf(from: number, to: number): number[] {
+  const out: number[] = [];
+  for (let x = from; x <= to; x++) out.push(x);
+  return out;
+}
+
 /**
  * Interactive Poisson process: count the events, or measure the gaps between
  * them, at one shared rate.
@@ -113,8 +120,17 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
   const [presetId, setPresetId] = useState(initial.id);
   const [lambda, setLambda] = useState(initial.lambda);
   const [gaps, setGaps] = useState(params.mode === "gaps");
-  const [lo, setLo] = useState(initial.select[0]);
-  const [rawHi, setRawHi] = useState(initial.select[1]);
+  /**
+   * Which bars are currently chosen, as a set of x values.
+   *
+   * A set rather than a range because clicking a bar simply turns that bar
+   * on or off. A range forced every click to move whichever end was nearer,
+   * so clicking inside the range moved an end the student was not pointing
+   * at. The presets still declare a range; it is expanded here.
+   */
+  const [chosen, setChosen] = useState<Set<number>>(
+    () => new Set(rangeOf(initial.select[0], initial.select[1])),
+  );
 
   const preset = POISSON_PRESETS.find((q) => q.id === presetId);
   /** Unit λ is quoted per, for the axis and read-out. Falls back when a slider has left every preset. */
@@ -151,14 +167,31 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
   // ---- Counting view -------------------------------------------------
   const nBars = barCount(lambda);
   const pmf = useMemo(() => poissonPmf(lambda, nBars), [lambda, nBars]);
-  // Both ends are clamped against the current bar count: lowering λ shortens
-  // the graph, and an end left stranded past the last bar would be swapped
-  // into the upper slot and printed as a range wider than the chart.
-  const hi = Math.min(rawHi, nBars);
-  const loClamped = Math.min(lo, nBars);
-  const selLo = Math.min(loClamped, hi);
-  const selHi = Math.max(loClamped, hi);
-  const selected = pmf.slice(selLo, selHi + 1).reduce((s, v) => s + v, 0);
+  /**
+   * The chosen bars that still exist, in order. Filtered against the current
+   * bar count rather than pruned: lowering λ shortens the graph, and a
+   * choice past the last bar must not be named in the read-out, but it comes
+   * back if λ rises again.
+   */
+  const picked = useMemo(
+    () => [...chosen].filter((x) => x <= nBars).sort((a, b) => a - b),
+    [chosen, nBars],
+  );
+  const selected = picked.reduce((sum, x) => sum + pmf[x], 0);
+
+  /** True when the chosen bars form one unbroken run, which reads better as a range. */
+  const isRun =
+    picked.length > 1 && picked[picked.length - 1] - picked[0] === picked.length - 1;
+
+  /** How to name the chosen set in the read-out. */
+  const pickedLabel =
+    picked.length === 0
+      ? null
+      : picked.length === 1
+        ? `X = ${picked[0]}`
+        : isRun
+          ? `${picked[0]} ≤ X ≤ ${picked[picked.length - 1]}`
+          : `X ∈ {${picked.join(", ")}}`;
 
   /**
    * The selected probability written out as a sum, matching how the Module 3
@@ -166,15 +199,13 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
    * instead, which is the technique the worked examples actually use.
    */
   const working = (() => {
-    const terms = selHi - selLo + 1;
-    if (terms === 1) return null;
-    if (terms <= 4) {
-      return pmf.slice(selLo, selHi + 1).map((v) => v.toFixed(4)).join(" + ");
+    if (picked.length <= 1) return null;
+    if (picked.length <= 4) {
+      return picked.map((x) => pmf[x].toFixed(4)).join(" + ");
     }
-    const outside = [...pmf.slice(0, selLo), ...pmf.slice(selHi + 1)];
-    const nonZero = outside.filter((v) => v >= 0.0001);
-    if (nonZero.length > 0 && nonZero.length <= 4) {
-      return `1 − ${nonZero.map((v) => v.toFixed(4)).join(" − ")}`;
+    const left = rangeOf(0, nBars).filter((x) => !chosen.has(x) && pmf[x] >= 0.0001);
+    if (left.length > 0 && left.length <= 4) {
+      return `1 − ${left.map((x) => pmf[x].toFixed(4)).join(" − ")}`;
     }
     return null;
   })();
@@ -325,8 +356,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
     if (!q) return;
     setPresetId(id);
     setLambda(q.lambda);
-    setLo(q.select[0]);
-    setRawHi(q.select[1]);
+    setChosen(new Set(rangeOf(q.select[0], q.select[1])));
     setXMax(4 / q.lambda);
     setT(1 / q.lambda);
     clearRuns();
@@ -341,9 +371,14 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
     clearRuns();
   }
 
-  function pickBar(x: number) {
-    if (Math.abs(x - selLo) <= Math.abs(x - selHi)) setLo(x);
-    else setRawHi(x);
+  /** Clicking a bar turns that bar on or off, and nothing else moves. */
+  function toggleBar(x: number) {
+    setChosen((prev) => {
+      const next = new Set(prev);
+      if (next.has(x)) next.delete(x);
+      else next.add(x);
+      return next;
+    });
   }
 
   function dragThreshold(e: React.PointerEvent) {
@@ -491,7 +526,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
               ? `Exponential density at rate ${lambda} per ${unit}, with the area beyond ${fmtX(
                   t,
                 )} shaded, equal to ${tailProb.toFixed(4)}`
-              : `Poisson bar graph at rate ${lambda} per ${unit}, with bars ${selLo} to ${selHi} selected, totalling ${selected.toFixed(
+              : `Poisson bar graph at rate ${lambda} per ${unit}, with ${picked.length} bar(s) selected, totalling ${selected.toFixed(
                   4,
                 )}`}
           </title>
@@ -628,9 +663,9 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
           ) : (
             <>
               {pmf.map((prob, x) => {
-                const inRange = x >= selLo && x <= selHi;
+                const isChosen = chosen.has(x);
                 return (
-                  <g key={x} className="cursor-pointer" onClick={() => pickBar(x)}>
+                  <g key={x} className="cursor-pointer" onClick={() => toggleBar(x)}>
                     {/* Invisible full-height hit area: a short bar is a tiny target. */}
                     <rect
                       x={cxBar(x) - slot / 2}
@@ -646,7 +681,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
                       height={AXIS_Y - yBar(prob)}
                       rx="2"
                       fill={ACCENT}
-                      fillOpacity={inRange ? 0.85 : 0.22}
+                      fillOpacity={isChosen ? 0.85 : 0.22}
                     />
                     {x % tickEvery === 0 && (
                       <text
@@ -654,7 +689,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
                         y={AXIS_Y + 14}
                         textAnchor="middle"
                         fontSize={VIZ_TEXT.axisTick}
-                        fill={inRange ? ACCENT_DARK : "var(--color-ink-500)"}
+                        fill={isChosen ? ACCENT_DARK : "var(--color-ink-500)"}
                         className="tabular-nums"
                       >
                         {x}
@@ -669,7 +704,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
                         textAnchor="middle"
                         fontSize={VIZ_TEXT.axisTick}
                         fontWeight="600"
-                        fill={inRange ? ACCENT_DARK : "var(--color-ink-500)"}
+                        fill={isChosen ? ACCENT_DARK : "var(--color-ink-500)"}
                         className="tabular-nums"
                       >
                         {prob.toFixed(3)}
@@ -780,7 +815,7 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
               "Pick an example along the top, then switch between counting events and measuring the gaps.",
               "Press Run to cover a stretch for real. The strip shows where the events fell.",
               "One drive feeds both views: how many events it found, and how far apart they were.",
-              "Counting: click bars to select a run, and read Pr[a ≤ X ≤ b] below.",
+              "Counting: click a bar to select it, click again to unselect. Any set of bars works.",
               "Gaps: drag the handle t, and the shaded tail is Pr[X > t].",
               "Compare the two lines in the gaps read-out: they are always equal, which is Example 13C.",
             ]}
@@ -814,9 +849,15 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
         ) : (
           <>
             <p className="mt-1 text-[15px] leading-snug text-[color:var(--color-ink-900)]">
-              Pr[{selLo === selHi ? `X = ${selLo}` : `${selLo} ≤ X ≤ ${selHi}`}] ={" "}
-              {working && <span className="tabular-nums">{working} = </span>}
-              <span className="font-semibold tabular-nums">{selected.toFixed(4)}</span>
+              {pickedLabel === null ? (
+                "No bars selected."
+              ) : (
+                <>
+                  Pr[{pickedLabel}] ={" "}
+                  {working && <span className="tabular-nums">{working} = </span>}
+                  <span className="font-semibold tabular-nums">{selected.toFixed(4)}</span>
+                </>
+              )}
             </p>
             <p className="mt-1 text-[12px] text-[color:var(--color-ink-700)] tabular-nums">
               X ~ P({lambda.toFixed(1)}) &nbsp;·&nbsp;{" "}
@@ -827,9 +868,11 @@ export default function PoissonProcess({ params }: { params: VizParams }) {
             {/* An always-present line saying what the picture means, the way
                 the Module 1 to 3 viz do. */}
             <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">
-              {working?.startsWith("1 −")
-                ? "Quicker as the complement: subtract the few counts you do not want from 1."
-                : `Mean and variance are both λ, which is unusual and a quick way to check whether real counts are plausibly Poisson.`}
+              {picked.length === 0
+                ? "Click any bar to add it to the total. Click it again to take it out."
+                : working?.startsWith("1 −")
+                  ? "Quicker as the complement: subtract the few counts you do not want from 1."
+                  : "Mean and variance are both λ, which is unusual and a quick way to check whether real counts are plausibly Poisson."}
             </p>
             {drives > 0 && (
               <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">

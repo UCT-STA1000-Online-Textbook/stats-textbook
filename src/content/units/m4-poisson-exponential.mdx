@@ -5,10 +5,540 @@ moduleId: "m4"
 moduleTitle: "Probability Distributions"
 unitNumber: 11
 moduleUnitNumber: 3
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "What is the defining condition for a Poisson process?"
+    options:
+      - "There are exactly two outcomes on each trial"
+      - "The events occur at random, so an event is equally likely at any instant"
+      - "The number of trials is fixed in advance"
+      - "The probability of an event is always small"
+    answer: 1
+    explanation: "A Poisson process is one in which events occur at random in time or space, meaning an event is equally likely to occur at any instant. Two outcomes per trial and a fixed number of trials are the Binomial conditions; with a Poisson process there is no fixed number of trials at all."
+  - id: "q2"
+    type: "mcq"
+    question: "Breakdowns occur randomly at 12 per 5-day working week. What is λ for the number of breakdowns in a single day?"
+    options:
+      - "12, the rate given in the question"
+      - "2.4"
+      - "60, which is 12 × 5"
+      - "0.42, which is 5 ÷ 12"
+    answer: 1
+    explanation: "The time period in the rate must match the time period you are counting over. 12 breakdowns per 5 days is 12/5 = 2.4 per day, so λ = 2.4. Getting this conversion wrong is the most common mistake in Poisson questions."
+    vizHint: "poisson-process"
+    vizHintParams:
+      preset: "trucks"
+  - id: "q3"
+    type: "true-false"
+    question: "For a Poisson distribution the mean and the variance are equal."
+    answer: true
+    explanation: "True: both are λ. This is unusual among distributions, and it gives you a quick practical check. If a set of real counts has a variance far larger than its mean, the events are probably clustering rather than occurring at random, and a Poisson model is the wrong choice."
+    vizHint: "poisson-process"
+  - id: "q4"
+    type: "mcq"
+    question: "Flaws occur randomly in cable at 4.4 per km. What is the probability that the distance between two flaws exceeds 500 m?"
+    options:
+      - "0.1108"
+      - "0.8892"
+      - "0.2834"
+      - "0.0111"
+    answer: 0
+    explanation: "This is a question about the gap between events, so it is Exponential rather than Poisson. With λ = 4.4 per km and t = 0.5 km, Pr[X > 0.5] = e^(−4.4 × 0.5) = e^(−2.2) = 0.1108. The value 0.8892 is its complement, the probability that the gap is shorter than 500 m."
+    vizHint: "poisson-process"
+    vizHintParams:
+      mode: "gaps"
+  - id: "q5"
+    type: "mcq"
+    question: "Events occur in a Poisson process at rate λ. Which pair of probabilities is equal?"
+    options:
+      - "Pr[no events in t] and Pr[the gap between events exceeds t]"
+      - "Pr[no events in t] and Pr[the gap between events is less than t]"
+      - "Pr[one event in t] and Pr[the gap between events exceeds t]"
+      - "No pair is equal, because one distribution is discrete and the other continuous"
+    answer: 0
+    explanation: "Both equal e^(−λt). Saying that nothing happened during a stretch of length t and saying that the wait for the next event was longer than t are two descriptions of the same event, so they must have the same probability. This is Example 13C, and it is why the Poisson and Exponential distributions always appear together."
+    vizHint: "poisson-process"
+    vizHintParams:
+      mode: "gaps"
+  - id: "q6"
+    type: "mcq"
+    question: "Why can the Exponential distribution model the distance between flaws in a cable, but not the distance between flaws on an A4 page?"
+    options:
+      - "A page is too small for the distribution to apply"
+      - "Flaws on a page are not random"
+      - "A cable is one-dimensional, while a page is two-dimensional"
+      - "The Exponential distribution only applies to time, never to distance"
+    answer: 2
+    explanation: "The Exponential distribution describes the gap between events along one dimension, so it works for time or for a line such as a cable. On a page there is no single direction in which to measure the gap, because the space is two-dimensional. Note that counting flaws per page is still fine: the Poisson distribution handles space of any number of dimensions."
 prevUnit: "m4-binomial"
 nextUnit: "m4-normal"
 ---
 
-Content coming soon.
+## The Poisson distribution
+
+Many phenomena in physics obey the Poisson probability law, named in honour of the French mathematician Simeon D. Poisson (1781 to 1840). The classic example is the decomposition of radioactive nuclei. In management science, the number of demands for service in a given period of time (on the tellers in a bank, the stock pile of a factory, the runways of an airport, the lines of a telephone exchange) often obeys a Poisson distribution, either exactly or approximately. The same goes for the occurrence of accidents, errors, breakdowns and other calamities: the number that occurs within a specified time period has a Poisson distribution under certain circumstances.
+
+In broad terms, the condition for a **Poisson process** is that the events occur in time "at random". Loosely, this means that an event is equally likely to occur at any instant in time. If a phenomenon obeys a Poisson process, then the Poisson distribution may be used to model the number of occurrences of the event during a fixed time period.
+
+We can also use the Poisson distribution when we count the occurrences of an event in a fixed amount of "space". The number of faults in 100 m of computer cable, the number of misprints on an A4 page, and the number of diamonds in a cubic metre of ore are all Poisson processes, so long as the events occur at random in space, and can be modelled with the Poisson distribution.
+
+> **Keywords:** <KeywordChip vizId="poisson-process" preset="potholes">Poisson process</KeywordChip>, events occurring at random, <KeywordChip vizId="poisson-process" preset="trucks">rate λ</KeywordChip>, probability mass function, <KeywordChip vizId="poisson-process" mode="gaps">Exponential distribution</KeywordChip>, time between events, memorylessness.
+
+The Poisson distribution has only one parameter: the average rate $\lambda$ at which events occur per time period. Because the number of events in the interval must be a whole number, the Poisson distribution is discrete.
+
+<Definition term="Poisson distribution">
+We are given a period of time during which events occur at random. The average rate at which events occur is $\lambda$ events per time period.
+
+It is critical that the time period referred to in the rate must be the same as the time period during which the events are counted.
+
+Let the random variable $X$ be the number of events occurring during the time period. Then $X$ has the Poisson distribution with parameter $\lambda$, written $X \sim P(\lambda)$, with probability mass function
+
+$$
+p(x) = \frac{e^{-\lambda} \lambda^{x}}{x!}, \qquad x = 0, 1, 2, \ldots
+$$
+
+$$
+p(x) = 0, \qquad \text{otherwise.}
+$$
+</Definition>
+
+<Note>
+Read the middle paragraph of that box twice. Most wrong answers in this unit come from a rate and a counting period that do not match: a rate given per week and a question asked per day. Convert the rate first, before anything else.
+</Note>
+
+<TryThis
+  vizId="poisson-process"
+  preset="potholes"
+  label="Change the rate and watch the shape"
+  description="Press Run to cover a kilometre of road and see where the potholes fall. Then drag λ from 0.2 up to 10: at a low rate the graph is crowded against zero and badly skew, and as the rate climbs it spreads out and straightens into a bell."
+/>
+
+The opening view is the pothole-counting experiment: stretches of road with the potholes in each counted. Press **Run** and the panel covers a kilometre for real, dropping potholes at random as it goes and showing you where they fell. Each kilometre adds a ring above the bar for that many potholes, and a few thousand kilometres will bury the bars under your own results. The 5000 kilometres recorded in Tutorial 7 can be loaded into the same tally; they average 3.0064 potholes per kilometre, which is why $\lambda = 3$ models them so well.
+
+<Example title="Example 6A: delivery trucks">
+We have a large fleet of delivery trucks which are randomly subject to breakdowns. On average we have 12 breakdowns per 5-day working week. Each day we keep two trucks on standby. What is the probability that on any day
+
+(a) no standby trucks are needed?
+
+(b) the number of standby trucks is inadequate?
+
+<Solution>
+Let $X$ be the number of trucks that break down in a given day. Because the breakdowns occur at random, the Poisson distribution is a realistic model.
+
+We are interested in breakdowns per day, so we must convert the weekly rate into a daily one. 12 breakdowns per 5 days is $12/5 = 2.4$ breakdowns per day, so $X \sim P(2.4)$ and
+
+$$
+\Pr[X = x] = p(x) = \frac{e^{-2.4} \, 2.4^{x}}{x!}.
+$$
+
+**(a)** No standby trucks are needed when nothing breaks down:
+
+$$
+\Pr[X = 0] = p(0) = \frac{e^{-2.4} \, 2.4^{0}}{0!} = 0.0907.
+$$
+
+**(b)** Two trucks are on standby, so they are inadequate when three or more break down:
+
+$$
+\Pr[X > 2] = 1 - \Pr[X \le 2] = 1 - (0.0907 + 0.2177 + 0.2613) = 0.4303.
+$$
+
+So on about 9% of days we do not use the standby trucks at all, but on about 43% of days we run out of them. That is often enough to be worth investigating the financial implications of putting more trucks on standby.
+</Solution>
+</Example>
+
+<ExcelPointer title="Poisson probabilities for Example 6A">
+Excel's Poisson function takes the value, then the rate, then a TRUE/FALSE switch for whether you want the cumulative probability.
+
+1. For $p(0)$, the answer to part (a), type `=POISSON.DIST(0, 2.4, FALSE)`. The FALSE asks for the probability of exactly that value.
+2. For part (b) you want $\Pr[X > 2]$, so subtract the cumulative probability up to 2 from 1: `=1 - POISSON.DIST(2, 2.4, TRUE)`. The TRUE asks for everything up to and including 2, which saves adding three terms by hand.
+3. In older versions of Excel the function is called `POISSON` rather than `POISSON.DIST`, with the same three arguments.
+</ExcelPointer>
+
+<TryThis
+  vizId="poisson-process"
+  preset="trucks"
+  label="Check the standby-truck answer"
+  description="Bars 3 and upwards are selected, giving the 0.4303 chance of running out of standby trucks. Click bar 0 twice to isolate it for the 0.0907 in part (a)."
+/>
+
+<Example title="Example 7B: errors in a ledger">
+Bank tellers randomly make errors in entering figures in their ledgers at the average rate of 0.75 errors per page of entries. What is the probability that in a random sample of 4 pages there will be 2 or more errors?
+
+<Solution>
+Because the errors occur at random, we assume a Poisson distribution. The rate is given per page but the question asks about 4 pages, so we convert: at 0.75 errors per page, the rate per 4 pages is $4 \times 0.75 = 3$. So $\lambda = 3$ and
+
+$$
+\Pr[X = x] = \frac{e^{-3} 3^{x}}{x!}.
+$$
+
+Then
+
+$$
+\Pr[X \ge 2] = 1 - \Pr[X = 0] - \Pr[X = 1] = 1 - \frac{e^{-3}3^{0}}{0!} - \frac{e^{-3}3^{1}}{1!},
+$$
+
+$$
+\Pr[X \ge 2] = 1 - 0.0498 - 0.1494 = 0.8008.
+$$
+</Solution>
+</Example>
+
+<ExcelPointer title="Poisson probabilities for Example 7B">
+1. Convert the rate first: 4 pages at 0.75 errors per page gives $\lambda = 3$. Excel will not do this step for you, and it is where the marks are usually lost.
+2. For $\Pr[X \ge 2]$, take the complement of the cumulative probability up to 1: `=1 - POISSON.DIST(1, 3, TRUE)`.
+3. Note the 1, not the 2. "Two or more" is the opposite of "one or fewer", so the cumulative probability you subtract stops at 1.
+</ExcelPointer>
+
+<Example title="Example 8C: checking that it is a probability mass function">
+Show that the function
+
+$$
+p(x) = \frac{e^{-\lambda} \lambda^{x}}{x!}, \qquad x = 0, 1, 2, \ldots
+$$
+
+with $p(x) = 0$ otherwise, is in fact a probability mass function. You will need the mathematical result
+
+$$
+e^{\lambda} = 1 + \lambda + \frac{\lambda^{2}}{2!} + \frac{\lambda^{3}}{3!} + \cdots = \sum_{x=0}^{\infty} \frac{\lambda^{x}}{x!}.
+$$
+
+<Solution>
+**(i)** The function is defined everywhere, and is non-zero on the set $\{0, 1, 2, \ldots\}$.
+
+**(ii)** It has no negative terms: $\lambda$ is a rate and so is positive, $e^{-\lambda}$ is positive, and $x!$ is positive.
+
+**(iii)** The values must add to 1. Take the constant $e^{-\lambda}$ outside the sum:
+
+$$
+\sum_{x=0}^{\infty} \frac{e^{-\lambda} \lambda^{x}}{x!} = e^{-\lambda} \sum_{x=0}^{\infty} \frac{\lambda^{x}}{x!} = e^{-\lambda} \cdot e^{\lambda} = e^{0} = 1,
+$$
+
+using the series given above. So all three conditions hold.
+</Solution>
+</Example>
+
+<Example title="Example 9C: beercans along the road">
+Beercans are randomly tossed alongside the national road, with an average frequency of 3.2 per km.
+
+(a) What is the probability of seeing no beercans over a 5 km stretch?
+
+(b) What is the probability of seeing at least one beercan in 200 m?
+
+(c) Determine the values of $x$ and $y$ in the following statement: "40% of 1 km sections have $x$ or fewer beercans, while 5% have more than $y$."
+
+For part (c) the following table is useful.
+
+| $x$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---|---|---|---|---|---|---|---|---|
+| $p(x)$ | 0.0408 | 0.1304 | 0.2087 | 0.2226 | 0.1781 | 0.1140 | 0.0608 | 0.0278 | 0.0111 |
+| $\Pr[X \le x]$ | 0.0408 | 0.1712 | 0.3799 | 0.6025 | 0.7806 | 0.8946 | 0.9554 | 0.9832 | 0.9943 |
+
+<Solution>
+**(a)** Convert the rate to match the 5 km stretch: $\lambda = 5 \times 3.2 = 16$. Then
+
+$$
+\Pr[X = 0] = e^{-16} = 0.1125 \times 10^{-6}.
+$$
+
+Roughly one chance in nine million. Over 5 km of national road, seeing no beercans at all is effectively impossible.
+
+**(b)** Now 200 m is 0.2 km, so $\lambda = 0.2 \times 3.2 = 0.64$ and
+
+$$
+\Pr[X \ge 1] = 1 - \Pr[X = 0] = 1 - e^{-0.64} = 1 - 0.5273 = 0.4727.
+$$
+
+**(c)** Here the section is 1 km, so $\lambda = 3.2$ and we read from the table.
+
+For $x$, we want the largest count such that no more than 40% of sections are at or below it. From the table $\Pr[X \le 2] = 0.3799$, just under 40%, while $\Pr[X \le 3] = 0.6025$ is well over. So $x = 2$.
+
+For $y$, "5% have more than $y$" means $\Pr[X > y] = 0.05$, that is $\Pr[X \le y] = 0.95$. From the table $\Pr[X \le 6] = 0.9554$, the first entry at or above 0.95. So $y = 6$.
+</Solution>
+</Example>
+
+<ExcelPointer title="Poisson probabilities for Example 9C">
+1. Part (a): the rate over 5 km is $\lambda = 16$, so `=POISSON.DIST(0, 16, FALSE)`. Excel will show something like `1.12535E-07`, which is the $0.1125 \times 10^{-6}$ above.
+2. Part (b): over 200 m the rate is $\lambda = 0.64$, so `=1 - POISSON.DIST(0, 0.64, FALSE)`.
+3. Part (c): build the whole table rather than reading one value. Put 0, 1, 2, … down a column, then `=POISSON.DIST(A2, 3.2, FALSE)` beside it for $p(x)$ and `=POISSON.DIST(A2, 3.2, TRUE)` for the cumulative column, and fill down. Then read off the two answers.
+</ExcelPointer>
+
+<TryThis
+  vizId="poisson-process"
+  preset="beercans"
+  label="Read off the beercan percentiles"
+  description="Bars 0 to 2 are selected, giving the 0.3799 that answers x = 2 in part (c). Extend the selection to bar 6 and you pass 0.95, which is where y = 6 comes from."
+/>
+
+## A more formal derivation of the Poisson distribution
+
+The Poisson distribution can be derived from the Binomial distribution, which is worth seeing: it explains where that surprising $e^{-\lambda}$ comes from. We need two mathematical results:
+
+$$
+\lim_{n \to \infty} \left(1 - \frac{\lambda}{n}\right)^{n} = e^{-\lambda}, \qquad \lim_{n \to \infty} \frac{a}{n} = 0 \ \text{ for any finite } a.
+$$
+
+Suppose events are occurring at random with rate $\lambda$ per time period. Divide the time period into $n$ extremely short intervals, each of length $1/n$. These intervals are so short that we assume it is impossible for two or more events to occur in the same one. With that assumption, the probability that an event occurs in a short interval is $\lambda/n$, and the probability that it does not is $1 - \lambda/n$.
+
+Now stand back and look at this from a new angle. Think of each interval as a **trial**. There are exactly two outcomes of each trial: either an event occurs (success) or it does not (failure). The probability of success is $p = \lambda/n$, and there are $n$ intervals, so $n$ trials. Let $X$ be the number of events in the time period. This is precisely the set-up for a Binomial distribution, $X \sim B(n, \lambda/n)$, so
+
+$$
+\Pr[x \text{ events}] = \binom{n}{x} \left(\frac{\lambda}{n}\right)^{x} \left(1 - \frac{\lambda}{n}\right)^{n-x}.
+$$
+
+Now let $n$ grow without bound, which is what makes the "no two events in one interval" assumption realistic:
+
+$$
+p(x) = \lim_{n \to \infty} \frac{n!}{x!(n-x)!} \cdot \frac{\lambda^{x}}{n^{x}} \left(1 - \frac{\lambda}{n}\right)^{n} \left(1 - \frac{\lambda}{n}\right)^{-x}.
+$$
+
+Split the limit into three pieces. The last bracket tends to 1, and the middle one tends to $e^{-\lambda}$ by the first result above. That leaves
+
+$$
+p(x) = \frac{\lambda^{x}}{x!} \cdot \lim_{n \to \infty} \frac{n}{n} \cdot \frac{n-1}{n} \cdot \frac{n-2}{n} \cdots \frac{n-x+1}{n} \cdot e^{-\lambda}.
+$$
+
+Re-expressing each term in that product,
+
+$$
+p(x) = \frac{\lambda^{x}}{x!} \lim_{n \to \infty} 1 \cdot \left(1 - \frac{1}{n}\right)\left(1 - \frac{2}{n}\right) \cdots \left(1 - \frac{x-1}{n}\right) e^{-\lambda},
+$$
+
+and by the second result every bracket tends to 1. Therefore
+
+$$
+p(x) = \frac{e^{-\lambda}\lambda^{x}}{x!},
+$$
+
+the probability mass function for the Poisson distribution, as required.
+
+<Note>
+Notice what this derivation says: a Poisson distribution is what a Binomial distribution turns into when there are a huge number of trials, each with a tiny chance of success, while the average number of successes stays put at $\lambda$. That is exactly the situation with potholes on a road or misprints on a page, where you cannot sensibly say how many "trials" there were.
+</Note>
+
+## The Exponential distribution
+
+The Exponential distribution arises out of the same underlying scenario as the Poisson distribution: the Poisson process, in which events occur at random in time or space. For the Poisson distribution we counted the number of events that occurred in a fixed period of time. For the Exponential distribution we consider the **interval of time between events**.
+
+We let the random variable $X$ be the time between events. It is a continuous random variable, since it can take any value in the sample space $S = \{x \mid x \ge 0\}$, so it must have a probability density function.
+
+<Definition term="Exponential distribution">
+If events are occurring at random with average rate $\lambda$ per unit of time, then the probability density function for the random variable $X$, the length of time between events, is given by
+
+$$
+f(x) = \lambda e^{-\lambda x}, \qquad x \ge 0
+$$
+
+$$
+f(x) = 0, \qquad \text{otherwise.}
+$$
+
+$X$ is said to have the Exponential distribution with parameter $\lambda$, and we write $X \sim E(\lambda)$.
+</Definition>
+
+The Exponential distribution can also be used to model the distance between events in space, so long as the space is one-dimensional. It works for the distance between flaws in a cable, but not for the distance between flaws on an A4 page, because a page is two-dimensional and there is no single direction in which to measure the gap.
+
+<TryThis
+  vizId="poisson-process"
+  mode="gaps"
+  label="Measure the gaps instead"
+  description="The same process as before, asked a different question. Every kilometre you cover is built by stepping one gap at a time, so the same runs that filled the bar graph also fill the pale histogram here. Drag the handle t and the shaded tail is Pr[X > t]."
+/>
+
+<Example title="Example 10A: a computer that breaks down">
+A computer that operates continuously breaks down at random on average 1.5 times per week. What is the probability of no breakdowns for 2 weeks? And what is the probability of a breakdown within 3 days?
+
+<Solution>
+We have $\lambda = 1.5$ per week, so the random variable $X$, the time between breakdowns, has density
+
+$$
+f(x) = 1.5 e^{-1.5x}, \qquad x \ge 0.
+$$
+
+**No breakdowns for 2 weeks.** This means the gap to the next breakdown must be greater than 2 (think through this statement carefully), so we want $\Pr[X > 2]$. The distribution is continuous, so we integrate:
+
+$$
+\Pr[X > 2] = \int_{2}^{\infty} 1.5 e^{-1.5x} \, dx = \left[ -e^{-1.5x} \right]_{2}^{\infty} = 0 + e^{-3} = 0.0498.
+$$
+
+**A breakdown within 3 days.** First make the units of time compatible: 3 days is $3/7$ of a week. We want the probability of a breakdown before then:
+
+$$
+\Pr[0 < X < 3/7] = \int_{0}^{3/7} 1.5 e^{-1.5x} \, dx = \left[ -e^{-1.5x} \right]_{0}^{3/7} = -e^{-0.6429} + 1 = 0.4742.
+$$
+
+Both integrals came out the same way, and it is worth noticing the pattern rather than integrating every time:
+
+$$
+\Pr[X > t] = e^{-\lambda t}, \qquad \Pr[X < t] = 1 - e^{-\lambda t}.
+$$
+</Solution>
+</Example>
+
+<TryThis
+  vizId="poisson-process"
+  preset="computer"
+  mode="gaps"
+  label="Shade the computer's downtime"
+  description="The rate is 1.5 faults per week. Drag t out to 2 to get the 0.0498 from the first part, and the unshaded area to its left is the 0.9502 chance of at least one breakdown in that fortnight."
+/>
+
+<Example title="Example 11B: checking that it is a probability density function">
+Show that the Exponential distribution
+
+$$
+f(x) = \lambda e^{-\lambda x}, \qquad x \ge 0
+$$
+
+with $f(x) = 0$ otherwise, is a probability density function.
+
+<Solution>
+We check the three conditions.
+
+**(i)** $f(x)$ is defined everywhere, and is non-zero on the interval $[0, \infty)$.
+
+**(ii)** $f(x)$ is never negative. Because $\lambda$ is a rate it must be positive, and $e^{-\lambda x}$ is positive for every $x$.
+
+**(iii)** The total area must be 1:
+
+$$
+\int_{0}^{\infty} \lambda e^{-\lambda x} \, dx = \left[ -e^{-\lambda x} \right]_{0}^{\infty} = 0 + e^{0} = 1,
+$$
+
+as required for the area under the curve of a probability density function.
+</Solution>
+</Example>
+
+<Example title="Example 12C: how long a light bulb lasts">
+Let the random variable $X$ be the time in hours for which a light bulb burns from the time it is put into service. Bulbs fail at random, and the probability density function of $X$ is
+
+$$
+f(x) = \tfrac{1}{1000} e^{-x/1000}, \qquad x \ge 0
+$$
+
+with $f(x) = 0$ otherwise.
+
+(a) What is the probability that the bulb burns for between 100 and 1000 hours?
+
+(b) What is the probability that the bulb burns for more than 1000 hours?
+
+(c) What is the probability that the bulb burns for a further 1000 hours, given that it has already burned for 500? (Use conditional probabilities.)
+
+<Solution>
+Comparing with the definition, this is the Exponential distribution with $\lambda = 1/1000$. Using $\Pr[X > t] = e^{-\lambda t}$ throughout:
+
+**(a)**
+
+$$
+\Pr[100 < X < 1000] = e^{-100/1000} - e^{-1000/1000} = e^{-0.1} - e^{-1} = 0.9048 - 0.3679 = 0.5369.
+$$
+
+**(b)**
+
+$$
+\Pr[X > 1000] = e^{-1} = 0.3679.
+$$
+
+**(c)** We want $\Pr[X > 1500 \mid X > 500]$. By the definition of conditional probability,
+
+$$
+\Pr[X > 1500 \mid X > 500] = \frac{\Pr[X > 1500 \ \text{and} \ X > 500]}{\Pr[X > 500]} = \frac{\Pr[X > 1500]}{\Pr[X > 500]},
+$$
+
+since a bulb lasting beyond 1500 hours has certainly lasted beyond 500. So
+
+$$
+\Pr[X > 1500 \mid X > 500] = \frac{e^{-1.5}}{e^{-0.5}} = e^{-1} = 0.3679.
+$$
+
+Compare that with the answer to (b). A bulb that has already burned for 500 hours has exactly the same chance of lasting another 1000 as a brand new one did. The distribution has no memory of how long the bulb has been running, which is why the Exponential distribution is called **memoryless**. It is a strong assumption, and it is the reason the Exponential distribution is a poor model for anything that wears out.
+</Solution>
+</Example>
+
+<Example title="Example 13C: the two distributions are one process">
+Events occur according to a Poisson process with intensity $\lambda$, that is, at rate $\lambda$ per unit of time.
+
+(a) Use the Poisson distribution to determine the probability of no events in $t$ units of time.
+
+(b) Now use the Exponential distribution to determine the probability that the time between events is greater than $t$.
+
+(c) Compare the answers to (a) and (b) and explain the result.
+
+<Solution>
+**(a)** Over $t$ units of time the rate is $\lambda t$, so the number of events $N$ has $N \sim P(\lambda t)$ and
+
+$$
+\Pr[N = 0] = \frac{e^{-\lambda t}(\lambda t)^{0}}{0!} = e^{-\lambda t}.
+$$
+
+**(b)** The time between events $X$ has $X \sim E(\lambda)$, so
+
+$$
+\Pr[X > t] = e^{-\lambda t}.
+$$
+
+**(c)** The two answers are identical, and they must be: the events are the same event. Saying that no events occurred during a stretch of length $t$ and saying that the wait until the next event was longer than $t$ are two ways of describing one situation. One counts, the other measures, and they have to agree.
+
+This is the link between the two distributions. Either can answer a question about "nothing happening"; use whichever is more convenient.
+</Solution>
+</Example>
+
+<Example title="Example 14C: flaws in telephone cable">
+Flaws in telephone cable occur randomly at the average rate of 4.4 flaws per km of cable. Calculate the following probabilities. (Make use of Binomial, Poisson and Exponential distributions.)
+
+(a) What is the probability of 1 flaw in 100 m of cable?
+
+(b) What is the probability of more than 3 flaws in 250 m of cable?
+
+(c) What is the probability that the distance between flaws exceeds 500 m?
+
+(d) In ten 200 m lengths of cable, what is the probability that 8 or more are free of flaws?
+
+<Solution>
+This example is the whole module in one question. Each part asks something slightly different, and the wording tells you which distribution to reach for. Counting flaws in a fixed length is Poisson; measuring the distance between flaws is Exponential; counting how many lengths out of ten pass a test is Binomial.
+
+**(a)** Counting, so Poisson. 100 m is 0.1 km, giving $\lambda = 0.1 \times 4.4 = 0.44$:
+
+$$
+\Pr[X = 1] = \frac{e^{-0.44} \, 0.44^{1}}{1!} = 0.6440 \times 0.44 = 0.2834.
+$$
+
+**(b)** Counting again. 250 m is 0.25 km, giving $\lambda = 0.25 \times 4.4 = 1.1$:
+
+$$
+\Pr[X > 3] = 1 - \Pr[X \le 3] = 1 - (0.3329 + 0.3662 + 0.2014 + 0.0738) = 0.0257.
+$$
+
+**(c)** A distance between events, so Exponential, with $\lambda = 4.4$ per km and $t = 0.5$ km:
+
+$$
+\Pr[X > 0.5] = e^{-4.4 \times 0.5} = e^{-2.2} = 0.1108.
+$$
+
+**(d)** Now we have ten lengths, each either flaw-free or not: that is ten trials with two outcomes, so Binomial. First we need $p$, the probability that one 200 m length is flaw-free. That is a Poisson question with $\lambda = 0.2 \times 4.4 = 0.88$:
+
+$$
+p = \Pr[\text{no flaws in 200 m}] = e^{-0.88} = 0.4148.
+$$
+
+Now let $Y$ be the number of flaw-free lengths out of ten, so $Y \sim B(10, 0.4148)$ and
+
+$$
+\Pr[Y \ge 8] = \binom{10}{8}p^{8}q^{2} + \binom{10}{9}p^{9}q + \binom{10}{10}p^{10} = 0.0135 + 0.0021 + 0.0002 = 0.0158.
+$$
+
+Part (d) is the one worth rereading. The Poisson calculation is not the answer: it only supplies the $p$ that the Binomial calculation then needs.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="poisson-process"
+  preset="cable-flaws"
+  mode="gaps"
+  label="Check the cable-flaw distance"
+  description="The rate is 4.4 flaws per km. Drag t to 0.5 km for the 0.1108 in part (c), and read the second line of the panel: it is the Poisson probability of no flaws in that same half kilometre, and it is the same number."
+/>
+
+<Quiz />

@@ -433,3 +433,114 @@ export const BINOMIAL_PRESETS: BinomialPreset[] = [
     select: [1, 10],
   },
 ];
+
+/**
+ * A worked example the `PoissonProcess` viz can open at. One rate λ drives
+ * both of its views, because the count of events and the gap between them are
+ * two readings of the same underlying Poisson process.
+ */
+export interface PoissonPreset {
+  id: string;
+  /** Short name for the preset picker. */
+  label: string;
+  /** Which worked example this comes from, shown under the chart. */
+  source: string;
+  /** Average number of events per unit of time or space. */
+  lambda: number;
+  /** The unit λ is quoted per, e.g. "km" or "day". */
+  unit: string;
+  /**
+   * How to name a length of that unit in the gaps view, e.g. "km of road".
+   * Kept separate from `unit` because simply adding an "s" gives "kms", and
+   * because a rate quoted per 4 pages makes the gap unit a block of 4 pages,
+   * not a page.
+   */
+  span: string;
+  /** Plural name for the events being counted, e.g. "potholes". */
+  event: string;
+  /** Bars selected on opening in the counting view, as an inclusive range. */
+  select: [number, number];
+  /**
+   * Optional observed counts from a real simulation run, indexed by x, for
+   * the viz to draw over the theoretical bars. Only the pothole preset, which
+   * comes from the lecturer's Tutorial 7 dataset, carries this.
+   */
+  observed?: number[];
+}
+
+/**
+ * Poisson processes for `PoissonProcess`, one per worked example in Module 4,
+ * WU3 (`m4-poisson-exponential`).
+ *
+ * The pothole entry is not from the textbook: it matches the lecturer's
+ * Tutorial 7 simulation, whose 5000 one-kilometre samples average 3.0
+ * potholes per km.
+ */
+export const POISSON_PRESETS: PoissonPreset[] = [
+  {
+    id: "potholes",
+    label: "Potholes",
+    source: "Tutorial 7 simulation",
+    lambda: 3,
+    unit: "km",
+    span: "km of road",
+    event: "potholes",
+    select: [0, 3],
+    // The 5000 one-kilometre samples in Tutorial 7, counted by how many
+    // potholes each held. Their mean is 3.0064 against a λ of 3.
+    observed: [247, 759, 1140, 1101, 812, 480, 283, 116, 40, 14, 5, 2, 0, 0, 1],
+  },
+  {
+    id: "trucks",
+    label: "Trucks",
+    source: "Example 6A",
+    lambda: 2.4,
+    unit: "day",
+    span: "days",
+    event: "breakdowns",
+    // Pr[X > 2] = 0.4303: the two standby trucks are not enough.
+    select: [3, 12],
+  },
+  {
+    id: "ledger-errors",
+    label: "Ledger",
+    source: "Example 7B",
+    lambda: 3,
+    unit: "4 pages",
+    span: "blocks of 4 pages",
+    event: "errors",
+    // Pr[X ≥ 2] = 0.8008 in the text.
+    select: [2, 14],
+  },
+  {
+    id: "beercans",
+    label: "Beercans",
+    source: "Example 9C",
+    lambda: 3.2,
+    unit: "km",
+    span: "km of road",
+    event: "beercans",
+    // Pr[X ≤ 2] = 0.3799, the "40% or fewer" figure in part (c).
+    select: [0, 2],
+  },
+  {
+    id: "computer",
+    label: "Computer",
+    source: "Example 10A",
+    lambda: 1.5,
+    unit: "week",
+    span: "weeks",
+    event: "breakdowns",
+    select: [0, 0],
+  },
+  {
+    id: "cable-flaws",
+    label: "Cable",
+    source: "Example 14C",
+    lambda: 4.4,
+    unit: "km",
+    span: "km of cable",
+    event: "flaws",
+    select: [0, 0],
+  },
+];

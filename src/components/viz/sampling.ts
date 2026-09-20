@@ -27,6 +27,17 @@ export function sampleBinomialTrials(n: number, p: number): boolean[] {
 }
 
 /**
+ * One draw from the Exponential distribution with rate λ, by inverting the
+ * cumulative function: if U is uniform on (0, 1) then −ln(U)/λ is Exponential.
+ *
+ * `Math.random()` can return exactly 0, whose log is −∞, so the draw is taken
+ * from 1 − U instead, which lies in (0, 1].
+ */
+export function sampleExponential(lambda: number): number {
+  return -Math.log(1 - Math.random()) / lambda;
+}
+
+/**
  * One draw from the Uniform distribution on (a, b).
  */
 export function sampleUniform(a: number, b: number): number {

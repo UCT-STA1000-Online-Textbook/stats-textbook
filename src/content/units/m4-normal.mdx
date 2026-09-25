@@ -5,10 +5,616 @@ moduleId: "m4"
 moduleTitle: "Probability Distributions"
 unitNumber: 12
 moduleUnitNumber: 4
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "The amount of margarine in a tub is X ~ N(251, 3²). What is the z value for a tub containing 254 g?"
+    options:
+      - "1"
+      - "3"
+      - "1/3"
+      - "254/251"
+    answer: 0
+    explanation: "z = (x − μ)/σ = (254 − 251)/3 = 1. The z value counts how many standard deviations x lies from the mean, so a tub of 254 g is exactly one standard deviation above average. Note that the second parameter in N(251, 3²) is the variance, so σ is 3, not 9."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "margarine"
+  - id: "q2"
+    type: "true-false"
+    question: "If the standard deviation σ of a Normal distribution increases, the peak of the curve gets higher."
+    answer: false
+    explanation: "False. A larger σ spreads the distribution out, and because the total area under the curve must stay at 1, the curve has to get flatter: its peak drops. Drag the σ slider in the visualisation and watch it happen."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "t-shirts"
+  - id: "q3"
+    type: "mcq"
+    question: "Roughly what proportion of any Normal distribution lies within two standard deviations of its mean?"
+    options:
+      - "50%"
+      - "68%"
+      - "95%"
+      - "99.7%"
+    answer: 2
+    explanation: "About 95% (more precisely 0.954). Within one standard deviation lies about 68%, and within three about 99.7%. These figures hold for every combination of μ and σ, which is a direct consequence of the link through z = (x − μ)/σ."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "margarine"
+  - id: "q4"
+    type: "mcq"
+    question: "Independent chore times are X₁ ~ N(5, 0.5²) and X₂ ~ N(4, 1²). What is the distribution of the total time T = X₁ + X₂?"
+    options:
+      - "N(9, 1.25)"
+      - "N(9, 1.5²)"
+      - "N(9, 1.5)"
+      - "N(1, 1.25)"
+    answer: 0
+    explanation: "The means add: 5 + 4 = 9. The variances add, not the standard deviations: 0.5² + 1² = 0.25 + 1 = 1.25. So T ~ N(9, 1.25). The option N(9, 1.5²) is the common mistake of adding the standard deviations 0.5 + 1 = 1.5."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "chores"
+  - id: "q5"
+    type: "true-false"
+    question: "If X₁ and X₂ are independent Normal random variables, the variance of the difference X₁ − X₂ is σ₁² − σ₂²."
+    answer: false
+    explanation: "False. The mean of a difference is found by subtraction, μ₁ − μ₂, but the variance is still found by addition: σ₁² + σ₂². Subtracting a random quantity adds uncertainty, it never removes it."
+  - id: "q6"
+    type: "mcq"
+    question: "Which Excel formula gives z(0.10), the upper 10% point of the standard Normal distribution?"
+    options:
+      - "=NORM.S.INV(0.10)"
+      - "=NORM.S.INV(0.90)"
+      - "=NORM.S.DIST(0.10, TRUE)"
+      - "=1 - NORM.S.DIST(0.90, TRUE)"
+    answer: 1
+    explanation: "NORM.S.INV works from the area to the left of the point. If 10% lies to the right of z(0.10), then 90% lies to its left, so we ask for =NORM.S.INV(0.90), which gives 1.2816. The first option gives −1.2816, the lower 10% point, and the NORM.S.DIST options return probabilities, not points on the Z scale."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "standard"
+  - id: "q7"
+    type: "mcq"
+    question: "The margarine in a tub is X ~ N(251, 3²). Which Excel formula gives Pr[X < 250]?"
+    options:
+      - "=NORM.DIST(250, 251, 3, TRUE)"
+      - "=NORM.DIST(250, 251, 3, FALSE)"
+      - "=NORM.DIST(250, 251, 9, TRUE)"
+      - "=1 - NORM.DIST(250, 251, 3, TRUE)"
+    answer: 0
+    explanation: "NORM.DIST takes the value, the mean, the standard deviation (not the variance, so 3 rather than 9) and TRUE for a cumulative probability. With TRUE it returns the area to the left of 250, which is exactly Pr[X < 250] = 0.3694. FALSE would return the height of the density at 250, and 1 minus the result would be Pr[X > 250]."
+    vizHint: "normal-explorer"
+    vizHintParams:
+      preset: "margarine"
 prevUnit: "m4-poisson-exponential"
 nextUnit: "m5-sampling-distribution"
 ---
 
-Content coming soon.
+## The Normal distribution
+
+The Normal distribution is often referred to as the Gaussian distribution, in honour of Carl Friedrich Gauss (1777 to 1855), a famous German mathematician, who, for more than a century, was credited with its discovery. The same result was published at about the same time by the equally famous French mathematician the Marquis de Laplace (1749 to 1827). But the Normal distribution had actually been discovered nearly a century earlier by Abraham de Moivre (1667 to 1754). In 1733 he published a mathematical pamphlet that was not widely circulated and was quickly forgotten. A copy of de Moivre's pamphlet was found in 1924, and the English statistician Karl Pearson found that it contained the formula for the Normal distribution. De Moivre's precedence in discovering the Normal distribution is contained in a paper published in 1924 by Pearson (*Historical note on the origin of the normal curve of errors*) in the journal *Biometrika*, volume 16, pages 402 to 404, an important statistical journal which is still publishing major discoveries in statistics.
+
+The Normal distribution is the most important distribution in statistics. Part of the reason for this is a result called the **central limit theorem**, which states that if a random variable $X$ is the sum of a large number of random increments, then $X$ has the Normal distribution.
+
+The daily turnover of a large store is the sum of the purchases of all the individual customers. The height of a 50-year-old pine tree can be thought of as the sum of each year's growth, which itself is a variable affected by sunshine, temperature, rainfall, etc. So one expects the heights of 50-year-old pine trees to obey a Normal distribution. Similarly, an examination mark is the sum of the scores in a large number of questions. Thus, by the central limit theorem, one expects daily turnover, the heights of trees and examination marks (approximately, at least) to be Normally distributed.
+
+> **Keywords:** <KeywordChip vizId="normal-explorer" preset="margarine">Normal distribution</KeywordChip>, bell-shaped curve, mean $\mu$ and standard deviation $\sigma$, <KeywordChip vizId="normal-explorer" preset="standard">standard Normal distribution</KeywordChip>, $z = (x - \mu)/\sigma$, NORM.DIST, <KeywordChip vizId="normal-explorer" preset="chores">sums and differences of Normal random variables</KeywordChip>, percentage points.
+
+<Definition term="Normal distribution">
+The Normal distribution is continuous, and has probability density function
+
+$$
+f(x) = \frac{1}{\sqrt{2\pi\sigma^{2}}} \, e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^{2}}, \qquad -\infty < x < \infty.
+$$
+
+There are two parameters, $\mu$ ("mu", the Greek letter m for Mean) and $\sigma$ ("sigma", the Greek letter s for Standard deviation).
+</Definition>
+
+The constant $\mu$ tells us where the graph is located (it can take on any real value); the constant $\sigma$ (which is always positive) tells how spread out the distribution is. The most striking feature of the Normal distribution is that it is bell-shaped. Notice also that the centre of the bell is located at the value $\mu$, and that the distribution gets flatter as $\sigma$ gets larger. This also illustrates the fact that the area under the curve for a probability density function is one; to accommodate this, as the curve gets "flatter", its maximum value has to become smaller.
+
+<TryThis
+  vizId="normal-explorer"
+  preset="margarine"
+  label="Move the bell and flatten it"
+  description="Drag the μ slider and the whole bell slides along the axis without changing shape. Then drag σ: a larger σ spreads the curve out and its peak drops, because the area under it has to stay at 1."
+/>
+
+If $X$ has the Normal distribution with parameters $\mu$ and $\sigma$, we abbreviate this to $X \sim N(\mu, \sigma^{2})$, reading this as "the random variable $X$ has the Normal distribution with parameters $\mu$ and $\sigma^{2}$". When we use this notation, our convention is to write $\sigma^{2}$ for the second parameter, not plain $\sigma$. The parameter $\sigma^{2}$ is known as the variance of the distribution, where the variance is the square of the standard deviation.
+
+## One table for every Normal distribution
+
+Unfortunately, it is impossible to determine probabilities by integrating the Normal probability density function. However (and this makes life very easy), the integration can be done by computer, and so statisticians have historically worked with a table of Normal probabilities generated by computer.
+
+It may seem surprising to find out that only a single table of Normal probabilities is needed, for any conceivable Normal distribution, defined by any combination of the parameters $\mu$ and $\sigma$. One would think that as there are infinitely many combinations of $\mu$ and $\sigma$, we ought to have a massive book of Normal tables. It is part of the extraordinary power of the Normal distribution that there is a connecting link between all Normal distributions which made it possible to get away with a single table! We will learn how this amazing table operates for all Normal distributions by means of an example.
+
+<Example title="Example 15A: margarine in a tub">
+If the amount of margarine, $X$, in a 250 g tub is Normally distributed with $\mu = 251$ and $\sigma = 3$, what is the probability that the tub will contain
+
+(a) between 251 g and 253 g of margarine?
+
+(b) less than 250 g of margarine?
+</Example>
+
+This example is worked through in full below, because the working is where the key idea of the unit comes from.
+
+For part (a) we want
+
+$$
+\Pr[251 \le X \le 253] = \int_{251}^{253} \frac{1}{\sqrt{2\pi \cdot 3^{2}}} \, e^{-\frac{1}{2}\left(\frac{x - 251}{3}\right)^{2}} \, dx.
+$$
+
+It is impossible to evaluate this integral by finding an indefinite integral and then substituting. So we can make use of the Normal table. There is a table for only one set of values of the two parameters, and this is all we need: when $\mu = 0$ and $\sigma = 1$ we have the **standard Normal distribution**, which has density function
+
+$$
+f(z) = \frac{1}{\sqrt{2\pi}} \, e^{-\frac{1}{2}z^{2}}, \qquad -\infty < z < \infty.
+$$
+
+How do we make do with tables for only the standard Normal distribution? Because we have an easily proved result that **the proportion of the density function that lies between the mean and a specified number of standard deviations away from the mean is always constant**, regardless of the numerical values of the mean and standard deviation.
+
+Translated into mathematical symbols, this important result can be written as
+
+$$
+\int_{\mu}^{\mu + z\sigma} \frac{1}{\sqrt{2\pi\sigma^{2}}} \, e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^{2}} \, dx = \int_{0}^{z} \frac{1}{\sqrt{2\pi}} \, e^{-\frac{1}{2}z^{2}} \, dz.
+$$
+
+Use integration by substitution to prove this by putting $z = (x - \mu)/\sigma$.
+
+As an example of this, the area under $N(251, 3^{2})$ between the mean and one standard deviation above the mean is equal to the area under $N(0, 1)$ between 0 and 1. 254 is one standard deviation (i.e. 3 units) above 251, the mean. Thus the area between 251 and 254 in $N(251, 3^{2})$ is the same as that between 0 and 1 in $N(0, 1)$.
+
+<TryThis
+  vizId="normal-explorer"
+  preset="margarine"
+  label="See the two areas agree"
+  description="Drag d to 254, one standard deviation above the mean: the lower z-axis shows the shading runs from z = 0 to z = 1, and the area is 0.3413. Now move σ: the z-axis stretches with the curve. Switch to N(0, 1) and shade 0 to 1 (click a handle and use the arrow keys to land exactly) to get the same 0.3413."
+/>
+
+Returning to part (a) of our margarine example, we need the area between 251 and 253 of $N(251, 3^{2})$. 253 is two-thirds of a standard deviation above the mean of 251, because $(253 - 251)/3 = 2/3$. Thus $\Pr[251 < X < 253] = \Pr[0 < Z < 2/3]$.
+
+Some numerical results from the Normal tables help to give a "feel" for the Normal distribution. The area from one standard deviation below the mean to one standard deviation above the mean is 0.683 (close to 2/3rds); i.e.
+
+$$
+\Pr[\mu - \sigma < X < \mu + \sigma] = 0.683.
+$$
+
+The corresponding probabilities for two, three and four standard deviations are:
+
+$$
+\Pr[\mu - 2\sigma < X < \mu + 2\sigma] = 0.954
+$$
+
+$$
+\Pr[\mu - 3\sigma < X < \mu + 3\sigma] = 0.997
+$$
+
+$$
+\Pr[\mu - 4\sigma < X < \mu + 4\sigma] = 0.999999
+$$
+
+These results are true for all combinations of $\mu$ and $\sigma$! In general terms, two-thirds (68%) of a Normal distribution is within one standard deviation of its mean, 95% is within two standard deviations, and virtually all of it is within three standard deviations.
+
+<TryThis
+  vizId="normal-explorer"
+  preset="t-shirts"
+  label="Check the 68% and 95% rules"
+  description="Drag c to 87 and d to 97, one standard deviation either side of the mean of 92: the area is 0.6827. Widen to 82 and 102 for 0.9545. Then move μ and σ and put the handles back on z = −1 and z = 1: the area does not change."
+/>
+
+The general result is that the area between $\mu$ and some point $x$ for $N(\mu, \sigma^{2})$ is the same as the area between 0 and $z = \dfrac{x - \mu}{\sigma}$ for $N(0, 1)$. The formula $z = \dfrac{x - \mu}{\sigma}$ tells us how many standard deviations the point $x$ is away from the mean $\mu$.
+
+In our margarine example, we use $z = (x - \mu)/\sigma$ for $x = 251$ and $x = 253$ to get
+
+$$
+\Pr[251 < X < 253] = \Pr\left[\frac{251 - 251}{3} < Z < \frac{253 - 251}{3}\right] = \Pr[0 < Z < 0.67].
+$$
+
+From the table for the standard Normal distribution we can read off this probability as 0.2486.
+
+<ExcelPointer title="Normal probabilities for Example 15A(a)">
+In Excel we use the `=NORM.DIST(x, mean, standard_dev, cumulative)` function.
+
+1. Write the probability as a difference of two cumulative probabilities: $\Pr(251 < X < 253) = \Pr(X < 253) - \Pr(X < 251)$.
+2. Type `=NORM.DIST(253, 251, 3, TRUE) - NORM.DIST(251, 251, 3, TRUE)`, which gives 0.2475.
+3. Setting cumulative to TRUE produces a cumulative probability, which is what we want. FALSE would instead give the height of the density function at that value of $X$ (or $Z$).
+4. We can also work directly with the standard Normal distribution by converting the $X$ values into the equivalent number of standard deviations away from the mean (these are the $Z$ values) and finding $\Pr(0 < Z < 2/3)$: `=NORM.S.DIST(2/3, TRUE) - NORM.S.DIST(0, TRUE)`, which also gives 0.2475.
+</ExcelPointer>
+
+Thus, almost a quarter of margarine tubs contain between 251 g and 253 g of margarine. (The table gave 0.2486 because it had to round $2/3$ to 0.67 before looking it up; Excel uses the exact value.)
+
+<TryThis
+  vizId="normal-explorer"
+  preset="margarine"
+  label="Weigh the tubs yourself"
+  description="The shading is set to 251 to 253 g. Press Weigh 500 a few times: the tubs pile up as pale bars under the curve, and the share landing between 251 and 253 closes in on 0.2475."
+/>
+
+Part (b) of our question asked for the probability that a tub of margarine was underweight, i.e. the probability that $X < 250$. The area between $-\infty$ and 250 in $N(251, 3^{2})$ is the same as the area between $-\infty$ and $(250 - 251)/3 = -1/3$ in $N(0, 1)$:
+
+$$
+\Pr[X < 250] = \Pr\left[Z < \frac{250 - 251}{3}\right] = \Pr[Z < -1/3].
+$$
+
+Because our tables give us areas between 0 and a point $z$, we have to go through a few steps to find this probability. We make use of the facts that the Normal distribution is symmetric, and that the area from 0 to $\infty$ is 0.5:
+
+$$
+\Pr[X < 250] = \Pr[Z < -1/3] = \Pr[Z > 1/3] = 0.5 - \Pr[0 < Z < 1/3] = 0.5 - 0.1293 = 0.3707.
+$$
+
+The value 0.1293 can be looked up in the Normal tables. Thus we see that 37% of the tubs will contain less margarine than stated. Notice that because the Normal distribution is symmetric, statisticians only ever needed tables for "half" of the distribution.
+
+However, we can use Excel to calculate $\Pr(X < 250)$ directly:
+
+<ExcelPointer title="Normal probabilities for Example 15A(b)">
+1. A "less than" probability is already cumulative, so no subtraction is needed.
+2. Type `=NORM.DIST(250, 251, 3, TRUE)`, which gives 0.3694.
+3. There is no need for the symmetry argument above: Excel handles negative $z$ values directly, so `=NORM.S.DIST(-1/3, TRUE)` gives the same 0.3694.
+</ExcelPointer>
+
+<TryThis
+  vizId="normal-explorer"
+  preset="margarine"
+  label="Shade the underweight tubs"
+  description="Pull c off the left end of the axis so it reads −∞, and drag d to 250. The read-out shows Pr[X ≤ 250] = Pr[Z ≤ −0.333] = 0.3694, the same as the Excel formula."
+/>
+
+From here on we use Excel for the calculations. The steps are always the same: say which area you want, standardise if it helps you think, then let `NORM.DIST` do the integration.
+
+<Example title="Example 16B: a straightforward probability">
+If $\mu = 4$ and $\sigma = 8$, what is the probability that a Normally distributed random variable $X$ lies between 2 and 18?
+
+<Solution>
+Letting $z = (x - \mu)/\sigma$,
+
+$$
+\Pr[2 < X < 18] = \Pr\left[\frac{2 - 4}{8} < Z < \frac{18 - 4}{8}\right] = \Pr[-0.25 < Z < 1.75].
+$$
+
+This is the area to the left of 1.75, minus the area to the left of $-0.25$:
+
+$$
+\Pr[-0.25 < Z < 1.75] = 0.9599 - 0.4013 = 0.5586.
+$$
+
+In Excel, `=NORM.DIST(18, 4, 8, TRUE) - NORM.DIST(2, 4, 8, TRUE)` gives 0.5586.
+</Solution>
+</Example>
+
+<Example title="Example 17B: t-shirt sizes">
+A t-shirt manufacturer knows that the chest measurements of his customers are Normally distributed with mean 92 cm and standard deviation 5 cm. He makes his t-shirts in four sizes: S (to fit 80 to 87 cm), M (to fit 87 to 94), L (to fit 94 to 101) and XL (to fit 101 to 108). What proportion of customers fit into each size t-shirt?
+
+<Solution>
+We need the cumulative probability at each of the boundary points. The $z$ values, from $z = (x - 92)/5$, show how far each boundary is from the mean, and `=NORM.DIST(x, 92, 5, TRUE)` gives the area to the left of it:
+
+| $x$ | $z = (x - 92)/5$ | $\Pr[X < x]$ |
+|---|---|---|
+| 80 | $-2.4$ | 0.0082 |
+| 87 | $-1.0$ | 0.1587 |
+| 94 | 0.4 | 0.6554 |
+| 101 | 1.8 | 0.9641 |
+| 108 | 3.2 | 0.9993 |
+
+The proportion for each size is the area between its two boundaries, found by subtraction. For size M, for example, `=NORM.DIST(94, 92, 5, TRUE) - NORM.DIST(87, 92, 5, TRUE)`:
+
+| Size | Proportion |
+|---|---|
+| S | 0.1505 (15.05%) |
+| M | 0.4968 (49.68%) |
+| L | 0.3086 (30.86%) |
+| XL | 0.0352 (3.52%) |
+
+Excel works with the unrounded cumulative probabilities, so the last digit can differ by one from subtracting the four-decimal figures in the first table.
+
+Check for yourself that 0.89% of customers don't fit into any size t-shirt.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="normal-explorer"
+  preset="t-shirts"
+  label="Shade each t-shirt size"
+  description="Size M, 87 to 94 cm, is shaded: 0.4968 of customers. Drag the handles to 80 and 87 for size S, and on through L and XL. Measure 500 customers and see how many fit the shaded size."
+/>
+
+<Example title="Example 18C: defective washers">
+The mean inside diameter of washers produced by a machine is 0.403 cm and the standard deviation is 0.005 cm. Washers with an internal diameter less than 0.397 cm or greater than 0.406 cm are considered defective. What percentage of the washers produced are defective, assuming the diameters are Normally distributed?
+
+<Solution>
+A washer is defective if it is too small or too large, so we add the two tails:
+
+$$
+\Pr[X < 0.397] + \Pr[X > 0.406] = \Pr[Z < -1.2] + \Pr[Z > 0.6] = 0.1151 + 0.2743 = 0.3894.
+$$
+
+In Excel: `=NORM.DIST(0.397, 0.403, 0.005, TRUE) + 1 - NORM.DIST(0.406, 0.403, 0.005, TRUE)` gives 0.3893, because it adds the unrounded values.
+
+So 38.93% of the washers are defective. (Working from tables gives 38.94%.)
+</Solution>
+</Example>
+
+<Example title="Example 19C: working backwards to μ and σ">
+In a large group of men 4% are under 160 cm tall and 52% are between 160 cm and 175 cm tall. Assuming that heights of men are Normally distributed, what are the mean and standard deviation of the distribution?
+
+<Solution>
+This time we know the areas and need the points, so we work backwards. 4% are under 160 cm, and $4\% + 52\% = 56\%$ are under 175 cm.
+
+`=NORM.S.INV(0.04)` gives $-1.7507$, so 160 cm is 1.7507 standard deviations below the mean. `=NORM.S.INV(0.56)` gives 0.1510, so 175 cm is 0.1510 standard deviations above it. Writing each as $x = \mu + z\sigma$:
+
+$$
+160 = \mu - 1.7507\sigma, \qquad 175 = \mu + 0.1510\sigma.
+$$
+
+Subtracting the first equation from the second, $15 = 1.9017\sigma$, so $\sigma = 7.888$. Then $\mu = 175 - 0.1510 \times 7.888 = 173.81$.
+
+So $\mu = 173.81$ cm and $\sigma = 7.888$ cm. (Working from tables, with $z$ rounded to two decimals, gives $\mu = 173.82$ and $\sigma = 7.895$.)
+</Solution>
+</Example>
+
+<Example title="Example 20C: the cooldrink machine">
+A soft-drink vending machine is set to discharge an average of 215 ml of cooldrink per cup. The amount discharged is Normally distributed with standard deviation 10 ml.
+
+(a) If 225 ml cups are used, what proportion of cups overflow?
+
+(b) What is the probability that a cup contains at least 200 ml of cooldrink?
+
+(c) What size cups ought to be used if it is desirable that only 2% of cups overflow?
+
+<Solution>
+**(a)** A cup overflows when more than 225 ml is poured:
+
+$$
+\Pr[X > 225] = \Pr[Z > 1] = 1 - 0.8413 = 0.1587.
+$$
+
+In Excel, `=1 - NORM.DIST(225, 215, 10, TRUE)`.
+
+**(b)**
+
+$$
+\Pr[X \ge 200] = \Pr[Z \ge -1.5] = 1 - 0.0668 = 0.9332.
+$$
+
+In Excel, `=1 - NORM.DIST(200, 215, 10, TRUE)`.
+
+**(c)** We need the cup size $x$ with only 2% of pours above it, which is 98% below it. `=NORM.INV(0.98, 215, 10)` gives 235.5 ml. That is a very large cup for a 215 ml drink: the machine is far too variable.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="normal-explorer"
+  preset="cooldrink"
+  label="Watch the cups overflow"
+  description="Everything above 225 ml is shaded: 0.1587 of cups overflow. Pour 500 cups and count. Then drag c out to 235.5 and the overflow falls to about 2%."
+/>
+
+## Sums and differences of independent Normal random variables
+
+Suppose we have a number of tasks that have to be completed in sequence, e.g. when a building is constructed. Suppose the time taken for each task obeys a Normal distribution, each having a given mean and variance, and is independent of the time taken for the other tasks. Obviously the total time taken will also be a random variable. What will its distribution be, and what will its mean and variance be? Without proof, we state that the total time taken will be Normally distributed with mean total time equal to the sum of the means for each task, and variance equal to the sum of the variances (**not** the standard deviations).
+
+<Theorem name="Sum of independent Normal random variables">
+If the time $X_i$ taken for the $i$th task is such that
+
+$$
+X_i \sim N(\mu_i, \sigma_i^{2}),
+$$
+
+and if it is independent of the time taken for other tasks, then the distribution of the random variable $Y = \sum_{i=1}^{n} X_i$ is
+
+$$
+Y \sim N(\mu, \sigma^{2}), \qquad \text{where } \mu = \sum_{i=1}^{n} \mu_i \ \text{ and } \ \sigma^{2} = \sum_{i=1}^{n} \sigma_i^{2}.
+$$
+</Theorem>
+
+Sometimes we need to consider the difference of two independent Normally distributed random variables. Suppose
+
+$$
+X_1 \sim N(\mu_1, \sigma_1^{2}) \quad \text{and} \quad X_2 \sim N(\mu_2, \sigma_2^{2}).
+$$
+
+Then, letting $Z = X_1 - X_2$, we state, without proof, that
+
+$$
+Z \sim N(\mu_1 - \mu_2, \ \sigma_1^{2} + \sigma_2^{2}).
+$$
+
+The mean of the random variable $Z$ is found by subtraction, but the variance is still found by addition.
+
+<Example title="Example 21B: getting to lectures on time">
+You have 4 chores to perform before getting to Statistics lectures by 08h00. The time (in minutes) to perform each chore is Normally distributed with mean and standard deviation as given below:
+
+| Chore | Mean ($\mu$) | Std. dev. ($\sigma$) |
+|---|---|---|
+| 1. Shower | 5 | 0.5 |
+| 2. Get dressed | 4 | 1.0 |
+| 3. Eat breakfast | 10 | 3.5 |
+| 4. Drive to university | 15 | 5.0 |
+
+(a) If you get up at 07h20, what is the probability of being late?
+
+(b) (i) At what time should you get up so as to be 99% sure you will not be more than 3 minutes late?
+
+(ii) What is the probability, getting up at this time, that you will be late (that is, arrive after 08h00)?
+
+<Solution>
+**(a)** The total time taken to get to university is a Normally distributed random variable $X$ with mean
+
+$$
+\mu = 5 + 4 + 10 + 15 = 34 \text{ minutes}
+$$
+
+and variance
+
+$$
+\sigma^{2} = 0.5^{2} + 1.0^{2} + 3.5^{2} + 5.0^{2} = 38.5,
+$$
+
+and therefore standard deviation $\sigma = \sqrt{38.5} = 6.205$. Getting up at 07h20 allows 40 minutes, so the probability that you take more than the allowed 40 minutes is
+
+$$
+\Pr[X > 40] = \Pr\left[Z > \frac{40 - 34}{6.205}\right] = \Pr[Z > 0.967] = 0.1668.
+$$
+
+In Excel, `=1 - NORM.DIST(40, 34, SQRT(38.5), TRUE)`. On average, you will be late one day in six, because $1/0.1668 \approx 6$.
+
+**(b) (i)** We must choose $x$ so that $\Pr[X < x] = 0.99$. In Excel, `=NORM.INV(0.99, 34, SQRT(38.5))` gives $x = 48.43$ minutes. You may be up to 3 minutes late, so you must arrive by 08h03, and 48.43 minutes before 08h03 is about 07h14.5.
+
+**(ii)** Getting up at this time, you are late if the chores take more than $48.43 - 3 = 45.43$ minutes:
+
+$$
+\Pr[X > 45.43] = \Pr\left[Z > \frac{45.43 - 34}{6.205}\right] = \Pr[Z > 1.843] = 0.0327.
+$$
+
+In Excel, if the answer to (i) is in cell B1, use `=1 - NORM.DIST(B1 - 3, 34, SQRT(38.5), TRUE)`. You'll be late about one day in 31, on average, but (by part (b)) more than three minutes late only once in every 100 days.
+</Solution>
+</Example>
+
+<ExcelPointer title="Working backwards with NORM.INV and NORM.S.INV">
+`NORM.DIST` goes from a value to a probability. `NORM.INV` goes the other way, from a probability to a value.
+
+1. `=NORM.INV(probability, mean, standard_dev)` returns the value $x$ with that much of the distribution to its left. In Example 21B(b)(i), `=NORM.INV(0.99, 34, SQRT(38.5))` returns 48.43: 99% of mornings take less than 48.43 minutes.
+2. `=NORM.S.INV(probability)` does the same for the standard Normal distribution, returning a $z$ value. `=NORM.S.INV(0.99)` gives 2.3263, and then $x = \mu + z\sigma = 34 + 2.3263 \times 6.2048 = 48.43$, the same answer.
+3. Both functions always work from the area to the **left**. For a question about the area to the right, subtract from 1 first.
+4. Take care not to round values that are inputs to a formula. Type `SQRT(38.5)` rather than 6.2, and refer to the cell holding 48.4346 rather than retyping 48.43. The general rule is to round only at the end of the calculation.
+</ExcelPointer>
+
+<TryThis
+  vizId="normal-explorer"
+  preset="chores"
+  label="Time your mornings"
+  description="Each run times all four chores separately and adds them up; nothing tells the panel that the total is Normal. Time 500 mornings and the pale bars settle onto N(34, 38.5). Everything past 40 minutes is shaded: late 0.1668 of the time."
+/>
+
+<Example title="Example 22C: caps for degree tubes">
+Plastic caps seal the ends of the tube into which your degree certificate is placed when you graduate. Suppose the tubes have a mean diameter of 24.0 mm and a standard deviation of 0.15 mm, and that the plastic caps have a mean diameter of 23.8 mm and a standard deviation of 0.11 mm. If the diameter of the cap is 0.10 mm or more larger than that of the tube, the cap cannot be squashed into the tube, and if the diameter of the cap is 0.45 mm or more smaller than that of the tube, it will not seal the tube, but will just keep falling out. If a tube and a plastic cap are selected at random, what are the probabilities of (a) the cap being too large for the tube, and (b) the cap falling out of the tube?
+
+<Solution>
+Let $C$ be the cap diameter and $T$ the tube diameter, and let $D = C - T$. The mean of a difference is found by subtraction and the variance by addition, so
+
+$$
+D \sim N(23.8 - 24.0, \ 0.11^{2} + 0.15^{2}) = N(-0.2, \ 0.0346),
+$$
+
+with standard deviation $\sqrt{0.0346} = 0.1860$.
+
+**(a)** The cap is too large when $D \ge 0.10$:
+
+$$
+\Pr[D \ge 0.10] = \Pr\left[Z \ge \frac{0.10 - (-0.2)}{0.1860}\right] = \Pr[Z \ge 1.613] = 0.0534.
+$$
+
+In Excel, `=1 - NORM.DIST(0.1, -0.2, SQRT(0.0346), TRUE)`.
+
+**(b)** The cap falls out when $D \le -0.45$:
+
+$$
+\Pr[D \le -0.45] = \Pr\left[Z \le \frac{-0.45 - (-0.2)}{0.1860}\right] = \Pr[Z \le -1.344] = 0.0895.
+$$
+
+In Excel, `=NORM.DIST(-0.45, -0.2, SQRT(0.0346), TRUE)`. (Working from tables gives 0.0537 and 0.0901.)
+</Solution>
+</Example>
+
+## Multiplying a Normal random variable by a constant
+
+Suppose that an American textbook says that the heights of students have a Normal distribution with mean 67 inches and standard deviation 4 inches. How do we convert this information to a Normal distribution with heights in centimetres?
+
+A result, which we do not prove, comes to our aid.
+
+<Theorem name="A linear function of a Normal random variable">
+If the random variable $X \sim N(\mu, \sigma^{2})$, and if $a$ and $b$ are constants, then the random variable $Y = aX + b$ also has a Normal distribution, with
+
+$$
+Y \sim N(a\mu + b, \ a^{2}\sigma^{2}).
+$$
+</Theorem>
+
+To solve the inches and centimetres problem, we note that the conversion factor, $a$, from inches to centimetres is 2.54 (one inch = 2.54 cm) and $b = 0$. So if $X \sim N(67, 16)$, where $X$ is measured in inches, then $Y = 2.54X + 0$ will be in centimetres, and
+
+$$
+Y \sim N(2.54 \times 67 + 0, \ 2.54^{2} \times 16) = N(170.2, \ 103.2).
+$$
+
+Also consider the case where you'd like to convert from degrees Celsius ($X$) to degrees Fahrenheit ($Y$). It is known that the relationship is given by $Y = \frac{9}{5}X + 32$. So, in general, if $X \sim N(\mu, \sigma^{2})$ then
+
+$$
+Y \sim N\left(\tfrac{9}{5}\mu + 32, \ \tfrac{81}{25}\sigma^{2}\right).
+$$
+
+If it was known that the temperature in degrees Fahrenheit was Normally distributed, what would the corresponding distribution in degrees Celsius be?
+
+<Example title="Example 23C: the mass of an ostrich">
+Another textbook says that the mass of an ostrich is Normally distributed with mean 68 745 g and variance 13 201 000 g².
+
+(a) Convert this information to a random variable with mass measured, more sensibly, in kilograms.
+
+(b) What is the probability that three ostriches weigh more than 225 kg?
+
+<Solution>
+**(a)** The conversion from grams to kilograms is to divide by 1000, so $a = 1/1000$ and $b = 0$. The variance is multiplied by $a^{2} = 1/1\,000\,000$:
+
+$$
+Y \sim N(68.745, \ 13.201),
+$$
+
+where $Y$ is measured in kilograms.
+
+**(b)** If one ostrich weighs $Y$ kg, then three weigh $V = Y_1 + Y_2 + Y_3$ kg, a sum of three independent Normal random variables, so
+
+$$
+V \sim N(3 \times 68.745, \ 3 \times 13.201) = N(206.235, \ 39.603).
+$$
+
+Then
+
+$$
+\Pr[V > 225] = \Pr\left[Z > \frac{225 - 206.235}{\sqrt{39.603}}\right] = \Pr[Z > 2.98] = 0.0014.
+$$
+
+In Excel, `=1 - NORM.DIST(225, 206.235, SQRT(39.603), TRUE)`.
+
+Notice that three different ostriches are not the same as one ostrich weighed three times over. $3Y$ would have variance $3^{2} \times 13.201$, but $Y_1 + Y_2 + Y_3$ has variance $3 \times 13.201$: the three birds' variations partly cancel out.
+</Solution>
+</Example>
+
+## Percentage points of the standard Normal distribution
+
+Often, instead of wanting to find $\Pr[Z > z]$ for some given value of $z$, we are given a probability $p$ and need to find the value of $z$ that makes the equation $\Pr[Z > z] = p$ true. It is convenient to use the notation $z_{(p)}$ to denote the value of $z$ which provides the solution to this equation, and to describe it as the $100p\%$ point of the distribution.
+
+<Example title="Example 24A: the 10% point">
+Find $z_{(0.10)}$, the 10% point of the standard Normal distribution.
+
+In other words, we are asked to find the point along the standard Normal distribution such that 10% of the distribution lies to the right of it.
+</Example>
+
+<TryThis
+  vizId="normal-explorer"
+  preset="standard"
+  label="Shade the top 10%"
+  description="This is the standard Normal distribution, Z ~ N(0, 1). Everything to the right of z = 1.28 is shaded, and the area is 0.1003: about 10%, so 1.28 is the 10% point. Drag c, or click it and use the arrow keys, to find other percentage points."
+/>
+
+The Excel formula `=NORM.S.INV(x)` works from a cumulative probability: it gives the point on the $Z$ scale to the left of which a proportion $x$ of the Normal distribution lies. Thus, to find $z_{(0.10)}$, the 10% point of the $Z$ distribution, we use the formula `=NORM.S.INV(0.90)`, which gives 1.2816. So $z_{(0.10)} = 1.28$.
+
+Note that, due to the symmetry of the Normal distribution about its mean (for the $Z$ distribution, this is symmetry about 0), we observe that $z_{(0.90)} = -z_{(0.10)}$, or
+
+`NORM.S.INV(0.10) = -NORM.S.INV(0.90)`.
+
+<Example title="Example 25C: more percentage points">
+Find (a) $z_{(0.05)}$, (b) $z_{(0.025)}$, (c) $z_{(0.01)}$, (d) $z_{(0.005)}$, (e) $z_{(0.25)}$, (f) $z_{(0.5)}$, (g) $z_{(0.95)}$ and (h) $z_{(0.99)}$.
+
+<Solution>
+In each case $z_{(p)}$ has $p$ of the distribution to its right, so $1 - p$ to its left, and we use `=NORM.S.INV(1 - p)`:
+
+| | $p$ | Excel | $z_{(p)}$ |
+|---|---|---|---|
+| (a) | 0.05 | `=NORM.S.INV(0.95)` | 1.64 |
+| (b) | 0.025 | `=NORM.S.INV(0.975)` | 1.96 |
+| (c) | 0.01 | `=NORM.S.INV(0.99)` | 2.33 |
+| (d) | 0.005 | `=NORM.S.INV(0.995)` | 2.58 |
+| (e) | 0.25 | `=NORM.S.INV(0.75)` | 0.67 |
+| (f) | 0.5 | `=NORM.S.INV(0.5)` | 0 |
+| (g) | 0.95 | `=NORM.S.INV(0.05)` | $-1.64$ |
+| (h) | 0.99 | `=NORM.S.INV(0.01)` | $-2.33$ |
+
+Notice the symmetry: (g) and (h) are just (a) and (c) with the sign changed. The values in (a) to (c) will come up again and again in the inference work of Module 5.
+</Solution>
+</Example>
+
+<Quiz />

@@ -43,3 +43,17 @@ export function sampleExponential(lambda: number): number {
 export function sampleUniform(a: number, b: number): number {
   return a + Math.random() * (b - a);
 }
+
+/**
+ * One draw from the Normal distribution N(μ, σ²), by the Box–Muller method:
+ * two independent Uniform draws are turned into one standard Normal draw,
+ * which is then shifted by μ and stretched by σ.
+ *
+ * As in `sampleExponential`, the first draw is taken from 1 − U so that it
+ * can never be 0, whose log is −∞.
+ */
+export function sampleNormal(mu: number, sigma: number): number {
+  const u = 1 - Math.random();
+  const v = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+}

@@ -59,6 +59,9 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // One component serves both: they are two views of the same process.
   "poisson-process": lazy(() => import("./distributions/PoissonProcess")),
 
+  // M4 — Normal distribution (m4-normal)
+  "normal-explorer": lazy(() => import("./distributions/NormalExplorer")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

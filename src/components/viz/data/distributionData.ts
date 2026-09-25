@@ -1,14 +1,16 @@
 /**
  * Preset distributions for the Module 3 and Module 4 visualisations
- * (`PmfBarExplorer`, `PdfArea` and `UniformExplorer`).
+ * (`PmfBarExplorer`, `PdfArea`, `UniformExplorer`, `BinomialExplorer`,
+ * `PoissonProcess` and `NormalExplorer`).
  *
  * Every preset here is taken from a worked example in the unit, so the numbers
  * a student sees in the right panel are the same ones they just read in the
  * text. Where the lecturer changed the figures from the printed book (the tip
  * coins and the car commissions), the values below follow the lecturer.
  *
- * Densities carry an exact antiderivative (`cdf`) rather than being integrated
- * numerically. Every density in this chapter is a low-order polynomial, so the
+ * The Module 3 densities in `PDF_PRESETS` carry an exact antiderivative (`cdf`)
+ * rather than being integrated numerically. Every density in that chapter is a
+ * low-order polynomial, so the
  * closed form is short, and it means the shaded-area readout agrees with the
  * answers printed in the worked solutions to the last decimal instead of
  * drifting by a rounding error.
@@ -542,5 +544,173 @@ export const POISSON_PRESETS: PoissonPreset[] = [
     span: "km of cable",
     event: "flaws",
     select: [0, 0],
+  },
+];
+
+/**
+ * One component of a Normal random variable that is built as a sum, such as
+ * a single chore in Example 21B. The viz draws each part separately and adds
+ * them, so the sum's distribution is seen to come out Normal rather than
+ * being asserted.
+ */
+export interface NormalPart {
+  /** Short name shown in the breakdown of a single run, e.g. "Shower". */
+  name: string;
+  mu: number;
+  sigma: number;
+}
+
+/**
+ * A worked example the `NormalExplorer` can open at: a Normal distribution,
+ * the fixed stretch of axis it is drawn against, and the area shaded on
+ * opening.
+ */
+export interface NormalPreset {
+  id: string;
+  /** Short name for the preset picker. */
+  label: string;
+  /** Which worked example this comes from, shown under the chart. */
+  source: string;
+  /** Mean of the distribution on opening. */
+  mu: number;
+  /** Standard deviation on opening (not the variance). */
+  sigma: number;
+  /**
+   * How σ is written in the Excel formula shown in the read-out, when it is
+   * not a tidy number: Example 21B works with SQRT(38.5), not 6.2048, and the
+   * text warns against typing a rounded value into a formula. Defaults to the
+   * number itself.
+   */
+  sigmaExcel?: string;
+  /**
+   * The visible stretch of the x-axis. Fixed while μ and σ are dragged, so
+   * the curve is seen to move and flatten against an unmoving scale.
+   */
+  view: [number, number];
+  /**
+   * Edges of the shaded area on opening. `null` stands for an infinite edge:
+   * `[null, 250]` shades everything below 250.
+   */
+  shade: [number | null, number | null];
+  /** Granularity of the μ slider and the shading handles, e.g. 0.1. */
+  step: number;
+  /** Axis caption naming what the random variable measures. */
+  axisLabel: string;
+  /** Unit to print after a single drawn value, e.g. "g". */
+  unit: string;
+  /** What one draw is, in the language of the example: "Weigh one tub". */
+  drawOne: string;
+  /** The same action done 500 times, for the batch button. */
+  drawMany: string;
+  /** Plural noun for the things drawn, used in the running score. */
+  drawNoun: string;
+  /** Letter for the random variable in the read-out. Defaults to "X". */
+  variable?: string;
+  /**
+   * When present, μ and σ cannot be changed for this preset and this sentence
+   * says why, in place of the sliders. The standard Normal distribution is
+   * N(0, 1) by definition, and the chores total takes its μ and σ from the
+   * four chores, so a slider on either would contradict the text.
+   */
+  locked?: string;
+  /** The pieces a draw is summed from, for a preset built as a sum. */
+  parts?: NormalPart[];
+}
+
+/**
+ * Normal distributions for `NormalExplorer`, one per worked example in
+ * Module 4, WU4 (`m4-normal`).
+ */
+export const NORMAL_PRESETS: NormalPreset[] = [
+  {
+    id: "margarine",
+    label: "Margarine",
+    source: "Example 15A",
+    mu: 251,
+    sigma: 3,
+    view: [239, 263],
+    // Part (a): Pr[251 ≤ X ≤ 253] = 0.2475, the Excel figure in the text.
+    shade: [251, 253],
+    step: 0.1,
+    axisLabel: "x = margarine in a 250 g tub, in grams",
+    unit: "g",
+    drawOne: "Weigh one tub",
+    drawMany: "Weigh 500",
+    drawNoun: "tubs",
+  },
+  {
+    id: "t-shirts",
+    label: "T-shirts",
+    source: "Example 17B",
+    mu: 92,
+    sigma: 5,
+    view: [72, 112],
+    // Size M, 87 to 94 cm: the largest share of customers, 0.4968.
+    shade: [87, 94],
+    step: 0.5,
+    axisLabel: "x = chest measurement, in cm",
+    unit: "cm",
+    drawOne: "Measure one customer",
+    drawMany: "Measure 500",
+    drawNoun: "customers",
+  },
+  {
+    id: "cooldrink",
+    label: "Cooldrink",
+    source: "Example 20C",
+    mu: 215,
+    sigma: 10,
+    view: [175, 255],
+    // Part (a): a 225 ml cup overflows with probability 0.1587.
+    shade: [225, null],
+    step: 0.5,
+    axisLabel: "x = cooldrink poured into a cup, in ml",
+    unit: "ml",
+    drawOne: "Pour one cup",
+    drawMany: "Pour 500",
+    drawNoun: "cups",
+  },
+  {
+    id: "chores",
+    label: "Chores",
+    source: "Example 21B",
+    mu: 34,
+    sigma: Math.sqrt(38.5),
+    sigmaExcel: "SQRT(38.5)",
+    view: [9, 59],
+    // Part (a): up at 07h20 leaves 40 minutes, and Pr[X > 40] = 0.1668.
+    shade: [40, null],
+    step: 0.1,
+    axisLabel: "x = time for all four chores, in minutes",
+    unit: "min",
+    drawOne: "Time one morning",
+    drawMany: "Time 500",
+    drawNoun: "mornings",
+    locked:
+      "μ and σ come from the four chores: μ = 5 + 4 + 10 + 15 = 34 and σ² = 0.5² + 1² + 3.5² + 5² = 38.5.",
+    parts: [
+      { name: "Shower", mu: 5, sigma: 0.5 },
+      { name: "Dress", mu: 4, sigma: 1 },
+      { name: "Breakfast", mu: 10, sigma: 3.5 },
+      { name: "Drive", mu: 15, sigma: 5 },
+    ],
+  },
+  {
+    id: "standard",
+    label: "N(0, 1)",
+    source: "Example 24A",
+    mu: 0,
+    sigma: 1,
+    view: [-4, 4],
+    // The upper 10% point: Pr[Z ≥ 1.28] = 0.1003.
+    shade: [1.28, null],
+    step: 0.01,
+    axisLabel: "z = standard deviations from the mean",
+    unit: "",
+    drawOne: "Draw one z",
+    drawMany: "Draw 500",
+    drawNoun: "values",
+    variable: "Z",
+    locked: "The standard Normal distribution has μ = 0 and σ = 1 by definition.",
   },
 ];

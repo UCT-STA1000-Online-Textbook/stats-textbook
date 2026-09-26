@@ -28,7 +28,7 @@ export const ALL_UNITS: UnitMeta[] = [
   { slug: "m4-binomial",                  title: "Binomial Distribution",                    moduleId: "m4", moduleTitle: "Probability Distributions", unitNumber: 10, moduleUnitNumber: 2 },
   { slug: "m4-poisson-exponential",       title: "Poisson & Exponential Distributions",      moduleId: "m4", moduleTitle: "Probability Distributions", unitNumber: 11, moduleUnitNumber: 3 },
   { slug: "m4-normal",                    title: "Normal Distribution",                      moduleId: "m4", moduleTitle: "Probability Distributions", unitNumber: 12, moduleUnitNumber: 4 },
-  { slug: "m5-sampling-distribution",     title: "Sampling Distribution",                    moduleId: "m5", moduleTitle: "Hypothesis Testing",        unitNumber: 13, moduleUnitNumber: 1 },
+  { slug: "m5-sampling-distribution",     title: "Population Means and Sample Means",      moduleId: "m5", moduleTitle: "Hypothesis Testing",        unitNumber: 13, moduleUnitNumber: 1 },
   { slug: "m5-confidence-intervals",      title: "Confidence Intervals",                     moduleId: "m5", moduleTitle: "Hypothesis Testing",        unitNumber: 14, moduleUnitNumber: 2 },
   { slug: "m5-testing-mu",                title: "Testing Whether µ is a Specified Value",   moduleId: "m5", moduleTitle: "Hypothesis Testing",        unitNumber: 15, moduleUnitNumber: 3 },
   { slug: "m5-comparing-two-means",       title: "Comparing Two Sample Means",               moduleId: "m5", moduleTitle: "Hypothesis Testing",        unitNumber: 16, moduleUnitNumber: 4 },

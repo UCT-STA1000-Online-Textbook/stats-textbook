@@ -1,14 +1,226 @@
 ---
 slug: "m5-sampling-distribution"
-title: "Sampling Distribution"
+title: "Population Means and Sample Means"
 moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 13
 moduleUnitNumber: 1
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Which of the following is a statistic?"
+    options:
+      - "The population mean μ"
+      - "The population variance σ²"
+      - "The sample mean x̄"
+      - "The mean of every travelling time in the country"
+    answer: 2
+    explanation: "A statistic is any value computed from the elements of a random sample, so the sample mean x̄ is one. The population mean μ and the population variance σ² belong to the population as a whole, and so does the mean of every travelling time in the country (that is just μ described in words). They are parameters, not statistics."
+  - id: "q2"
+    type: "true-false"
+    question: "The population mean μ is a random variable: it changes from one sample to the next."
+    answer: false
+    explanation: "False. The population mean μ has one fixed value, even if we never get to know it. It is the sample mean that changes from sample to sample, which is why we treat it as a random variable and write it as X̄."
+    vizHint: "sampling-distribution"
+    vizHintParams:
+      preset: "travel"
+  - id: "q3"
+    type: "mcq"
+    question: "A sample of n = 40 is taken from a population with mean μ and standard deviation σ = 1.4. What is the variance of the sample mean X̄?"
+    options:
+      - "0.221"
+      - "0.049"
+      - "1.96"
+      - "0.035"
+    answer: 1
+    explanation: "The variance of X̄ is σ²/n = 1.4²/40 = 1.96/40 = 0.049. The value 0.221 is its standard deviation, σ/√n = 1.4/√40, and 1.96 is the variance of a single value from the population."
+    vizHint: "sampling-distribution"
+    vizHintParams:
+      preset: "travel"
+  - id: "q4"
+    type: "true-false"
+    question: "If the population has a Normal distribution, the sample mean X̄ only has a Normal distribution when n is 30 or more."
+    answer: false
+    explanation: "False. When the population is Normal, X̄ has a Normal distribution for every sample size, even n = 2. The rule of thumb of n ≥ 30 is for populations that are not Normal, where the central limit theorem needs a large enough sample to take effect."
+    vizHint: "sampling-distribution"
+    vizHintParams:
+      preset: "travel"
+  - id: "q5"
+    type: "mcq"
+    question: "The lifetimes of light bulbs have a strongly skewed distribution with mean 1000 hours. A sample of 50 bulbs is tested. What can we say about the sample mean lifetime X̄?"
+    options:
+      - "It is skewed like the population, so we cannot say anything about it."
+      - "It is approximately Normal, but its mean is smaller than 1000 hours."
+      - "It is exactly Normal, because n is larger than 30."
+      - "It is approximately Normal, with mean 1000 hours."
+    answer: 3
+    explanation: "By the central limit theorem, with a sample as large as 50 the sample mean is approximately Normal, whatever the shape of the population, and its mean is the population mean, 1000 hours. It is only approximately Normal: X̄ is exactly Normal only when the population itself is Normal."
+    vizHint: "sampling-distribution"
+    vizHintParams:
+      preset: "bulbs"
+  - id: "q6"
+    type: "mcq"
+    question: "If the sample size is made four times larger, what happens to the standard deviation of the sample mean?"
+    options:
+      - "It is divided by four."
+      - "It stays the same."
+      - "It is halved."
+      - "It doubles."
+    answer: 2
+    explanation: "The standard deviation of X̄ is σ/√n. Replacing n by 4n divides it by √4 = 2, so it is halved. Its variance, σ²/n, is divided by four. Larger samples give sample means that sit closer to μ."
+    vizHint: "sampling-distribution"
+    vizHintParams:
+      preset: "margarine"
 prevUnit: "m4-normal"
 nextUnit: "m5-confidence-intervals"
 ---
 
-Content coming soon.
+## The unobtainable carrot
+
+We introduce now two new concepts, the mean and variance of a population, and then immediately acknowledge that they are virtually unobtainable. Consider this problem. We want to make global statements about the travelling times to work of all people employed in a country. To be precise, we wish to determine the mean and variance of these travelling times. Now let your imagination run riot considering the logistics of such an operation (observers, stop-watches, data collection and processing, ...). There is no doubt that the mean and variance of the travelling times of all employed people are numbers that exist; it is just too expensive and too time consuming to obtain them. So what do we do? We take the travelling times of a sample of employed people and use the sample mean and variance to estimate the mean and variance of the travelling times of the population of employed people. The operation of taking a sample from a population is not a trivial one, and is an entire area of study on its own, one which we unfortunately do not have time to pursue in this course.
+
+> **Keywords:** population mean and variance, statistic, <KeywordChip vizId="sampling-distribution" preset="travel">sampling distribution</KeywordChip>, <KeywordChip vizId="sampling-distribution" preset="bulbs">central limit theorem</KeywordChip>, <KeywordChip vizId="sampling-distribution" preset="travel">the sample mean is a random variable</KeywordChip>.
+
+We now have three related concepts, each called a mean: the mean of a sample (Module 2), the mean of a probability distribution (Module 3) and now the mean of a population. The sample mean is used to estimate the population mean. When a probability distribution is chosen as a statistical model for a population, one of the criteria for determining the parameters of the probability distribution is that the mean of the probability distribution should be equal to the population mean. This paragraph so far is also true when we replace the word mean with the word variance. It is a universal convention to use the symbols $\mu$ and $\sigma^{2}$ for the population mean and population variance respectively, and the fact that these symbols are also used for the mean and the variance of a probability distribution causes no confusion.
+
+Because these notions of the mean and variance are important, we risk saying them again. The population mean and variance are quantities that belong to the population as a whole. If you could examine the entire population of interest then you could determine the one true value for the population mean and the one true value for the population variance. Usually, it is impracticable to do a census of every member of a population to determine the population mean. The standard procedure is to take a random sample from the population of interest and estimate $\mu$, the population mean, by means of $\bar{x}$, the sample mean.
+
+## Statistics
+
+We remind you again of the special definition, within the subject Statistics, of the noun "statistic".
+
+<Definition term="Statistic">
+A **statistic** is any value computed from the elements of a random sample. Thus $\bar{x}$ and $s^{2}$ are examples of statistics.
+</Definition>
+
+## The random variable $\bar{X}$
+
+We argued above that the population parameter $\mu$ has a fixed value. But the sample mean $\bar{x}$, the statistic which estimates $\mu$, depends on the particular random sample drawn, and therefore varies from sample to sample. Thus the sample mean $\bar{x}$ is a random variable: it takes on different values for different random samples. In accordance with our custom of using capital letters for random variables and small letters for particular values of random variables, we will now start referring to the sample mean as the random variable $\bar{X}$.
+
+<TryThis
+  vizId="sampling-distribution"
+  preset="travel"
+  label="Take a sample, then another"
+  description="Press Time 40 trips a few times. Each press is a fresh study of 40 travelling times, and each gives a different x̄: watch them land in different places in the lower chart, while μ stays put."
+/>
+
+<Note>
+In real life you only ever get **one** sample, like the 40 days in Example 1A, and so one value of $\bar{x}$. The visualisation repeats the whole study hundreds of times, which nobody could afford to do, so that you can *see* how much $\bar{x}$ could have varied from one sample to the next. Two numbers control it, and they mean different things:
+
+- $n$ is the size of each sample. Changing $n$ changes the answer: bigger samples give sample means that sit closer to $\mu$.
+- "Repeat 500 times" is how many imaginary studies to run. It does not change the answer; it only fills in the picture so the shape is clear.
+
+The pattern the repeats reveal is exactly what the theory below predicts, and it is what lets us judge how trustworthy our one $\bar{x}$ is.
+</Note>
+
+Because the statistic $\bar{X}$ is a random variable it must have a probability distribution. We have a special name for the probability distributions of statistics. They are called **sampling distributions**. This name is motivated by the fact that statistics depend on samples.
+
+## The sampling distribution of $\bar{X}$
+
+In order to find the sampling distribution of $\bar{X}$, consider the following. Suppose that we take a sample of size $n$ from a population which has a Normal distribution with known mean $\mu$ and known variance $\sigma^{2}$. Apart from dividing by $n$, which is a fixed number, we can then think of $\bar{X}$ as the sum of $n$ values, let us call them $X_1, X_2, X_3, \ldots, X_n$, each of which has a Normal distribution, with mean $\mu$ and variance $\sigma^{2}$; i.e. $X_i \sim N(\mu, \sigma^{2})$.
+
+When we learnt about the Normal distribution, we stated that the sum of independent Normal distributions also has a Normal distribution; the mean of the sum is the sum of the means, and the variance of the sum is the sum of the variances. Thus
+
+$$
+\sum_{i=1}^{n} X_i \sim N(n\mu, \ n\sigma^{2})
+$$
+
+because there are $n$ equal means and $n$ equal variances. But we do not want the distribution of $\sum_{i=1}^{n} X_i$; we want the distribution of
+
+$$
+\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i.
+$$
+
+We also saw in Module 4 that if the random variable $X \sim N(\mu, \sigma^{2})$, then $aX \sim N(a\mu, \ a^{2}\sigma^{2})$. Applying this result with $a = 1/n$, we have
+
+$$
+\bar{X} = \frac{1}{n} \sum_{i=1}^{n} X_i \sim N\left(\mu, \ \frac{\sigma^{2}}{n}\right).
+$$
+
+This statement about the distribution of $\bar{X}$ is true for all values of $n$. The bottom line is that if a sample of any specified size $n$ is taken from a population having a Normal distribution with mean $\mu$ and variance $\sigma^{2}$, then the mean of that sample will also have a Normal distribution, with the same mean $\mu$, but variance $\sigma^{2}/n$.
+
+## The central limit theorem
+
+But what happens if we take a sample from a population that does not have a Normal distribution? Suppose that we do however know that this distribution has mean $\mu$ and variance $\sigma^{2}$. Suppose we take a sample of size $n$, and compute the sample mean $\bar{X}$. As mentioned above, apart from division by the sample size, the sample mean $\bar{X}$ consists of $\sum_{i=1}^{n} X_i$, the sum of $n$ random variables. We learnt about the "central limit theorem", which states that the sum of a large number of independent identically distributed random variables always has a Normal distribution. Thus, by the central limit theorem, the sample mean has a Normal distribution if the sample size is "large enough". A sample size of 30 or more is large enough so that the distribution of the sample mean can be assumed to have a Normal distribution; the approximation to a Normal distribution is often good even for much smaller samples. It can be shown that if we draw a sample of $n$ observations from a population which has population mean $\mu$ and variance $\sigma^{2}$, then $\bar{X}$ can be modelled by a Normal distribution with mean $\mu$ and variance $\sigma^{2}/n$, i.e.
+
+$$
+\bar{X} \mathrel{\dot\sim} N\left(\mu, \ \frac{\sigma^{2}}{n}\right)
+$$
+
+("the sample mean is approximately distributed Normally, with mean $\mu$ and variance $\sigma^{2}/n$"; the dot over the $\sim$ stands for "approximately"). The approximation is invariably very good for $n \ge 30$. But if the population which is being sampled has a Normal distribution, then
+
+$$
+\bar{X} \sim N\left(\mu, \ \frac{\sigma^{2}}{n}\right)
+$$
+
+for all values of $n$, including small values.
+
+<TryThis
+  vizId="sampling-distribution"
+  preset="bulbs"
+  label="Watch the central limit theorem happen"
+  description="Light bulb lifetimes are strongly skewed. Test 2 bulbs, then Repeat 500 times: the pile of sample means still leans right. Now drag n up to 30 or more and repeat 500 times again: the means settle into the Normal curve, even though the bulbs themselves never do."
+/>
+
+<Theorem name="The sampling distribution of the sample mean">
+Take a random sample of size $n$ from a population with mean $\mu$ and variance $\sigma^{2}$. Then
+
+- if the population is Normal, $\bar{X} \sim N(\mu, \sigma^{2}/n)$ exactly, for every $n$;
+- whatever the shape of the population, $\bar{X} \mathrel{\dot\sim} N(\mu, \sigma^{2}/n)$ approximately, and the approximation is very good for $n \ge 30$.
+</Theorem>
+
+The central limit theorem is a powerful result. Firstly, it tells us about the sampling distribution of $\bar{X}$, **regardless of the distribution of the population from which we sample**. The approximation becomes very good as the sample size increases. If the population which we sampled had a distribution which was similar to a Normal distribution, the approximation is good even for small samples. If the sampled population had an exact Normal distribution, then $\bar{X}$ too has a Normal distribution for all sample sizes. But even when the population from which the samples were taken looks nothing like a Normal distribution, the approximation of the sampling distribution to a Normal distribution shape gets better and better as the sample size $n$ increases.
+
+Secondly, (and remember that we are thinking of $\bar{X}$ as a random variable and that therefore it has a mean) it tells us that the mean of the sample mean $\bar{X}$ is the same as the mean of the population from which we sampled. The sample mean is therefore likely to be "close" to the true population mean $\mu$. In simple terms, the sample mean is a good statistic to use to estimate the population mean $\mu$.
+
+Thirdly, the inverse relation between the sample size and variance of the sample mean has an important practical consequence. With a large sample size, the sample mean is likely, on average, to be closer to the true population mean than with a small sample size. In crude terms, sample means based on large samples are better than sample means based on small samples.
+
+<TryThis
+  vizId="sampling-distribution"
+  preset="margarine"
+  label="Make the sample bigger"
+  description="The mass of a margarine tub is Uniform on (495, 510), a flat population. Weigh 5 tubs and Repeat 500 times, then drag n up to 50 and repeat 500 times again. The pile of sample means gets much narrower around μ, because its variance is σ²/n."
+/>
+
+The rest of this module builds on our understanding of the distribution of $\bar{X}$. This idea is a fairly deep concept, and many students take a while before they really understand it. The above section should be revisited from time to time. Each time, you should peel off a new layer of the onion of understanding.
+
+Let us now consider various problems associated with the estimation of the mean. For now, we will make the (usually unrealistic) assumption that even though the population mean $\mu$ is unknown, we do in fact know the value of the population variance $\sigma^{2}$. Later on in the course, we will learn how to deal with the more realistic situation in which both the population mean and variance are unknown.
+
+## Estimating an unknown population mean when the population variance is assumed known
+
+We motivate some theory by means of an example.
+
+<Example title="Example 1A: travelling times to university">
+We wish to estimate the population mean $\mu$ of travelling times between home and university. For now we have to assume the population variance $\sigma^{2}$ known, so that $\sigma$ is also known, and let us suppose $\sigma = 1.4$ minutes. On a sample of 40 days, we use a stopwatch to measure our travelling time, with the following results (time in minutes):
+
+$$
+\begin{array}{cccccccccc}
+17.2 & 18.3 & 16.8 & 15.9 & 17.4 & 16.8 & 16.3 & 18.4 & 19.1 & 29.3 \\
+18.1 & 16.9 & 17.2 & 17.6 & 15.8 & 18.4 & 17.9 & 16.5 & 17.9 & 16.8 \\
+16.4 & 19.3 & 17.5 & 18.1 & 17.2 & 17.7 & 17.1 & 16.0 & 18.1 & 22.3 \\
+19.1 & 17.0 & 20.5 & 16.1 & 18.7 & 19.0 & 17.3 & 17.6 & 18.2 & 16.5
+\end{array}
+$$
+
+What is the sample mean?
+
+<Solution>
+Adding these numbers and dividing by 40 gives the sample mean
+
+$$
+\bar{x} = \frac{17.2 + 18.3 + \cdots + 16.5}{40} = \frac{718.3}{40} = 17.96.
+$$
+</Solution>
+</Example>
+
+Fine, $\bar{x}$ estimates $\mu$, so we have what we wanted. But how good is this estimate? How much confidence can we place in it? To answer this question we need to make use of the sampling distribution of $\bar{X}$. We shall see that we can use this distribution to form an interval of numbers, called a confidence interval. We will also be able to make a statement about the probability that the confidence interval method yields an interval which includes the population mean.
+
+<TryThis
+  vizId="sampling-distribution"
+  preset="travel"
+  label="How far can x̄ land from μ?"
+  description="Time 40 trips, then Repeat 500 times. With σ = 1.4 and n = 40, the sample means have standard deviation 1.4/√40 = 0.221, so almost all of them land within about half a minute of μ. That spread is what a confidence interval is built from."
+/>
+
+<Quiz />

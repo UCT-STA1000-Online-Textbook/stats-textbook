@@ -62,6 +62,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // M4 — Normal distribution (m4-normal)
   "normal-explorer": lazy(() => import("./distributions/NormalExplorer")),
 
+  // M5 — Population means and sample means (m5-sampling-distribution).
+  // The central limit theorem viz: take samples, pile up their means.
+  "sampling-distribution": lazy(() => import("./inference/SamplingDistribution")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

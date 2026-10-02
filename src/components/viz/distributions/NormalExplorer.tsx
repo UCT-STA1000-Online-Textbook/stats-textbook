@@ -39,6 +39,7 @@ import { useSvgDrag, clampN } from "../useDrag";
 import { useReplayTween } from "../useReplayTween";
 import { Slider, VIZ_TEXT, VizHint } from "../shared";
 import { sampleNormal } from "../sampling";
+import { normalCdf, normalPdf } from "../normal";
 import { NORMAL_PRESETS, type NormalPreset } from "../data/distributionData";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
@@ -77,57 +78,6 @@ const SIGMA_MAX_FRAC = 2;
 
 /** Share of a Normal distribution within k standard deviations, as the text rounds it. */
 const WITHIN_K: Record<number, string> = { 1: "68%", 2: "95%", 3: "99.7%" };
-
-/**
- * Cumulative probability Φ(z) of the standard Normal distribution.
- *
- * There is no closed form, so this uses Hart's rational approximation as
- * published by West (2005), which is accurate to about 15 decimal places:
- * far past the four the read-out prints, so the panel agrees with Excel's
- * NORM.S.DIST to the last digit shown.
- */
-function normalCdf(z: number): number {
-  if (z === Infinity) return 1;
-  if (z === -Infinity) return 0;
-  const x = Math.abs(z);
-  let tail: number;
-  if (x > 37) {
-    tail = 0;
-  } else {
-    const e = Math.exp((-x * x) / 2);
-    if (x < 7.07106781186547) {
-      let num = 3.52624965998911e-2 * x + 0.700383064443688;
-      num = num * x + 6.37396220353165;
-      num = num * x + 33.912866078383;
-      num = num * x + 112.079291497871;
-      num = num * x + 221.213596169931;
-      num = num * x + 220.206867912376;
-      let den = 8.83883476483184e-2 * x + 1.75566716318264;
-      den = den * x + 16.064177579207;
-      den = den * x + 86.7807322029461;
-      den = den * x + 296.564248779674;
-      den = den * x + 637.333633378831;
-      den = den * x + 793.826512519948;
-      den = den * x + 440.413735824752;
-      tail = (e * num) / den;
-    } else {
-      // Far tail: a continued fraction converges faster than the rational form.
-      let b = x + 0.65;
-      b = x + 4 / b;
-      b = x + 3 / b;
-      b = x + 2 / b;
-      b = x + 1 / b;
-      tail = e / b / 2.506628274631;
-    }
-  }
-  return z > 0 ? 1 - tail : tail;
-}
-
-/** Normal density f(x) for N(μ, σ²). */
-function normalPdf(x: number, mu: number, sigma: number): number {
-  const z = (x - mu) / sigma;
-  return Math.exp(-0.5 * z * z) / (sigma * Math.sqrt(2 * Math.PI));
-}
 
 /** Number of decimal places in a step such as 0.1 or 0.01. */
 function decimalsOf(step: number): number {

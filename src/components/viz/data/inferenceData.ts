@@ -1,11 +1,16 @@
 /**
- * Preset populations for the Module 5 sampling visualisation
- * (`SamplingDistribution`).
+ * Presets for the Module 5 inference visualisations, one list per viz:
  *
- * Each preset is a population the student has already met in Module 4, so the
- * only new idea on screen is what happens to the *mean of a sample* drawn from
- * it. The three shapes are chosen for what they teach about the central limit
- * theorem:
+ *   - `SAMPLE_MEAN_PRESETS` for `SamplingDistribution` (WU1),
+ *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2).
+ *
+ * Each preset carries the figures printed in its worked example, so the panel
+ * and the page agree.
+ *
+ * The WU1 populations are ones the student has already met in Module 4, so
+ * the only new idea on screen is what happens to the *mean of a sample* drawn
+ * from them. The three shapes are chosen for what they teach about the
+ * central limit theorem:
  *
  *   - Normal: the sample mean is exactly Normal for every sample size.
  *   - Uniform: flat, but the sample means turn bell-shaped almost at once.
@@ -97,5 +102,86 @@ export const SAMPLE_MEAN_PRESETS: SampleMeanPreset[] = [
     drawOne: (n) => `Test ${n} ${n === 1 ? "bulb" : "bulbs"}`,
     item: "bulb",
     format: (x) => x.toFixed(0),
+  },
+];
+
+/**
+ * A worked example the `ConfidenceIntervals` viz can open at (Module 5, WU2,
+ * `m5-confidence-intervals`).
+ *
+ * The examples give σ, n and one observed x̄, but never the true μ: if we
+ * knew μ we would not need an interval. The simulation has to pick one so it
+ * can check which intervals catch it, so each preset sets `trueMu` close to
+ * the example's x̄ and says so in `source`.
+ */
+export interface CiPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, and the true μ the simulation assumes. */
+  source: string;
+  /** Known population standard deviation σ. */
+  sigma: number;
+  /** The population mean the simulated samples are drawn from. */
+  trueMu: number;
+  /** The sample mean the worked example observed, shown before any runs. */
+  exampleMean: number;
+  /** Sample size the viz opens at: the example's n. */
+  startN: number;
+  /**
+   * The visible stretch of the x-axis. Fixed while n and the level change,
+   * so narrower intervals are *seen* to be narrower.
+   */
+  view: [number, number];
+  /** Spacing of the axis ticks. */
+  tickStep: number;
+  /** Axis caption naming what one value in the population measures. */
+  axisLabel: string;
+  /** What taking one sample is, in the language of the example. */
+  drawOne: (n: number) => string;
+}
+
+/** Worked examples for `ConfidenceIntervals`, from Module 5, WU2. */
+export const CI_PRESETS: CiPreset[] = [
+  {
+    id: "travel",
+    label: "Travel times",
+    // Same true mean as the Module 5 WU1 travel preset, so the two units
+    // tell one story about the same population.
+    source: "Example 1A, true mean set to 18",
+    sigma: 1.4,
+    trueMu: 18,
+    exampleMean: 17.96,
+    startN: 40,
+    view: [16.6, 19.4],
+    tickStep: 0.5,
+    axisLabel: "mean travelling time, in minutes",
+    drawOne: (n) => `Time ${n} trips`,
+  },
+  {
+    id: "fuel",
+    label: "Fuel",
+    source: "Example 2B, true mean set to 6.8",
+    sigma: 1.7,
+    trueMu: 6.8,
+    exampleMean: 6.73,
+    startN: 47,
+    view: [5.4, 8.2],
+    tickStep: 0.5,
+    axisLabel: "mean fuel used, in litres per 100 km",
+    drawOne: (n) => `Test ${n} drivers`,
+  },
+  {
+    id: "sport",
+    label: "Sport spend",
+    source: "Example 3C, true mean set to R170",
+    sigma: 37.6,
+    trueMu: 170,
+    exampleMean: 168.15,
+    startN: 58,
+    view: [140, 200],
+    tickStep: 10,
+    axisLabel: "mean winter spend on sporting equipment, in rand",
+    drawOne: (n) => `Ask ${n} pupils`,
   },
 ];

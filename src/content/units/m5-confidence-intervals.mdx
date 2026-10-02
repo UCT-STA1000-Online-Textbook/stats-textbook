@@ -5,10 +5,290 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 14
 moduleUnitNumber: 2
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "A 95% confidence interval for μ works out to (17.53, 18.39). Which statement is correct?"
+    options:
+      - "There is a 95% probability that μ lies between 17.53 and 18.39."
+      - "95% of all sample means lie between 17.53 and 18.39."
+      - "The method used to build the interval catches μ in 95% of random samples."
+      - "95% of the population values lie between 17.53 and 18.39."
+    answer: 2
+    explanation: "The 95% belongs to the method. Used on sample after sample, it gives intervals that include μ 95% of the time. Any one interval, once worked out, either contains μ or it does not, because μ is a fixed number. The interval is about μ, not about where individual population values or sample means lie."
+    vizHint: "confidence-intervals"
+    vizHintParams:
+      preset: "travel"
+  - id: "q2"
+    type: "mcq"
+    question: "A sample of 64 has mean x̄ = 50. The population standard deviation is σ = 8. What is the 95% confidence interval for μ?"
+    options:
+      - "(48.04, 51.96)"
+      - "(34.32, 65.68)"
+      - "(49.75, 50.25)"
+      - "(48.36, 51.64)"
+    answer: 0
+    explanation: "x̄ ± 1.96 × σ/√n = 50 ± 1.96 × 8/√64 = 50 ± 1.96 × 1 = (48.04, 51.96). The interval (34.32, 65.68) forgets to divide σ by √n, and (48.36, 51.64) uses 1.64, the 90% value of z."
+  - id: "q3"
+    type: "true-false"
+    question: "If everything else stays the same, a 99% confidence interval is narrower than a 95% confidence interval."
+    answer: false
+    explanation: "False. To be more confident of catching μ the interval must be wider: z grows from 1.96 to 2.58. Higher confidence is paid for with a wider interval."
+    vizHint: "confidence-intervals"
+    vizHintParams:
+      preset: "fuel"
+  - id: "q4"
+    type: "true-false"
+    question: "Taking a larger sample makes it more likely that the confidence interval method gives an interval that includes μ."
+    answer: false
+    explanation: "False. A larger n gives a narrower interval, but the probability that the method's interval includes μ stays at the confidence level, for example 0.95. Resist the temptation to think a bigger sample raises that probability."
+    vizHint: "confidence-intervals"
+    vizHintParams:
+      preset: "fuel"
+  - id: "q5"
+    type: "mcq"
+    question: "Which Excel formula gives the value of z for a 90% confidence interval?"
+    options:
+      - "=NORM.S.INV(0.90)"
+      - "=NORM.S.INV(0.95)"
+      - "=NORM.S.DIST(0.90, TRUE)"
+      - "=NORM.S.INV(0.10)"
+    answer: 1
+    explanation: "A 90% interval leaves 5% in each tail, so z has 95% of the standard Normal distribution to its left: =NORM.S.INV(0.95) gives 1.6449, which the table rounds to 1.64. =NORM.S.INV(0.90) gives 1.2816, which would leave 10% in each tail."
+  - id: "q6"
+    type: "mcq"
+    question: "The population standard deviation is σ = 10. How large a sample is needed to be 95% sure that x̄ is within 2 units of μ? (Use z = 1.96.)"
+    options:
+      - "10"
+      - "96"
+      - "97"
+      - "385"
+    answer: 2
+    explanation: "n = (zσ/L)² = (1.96 × 10/2)² = 9.8² = 96.04. We always round up, to 97, so that the interval is no wider than ± 2. Rounding down to 96 would give an interval slightly wider than asked for."
 prevUnit: "m5-sampling-distribution"
 nextUnit: "m5-testing-mu"
 ---
 
-Content coming soon.
+## How good is our estimate?
+
+In the [previous unit](/unit/m5-sampling-distribution) we estimated the population mean $\mu$ of travelling times between home and university from a sample of 40 days, and found the sample mean $\bar{x} = 17.96$ minutes. Fine, $\bar{x}$ estimates $\mu$, so we have what we wanted. But how good is this estimate? How much confidence can we place in it? To answer this question we make use of the sampling distribution of $\bar{X}$, to form an interval of numbers called a **confidence interval**.
+
+> **Keywords:** point estimate, <KeywordChip vizId="confidence-intervals" preset="travel">confidence interval</KeywordChip>, <KeywordChip vizId="confidence-intervals" preset="fuel">confidence level</KeywordChip>, =NORM.S.INV, <KeywordChip vizId="confidence-intervals" preset="sport">sample size needed for a desired accuracy</KeywordChip>.
+
+## Confidence intervals
+
+In many situations, in business and elsewhere, a sample mean by itself is not very useful. Such a single value is called a **point estimate**. For example, suppose that the breakeven point for a potential project is R20 million in revenues, and that we are given a point estimate for revenues of R22 million. Our dilemma is that this point estimate of revenue is subject to variation: the true unknown value may well be below R20 million. Clearly, it will be far more helpful in taking a decision if we could be given a method of calculating an interval of values along with a probability statement about the likelihood that the interval includes the true value. If we could be told that the true value for revenue is likely to lie in the interval R21 million to R23 million, we would decide to go ahead with the project. But if we were told it was likely that the true value lay in the interval R12 million to R32 million, we would most certainly want to get more or better information before investing in the project. Notice that, for both of these intervals, the point estimate of revenues, R22 million, lies at the midpoint of the interval. Our hesitation to invest, given the second scenario, is not due to the position of the midpoint, but to the width of the interval.
+
+The most commonly used probability associated with confidence interval methods is 0.95, and we then talk of a **95% confidence interval**. This phrase means that the probability is 0.95 that the confidence interval from a random sample will include the true population value. Conversely, the probability that the confidence interval from a random sample does not include the population mean is 0.05. Put another way, the confidence interval will not include the population mean 1 time in 20, on average. Let us develop the method for setting up such a confidence interval for the mean (assuming, as usual for now, that $\sigma^{2}$ is known).
+
+We make use of the fact that (for large samples)
+
+$$
+\bar{X} \sim N\left(\mu, \ \frac{\sigma^{2}}{n}\right).
+$$
+
+We make the usual transformation to obtain a standard Normal distribution:
+
+$$
+Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1).
+$$
+
+We know that
+
+$$
+\Pr[-1.96 < Z < 1.96] = \texttt{NORM.S.DIST(1.96, TRUE)} - \texttt{NORM.S.DIST(-1.96, TRUE)} = 0.95,
+$$
+
+i.e. the probability that the standard Normal distribution lies between $-1.96$ and $+1.96$ is 0.95.
+
+We can substitute $(\bar{X} - \mu)/(\sigma/\sqrt{n})$ in place of $Z$ in the square brackets because it has a standard Normal distribution:
+
+$$
+\Pr\left[-1.96 < \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} < 1.96\right] = 0.95.
+$$
+
+Rearranging, we obtain:
+
+$$
+\Pr\left[\bar{X} - 1.96\frac{\sigma}{\sqrt{n}} < \mu < \bar{X} + 1.96\frac{\sigma}{\sqrt{n}}\right] = 0.95.
+$$
+
+Look at this probability statement carefully: in words, it says, the probability is 0.95 that an interval formed by the method $\left(\bar{X} - 1.96\frac{\sigma}{\sqrt{n}}, \ \bar{X} + 1.96\frac{\sigma}{\sqrt{n}}\right)$ includes $\mu$, the population mean. The method supplies a 95% confidence interval for $\mu$. We apply this result to our introductory example.
+
+<Example title="Example 1A, continued: travelling times to university">
+Recall that $\bar{x} = 17.96$, $\sigma = 1.4$ and $n = 40$. Find a 95% confidence interval for the population mean travelling time $\mu$.
+
+<Solution>
+Substitute these values into the formula for the 95% confidence interval:
+
+$$
+\left(17.96 - 1.96 \times \frac{1.4}{\sqrt{40}}, \ 17.96 + 1.96 \times \frac{1.4}{\sqrt{40}}\right)
+$$
+
+which reduces to $(17.53, 18.39)$. Thus, finally, we can state that we are 95% certain that our method covers the population mean of the travelling time from home to university. This interval method specifies a set of most likely values. We now not only have the point estimate given by $\bar{x}$, we also have some insight into the accuracy of our estimate.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="confidence-intervals"
+  preset="travel"
+  label="Does the method really catch μ 95% of the time?"
+  description="The blue bar is Example 1A's interval. Press Repeat 500 times: each run is a fresh sample of 40 days and a fresh interval. Count the red ones that miss μ, and compare the hit rate with 95%."
+/>
+
+<Note>
+One interval, once it is worked out, either contains $\mu$ or it does not: $\mu$ is a fixed number, not a random one. The "95%" is a statement about the **method**. If we could repeat the whole study many times, about 95 in every 100 of the intervals it produced would include $\mu$. That is why we say we are 95% sure that *the method* covers $\mu$.
+</Note>
+
+To obtain confidence intervals with different probability levels, all that needs to be changed is the $z$-value, obtained using the Excel formula `=NORM.S.INV`. The box below gives the appropriate $z$-values for the most frequently used confidence intervals.
+
+<Theorem name="Confidence interval method for μ, σ² known">
+If we have a random sample of size $n$ with sample mean $\bar{X}$, then A% confidence intervals for $\mu$ are given by
+
+$$
+\left(\bar{X} - z\frac{\sigma}{\sqrt{n}}, \ \bar{X} + z\frac{\sigma}{\sqrt{n}}\right)
+$$
+
+where the appropriate values of $z$ are given by:
+
+| A% | $z$ | In Excel |
+| --- | --- | --- |
+| 90% | 1.64 | `=NORM.S.INV(0.95)` gives 1.6449 |
+| 95% | 1.96 | `=NORM.S.INV(0.975)` gives 1.9600 |
+| 98% | 2.33 | `=NORM.S.INV(0.99)` gives 2.3263 |
+| 99% | 2.58 | `=NORM.S.INV(0.995)` gives 2.5758 |
+
+In practice we would use Excel to calculate the exact $z$-values and not round them, when using the values as input to our confidence interval calculations. The rounded values are shown in the table and used in the illustrative examples just to demonstrate the method.
+</Theorem>
+
+Each Excel formula asks for the point with $(100 + A)/2$ percent of the standard Normal distribution to its left. A 95% interval leaves 2.5% in each tail, so $z$ has 97.5% to its left, which is why we use `=NORM.S.INV(0.975)`.
+
+<Example title="Example 2B: fuel consumption">
+An estimate of the mean fuel consumption (litres/100 km) of a car is required. A sample of 47 drivers each drive the car under a variety of conditions for 100 km, and the fuel consumed is measured. The sample mean turns out to be 6.73 litres/100 km. The value of $\sigma$ is known to be 1.7 litres/100 km. Determine 95% and 99% confidence intervals for $\mu$.
+
+<Solution>
+We have $\bar{x} = 6.73$, $\sigma = 1.7$ and $n = 47$. Thus a 95% confidence interval for $\mu$ is given by
+
+$$
+\left(6.73 - 1.96 \times \frac{1.7}{\sqrt{47}}, \ 6.73 + 1.96 \times \frac{1.7}{\sqrt{47}}\right)
+$$
+
+which is $(6.24, 7.22)$. We are 95% sure that the method will include the true fuel consumption. The 99% confidence interval is found by replacing 1.96 by 2.58:
+
+$$
+\left(6.73 - 2.58 \times \frac{1.7}{\sqrt{47}}, \ 6.73 + 2.58 \times \frac{1.7}{\sqrt{47}}\right)
+$$
+
+which is $(6.09, 7.37)$. We are 99% sure that the method will include the true fuel consumption. Note the penalty we have to pay for increasing the level of confidence: the interval is considerably wider. Making a wider interval involves accepting margins of variability in sample means.
+
+Suppose now that there was a block in the communication between the experimenter and the statistician and that the actual sample size was not 47, but 147. What now are the 95% and 99% confidence intervals?
+
+The appropriate confidence interval methods give intervals of
+
+$$
+\left(6.73 - 1.96 \times \frac{1.7}{\sqrt{147}}, \ 6.73 + 1.96 \times \frac{1.7}{\sqrt{147}}\right) = (6.46, 7.00)
+$$
+
+and
+
+$$
+\left(6.73 - 2.58 \times \frac{1.7}{\sqrt{147}}, \ 6.73 + 2.58 \times \frac{1.7}{\sqrt{147}}\right) = (6.37, 7.09)
+$$
+
+respectively. Note that if everything else remains unchanged, the method provides confidence intervals that become shorter with an increase in the sample size $n$. Resist the temptation to conclude that by increasing the sample size it is more likely that the confidence interval method covers the true mean. The increase in sample size results in the method supplying narrower confidence intervals, but the probability of intervals that include the true mean $\mu$ is unchanged.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="confidence-intervals"
+  preset="fuel"
+  label="Wider for 99%, narrower for n = 147"
+  description="Repeat 500 times at 95%, then switch to 99%: every interval gets wider and the misses become rarer. Now drag n from 47 up to 147 and repeat: the intervals shrink, but the hit rate stays at the level you picked."
+/>
+
+<Example title="Example 3C: spending on sporting equipment">
+A chain of stores is interested in the expenditure on sporting equipment by high school pupils during a winter season. A random sample of 58 high school pupils yielded a mean winter expenditure on sporting equipment of R168.15. Assuming that the population standard deviation is known to be R37.60, find the 95% confidence interval for the true mean winter expenditure on sporting equipment.
+
+<Solution>
+We have $\bar{x} = 168.15$, $\sigma = 37.60$ and $n = 58$, so the 95% confidence interval is
+
+$$
+\left(168.15 - 1.96 \times \frac{37.60}{\sqrt{58}}, \ 168.15 + 1.96 \times \frac{37.60}{\sqrt{58}}\right) = (168.15 - 9.68, \ 168.15 + 9.68) = (158.47, 177.83).
+$$
+
+We are 95% sure that the method covers the true mean winter expenditure, somewhere between R158.47 and R177.83.
+</Solution>
+</Example>
+
+## Determining the sample size to achieve a desired accuracy
+
+<Example title="Example 4A: the mass of 18-year-old males">
+A rugby coach of an under-19 team is interested in the average mass of 18-year-old males. The population standard deviation of mass for this male age class is known to be 6.58 kg. What size sample is needed in order to be 95% sure to obtain an interval of the average mass of 18-year-old males within 2 kg of the true value?
+
+<Solution>
+Clearly, we are referring to the 95% confidence interval of the form $(\bar{X} - 2, \ \bar{X} + 2)$. Because the method yields $\left(\bar{X} - 1.96\sigma/\sqrt{n}, \ \bar{X} + 1.96\sigma/\sqrt{n}\right)$, it follows that, with $\sigma = 6.58$,
+
+$$
+2 = 1.96 \times \frac{6.58}{\sqrt{n}},
+$$
+
+and thus $n = (1.96 \times 6.58/2)^{2} = 41.58$, which gives $n = 42$, rounding upwards to the next integer.
+
+Note that if we round upwards we will be sure that our interval range is within the specified $\pm$ 2 kg. If we were to round downwards our interval will be slightly wider than the specified width. Thus, when calculating required sample sizes to achieve a given level of accuracy, we always adopt the rule of rounding our estimated sample size upwards to the next integer.
+</Solution>
+</Example>
+
+The general method for determining sample sizes is given in the box:
+
+<Theorem name="Sample size n required to achieve desired accuracy L, when σ² is known">
+To obtain a sample mean $\bar{X}$ which is within $L$ units of the population mean, with confidence level A%, the required sample size is
+
+$$
+n = \left(\frac{z\sigma}{L}\right)^{2},
+$$
+
+rounded upwards to the next integer, where the appropriate values of $z$ are
+
+| A% | $z$ |
+| --- | --- |
+| 90% | 1.64 |
+| 95% | 1.96 |
+| 98% | 2.33 |
+| 99% | 2.58 |
+</Theorem>
+
+<TryThis
+  vizId="confidence-intervals"
+  preset="sport"
+  label="How big must n be?"
+  description="The read-out gives the width of every interval. Drag n and watch the width: to halve it, you need four times as many pupils, because n sits under a square root."
+/>
+
+<Example title="Example 5C: the cooldrink machine">
+The population variance of the amount of cooldrink supplied by a vending machine is known to be $\sigma^{2} = 115 \text{ ml}^{2}$.
+
+(a) The machine was activated 61 times, and the mean amount of cooldrink supplied on each occasion was 185 ml. Find a 99% confidence interval for the mean.
+
+(b) What size samples are required if the estimated mean is required to be within (i) 1 ml (ii) 0.5 ml of the true value, with probability 0.99? Use Excel for the value of $z$.
+
+<Solution>
+**(a)** Here $\sigma = \sqrt{115} = 10.72$, so the 99% confidence interval is
+
+$$
+\left(185 - 2.58 \times \frac{\sqrt{115}}{\sqrt{61}}, \ 185 + 2.58 \times \frac{\sqrt{115}}{\sqrt{61}}\right) = (185 - 3.54, \ 185 + 3.54) = (181.46, 188.54).
+$$
+
+The answer is the same if the exact Excel value `=NORM.S.INV(0.995)` $= 2.5758$ is used instead of 2.58.
+
+**(b)** With $z$ = `=NORM.S.INV(0.995)` $= 2.5758$:
+
+(i) $n = \left(\dfrac{2.5758 \times \sqrt{115}}{1}\right)^{2} = 763.01$, so we need $n = 764$, rounding upwards.
+
+(ii) $n = \left(\dfrac{2.5758 \times \sqrt{115}}{0.5}\right)^{2} = 3052.05$, so we need $n = 3053$.
+
+Note that to improve the precision of the sample mean by a factor of $\tfrac{1}{2}$ (from within 1 ml to within 0.5 ml) required a sample about 4 times as large.
+</Solution>
+</Example>
+
+<Quiz />

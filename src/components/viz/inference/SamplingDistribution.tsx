@@ -34,6 +34,7 @@ import type { VizParams } from "@/store/vizStore";
 import { VizGuide } from "../VizGuide";
 import { Slider, VIZ_TEXT, VizHint } from "../shared";
 import { sampleExponential, sampleNormal, sampleUniform } from "../sampling";
+import { normalPdf } from "../normal";
 import { useReplayTween } from "../useReplayTween";
 import {
   SAMPLE_MEAN_PRESETS,
@@ -99,11 +100,6 @@ function popDraw(p: Population): number {
   if (p.kind === "normal") return sampleNormal(p.mu, p.sigma);
   if (p.kind === "uniform") return sampleUniform(p.a, p.b);
   return sampleExponential(p.lambda);
-}
-
-function normalPdf(x: number, mu: number, sd: number): number {
-  const z = (x - mu) / sd;
-  return Math.exp(-0.5 * z * z) / (sd * Math.sqrt(2 * Math.PI));
 }
 
 /**

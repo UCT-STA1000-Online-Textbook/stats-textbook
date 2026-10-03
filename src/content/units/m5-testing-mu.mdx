@@ -5,10 +5,275 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 15
 moduleUnitNumber: 3
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "A test is carried out at the 5% significance level. What does the 5% mean?"
+    options:
+      - "The probability that H₀ is true is 0.05."
+      - "The probability of rejecting H₀ when H₀ is in fact true is 0.05."
+      - "The probability of not rejecting H₀ when H₀ is false is 0.05."
+      - "5% of the sample values lie in the rejection region."
+    answer: 1
+    explanation: "The significance level is the probability of rejecting a true null hypothesis, a Type I error. At 5% we will make this mistake in one random sample in twenty. Failing to reject a false H₀ is a Type II error, whose probability is not fixed by α."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "batteries"
+  - id: "q2"
+    type: "mcq"
+    question: "A sample of 36 has mean x̄ = 48. Test H₀: μ = 50 when σ = 6 is known. What is the observed value of the test statistic?"
+    options:
+      - "z = −0.33"
+      - "z = −2.00"
+      - "z = −12.00"
+      - "z = 2.00"
+    answer: 1
+    explanation: "z = (x̄ − μ₀)/(σ/√n) = (48 − 50)/(6/√36) = −2/1 = −2.00. Leaving out the √n gives −0.33. The sign matters: x̄ is below μ₀, so z is negative."
+  - id: "q3"
+    type: "mcq"
+    question: "For a one-sided test with H₁: μ < μ₀ at the 1% significance level, which Excel formula gives the critical value?"
+    options:
+      - "=NORM.S.INV(0.99)"
+      - "=NORM.S.INV(0.01)"
+      - "=NORM.S.INV(0.005)"
+      - "=NORM.S.DIST(0.01, TRUE)"
+    answer: 1
+    explanation: "The rejection region is the lowest 1% of the standard Normal distribution, so the critical value has probability 0.01 to its left: =NORM.S.INV(0.01) gives −2.3263, which the examples round to −2.33. =NORM.S.INV(0.005) would be right for one tail of a two-sided 1% test."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "typist"
+  - id: "q4"
+    type: "true-false"
+    question: "In a two-sided test at the 5% significance level, an observed value z = 1.67 leads us to reject H₀."
+    answer: false
+    explanation: "False. With a two-sided alternative the 5% is split between the two tails, so we reject H₀ only if |z| > 1.96. Since 1.67 < 1.96 we cannot reject H₀, as in the fertilizer example."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "tomatoes"
+  - id: "q5"
+    type: "mcq"
+    question: "The null hypothesis is false, but the test fails to reject it. What kind of error is this?"
+    options:
+      - "A Type I error"
+      - "A Type II error"
+      - "No error: not rejecting H₀ is always safe"
+      - "A significance error"
+    answer: 1
+    explanation: "Not rejecting a false H₀ is a Type II error. A Type I error is the opposite mistake, rejecting a true H₀, and its probability is the significance level α."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "batteries"
+  - id: "q6"
+    type: "true-false"
+    question: "It is fine to choose a one-sided alternative hypothesis after looking at the data, if the data point in that direction."
+    answer: false
+    explanation: "False. The hypotheses and the significance level should be fixed before the data are gathered. Use a two-sided alternative unless there are good theoretical reasons for a one-sided one; \"the data point that way\" is never such a reason."
 prevUnit: "m5-confidence-intervals"
 nextUnit: "m5-comparing-two-means"
 ---
 
-Content coming soon.
+## Testing whether the mean is a specified value
+
+In the [previous unit](/unit/m5-confidence-intervals) we used a sample to say where the population mean $\mu$ is likely to lie. Now we turn the question around: someone makes a claim about $\mu$, and we use a sample to judge whether the claim stands up. We still assume, for now, that the population variance $\sigma^{2}$ is known. We again use an example to motivate our problem.
+
+> **Keywords:** <KeywordChip vizId="z-test" preset="batteries">hypothesis test</KeywordChip>, null hypothesis $H_0$, alternative hypothesis $H_1$, <KeywordChip vizId="z-test" preset="typist">significance level</KeywordChip>, <KeywordChip vizId="z-test" preset="batteries">rejection region</KeywordChip>, critical value, test statistic, statistically significant, <KeywordChip vizId="z-test" preset="tomatoes">one-sided and two-sided alternatives</KeywordChip>, <KeywordChip vizId="z-test" preset="checkout">Type I and Type II errors</KeywordChip>.
+
+<Example title="Example 6A: battery life">
+A manufacturer claims that, on average, its batteries last for 100 hours before they go flat. The population standard deviation of battery life is known to be 12 hours. We take a sample of 50 batteries and find the sample mean $\bar{x}$ is 95.5 hours. Does this sample mean undermine the manufacturer's claim?
+
+<Solution>
+As a first approach to this problem, let us assume that the manufacturer's claim is true, and that the true mean $\mu$ is in fact 100 hours. We now ask how likely it is that a random sample mean will be as, or more, extreme than the $\bar{x} = 95.5$ we have obtained. A reminder that because $\bar{X}$ is a continuous random variable, $\Pr(\bar{X} = 95.5) = 0$, so we cannot simply focus on the probability of this particular point in the distribution; our focus needs to be on the probability of $\bar{X}$ falling within a range. Which is the same as asking: what is the probability that $\bar{X} \le 95.5$, given that $\mu = 100$?
+
+We know that
+
+$$
+\bar{X} \sim N\left(\mu, \ \frac{\sigma^{2}}{n}\right) \quad \text{and that} \quad Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1).
+$$
+
+In this example
+
+$$
+Z = \frac{\bar{X} - 100}{12/\sqrt{50}} \sim N(0, 1).
+$$
+
+Here $\bar{x} = 95.5$, and the corresponding $z$-value is therefore
+
+$$
+z = \frac{95.5 - 100}{12/\sqrt{50}} = -2.65.
+$$
+
+Thus
+
+$$
+\Pr[\bar{X} \le 95.5] = \Pr[Z \le -2.65] = \texttt{NORM.S.DIST(-2.65, TRUE)} = 0.0040,
+$$
+
+rounded to 4 decimal places. This equation says, if the manufacturer's claim is true (i.e. $\mu = 100$) then the probability of getting a sample mean of 95.5 or less is 0.004, a very small probability.
+
+Now we have to take a decision. Either
+
+(a) the manufacturer is correct, and a very unlikely event has occurred, one that will occur on average 4 times in every 1000 samples, or
+
+(b) the manufacturer's claim is not true, and the true population mean is less than 100, making a sample mean of 95.5 or less a more likely event.
+
+The statistician here would go for alternative (b), reasoning that alternative (a) is so unlikely that it can safely be rejected, and conclude that the manufacturer's claim is exaggerated.
+</Solution>
+</Example>
+
+## Tests of hypotheses
+
+The problem posed in Example 6A introduces us to the concept of **statistical inference**: how we infer or draw conclusions from data. Tests of hypotheses, also called **significance tests**, are the foundation of statistical inference.
+
+Whenever a claim or assumption needs to be examined by means of a significance test, we have a step-by-step procedure, as outlined below. We will use Example 6A to illustrate the steps. A modified procedure to perform hypothesis tests will be discussed [later](/unit/m5-comparing-two-means).
+
+**1. Set up a null hypothesis.** This statement almost always suggests the value of a population parameter. Here the null hypothesis is that the true mean $\mu$ is equal to 100. For our null hypothesis we usually take any claim that is made (and usually we are hoping to be able to reject it, if the evidence against it in our random sample is strong enough to do so). We abbreviate the above null hypothesis to
+
+$$
+H_0: \mu = 100.
+$$
+
+**2. An alternative hypothesis $H_1$ is specified.** $H_1$ is accepted if the test enables us to reject $H_0$. Here the alternative hypothesis is $H_1: \mu < 100$. We shall see that this inequality is a "one-sided alternative" and gives rise to a "one-tailed significance test".
+
+**3. A significance level is chosen.** The significance level expresses the probability of rejecting the null hypothesis when it is in fact true. We usually work with a 5% or 0.05 significance level. We will then make the mistake of rejecting a true null hypothesis in 5% of all random samples, i.e. one time in twenty. On the other hand, if $H_0$ is true we will accept $H_0$ in 95% of random samples. If the consequences of wrongly rejecting the null hypothesis are serious, a 1% or 0.01 level may be used. Here a 5% significance level would suffice.
+
+**4. We determine the set of values that will lead to the rejection of the null hypothesis.** We call this the **rejection region**. Our test statistic will have a standard Normal distribution. Because here $H_1$ is one-sided and contains a "$<$" sign, the rejection region is in the lower (left-hand) end of the standard Normal distribution. We reject $H_0$ if the sample mean $\bar{X}$ is too far below the hypothesised population mean $\mu$, that is, if $\bar{X} - \mu$ is too negative.
+
+Because the significance level is 5% we must therefore find the lower 5% point of the standard Normal distribution: `=NORM.S.INV(0.05)` gives $-1.6449$, which we round to $-1.64$.
+
+Thus the rejection region ties up with the distribution of the test statistic, the form of the alternative hypothesis, and the "size" of the significance level. The value which defines the cut-off point for the rejection region is found using `=NORM.S.INV(probability)` and is frequently called the **critical value** of the test statistic. Note that *probability* is the probability of lying to the left of the critical value.
+
+**5. We calculate the test statistic.** We know that $\bar{X} \sim N(\mu, \sigma^{2}/n)$. If $H_0$ is true then $\bar{X} \sim N(100, 12^{2}/50)$ and
+
+$$
+Z = \frac{\bar{X} - 100}{12/\sqrt{50}} \sim N(0, 1).
+$$
+
+In our example, $\bar{x} = 95.5$ and the observed value of the test statistic $z$ is
+
+$$
+z = \frac{95.5 - 100}{12/\sqrt{50}} = -2.65.
+$$
+
+**6. We state our conclusions.** We determine whether the test statistic value we observed falls into the rejection region. If it does, then we reject the null hypothesis $H_0$ and accept the alternative $H_1$. The result of the sampling is then said to be **statistically significant**. This phrase means that the signal from the random sample suggests we can reject the null hypothesis.
+
+<TryThis
+  vizId="z-test"
+  preset="batteries"
+  label="See the six steps on one picture"
+  description="The curve is Z if H₀ is true. The shaded tail is the 5% rejection region, z < −1.64, and the dark line is the batteries' z = −2.65, well inside it. Press Test 50 batteries a few times to see where z lands when the claim really is true."
+/>
+
+The feeling you should have by now is that if $\bar{x}$, the mean from our sample, is "too far" from 100, then we will reject $H_0$. But how far is "too far"?
+
+We will reject $H_0$ if the calculated value of $Z = (\bar{X} - 100)/(12/\sqrt{50})$ is less than $-1.64$. Because $-2.65$, the observed value of $Z$, is less than $-1.64$, we reject $H_0$ at the 5% significance level.
+
+In essence what we are doing is to say that it is an unlikely event (with probability less than 0.05) to get a sample mean of 95.5, or smaller, when the population mean is 100. We infer the true mean is unlikely to be 100 and we conclude that it must be less than 100. Another possible perspective is to remember that we are testing the position of $\mu$, which is a measure of location. We are opting for the conclusion that the entire distribution is located (or centred) on a point to the left of the hypothesised location; this conclusion is consistent with the sample mean we obtained ($\bar{x} = 95.5$) being lower than $\mu = 100$.
+
+<Example title="Example 7B: the new typist">
+The mean output of typists in a typing pool is known to be 30 letters per day with a standard deviation of 10 letters. A new typist in the pool types 795 letters in her first 30 days, i.e. $795/30 = 26.5$ letters per day. Is her performance so far below average that we should fire her? Use a 1% significance level.
+
+<Solution>
+1. We set up the null hypothesis by giving the typist the benefit of the doubt: $H_0: \mu = 30$.
+
+2. The alternative hypothesis is $H_1: \mu < 30$.
+
+3. We use a 1% significance level: the probability of rejecting a true null hypothesis is then specified as 0.01. Because the decision to fire a person is an important one, we do not want to take this decision incorrectly. Using a 1% significance level means that we will make this incorrect decision only one time in a hundred.
+
+4. An observed $z$-value of less than $-2.33$ (`=NORM.S.INV(0.01)` gives $-2.3263$) will lead us to reject the null hypothesis.
+
+5. The test statistic is
+
+$$
+z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}} = \frac{26.5 - 30}{10/\sqrt{30}} = -1.92.
+$$
+
+6. Because $-1.92 > -2.33$ we do not reject $H_0$. We thus decide to keep our new typist on. Note that if we had chosen a 5% significance level, the critical value would have been $-1.64$, and on that criterion we would have decided that our new typist was below standard.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="typist"
+  label="The same z, two different verdicts"
+  description="At α = 1% the typist's z = −1.92 falls short of the cut-off at −2.33. Switch α to 5%: the cut-off moves to −1.64 and the same z now lands in the rejection region."
+/>
+
+<Example title="Example 8C: the new till">
+From past records it is known that the checkout times at supermarket tills have a standard deviation of 1.3 minutes. Past records also reveal that the average checkout time at a particular type of till is 4.1 minutes. A new type of till is monitored and 64 randomly sampled customers had an average checkout time of 3.8 minutes. Does the new till result in a significant reduction in checkout times? Use a 1% level of significance.
+
+<Solution>
+1. $H_0: \mu = 4.1$.
+
+2. $H_1: \mu < 4.1$. We are looking for a reduction in checkout times.
+
+3. Significance level: 1%.
+
+4. Reject $H_0$ if $z < -2.33$.
+
+5. The test statistic is
+
+$$
+z = \frac{3.8 - 4.1}{1.3/\sqrt{64}} = \frac{-0.3}{0.1625} = -1.85.
+$$
+
+6. Because $-1.85 > -2.33$, the observed $z$ does not lie in the rejection region, and we cannot reject $H_0$. At the 1% level, the new till has not been shown to reduce checkout times.
+</Solution>
+</Example>
+
+## One-sided and two-sided alternative hypotheses
+
+The following example illustrates the use of a two-sided alternative hypothesis. Guidelines on the choice of one-sided and two-sided alternative hypotheses are given after the example.
+
+<Example title="Example 9B: the new fertilizer">
+A farmer who has used a specific fertilizer for many years knows that his average yield of tomatoes is 2.5 tons/ha with a standard deviation of 0.53 tons/ha. The fertilizer is discontinued and he has to use a new brand. He suspects that the new fertilizer might alter the yield, but he has no idea whether the change will be an increase or a decrease. At the end of the season he finds that the average yield in 35 plots has been 2.65 tons/ha. At the 5% level of significance, test whether this sample data is statistically significant.
+
+<Solution>
+1. $H_0: \mu = 2.5$.
+
+2. $H_1: \mu \ne 2.5$. The farmer does not know in advance in which direction the change in yield might go. He wants to be able to reject $H_0$ if the yield either increases or decreases significantly.
+
+3. Significance level: 5%.
+
+4. Rejection region. Because of the form of the alternative hypothesis, we need to have two rejection regions, so that we can reject the null hypothesis either if the change of fertilizer decreases the yield or if it increases the yield. The two rejection regions are constructed to have the same size, but with their total probability set at 0.05, so each tail holds 0.025. `=NORM.S.INV(0.975)` gives 1.9600, so we reject the null hypothesis if $|z| > 1.96$.
+
+5. We calculate the test statistic:
+
+$$
+z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}} = \frac{2.65 - 2.5}{0.53/\sqrt{35}} = 1.67.
+$$
+
+6. The observed $z$-value, 1.67, does not lie within either part of the rejection region; thus we cannot reject $H_0$. On the available statistical evidence the farmer concludes that the new fertilizer is not significantly different to the old.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="tomatoes"
+  label="Two tails, half the area in each"
+  description="With H₁: μ ≠ 2.5 the 5% is split into two tails of 2.5%, beyond −1.96 and 1.96. The farmer's z = 1.67 lands between them. Repeat 500 times with H₀ true: rejections come from both tails, about 5% in all."
+/>
+
+## Some guidelines
+
+The null hypothesis, the alternative hypothesis and the level of significance should all be determined *before* the data is gathered. The guideline for the choice of alternative hypotheses is: **always use a two-sided alternative unless there are good theoretical reasons for using a one-sided alternative.** The use of a one-sided alternative is never justified by claiming "the data point that way". In the hypothesis testing procedure we have considered above, the significance level ought also to be predetermined.
+
+## Type I and Type II errors
+
+By now you are probably saying: it is better to use a 1% significance level than a 5% significance level, because with a 1% level we make the mistake of rejecting a true null hypothesis only 1 time in 100, whereas we make this mistake 1 time in 20 with a 5% significance level. If you have thought of that, then you have done well, but you may have overlooked something. There is another type of error one can make: the error of accepting the null hypothesis when it is false. The higher the significance of the test (i.e. a smaller $\alpha$), the more difficult it is to reject the null hypothesis, and the more likely we are to accept the null hypothesis when it is false. Statisticians call the two classes of errors **Type I** and **Type II** errors, respectively.
+
+| Our decision | $H_0$ true | $H_0$ false |
+| --- | --- | --- |
+| Do not reject $H_0$ | correct decision | Type II error |
+| Reject $H_0$ | Type I error | correct decision |
+
+The probability of committing a Type I error is the significance level of the test, sometimes also referred to as the size of the test: $\Pr(\text{Type I error}) = \alpha$. The probability of committing a Type II error varies depending on how close $H_0$ is to the true situation, and is difficult to control. The tradition of using 5% and 1% significance levels is based on the experience that, at these levels, the frequency of Type II errors is acceptable.
+
+<TryThis
+  vizId="z-test"
+  preset="checkout"
+  label="Count both kinds of error"
+  description="With In truth set to μ = 4.1, Repeat 500 times: every rejection is a Type I error, about 1% of runs. Now set In truth to μ = 3.8, so H₀ is false, and repeat: count the Type II errors. Change α to 5% and watch one kind of error trade off against the other."
+/>
+
+<Quiz />

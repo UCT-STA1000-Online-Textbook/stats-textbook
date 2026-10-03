@@ -70,6 +70,9 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // method on sample after sample and count how often it catches μ.
   "confidence-intervals": lazy(() => import("./inference/ConfidenceIntervals")),
 
+  // M5 — Testing μ (m5-testing-mu). The z-test viz.
+  "z-test": lazy(() => import("./inference/ZTest")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

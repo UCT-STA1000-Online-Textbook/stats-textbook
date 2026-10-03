@@ -2,7 +2,8 @@
  * Presets for the Module 5 inference visualisations, one list per viz:
  *
  *   - `SAMPLE_MEAN_PRESETS` for `SamplingDistribution` (WU1),
- *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2).
+ *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2),
+ *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -183,5 +184,112 @@ export const CI_PRESETS: CiPreset[] = [
     tickStep: 10,
     axisLabel: "mean winter spend on sporting equipment, in rand",
     drawOne: (n) => `Ask ${n} pupils`,
+  },
+];
+
+/**
+ * The data a z-test is run on. A one-sample test compares one sample mean
+ * with a claimed μ₀; a two-sample test compares two independent sample
+ * means, with H₀: μ₁ − μ₂ = 0. All population standard deviations are known
+ * (the Module 5 assumption until the unknown-σ unit).
+ */
+export type ZTestDesign =
+  | { kind: "one"; mu0: number; sigma: number; n: number; xbar: number }
+  | {
+      kind: "two";
+      n1: number;
+      n2: number;
+      sigma1: number;
+      sigma2: number;
+      xbar1: number;
+      xbar2: number;
+    };
+
+/** Direction of H₁: μ < μ₀ ("lower"), μ > μ₀ ("upper"), or μ ≠ μ₀ ("two"). */
+export type Tail = "lower" | "upper" | "two";
+
+/** A worked example the `ZTest` viz can open at. */
+export interface ZTestPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /**
+   * The unit the example belongs to. The viz only offers the chips from the
+   * same unit as the preset it opened with, so WU3 and WU4 each see their
+   * own four examples.
+   */
+  unit: "testing-mu" | "two-means";
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /**
+   * How the example reaches its decision: the classical six steps with a
+   * rejection region ("critical"), or the modified procedure that reports a
+   * p-value ("p-value").
+   */
+  approach: "critical" | "p-value";
+  tail: Tail;
+  /** Significance level the example uses. Ignored for the p-value approach. */
+  alpha: number;
+  design: ZTestDesign;
+  /** Decimals used to print the example's figures, matching the text. */
+  dp: number;
+  /**
+   * Keep trailing zeros when printing the figures (R286.50, not R286.5).
+   * Otherwise they are dropped, so μ₀ = 100 does not print as 100.0.
+   */
+  keepZeros?: boolean;
+  /** What taking one sample (or pair of samples) is, in the example's words. */
+  drawOne: string;
+}
+
+/** Worked examples for `ZTest`, from Module 5 WU3 (`m5-testing-mu`). */
+export const ZTEST_PRESETS: ZTestPreset[] = [
+  {
+    id: "batteries",
+    label: "Batteries",
+    unit: "testing-mu",
+    source: "Example 6A: battery life",
+    approach: "critical",
+    tail: "lower",
+    alpha: 0.05,
+    design: { kind: "one", mu0: 100, sigma: 12, n: 50, xbar: 95.5 },
+    dp: 1,
+    drawOne: "Test 50 batteries",
+  },
+  {
+    id: "typist",
+    label: "Typist",
+    unit: "testing-mu",
+    source: "Example 7B: the new typist",
+    approach: "critical",
+    tail: "lower",
+    alpha: 0.01,
+    design: { kind: "one", mu0: 30, sigma: 10, n: 30, xbar: 26.5 },
+    dp: 1,
+    drawOne: "Count 30 days",
+  },
+  {
+    id: "checkout",
+    label: "Checkout",
+    unit: "testing-mu",
+    source: "Example 8C: the new till",
+    approach: "critical",
+    tail: "lower",
+    alpha: 0.01,
+    design: { kind: "one", mu0: 4.1, sigma: 1.3, n: 64, xbar: 3.8 },
+    dp: 1,
+    drawOne: "Time 64 customers",
+  },
+  {
+    id: "tomatoes",
+    label: "Tomatoes",
+    unit: "testing-mu",
+    source: "Example 9B: the new fertilizer",
+    approach: "critical",
+    tail: "two",
+    alpha: 0.05,
+    design: { kind: "one", mu0: 2.5, sigma: 0.53, n: 35, xbar: 2.65 },
+    dp: 2,
+    drawOne: "Harvest 35 plots",
   },
 ];

@@ -5,10 +5,447 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 16
 moduleUnitNumber: 4
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "X̄₁ and X̄₂ are the means of independent samples of sizes n₁ and n₂, from populations with known variances σ₁² and σ₂². What is the variance of X̄₁ − X̄₂?"
+    options:
+      - "σ₁²/n₁ − σ₂²/n₂"
+      - "σ₁²/n₁ + σ₂²/n₂"
+      - "σ₁² + σ₂²"
+      - "(σ₁ + σ₂)²/(n₁ + n₂)"
+    answer: 1
+    explanation: "Each sample mean has variance σ²/n, and the variance of a difference of independent random variables is the sum of the variances: σ₁²/n₁ + σ₂²/n₂. Subtracting one random quantity from another adds uncertainty; it never removes it."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "drivers"
+  - id: "q2"
+    type: "mcq"
+    question: "Which statement best describes a p-value?"
+    options:
+      - "The probability that the null hypothesis is true."
+      - "The probability, assuming H₀ is true, of a test statistic at least as extreme as the one observed."
+      - "The probability of a Type II error."
+      - "The significance level chosen before the data were collected."
+    answer: 1
+    explanation: "The p-value is the probability of seeing what we have seen, or something more extreme, under the assumption that the null hypothesis is true. It is not the probability that H₀ is true: it is worked out by assuming H₀ is true."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "wages"
+  - id: "q3"
+    type: "mcq"
+    question: "In a lower-tailed test (H₁: μ < μ₀) the observed test statistic is z = −1.47. Which Excel formula gives the p-value?"
+    options:
+      - "=1 - NORM.S.DIST(-1.47, TRUE)"
+      - "=NORM.S.DIST(-1.47, TRUE)"
+      - "=2*NORM.S.DIST(-1.47, TRUE)"
+      - "=NORM.S.INV(-1.47)"
+    answer: 1
+    explanation: "In a lower-tailed test, more extreme means smaller, so p = Pr(Z ≤ −1.47) = NORM.S.DIST(-1.47, TRUE) = 0.0708. Doubling would be right for a two-sided test, and NORM.S.INV turns a probability into a z-value, the wrong way round."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "eggs"
+  - id: "q4"
+    type: "true-false"
+    question: "In a two-sided test with observed z = 1.67, the p-value is Pr(Z ≥ 1.67) = 0.0475, so H₀ is rejected at the 5% level."
+    answer: false
+    explanation: "False. In a two-sided test the tail area is doubled: p = 2 × 0.0475 = 0.0950, which is larger than 0.05, so H₀ is not rejected. This agrees with the classical approach, where |1.67| < 1.96."
+  - id: "q5"
+    type: "mcq"
+    question: "A test gives p = 0.0708. With no significance level stated, what do we conclude?"
+    options:
+      - "Reject H₀, because p is small."
+      - "Do not reject H₀, because p is larger than 0.05."
+      - "Reject H₀, because p is smaller than 0.10."
+      - "Nothing, because no significance level was given."
+    answer: 1
+    explanation: "When α is not stated we follow the modified procedure and use the convention of 0.05. Since 0.0708 > 0.05 we do not reject H₀, although the result is close: it would be significant at the 10% level."
+    vizHint: "z-test"
+    vizHintParams:
+      preset: "eggs"
+  - id: "q6"
+    type: "mcq"
+    question: "Course A: 27 students, mean 620 words/minute. Course B: 38 students, mean 684 words/minute. σ = 25 in both. What is the test statistic for H₀: μ_A − μ_B = 0?"
+    options:
+      - "z = −2.56"
+      - "z = −10.17"
+      - "z = −1.56"
+      - "z = −64.00"
+    answer: 1
+    explanation: "z = (620 − 684)/√(25²/27 + 25²/38) = −64/√(23.15 + 16.45) = −64/6.29 = −10.17. That is far beyond −1.96, so the two courses differ significantly."
 prevUnit: "m5-testing-mu"
 nextUnit: "m5-unknown-sigma"
 ---
 
-Content coming soon.
+## Comparing two sample means (with known population variances)
+
+So far we have tested whether one population mean equals a specified value. Often the real question compares two groups: is this year's running time better than last year's? Is one driver's route quicker than the other's? This unit extends the z-test to compare two means, and then introduces a second way of reporting any test, the p-value.
+
+> **Keywords:** <KeywordChip vizId="z-test" preset="athlete">difference between two means</KeywordChip>, <KeywordChip vizId="z-test" preset="drivers">two-sample z-test</KeywordChip>, modified hypothesis testing procedure, <KeywordChip vizId="z-test" preset="wages">p-value</KeywordChip>, <KeywordChip vizId="z-test" preset="eggs">statistically significant</KeywordChip>, =NORM.S.DIST.
+
+We recall a result we first used in [Module 4, with the Normal distribution](/unit/m4-normal). If $X_1$ and $X_2$ are random variables with Normal distributions,
+
+$$
+X_1 \sim N(\mu_1, \sigma_1^{2}), \qquad X_2 \sim N(\mu_2, \sigma_2^{2})
+$$
+
+and $X_1$ and $X_2$ are independent, then the distribution of the random variable $Y = X_1 - X_2$ is given by
+
+$$
+Y = X_1 - X_2 \sim N(\mu_1 - \mu_2, \ \sigma_1^{2} + \sigma_2^{2}).
+$$
+
+<Example title="Example 10A: the 8 km time trial">
+A cross-country athlete runs an 8 km time trial nearly every Wednesday as part of his weekly training programme. Last year, he ran on 49 occasions, and the mean of his times was 30 minutes 25.4 seconds (30.42 minutes). So far this year his mean time has been 30 minutes 15.7 seconds (30.26 minutes) over 35 runs. Assuming that the standard deviation last year was 0.78 minutes, and this year is 0.65 minutes, do these data establish whether, at the 5% significance level, there has been a reduction in the athlete's time over 8 km?
+
+<Solution>
+We work our way through our six-point plan:
+
+1. Let the population means last year and this year be $\mu_1$ and $\mu_2$ respectively. Our null hypothesis specifies that there is no change in the athlete's times between last year and this year:
+
+$$
+H_0: \mu_1 = \mu_2, \text{ or equivalently, } H_0: \mu_1 - \mu_2 = 0.
+$$
+
+Notice once again how the null hypothesis expresses the concept we are hoping to disprove. The null hypothesis can helpfully be thought of as the hypothesis of **no change**, or of **no difference**.
+
+2. The alternative hypothesis involves the statement the athlete hopes is true:
+
+$$
+H_1: \mu_1 > \mu_2, \text{ or equivalently, } H_1: \mu_1 - \mu_2 > 0.
+$$
+
+The alternative hypothesis does not specify the amount of the change; it simply states that there has been a decrease in average time between years 1 and 2.
+
+3. Significance level: we specified that we would perform the test at the 5% level.
+
+4. Rejection region. Because the test statistic has a standard Normal distribution (we will show this in the next step), because the significance level is 5%, and because we have a one-sided "greater than" alternative hypothesis, we will reject $H_0$ if the observed value of the test statistic is greater than 1.64 (`=NORM.S.INV(0.95)` gives 1.6449).
+
+5. Test statistic. In general, let us suppose that we have a random sample of size $n_1$ from one population and a random sample of size $n_2$ from a second population. Suppose the sample means are $\bar{X}_1$ and $\bar{X}_2$, respectively, and that the population means and variances are $\mu_1$, $\mu_2$, $\sigma_1^{2}$ and $\sigma_2^{2}$. Then
+
+$$
+\bar{X}_1 \sim N\left(\mu_1, \ \frac{\sigma_1^{2}}{n_1}\right) \quad \text{and} \quad \bar{X}_2 \sim N\left(\mu_2, \ \frac{\sigma_2^{2}}{n_2}\right).
+$$
+
+Now, using the result about the distribution of differences,
+
+$$
+\bar{X}_1 - \bar{X}_2 \sim N\left(\mu_1 - \mu_2, \ \frac{\sigma_1^{2}}{n_1} + \frac{\sigma_2^{2}}{n_2}\right).
+$$
+
+We now transform the difference variable to the standard Normal distribution by subtracting its mean, and dividing by its standard deviation:
+
+$$
+Z = \frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{\sqrt{\dfrac{\sigma_1^{2}}{n_1} + \dfrac{\sigma_2^{2}}{n_2}}} \sim N(0, 1).
+$$
+
+This is our test statistic, and we can substitute for each variable: from the problem description we have
+
+| | | |
+| --- | --- | --- |
+| $\bar{x}_1 = 30.42$ | $n_1 = 49$ | $\sigma_1 = 0.78$ |
+| $\bar{x}_2 = 30.26$ | $n_2 = 35$ | $\sigma_2 = 0.65$ |
+
+and from the null hypothesis we have $\mu_1 - \mu_2 = 0$. Thus, substituting, we compute our observed $z$-value as
+
+$$
+z = \frac{30.42 - 30.26 - 0}{\sqrt{\dfrac{0.78^{2}}{49} + \dfrac{0.65^{2}}{35}}} = 1.02.
+$$
+
+6. Conclusion. The observed value of the test statistic does not lie in the rejection region. We have to disappoint our athlete and tell him to keep trying.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="athlete"
+  label="Two samples, one z"
+  description="Each run times 49 runs from last year and 35 from this year, and works out z from the difference of their means. With μ₁ = μ₂, Repeat 500 times: the z values follow the N(0, 1) curve, and about 5% land beyond 1.64."
+/>
+
+<Example title="Example 11B: the two drivers">
+A retail shop has two drivers that transport goods between the shop and a warehouse 15 km away. They argue continuously about the choice of route between the shop and warehouse, each claiming that his route is the quicker. To settle the argument, you wish to decide (5% significance level) which driver's route is the quicker. Over a period of months you time the two drivers, and the data collected are summarised below.
+
+| | Driver 1 | Driver 2 |
+| --- | --- | --- |
+| Number of observations | $n_1 = 38$ | $n_2 = 43$ |
+| Average time (minutes) | $\bar{x}_1 = 20.3$ | $\bar{x}_2 = 22.5$ |
+| Standard deviation (minutes) | $\sigma_1 = 3.7$ | $\sigma_2 = 4.1$ |
+
+<Solution>
+1. $H_0: \mu_1 - \mu_2 = 0$. Both drivers take equally long.
+
+2. $H_1: \mu_1 - \mu_2 \ne 0$. We do not know in advance which driver is quicker.
+
+3. Significance level: 5%.
+
+4. We have a two-sided alternative at the 5% level. Thus we reject $H_0$ if the test statistic exceeds 1.96 or is less than $-1.96$; i.e. we reject $H_0$ if $|z| > 1.96$.
+
+5. The test statistic is calculated from the data and the null hypothesis:
+
+$$
+z = \frac{\bar{x}_1 - \bar{x}_2 - (\mu_1 - \mu_2)}{\sqrt{\dfrac{\sigma_1^{2}}{n_1} + \dfrac{\sigma_2^{2}}{n_2}}} = \frac{20.3 - 22.5 - 0}{\sqrt{\dfrac{3.7^{2}}{38} + \dfrac{4.1^{2}}{43}}} = -2.54.
+$$
+
+6. Because $|-2.54| > 1.96$ we reject $H_0$ and conclude that the driving times are not equal. By inspection, it is clear that the route used by driver 1 is the quicker.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="drivers"
+  label="What if the routes really differ?"
+  description="Driver 1's z = −2.54 lies in the left-hand rejection region. Set In truth to μ₁ − μ₂ = −2.2 and Repeat 500 times: most runs reject H₀, and the ones that don't are Type II errors."
+/>
+
+<Example title="Example 12C: speed-reading courses">
+Two speed-reading courses are available. Students enrol independently for these courses. After completing their respective courses, the group of 27 students who took course A had an average reading speed of 620 words/minute, while the group of 38 students who took course B had an average speed of 684 words/minute. If it is known that reading speed has a standard deviation of 25 words/minute, test (at the 5% significance level) whether there is any difference between the two courses.
+
+<Solution>
+1. $H_0: \mu_A - \mu_B = 0$.
+
+2. $H_1: \mu_A - \mu_B \ne 0$. We are asked whether there is *any* difference.
+
+3. Significance level: 5%.
+
+4. Reject $H_0$ if $|z| > 1.96$.
+
+5. The test statistic is
+
+$$
+z = \frac{620 - 684 - 0}{\sqrt{\dfrac{25^{2}}{27} + \dfrac{25^{2}}{38}}} = \frac{-64}{6.29} = -10.17.
+$$
+
+6. Because $|-10.17| > 1.96$ we reject $H_0$. There is a significant difference between the courses: course B gives the faster reading speeds.
+</Solution>
+</Example>
+
+<Example title="Example 13C: the petrol additive">
+The scientists of the Fuel Improvement Centre think they have found a new petrol additive which they hope will reduce a car's fuel consumption by 0.5 litres/100 km. Two series of trials are conducted, one without and the other with the additive. 40 trials without the additive show an average consumption of 9.8 litres/100 km. 50 trials with the additive show an average consumption of 9.1 litres/100 km. Do these data establish evidence that the additive reduces fuel consumption by 0.5 litres/100 km? Use a 5% significance level, and assume that the population standard deviations without and with the addition of the additive are 0.8 and 0.7 litres/100 km respectively.
+
+<Solution>
+Let $\mu_1$ and $\mu_2$ be the mean consumption without and with the additive.
+
+1. $H_0: \mu_1 - \mu_2 = 0.5$. The additive reduces consumption by 0.5 litres/100 km.
+
+2. $H_1: \mu_1 - \mu_2 \ne 0.5$.
+
+3. Significance level: 5%.
+
+4. Reject $H_0$ if $|z| > 1.96$.
+
+5. This time the null hypothesis does not say "no difference", so $\mu_1 - \mu_2 = 0.5$ is what we subtract in the test statistic:
+
+$$
+z = \frac{9.8 - 9.1 - 0.5}{\sqrt{\dfrac{0.8^{2}}{40} + \dfrac{0.7^{2}}{50}}} = \frac{0.2}{0.1606} = 1.25.
+$$
+
+6. Because $|1.25| < 1.96$ we cannot reject $H_0$. The data are consistent with the additive reducing fuel consumption by 0.5 litres/100 km.
+</Solution>
+</Example>
+
+<Example title="Example 14C: a confidence interval for a difference">
+Show that a 95% confidence interval for $\mu_1 - \mu_2$, the difference between two independent means, with variances assumed known, is given by
+
+$$
+\left(\bar{X}_1 - \bar{X}_2 - 1.96\sqrt{\frac{\sigma_1^{2}}{n_1} + \frac{\sigma_2^{2}}{n_2}}, \ \bar{X}_1 - \bar{X}_2 + 1.96\sqrt{\frac{\sigma_1^{2}}{n_1} + \frac{\sigma_2^{2}}{n_2}}\right).
+$$
+
+Find a 95% confidence interval for the difference between mean travelling times in Example 11B.
+
+<Solution>
+We showed above that
+
+$$
+Z = \frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{\sqrt{\sigma_1^{2}/n_1 + \sigma_2^{2}/n_2}} \sim N(0, 1),
+$$
+
+so $\Pr[-1.96 < Z < 1.96] = 0.95$. Rearranging the inequality for $\mu_1 - \mu_2$, exactly as we did for a single mean in the [confidence intervals unit](/unit/m5-confidence-intervals), gives the interval above.
+
+For the two drivers, $\bar{x}_1 - \bar{x}_2 = 20.3 - 22.5 = -2.2$ and
+
+$$
+\sqrt{\frac{3.7^{2}}{38} + \frac{4.1^{2}}{43}} = 0.867,
+$$
+
+so the 95% confidence interval is $-2.2 \pm 1.96 \times 0.867 = -2.2 \pm 1.70$, which is $(-3.90, -0.50)$. The whole interval lies below zero, which agrees with the test in Example 11B: driver 1's route is the quicker.
+</Solution>
+</Example>
+
+## A modified hypothesis testing procedure
+
+These methods can be used only when we have random sample data, or when we explicitly report that we are assuming the data set is from a random sample.
+
+The six-point plan for hypothesis testing, with steps 1 to 3 completed before the data are considered, represents the classical approach to hypothesis testing:
+
+1. Null hypothesis $H_0$
+2. Alternative hypothesis $H_1$
+3. Significance level $\alpha$
+4. Rejection region for test statistic
+5. Observed test statistic, calculated from data under the assumption that $H_0$ is true
+6. Conclusion
+
+However, in practice, and particularly in the presentation of statistical conclusions in the journal literature, an alternative approach has been widely adopted:
+
+1. Null hypothesis $H_0$
+2. Alternative hypothesis $H_1$
+3. Observed test statistic, calculated from data under the assumption that $H_0$ is true
+4. p-value
+5. Conclusion
+
+In this second approach, instead of explicitly using the fixed significance level $\alpha$ specified beforehand, we report the **p-value** derived from the data set **under the assumption that the null hypothesis is true**. The p-value is defined to be the probability of obtaining a test-statistic value *equal to or more extreme* than the observed test statistic if we were to take other random samples of the same size $n$ from the same population used in the first sample. In other words, the p-value is the probability of seeing what we have seen (in the data via the test statistic), or something more extreme, **under the assumption that the null hypothesis is true**. So, a small p-value provides evidence against the null hypothesis, and we'll reject the null hypothesis when we have a sufficiently small p-value. We say we have a statistically significant result when we observe a sufficiently small p-value.
+
+To determine if a p-value is sufficiently small we need a guideline. It has become convention, for no particular reason, to use 0.05, so that p-values smaller than this level would result in a rejection of the null hypothesis. We will adopt the convention that if the significance level $\alpha$ is not explicitly stated, then the modified hypothesis testing procedure is to be followed.
+
+Since the only test you have encountered thus far is a z-test, we'll illustrate how p-values are calculated in this context, but please note that the concept is applicable in all hypothesis testing.
+
+We said that a p-value is defined to be the probability of obtaining a test-statistic value equal to or more extreme than the observed test statistic. The test statistic is computed from the data, but how "extreme" it is depends on the alternative hypothesis. In an upper-tail test (greater than alternative), one would expect to observe relatively large test statistic values if the null hypothesis was false. This is why the p-value would be calculated as follows:
+
+$$
+\text{p-value} = \Pr(Z \ge \text{test stat} \mid H_0 \text{ is true}).
+$$
+
+On the other hand, in a lower-tailed test you'd expect to observe relatively small test statistic values if the null hypothesis was false. The p-value would therefore be calculated as:
+
+$$
+\text{p-value} = \Pr(Z \le \text{test stat} \mid H_0 \text{ is true}).
+$$
+
+In the case of a two-tailed test, we don't know in which tail the test statistic would lie beforehand (but it can lie in only one!). To account for this, the area associated with the test statistic is calculated (depending on the tail in which it lies) and this area is then multiplied by 2 to obtain the relevant p-value.
+
+The p-value is conventionally reported as a probability (rather than as a percentage). In this course we will use Excel to calculate exact p-values.
+
+<Theorem name="p-values for a z-test, in Excel">
+With observed test statistic $z$:
+
+| Alternative hypothesis | p-value | In Excel |
+| --- | --- | --- |
+| Lower tail ($<$) | $\Pr(Z \le z)$ | `=NORM.S.DIST(z, TRUE)` |
+| Upper tail ($>$) | $\Pr(Z \ge z)$ | `=1 - NORM.S.DIST(z, TRUE)` |
+| Two-sided ($\ne$) | $2 \times \Pr(Z \ge \lvert z \rvert)$ | `=2*(1 - NORM.S.DIST(ABS(z), TRUE))` |
+</Theorem>
+
+<Example title="Example 15A: daily wages">
+The daily wage of unskilled workers in an industry is assumed to have population mean R286.50 and standard deviation R29.47. If a company in this industry pays a sample of 40 of its workers an average of R271.78 per day, can the company be accused of paying inferior wages, relative to the industry mean?
+
+<Solution>
+1. $H_0: \mu = 286.50$. (Our sample is consistent with a population mean of 286.50.)
+
+2. $H_1: \mu < 286.50$. (Our sample is consistent with a lower mean than 286.50.)
+
+3. The test statistic is
+
+$$
+z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}} = \frac{271.78 - 286.50}{29.47/\sqrt{40}} = -3.16.
+$$
+
+4. $\Pr(Z < -3.16) =$ `NORM.S.DIST(-3.16, TRUE)` $= 0.0008$.
+
+5. We illustrate the conventional form of writing the conclusion.
+
+"We have tested the sample mean against the population mean, and have found a statistically significant difference ($z = -3.16$, $p = 0.0008$). We conclude that the company is paying inferior wages."
+
+Notice carefully the shorthand method for presenting the results. The value of the test statistic is given, and the corresponding p-value.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="wages"
+  label="What a p-value of 0.0008 looks like"
+  description="The shaded tail beyond z = −3.16 is the p-value: almost nothing. Every run assumes H₀ is true, a population mean of R286.50. Repeat 500 times, then again: hardly any of the runs land as far out as the company's sample did."
+/>
+
+<Example title="Example 16B: extra-large eggs">
+The specifications for extra-large eggs are that they have a mean mass of 125 g and standard deviation 6 g. A sample of 24 reputedly extra-large eggs had an average mass of 123.2 g. Are the sampled eggs smaller than the specifications permit?
+
+<Solution>
+1. $H_0: \mu = 125$ g.
+
+2. $H_1: \mu < 125$ g.
+
+3. Test statistic:
+
+$$
+z = \frac{123.2 - 125}{6/\sqrt{24}} = -1.47.
+$$
+
+4. $\Pr(Z < -1.47) =$ `NORM.S.DIST(-1.47, TRUE)` $= 0.0708$ (note that this is statistically significant at the 10% level but not at 5%).
+
+5. The test shows that the mass of the sample of 24 eggs was close to being significantly lower than permitted by the specifications ($z = -1.47$, $p = 0.0708$). Further investigation is recommended to clarify the situation.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="z-test"
+  preset="eggs"
+  label="Count the runs as extreme as the eggs"
+  description="Repeat 500 times with every run assuming μ = 125. About 7% of the runs give a z of −1.47 or lower, matching p = 0.0708: unusual, but not rare enough to reject H₀ at 0.05."
+/>
+
+<Example title="Example 17C: private and public sector salaries">
+The standard deviation of salaries in the private sector is known to be R4500, while in the public sector it is R3000. A random sample of 80 people employed in the private sector has a mean income of R8210, and a sample of 65 public sector employees has a mean income of R7460. Test the hypothesis that incomes in the private sector are significantly higher than those in the public sector.
+
+<Solution>
+No significance level is given, so we use the modified procedure. Let $\mu_1$ and $\mu_2$ be the mean incomes in the private and public sectors.
+
+1. $H_0: \mu_1 - \mu_2 = 0$.
+
+2. $H_1: \mu_1 - \mu_2 > 0$. Private sector incomes are higher.
+
+3. The test statistic is
+
+$$
+z = \frac{8210 - 7460 - 0}{\sqrt{\dfrac{4500^{2}}{80} + \dfrac{3000^{2}}{65}}} = \frac{750}{625.8} = 1.20.
+$$
+
+4. This is an upper-tail test, so $p = \Pr(Z \ge 1.20) =$ `1 - NORM.S.DIST(1.20, TRUE)` $= 0.1151$.
+
+5. The p-value is larger than 0.05, so the difference is not statistically significant ($z = 1.20$, $p = 0.1151$). We cannot conclude that incomes in the private sector are higher.
+</Solution>
+</Example>
+
+<Example title="Example 18C: the tellurometer">
+A tellurometer is an electronic distance-measuring device used by surveyors. A new model has been developed, and its calibration is tested by repeatedly and independently measuring a distance of exactly 500 m. After 100 such measurements, the mean is 499.993 m with a standard deviation of 0.023 m. Does the new tellurometer have a systematic bias? Assume that the sample is sufficiently large that $\sigma \approx s$.
+
+<Solution>
+No significance level is given, so we use the modified procedure.
+
+1. $H_0: \mu = 500$. The tellurometer has no bias.
+
+2. $H_1: \mu \ne 500$. A bias could go either way.
+
+3. The test statistic, with $\sigma \approx 0.023$, is
+
+$$
+z = \frac{499.993 - 500}{0.023/\sqrt{100}} = \frac{-0.007}{0.0023} = -3.04.
+$$
+
+4. This is a two-sided test, so we double the tail area: $p = 2 \times \Pr(Z \le -3.04) = 2 \times$ `NORM.S.DIST(-3.04, TRUE)` $= 2 \times 0.0012 = 0.0024$.
+
+5. The p-value is much smaller than 0.05, so the result is statistically significant ($z = -3.04$, $p = 0.0024$). The new tellurometer has a systematic bias: it measures slightly short.
+</Solution>
+</Example>
+
+<Example title="Example 19C: sixty hypothesis tests">
+In the course of a year a statistician performed 60 hypothesis tests on different independent sets of data, each at the 5% significance level. Suppose that in every case the null hypothesis was true. What is the probability that the statistician made no incorrect decisions? What is the expected number of incorrect decisions?
+
+<Solution>
+Because every null hypothesis was true, the only possible mistake is a Type I error, which happens in each test with probability $\alpha = 0.05$. A test is decided correctly with probability 0.95, and the tests are independent, so
+
+$$
+\Pr(\text{all 60 decisions correct}) = 0.95^{60} = 0.0461.
+$$
+
+The number of incorrect decisions has a Binomial distribution with $n = 60$ and $p = 0.05$, so the expected number of incorrect decisions is
+
+$$
+np = 60 \times 0.05 = 3.
+$$
+
+Even when every null hypothesis is true, a statistician who runs many tests should expect a few "significant" results purely by chance.
+</Solution>
+</Example>
+
+<Quiz />

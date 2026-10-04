@@ -242,7 +242,10 @@ export interface ZTestPreset {
   drawOne: string;
 }
 
-/** Worked examples for `ZTest`, from Module 5 WU3 (`m5-testing-mu`). */
+/**
+ * Worked examples for `ZTest`: Module 5 WU3 (`m5-testing-mu`) and WU4
+ * (`m5-comparing-two-means`).
+ */
 export const ZTEST_PRESETS: ZTestPreset[] = [
   {
     id: "batteries",
@@ -291,5 +294,54 @@ export const ZTEST_PRESETS: ZTestPreset[] = [
     design: { kind: "one", mu0: 2.5, sigma: 0.53, n: 35, xbar: 2.65 },
     dp: 2,
     drawOne: "Harvest 35 plots",
+  },
+  {
+    id: "athlete",
+    label: "Athlete",
+    unit: "two-means",
+    source: "Example 10A: the 8 km time trial",
+    approach: "critical",
+    tail: "upper",
+    alpha: 0.05,
+    design: { kind: "two", n1: 49, n2: 35, sigma1: 0.78, sigma2: 0.65, xbar1: 30.42, xbar2: 30.26 },
+    dp: 2,
+    drawOne: "Time 49 + 35 runs",
+  },
+  {
+    id: "drivers",
+    label: "Drivers",
+    unit: "two-means",
+    source: "Example 11B: the two drivers",
+    approach: "critical",
+    tail: "two",
+    alpha: 0.05,
+    design: { kind: "two", n1: 38, n2: 43, sigma1: 3.7, sigma2: 4.1, xbar1: 20.3, xbar2: 22.5 },
+    dp: 1,
+    drawOne: "Time 38 + 43 trips",
+  },
+  {
+    id: "wages",
+    label: "Wages",
+    unit: "two-means",
+    source: "Example 15A: daily wages",
+    approach: "p-value",
+    tail: "lower",
+    alpha: 0.05,
+    design: { kind: "one", mu0: 286.5, sigma: 29.47, n: 40, xbar: 271.78 },
+    dp: 2,
+    keepZeros: true,
+    drawOne: "Pay 40 workers",
+  },
+  {
+    id: "eggs",
+    label: "Eggs",
+    unit: "two-means",
+    source: "Example 16B: extra-large eggs",
+    approach: "p-value",
+    tail: "lower",
+    alpha: 0.05,
+    design: { kind: "one", mu0: 125, sigma: 6, n: 24, xbar: 123.2 },
+    dp: 1,
+    drawOne: "Weigh 24 eggs",
   },
 ];

@@ -296,8 +296,12 @@ export default function ZTest({ params }: { params: VizParams }) {
   const cutText = tail === "lower" ? fmt(-c, 2) : fmt(c, 2);
   const decision = isCritical
     ? tail === "two"
-      ? `|${fmt(zObs, 2)}| ${exampleRejects ? ">" : "<"} ${fmt(c, 2)}, so ${exampleRejects ? "reject" : "do not reject"} H₀ at the ${alphaPct} level`
-      : `${fmt(zObs, 2)} ${(tail === "lower") === exampleRejects ? "<" : ">"} ${cutText}, so ${exampleRejects ? "reject" : "do not reject"} H₀ at the ${alphaPct} level`
+      ? `|${fmt(zObs, 2)}| ${exampleRejects ? ">" : "≤"} ${fmt(c, 2)}, so ${exampleRejects ? "reject" : "do not reject"} H₀ at the ${alphaPct} level`
+      : `${fmt(zObs, 2)} ${
+          // A z exactly on the cut-off is not rejected, so the non-reject
+          // signs include equality.
+          exampleRejects ? (tail === "lower" ? "<" : ">") : tail === "lower" ? "≥" : "≤"
+        } ${cutText}, so ${exampleRejects ? "reject" : "do not reject"} H₀ at the ${alphaPct} level`
     : null;
 
   const pProb =
@@ -363,7 +367,8 @@ export default function ZTest({ params }: { params: VizParams }) {
         {isCritical ? (
           <>
             Press <strong className="font-semibold">Repeat 500 times</strong> and count how
-            often the test rejects H₀ when H₀ is true.
+            often the test{" "}
+            {h0True ? "rejects H₀ when H₀ is true" : "fails to reject H₀ when H₀ is false"}.
           </>
         ) : (
           <>

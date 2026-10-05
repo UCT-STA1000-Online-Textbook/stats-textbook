@@ -154,6 +154,8 @@ export default function ConfidenceIntervals({ params }: { params: VizParams }) {
   function loadPreset(p: CiPreset) {
     setPreset(p);
     setN(p.startN);
+    // Every worked example is introduced at 95%, so a new one opens there.
+    setLevel(95);
     clearTally();
   }
 

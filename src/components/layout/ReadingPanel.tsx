@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useEffect, useMemo } from "react";
 import { useVizStore } from "@/store/vizStore";
 import { useUiStore } from "@/store/uiStore";
+import { useVizWide } from "./useVizWide";
 import type { VizParams } from "@/store/vizStore";
 import type { UnitFrontmatter } from "@/lib/mdx";
 import { ALL_UNITS } from "@/content/units";
@@ -37,6 +38,7 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
   const setViz = useVizStore((s) => s.setViz);
   const resetViz = useVizStore((s) => s.resetViz);
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
+  const wide = useVizWide();
   // Subscribe to the unit's progress record itself (not the store's getter
   // method) so the completion badges update live when a quiz is submitted.
   const progress = useProgressStore((s) => s.units[frontmatter.slug] ?? null);
@@ -76,9 +78,14 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
   // textbook, so prose keeps a readable measure before the viz panel grows.
   // The min-width guards the 768–1024px range where both panels share the
   // row (their combined minimums fit the narrowest viewport), and the
-  // max-width caps the line length on wide screens.
+  // max-width caps the line length on wide screens. In Wide view (desktop
+  // only) it becomes a fixed 360px column so the viz can take the rest.
   return (
-    <main className="flex-[5] min-w-0 md:min-w-[360px] max-w-[760px] overflow-y-auto">
+    <main
+      className={`flex-[5] min-w-0 md:min-w-[360px] max-w-[760px] overflow-y-auto ${
+        wide ? "lg:flex-none lg:basis-[360px]" : ""
+      }`}
+    >
       <article className="max-w-[680px] mx-auto px-5 py-8 sm:px-10 sm:py-12 animate-soft-fade">
         <header className="mb-10">
           {/* Breadcrumb: module · work-unit position · global position */}

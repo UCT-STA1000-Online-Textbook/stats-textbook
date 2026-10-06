@@ -30,6 +30,7 @@
 
 import { useState } from "react";
 import { useVizStore } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import { useProgressStore, QuizAnswer } from "@/store/progressStore";
 import { useQuizContext } from "@/components/mdx/QuizContext";
 import { QuizQuestion } from "@/components/mdx/QuizQuestion";
@@ -100,6 +101,8 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
   ) => {
     setViz(vizId, toVizParams(vizHintParams));
     if (expanded) onToggleExpanded();
+    // As with TryThis: opening a viz folds the sidebar to its icon rail.
+    useUiStore.getState().setSidebarCollapsed(true);
   };
 
   const score = submitted

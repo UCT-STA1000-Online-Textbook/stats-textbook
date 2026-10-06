@@ -357,39 +357,16 @@ export interface BinomialPreset {
   success: string;
   /** Bars selected on opening, as an inclusive range of x values. */
   select: [number, number];
-  /**
-   * Optional observed counts from a real simulation run, indexed by x, for
-   * the viz to draw over the theoretical bars. Only the presets that come
-   * from one of the lecturer's tutorial datasets carry this.
-   */
-  observed?: number[];
 }
 
 /**
  * Binomial distributions for `BinomialExplorer`, one per worked example in
  * Module 4, WU2 (`m4-binomial`).
  *
- * The mouse-in-the-maze entry is not from the textbook: it matches the
- * lecturer's Tutorial 6 simulation, which runs 1500 experiments of 8 mice
- * with a 0.3 chance of finding the way out.
+ * The mouse-in-the-maze simulation is not here: it has its own spreadsheet
+ * viz, `MouseMazeSheet`, with recorded rows in `recordedMouseMaze.ts`.
  */
 export const BINOMIAL_PRESETS: BinomialPreset[] = [
-  {
-    id: "mouse-maze",
-    label: "Mouse maze",
-    source: "Tutorial 6 simulation",
-    n: 8,
-    p: 0.3,
-    trial: "mouse released into the maze",
-    success: "finds its way out",
-    // Opens on "3 or more of the 8 get out" rather than the whole range: the
-    // read-out leads with this figure, and Pr[0 ≤ X ≤ 8] = 1 tells nobody
-    // anything.
-    select: [3, 8],
-    // The 1500 experiments in Tutorial 6, counted by how many of the 8 mice
-    // got out. Their mean is 2.3867 against a theoretical np of 2.4.
-    observed: [89, 307, 434, 389, 183, 86, 9, 2, 1],
-  },
   {
     id: "salesperson",
     label: "Salesperson",

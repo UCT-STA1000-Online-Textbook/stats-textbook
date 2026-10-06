@@ -11,6 +11,9 @@
  *   - `navDrawerOpen` / `vizSheetOpen` — transient overlays used only on
  *     tablet / phone widths. Deliberately NOT persisted: a drawer or sheet
  *     left open should never greet the student on their next visit.
+ *   - `vizWide` — the "Wide view" request for visualisations that need more
+ *     room (see `WIDE_CAPABLE` in `VizRegistry.ts` and `useVizWide`). Also
+ *     not persisted: each visit starts with the normal reading width.
  */
 
 "use client";
@@ -25,10 +28,16 @@ interface UiState {
   navDrawerOpen: boolean;
   /** Phone (`<md`): true → the visualisation bottom sheet is open. */
   vizSheetOpen: boolean;
+  /**
+   * Desktop (`lg`+): true → the student asked for Wide view. Only honoured
+   * while the active viz is wide-capable; read it through `useVizWide`.
+   */
+  vizWide: boolean;
   toggleSidebar: () => void;
   setSidebarCollapsed: (collapsed: boolean) => void;
   setNavDrawerOpen: (open: boolean) => void;
   setVizSheetOpen: (open: boolean) => void;
+  setVizWide: (wide: boolean) => void;
 }
 
 export const useUiStore = create<UiState>()(
@@ -37,11 +46,13 @@ export const useUiStore = create<UiState>()(
       sidebarCollapsed: false,
       navDrawerOpen: false,
       vizSheetOpen: false,
+      vizWide: false,
       toggleSidebar: () =>
         set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
       setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
       setNavDrawerOpen: (open) => set({ navDrawerOpen: open }),
       setVizSheetOpen: (open) => set({ vizSheetOpen: open }),
+      setVizWide: (wide) => set({ vizWide: wide }),
     }),
     {
       name: "sta1000-ui",

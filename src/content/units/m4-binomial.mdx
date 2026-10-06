@@ -218,12 +218,27 @@ To get a feel for the Binomial distribution, it helps to watch what the two para
 <TryThis
   vizId="binomial-explorer"
   label="Play with n and p"
-  description="Press Run to release the mice and watch your results pile up on the bars. Then drag p from 0.05 up to 0.95 with n held at 15 and watch the graph swing from one side to the other, standing symmetric only as it passes 0.5."
+  description="Drag n up to 15, then drag p from 0.05 up to 0.95 and watch the graph swing from one side to the other, standing symmetric only as it passes 0.5."
 />
 
-The opening view is the mouse-in-the-maze experiment: 8 mice are released into a maze, each with probability 0.3 of finding its way out, and we count how many get out. Press **Run** and the panel performs those 8 trials for real, marking which mice made it. Each run adds a ring above the bar for that many successes.
+## Simulating a Binomial experiment in Excel
 
-One run tells you nothing. Fifty runs start to show a shape. A few thousand and the rings lie almost exactly on the bars. That is worth doing yourself, because it is the difference between being told the formula is right and watching it come true. You can also load the 1500 runs recorded in Tutorial 6 straight into the same tally.
+Consider the mouse-in-the-maze experiment: 8 mice are released into a maze, each with probability 0.3 of finding its way out, and we count how many get out. So $X \sim B(8, 0.3)$. In Excel the simulation is laid out with one row per experiment:
+
+- Put $p$ in a cell of its own, say M1, so that one change updates the whole sheet.
+- Each mouse gets a column (Mouse #1 to Mouse #8), and each of its cells holds `=BINOM.INV(1,$M$1,RAND())`. `RAND()` picks a random number between 0 and 1, and `BINOM.INV` turns it into 1 (the mouse got out) with probability $p$, or 0 otherwise.
+- The column X adds up the row with `=SUM(B2:I2)`: the number of mice that got out in that experiment.
+- Fill the row down to repeat the experiment hundreds of times.
+
+Then compare the simulation with the theory. Count how often each value of X turned up with `=COUNTIF`, divide by the number of rows for the relative frequencies, and set them beside `=BINOM.DIST(x,8,$M$1,FALSE)`. Compare `=AVERAGE` and `=VAR.S` of column X with $np = 2.4$ and $np(1 - p) = 1.68$.
+
+<TryThis
+  vizId="mouse-maze"
+  label="Simulate the mouse maze"
+  description="Press Run once to fill down one experiment and watch the 8 mice run. Then Run 500 and watch the rings settle onto the BINOM.DIST bars. Show formulas reveals what is typed in each cell, and Load 1500 rows pastes in 1500 previously recorded experiments."
+/>
+
+One row tells you nothing. Fifty rows start to show a shape. A few thousand and the relative frequencies lie almost exactly on the BINOM.DIST values. That is worth doing yourself, because it is the difference between being told the formula is right and watching it come true. Notice too that pressing F9 in Excel makes every `RAND()` draw again: the simulated numbers change each time, but the pattern they make does not.
 
 <Example title="Example 4B: chipped pills">
 A certain type of pill is packed in bottles of 12 pills each. 10% of the pills are chipped in the manufacturing process.

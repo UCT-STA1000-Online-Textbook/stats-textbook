@@ -42,6 +42,7 @@ export function TryThis({
   const setViz = useVizStore((s) => s.setViz);
   const activeViz = useVizStore((s) => s.activeViz);
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
+  const setSidebarCollapsed = useUiStore((s) => s.setSidebarCollapsed);
   const isActive = activeViz === vizId;
 
   /**
@@ -52,6 +53,9 @@ export function TryThis({
   function handleClick() {
     setViz(vizId, buildVizParams(vizParamProps));
     setVizSheetOpen(true);
+    // Opening a viz folds the sidebar to its icon rail (desktop only; the
+    // flag is inert below lg) so the viz and the text get the room.
+    setSidebarCollapsed(true);
   }
 
   return (

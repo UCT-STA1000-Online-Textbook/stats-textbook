@@ -26,12 +26,15 @@
 import { Component, Suspense, useState, type ReactNode } from "react";
 import { useVizStore } from "@/store/vizStore";
 import { useUiStore } from "@/store/uiStore";
-import { VIZ_REGISTRY } from "@/components/viz/VizRegistry";
+import { VIZ_REGISTRY, WIDE_CAPABLE } from "@/components/viz/VizRegistry";
 import { QuizPanel } from "./QuizPanel";
+import { useVizWide } from "./useVizWide";
 import { useDialogA11y } from "./useDialogA11y";
 import {
   IconChart,
   IconChevronDown,
+  IconChevronLeft,
+  IconChevronRight,
   IconClose,
   IconRefresh,
   IconSparkles,
@@ -89,6 +92,8 @@ class VizErrorBoundary extends Component<
 function VizArea() {
   const { activeViz, vizParams, resetViz } = useVizStore();
   const VizComponent = activeViz ? VIZ_REGISTRY[activeViz] : null;
+  const wide = useVizWide();
+  const setVizWide = useUiStore((s) => s.setVizWide);
 
   if (!VizComponent) return <VizPlaceholder />;
 
@@ -103,14 +108,38 @@ function VizArea() {
             {activeViz}
           </span>
         </div>
-        <button
-          onClick={resetViz}
-          className="inline-flex items-center gap-1 text-[11px] font-medium text-[color:var(--color-ink-500)] hover:text-[color:var(--color-ink-900)] transition-colors"
-          title="Reset visualisation"
-        >
-          <IconRefresh size={12} strokeWidth={2} />
-          Reset
-        </button>
+        <div className="flex items-center gap-3">
+          {/* Wide view: offered only for viz that can use the room, and only
+              on desktop, where the reading panel can give some up. */}
+          {activeViz !== null && WIDE_CAPABLE.has(activeViz) && (
+            <button
+              onClick={() => setVizWide(!wide)}
+              aria-pressed={wide}
+              className="hidden lg:inline-flex items-center gap-1 rounded-md border border-[color:var(--color-line)] px-2 py-0.5 text-[11px] font-medium text-[color:var(--color-ink-700)] hover:border-blue-400 transition-colors"
+              title={wide ? "Give the reading panel its width back" : "Give this visualisation more room"}
+            >
+              {wide ? (
+                <>
+                  Normal view
+                  <IconChevronRight size={12} strokeWidth={2} />
+                </>
+              ) : (
+                <>
+                  <IconChevronLeft size={12} strokeWidth={2} />
+                  Wide view
+                </>
+              )}
+            </button>
+          )}
+          <button
+            onClick={resetViz}
+            className="inline-flex items-center gap-1 text-[11px] font-medium text-[color:var(--color-ink-500)] hover:text-[color:var(--color-ink-900)] transition-colors"
+            title="Reset visualisation"
+          >
+            <IconRefresh size={12} strokeWidth={2} />
+            Reset
+          </button>
+        </div>
       </div>
       {/* Re-key the boundary on viz + params so every `<TryThis>` click
           clears any error from a previous visualisation. */}
@@ -189,6 +218,7 @@ export function VizPanel() {
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
   const quizOpen = useVizStore((s) => s.quizOpen);
   const quizOpenNonce = useVizStore((s) => s.quizOpenNonce);
+  const wide = useVizWide();
 
   // Below `md` this panel is a slide-up bottom sheet that behaves as a modal
   // dialog; at `md`+ it's an in-flow column and none of that applies.
@@ -220,6 +250,8 @@ export function VizPanel() {
   // interactive area is always the larger of the two, and when the sidebar
   // collapses the freed space flows here instead of becoming dead gutter
   // beside the (capped) reading column. `min-w` keeps the controls usable.
+  // In Wide view (desktop only) this panel takes a much larger share and the
+  // reading panel drops to a fixed narrow column; see `useVizWide`.
   return (
     <aside
       ref={containerRef}
@@ -230,7 +262,7 @@ export function VizPanel() {
       aria-modal={isModal ? true : undefined}
       aria-label={isModal ? "Visualisation and quiz" : undefined}
       tabIndex={isModal ? -1 : undefined}
-      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-[4] md:min-w-[360px] lg:min-w-[400px] ${
+      className={`fixed inset-x-0 bottom-0 z-40 flex flex-col overflow-hidden rounded-t-2xl border-t border-[color:var(--color-line)] bg-white shadow-2xl transition-transform duration-300 h-[82dvh] md:static md:z-auto md:h-auto md:translate-y-0 md:rounded-none md:border-t-0 md:border-l md:shadow-none md:transition-none md:flex-[4] md:min-w-[360px] lg:min-w-[400px] ${wide ? "lg:flex-[9]" : ""} ${
         vizSheetOpen ? "translate-y-0" : "translate-y-full"
       }`}
     >

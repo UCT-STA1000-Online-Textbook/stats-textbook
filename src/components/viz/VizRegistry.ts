@@ -54,6 +54,8 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
 
   // M4 — Binomial distribution (m4-binomial)
   "binomial-explorer": lazy(() => import("./distributions/BinomialExplorer")),
+  // The mouse-maze simulation, laid out as an Excel sheet.
+  "mouse-maze": lazy(() => import("./distributions/MouseMazeSheet")),
 
   // M4 — Poisson & Exponential distributions (m4-poisson-exponential).
   // One component serves both: they are two views of the same process.
@@ -81,3 +83,12 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // `counting-studio` is the 3D counting-rules viz for m1-permutations-combinations.
   "counting-studio": lazy(() => import("./probability/CountingStudio")),
 };
+
+/**
+ * Visualisations that can use Wide view. For these, the viz panel header
+ * offers a "Wide view" button (desktop only) that narrows the reading panel
+ * and gives the viz most of the screen; the viz switches to a side-by-side
+ * layout through a CSS container query on the panel's width. Everything else
+ * keeps the normal width.
+ */
+export const WIDE_CAPABLE: ReadonlySet<string> = new Set(["mouse-maze"]);

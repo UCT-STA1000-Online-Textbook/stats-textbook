@@ -17,9 +17,9 @@
  * trials, lights up which of them succeeded, and adds the result to a tally
  * drawn over the theoretical bars. Run it enough times and the tally settles
  * onto the theory, which is the law of large numbers doing its work on the
- * distribution the student has just been reading about. The mouse-maze preset
- * can also load the lecturer's 1500 recorded Tutorial 6 experiments straight
- * into that tally, so the class data and the live runs are the same object.
+ * distribution the student has just been reading about. (The mouse-in-the-
+ * maze simulation has its own spreadsheet viz,
+ * `MouseMazeSheet`.)
  *
  * The tally is cleared whenever n or p changes, since counts gathered under
  * one pair of parameters say nothing about another.
@@ -41,6 +41,7 @@ import type { VizParams } from "@/store/vizStore";
 import { VizGuide } from "../VizGuide";
 import { useReplayTween } from "../useReplayTween";
 import { sampleBinomialTrials } from "../sampling";
+import { binomialPmf } from "../binomial";
 import { Slider, VIZ_TEXT, VizHint } from "../shared";
 import { BINOMIAL_PRESETS } from "../data/distributionData";
 
@@ -60,23 +61,6 @@ const AXIS_Y = 334;
 /** Largest number of trials the slider allows. Beyond ~20 the bars get too thin to click. */
 const MAX_N = 20;
 
-/**
- * Probability mass function of B(n, p) for every x from 0 to n.
- *
- * Built with the recurrence p(x) = p(x−1) · (n−x+1)/x · p/(1−p) starting from
- * p(0) = (1−p)^n. Computing C(n, x) directly would overflow for larger n, and
- * this also costs one multiply per bar instead of a factorial each.
- */
-function binomialPmf(n: number, p: number): number[] {
-  const q = 1 - p;
-  const out = new Array<number>(n + 1);
-  out[0] = Math.pow(q, n);
-  for (let x = 1; x <= n; x++) {
-    out[x] = (out[x - 1] * ((n - x + 1) / x) * p) / q;
-  }
-  return out;
-}
-
 /** Every whole number from `from` to `to`, inclusive. */
 function rangeOf(from: number, to: number): number[] {
   const out: number[] = [];
@@ -89,7 +73,7 @@ function rangeOf(from: number, to: number): number[] {
  * read off a probability.
  *
  * @param params.preset — id of the example to open at, from
- *   `BINOMIAL_PRESETS`; defaults to the mouse-in-the-maze simulation.
+ *   `BINOMIAL_PRESETS`; defaults to the salesperson of Example 1A.
  */
 export default function BinomialExplorer({ params }: { params: VizParams }) {
   const initial =
@@ -252,13 +236,6 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
     setLastRun(last);
   }
 
-  /** Seed the tally with the lecturer's recorded experiments for this preset. */
-  function loadRecorded() {
-    if (!preset?.observed) return;
-    setTally(preset.observed.map((c, i) => c + (tally[i] ?? 0)));
-    setLastRun(null);
-  }
-
   /**
    * Clicking a bar turns that bar on or off, and nothing else moves.
    *
@@ -327,14 +304,6 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
               {times === 1 ? `Run ${n} trials` : "Run 500"}
             </button>
           ))}
-          {preset?.observed && (
-            <button
-              onClick={loadRecorded}
-              className="px-2.5 py-1 rounded-md text-[11px] font-medium border border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-700)] transition-colors hover:border-blue-400"
-            >
-              Add the 1500 recorded
-            </button>
-          )}
           <button
             onClick={() => clearRuns(n)}
             className="px-2.5 py-1 rounded-md text-[11px] font-medium border border-[color:var(--color-line)] bg-white text-[color:var(--color-ink-500)] transition-colors hover:border-blue-400"
@@ -343,8 +312,8 @@ export default function BinomialExplorer({ params }: { params: VizParams }) {
           </button>
         </div>
 
-        {/* The individual trials of the most recent run. For the maze preset
-            these are the 8 mice, filled if they found their way out. */}
+        {/* The individual trials of the most recent run, each marker
+            filled if that trial was a success. */}
         {lastRun && (
           <div className="mt-2 flex flex-wrap items-center gap-1">
             {lastRun.map((ok, i) => (

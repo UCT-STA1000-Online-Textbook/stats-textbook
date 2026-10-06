@@ -12,6 +12,7 @@
 
 import type { ReactNode } from "react";
 import { useVizStore } from "@/store/vizStore";
+import { useUiStore } from "@/store/uiStore";
 import { buildVizParams, VizParamProps } from "./vizParams";
 
 interface KeywordChipProps extends VizParamProps {
@@ -22,9 +23,13 @@ interface KeywordChipProps extends VizParamProps {
 
 export function KeywordChip({ children, vizId, ...vizParamProps }: KeywordChipProps) {
   const setViz = useVizStore((s) => s.setViz);
+  const setSidebarCollapsed = useUiStore((s) => s.setSidebarCollapsed);
 
   function handleClick() {
     setViz(vizId, buildVizParams(vizParamProps));
+    // Opening a viz folds the sidebar to its icon rail (desktop only; the
+    // flag is inert below lg) so the viz and the text get the room.
+    setSidebarCollapsed(true);
   }
 
   return (

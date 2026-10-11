@@ -48,7 +48,7 @@ import { POISSON_PRESETS } from "../data/distributionData";
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
 /** Mean marker colour, shared with every other viz that marks a mean. */
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 
 // SVG geometry (viewBox units).
 const W = 440;

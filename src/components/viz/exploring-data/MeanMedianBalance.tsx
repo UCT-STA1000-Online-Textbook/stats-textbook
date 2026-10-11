@@ -32,7 +32,7 @@ import { fmtStat, mean as meanOf, quartileInc } from "../data/summaryStats";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
-const MEAN_C = "rgb(220, 38, 38)"; // red-600 — matches HistogramBuilder's mean overlay
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 const MEDIAN_C = "rgb(5, 150, 105)"; // emerald-600 — matches HistogramBuilder's median
 
 // SVG geometry (viewBox units). The gap above the beam is headroom for

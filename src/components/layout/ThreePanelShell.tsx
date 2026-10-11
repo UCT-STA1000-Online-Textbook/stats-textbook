@@ -32,6 +32,7 @@ import { VizPanel } from "./VizPanel";
 import { QuizProvider } from "@/components/mdx/QuizContext";
 import { useUiStore } from "@/store/uiStore";
 import { useProgressStore } from "@/store/progressStore";
+import { useFeedbackStore } from "@/store/feedbackStore";
 import { IconMenu, IconChart } from "@/components/icons";
 import type { UnitFrontmatter } from "@/lib/mdx";
 
@@ -47,10 +48,12 @@ export function ThreePanelShell({ frontmatter, content }: ThreePanelShellProps) 
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
 
   // Runs once per mount, client-only — exactly where it's safe to read
-  // localStorage and adopt the student's real progress/sidebar preference.
+  // localStorage and adopt the student's real progress, sidebar preference
+  // and viz ratings.
   useEffect(() => {
     useProgressStore.persist.rehydrate();
     useUiStore.persist.rehydrate();
+    useFeedbackStore.persist.rehydrate();
   }, []);
 
   return (

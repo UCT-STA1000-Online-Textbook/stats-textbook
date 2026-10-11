@@ -53,7 +53,7 @@ const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
 const STRAY_C = "rgb(248, 113, 113)"; // red-400
 const OUTLIER_C = "rgb(220, 38, 38)"; // red-600
-const MEAN_C = "rgb(42, 49, 71)"; // --color-ink-700
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 
 // SVG plot geometry (viewBox units).
 const W = 440;

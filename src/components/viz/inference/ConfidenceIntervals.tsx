@@ -8,7 +8,7 @@
  * The viz lets the student check that claim by running the study:
  *
  *   - Before any run, the chart shows the worked example's own interval,
- *     x̄ ± z·σ/√n, against the true μ (red, dashed).
+ *     x̄ ± z·σ/√n, against the true μ (black, dashed).
  *   - Each run takes a fresh sample of n, works out its interval and stacks
  *     it on top of the earlier ones. Intervals that catch μ are blue; the
  *     ones that miss it are red. The read-out keeps score and compares the
@@ -37,8 +37,7 @@ import { CI_PRESETS, type CiPreset } from "../data/inferenceData";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
-/** Mean marker colour, shared with every other viz that marks a mean. */
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 /** An interval that misses μ. Red reads as "wrong" without a legend. */
 const MISS_C = "rgb(220, 38, 38)"; // red-600
 
@@ -262,7 +261,7 @@ export default function ConfidenceIntervals({ params }: { params: VizParams }) {
               : `The latest ${shown.length} of ${tally.total} ${level}% confidence intervals, each from a sample of ${n}. ${tally.hits} caught the true mean ${trueMu}.`}
           </title>
 
-          {/* True mean μ: red, dashed, through the whole stack */}
+          {/* True mean μ: black, dashed, through the whole stack */}
           <line
             x1={xOf(trueMu)}
             y1={STACK_Y0 - 12}
@@ -371,7 +370,7 @@ export default function ConfidenceIntervals({ params }: { params: VizParams }) {
           </p>
           <VizGuide
             steps={[
-              "Pick a worked example along the top. The blue bar is its confidence interval, x̄ ± z × σ/√n, and the red dashed line is the true mean μ.",
+              "Pick a worked example along the top. The blue bar is its confidence interval, x̄ ± z × σ/√n, and the black dashed line is the true mean μ.",
               "In real life nobody knows μ. Here it is fixed so the simulation can check each interval.",
               "Press the first run button to take a fresh sample of n and draw its interval on top of the stack. Blue intervals contain μ; red ones miss it.",
               "Press Repeat 500 times and read the hit rate below the chart: it settles close to the confidence level.",

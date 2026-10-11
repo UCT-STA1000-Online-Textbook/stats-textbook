@@ -36,7 +36,7 @@ import { Slider, VIZ_TEXT, clamp01, toNum } from "../shared";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
-const MEAN_C = "rgb(220, 38, 38)"; // red-600 — matches the Module 2 mean colour
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 const MEDIAN_C = "rgb(5, 150, 105)"; // emerald-600 — matches the Module 2 median
 
 // SVG geometry (viewBox units).
@@ -281,7 +281,7 @@ export default function SkewnessMorpher({ params }: { params: VizParams }) {
             steps={[
               "Drag the slider from one end to the other to swing the long tail from left to right.",
               "Stop in the middle for a symmetric distribution.",
-              "Watch the red mean and the green median separate as the shape skews.",
+              "Watch the black mean and the green median separate as the shape skews.",
               "However far you push it, the mean always ends up past the median, on the long-tail side.",
             ]}
           />

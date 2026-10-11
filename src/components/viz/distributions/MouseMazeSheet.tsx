@@ -44,7 +44,7 @@ import { RECORDED_ROWS } from "../data/recordedMouseMaze";
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
 /** Mean marker colour, shared with every other viz that marks a mean. */
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 /** Excel's selection green, used only for the selected-row outline. */
 const EXCEL_GREEN = "rgb(33, 115, 70)";
 
@@ -416,7 +416,7 @@ export default function MouseMazeSheet() {
           </g>
         );
       })}
-      {/* Mean: np in theory, red and dashed as on every other viz */}
+      {/* Mean: np in theory, black and dashed as on every other viz */}
       <line
         x1={cx(MICE * p)}
         y1={12}
@@ -599,7 +599,7 @@ export default function MouseMazeSheet() {
           <tr>
             <SheetRowNum n={4} />
             <td className="border border-slate-200 px-2 font-semibold">np</td>
-            {/* np is what the red dashed line on the chart marks */}
+            {/* np is what the black dashed line on the chart marks */}
             <td className="border border-slate-200 px-2 text-right" style={{ color: MEAN_C }}>
               {showFormulas ? "=8*M1" : (MICE * p).toFixed(4)}
             </td>
@@ -760,7 +760,7 @@ export default function MouseMazeSheet() {
           </>
         )}
         Mean of X: {mean === null ? "none yet" : mean.toFixed(4)} vs np ={" "}
-        {/* Red to match the dashed np line on the chart */}
+        {/* Black to match the dashed np line on the chart */}
         <span style={{ color: MEAN_C }}>{fmt(MICE * p, 4)}</span>
       </p>
       <p className="mt-1 text-[12px] text-[color:var(--color-ink-500)]">{interpretation}</p>

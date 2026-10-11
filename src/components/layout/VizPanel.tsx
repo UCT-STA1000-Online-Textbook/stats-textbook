@@ -28,6 +28,7 @@ import { useVizStore } from "@/store/vizStore";
 import { useUiStore } from "@/store/uiStore";
 import { VIZ_REGISTRY, WIDE_CAPABLE } from "@/components/viz/VizRegistry";
 import { QuizPanel } from "./QuizPanel";
+import { VizRating } from "./VizRating";
 import { useVizWide } from "./useVizWide";
 import { useDialogA11y } from "./useDialogA11y";
 import {
@@ -86,8 +87,8 @@ class VizErrorBoundary extends Component<
 
 /**
  * Renders the active visualisation, or the placeholder if nothing is active.
- * Header bar shows the registered `vizId` and offers a Reset action that
- * clears the store back to the unit's default state.
+ * Header bar shows the registered `vizId`, a Rate control (see `VizRating`)
+ * and a Reset action that clears the store back to the unit's default state.
  */
 function VizArea() {
   const { activeViz, vizParams, resetViz } = useVizStore();
@@ -131,6 +132,8 @@ function VizArea() {
               )}
             </button>
           )}
+          {/* Keyed on the viz so its card never carries over to another viz. */}
+          {activeViz !== null && <VizRating key={activeViz} vizId={activeViz} />}
           <button
             onClick={resetViz}
             className="inline-flex items-center gap-1 text-[11px] font-medium text-[color:var(--color-ink-500)] hover:text-[color:var(--color-ink-900)] transition-colors"

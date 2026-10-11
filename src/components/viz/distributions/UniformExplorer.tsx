@@ -46,7 +46,7 @@ import { UNIFORM_PRESETS } from "../data/distributionData";
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
 /** Mean marker colour, shared with every other viz that marks a mean. */
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 
 // SVG geometry (viewBox units).
 const W = 440;
@@ -440,7 +440,7 @@ export default function UniformExplorer({ params }: { params: VizParams }) {
             {preset.axisLabel}
           </text>
 
-          {/* Mean marker at the midpoint of the interval. Red, dashed and
+          {/* Mean marker at the midpoint of the interval. Black, dashed and
               labelled, the same treatment every other viz in the book gives a
               mean, so the idea keeps one colour across modules. The label is
               stroked in white underneath (paintOrder) to stay readable where
@@ -601,7 +601,7 @@ export default function UniformExplorer({ params }: { params: VizParams }) {
               "Drag the grips a and b to change the interval the values fall in.",
               "Watch the height: widen the interval and the density drops, because the area has to stay at one.",
               "Drag the handles c and d to shade part of the interval. The shaded fraction is the probability.",
-              "The red line is the mean, which stays at the midpoint however you drag.",
+              "The black dashed line is the mean, which stays at the midpoint however you drag.",
               "Press Run to draw real values. Count how many land in the strip and the proportion closes on the predicted probability.",
             ]}
           />

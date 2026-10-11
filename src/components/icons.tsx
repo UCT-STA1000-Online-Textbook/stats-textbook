@@ -194,3 +194,9 @@ export const IconTrophy = (p: IconProps) => (
     <path d="M12 15v6" />
   </Base>
 );
+
+export const IconStar = (p: IconProps) => (
+  <Base {...p}>
+    <path d="m12 2.5 2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95L12 2.5Z" />
+  </Base>
+);

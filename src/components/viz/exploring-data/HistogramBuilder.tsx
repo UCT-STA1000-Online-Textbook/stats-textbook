@@ -30,7 +30,7 @@ import {
 } from "../data/exploringData";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 const MEDIAN_C = "rgb(5, 150, 105)"; // emerald-600
 
 // SVG plot geometry (viewBox units).

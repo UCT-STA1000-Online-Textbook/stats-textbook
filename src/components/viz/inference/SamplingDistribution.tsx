@@ -45,7 +45,7 @@ import {
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
 /** Mean marker colour, shared with every other viz that marks a mean. */
-const MEAN_C = "rgb(220, 38, 38)"; // red-600
+const MEAN_C = "rgb(0, 0, 0)"; // black, the book-wide mean colour
 
 // SVG geometry (viewBox units). Both charts use the same horizontal extent so
 // a value sits at the same x in each.
@@ -424,7 +424,7 @@ export default function SamplingDistribution({ params }: { params: VizParams }) 
             </text>
           ))}
 
-          {/* Population mean μ: red, dashed, labelled above the chart */}
+          {/* Population mean μ: black, dashed, labelled above the chart */}
           <line
             x1={xOf(mu)}
             y1={POP_Y0 - 4}
@@ -536,7 +536,7 @@ export default function SamplingDistribution({ params }: { params: VizParams }) 
             {preset.axisLabel}
           </text>
 
-          {/* The mean of X̄ is μ, so the same red marker carries straight down. */}
+          {/* The mean of X̄ is μ, so the same black marker carries straight down. */}
           <line
             x1={xOf(mu)}
             y1={MEAN_Y0 - 8}
@@ -574,7 +574,7 @@ export default function SamplingDistribution({ params }: { params: VizParams }) 
           </p>
           <VizGuide
             steps={[
-              "Pick a population along the top. The upper chart shows its shape, with the population mean μ in red.",
+              "Pick a population along the top. The upper chart shows its shape, with the population mean μ as a black dashed line.",
               "Set n, the number of values in each sample.",
               "Press the first run button to take one sample. Its values appear as ticks under the population, and their mean x̄ drops into the lower chart.",
               "In real life you only get one sample. Press Repeat 500 times to imagine the whole study done 500 times over, and see where all those sample means land. The blue curve is the Normal distribution N(μ, σ²/n) that the theory predicts.",

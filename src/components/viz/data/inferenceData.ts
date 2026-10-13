@@ -3,7 +3,8 @@
  *
  *   - `SAMPLE_MEAN_PRESETS` for `SamplingDistribution` (WU1),
  *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2),
- *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4).
+ *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4),
+ *   - `T_PRESETS` for `TDistribution` (WU5).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -343,5 +344,111 @@ export const ZTEST_PRESETS: ZTestPreset[] = [
     design: { kind: "one", mu0: 125, sigma: 6, n: 24, xbar: 123.2 },
     dp: 1,
     drawOne: "Weigh 24 eggs",
+  },
+];
+
+/** A worked example the `TDistribution` viz can open at. */
+export interface TPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /**
+   * What the example does with the t cut-off: build a confidence interval
+   * ("interval") or test a claimed mean ("test").
+   */
+  kind: "interval" | "test";
+  /**
+   * Which tail(s) the cut-off cuts off. A confidence interval is always
+   * "two": the middle 95% (or 99%) of t, with the rest split between the tails.
+   */
+  tail: Tail;
+  /** Total area beyond the cut-off: 0.05 for 95% confidence or a 5% test. */
+  alpha: number;
+  /**
+   * The true mean the simulation samples from. For a test it is μ₀, so every
+   * run has H₀ true. For an interval nobody knows μ, so it is set to the
+   * example's x̄, as `CI_PRESETS` does.
+   */
+  mu: number;
+  /** The example's sample standard deviation s, used as σ in the simulation. */
+  s: number;
+  /** The example's sample size; the viz opens at it. */
+  n: number;
+  /** The example's sample mean x̄. */
+  xbar: number;
+  /** Decimals for printing a simulated x̄ and s. */
+  dp: number;
+  /** What taking one sample is, in the example's words, as a function of n. */
+  drawOne: (n: number) => string;
+  /** What one value in the sample is, plural, for the sample strip's caption. */
+  items: string;
+}
+
+/**
+ * Worked examples for `TDistribution`, used in Module 5, WU5
+ * (`m5-unknown-sigma`). The figures are the ones printed in the text.
+ */
+export const T_PRESETS: TPreset[] = [
+  {
+    id: "flights",
+    label: "Flights",
+    source: "Example 1A: flight times, true mean set to 103",
+    kind: "interval",
+    tail: "two",
+    alpha: 0.05,
+    mu: 103,
+    s: 5,
+    n: 10,
+    xbar: 103,
+    dp: 1,
+    drawOne: (n) => `Time ${n} flights`,
+    items: "flight times, in minutes",
+  },
+  {
+    id: "bread",
+    label: "Bread",
+    source: "Example 2B: loaves of bread, true mean set to 696",
+    kind: "interval",
+    tail: "two",
+    alpha: 0.01,
+    mu: 696,
+    s: 7,
+    n: 25,
+    xbar: 696,
+    dp: 1,
+    drawOne: (n) => `Weigh ${n} loaves`,
+    items: "loaf masses, in grams",
+  },
+  {
+    id: "turkeys",
+    label: "Turkeys",
+    source: "Example 4A: the enriched diet",
+    kind: "test",
+    tail: "upper",
+    alpha: 0.05,
+    mu: 4.5,
+    s: 0.5,
+    n: 20,
+    xbar: 4.8,
+    dp: 2,
+    drawOne: (n) => `Weigh ${n} turkeys`,
+    items: "turkey masses, in kg",
+  },
+  {
+    id: "batteries",
+    label: "Batteries",
+    source: "Example 5B: car battery life",
+    kind: "test",
+    tail: "lower",
+    alpha: 0.05,
+    mu: 36,
+    s: 4,
+    n: 6,
+    xbar: 30,
+    dp: 1,
+    drawOne: (n) => `Test ${n} batteries`,
+    items: "battery lives, in months",
   },
 ];

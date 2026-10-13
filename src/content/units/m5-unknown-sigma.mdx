@@ -5,10 +5,416 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 17
 moduleUnitNumber: 5
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "A sample of 15 observations is used to calculate s. How many degrees of freedom does the t-distribution have?"
+    options:
+      - "15"
+      - "14"
+      - "13"
+      - "16"
+    answer: 1
+    explanation: "We first use x̄ to estimate μ before s can be calculated, so we lose one degree of freedom: n − 1 = 15 − 1 = 14. The statistic has the t₁₄-distribution."
+    vizHint: "t-distribution"
+    vizHintParams:
+      preset: "flights"
+  - id: "q2"
+    type: "mcq"
+    question: "Why does the t-distribution have heavier tails than the standard Normal distribution?"
+    options:
+      - "Because the population is not Normal."
+      - "Because s, which replaces σ, is itself a random variable that varies from sample to sample."
+      - "Because the sample mean x̄ is biased."
+      - "Because we divide by n − 1 instead of n."
+    answer: 1
+    explanation: "σ is one fixed number, but s changes from sample to sample. In a small sample s can come out well below σ, which makes t large. This extra variability gives t its longer tails; as n grows, s settles close to σ and t approaches N(0, 1)."
+    vizHint: "t-distribution"
+    vizHintParams:
+      preset: "batteries"
+  - id: "q3"
+    type: "true-false"
+    question: "As the sample size increases, the t-distribution gets closer and closer to the standard Normal distribution."
+    answer: true
+    explanation: "True. With a large sample, s lies reliably close to σ, so replacing σ by s makes little difference. Once n exceeds about 30 the two distributions are very close."
+    vizHint: "t-distribution"
+    vizHintParams:
+      preset: "flights"
+  - id: "q4"
+    type: "mcq"
+    question: "A sample of 12 gives x̄ and s. Which Excel formula gives the t-value for a 95% confidence interval for μ?"
+    options:
+      - "=T.INV.2T(0.05, 12)"
+      - "=T.INV.2T(0.05, 11)"
+      - "=T.INV.2T(0.95, 11)"
+      - "=NORM.S.INV(0.975)"
+    answer: 1
+    explanation: "T.INV.2T takes the probability in the two tails together, which is 100% − 95% = 5%, and the degrees of freedom, n − 1 = 11. =T.INV.2T(0.05, 11) = 2.2010. NORM.S.INV would only be right if σ were known."
+  - id: "q5"
+    type: "mcq"
+    question: "A sample of 16 has x̄ = 52 and s = 8. Test H₀: μ = 50. What is the observed value of the test statistic?"
+    options:
+      - "t = 0.25"
+      - "t = 1.00"
+      - "t = 4.00"
+      - "t = 0.06"
+    answer: 1
+    explanation: "t = (x̄ − μ)/(s/√n) = (52 − 50)/(8/√16) = 2/2 = 1.00. Forgetting the √n gives 0.25."
+  - id: "q6"
+    type: "mcq"
+    question: "For a sample of 10, we test H₀: μ = μ₀ against H₁: μ > μ₀ at the 5% level. Which critical value do we use?"
+    options:
+      - "=T.INV(0.95, 9) = 1.8331"
+      - "=T.INV(0.05, 9) = −1.8331"
+      - "=T.INV.2T(0.05, 9) = 2.2622"
+      - "=NORM.S.INV(0.95) = 1.6449"
+    answer: 0
+    explanation: "The rejection region is the top 5% of the t₉-distribution, so the cut-off has 95% to its left: =T.INV(0.95, 9) = 1.8331. T.INV.2T would split the 5% between two tails, which is for a two-sided alternative."
+    vizHint: "t-distribution"
+    vizHintParams:
+      preset: "turkeys"
 prevUnit: "m5-comparing-two-means"
 nextUnit: "m5-two-independent-samples"
 ---
 
-Content coming soon.
+## Population variance unknown
+
+So far, for confidence intervals for the mean, and for tests of hypotheses about means, we have always had to make the very restrictive assumption that the population variance (or standard deviation) was known. Until the early 1900s, whenever the population variance $\sigma^2$ was unknown, the sample variance $s^2$ was substituted in its place. This is reasonably satisfactory when the samples are "large enough", and consequently the sample variance lies reliably close to the population variance. We shall see in this unit that when the sample size exceeds about 30 then it is reasonable to make this substitution. Problems arise with small samples, because the sample variance $s^2$ is then very variable and can be far removed from the population variance $\sigma^2$, which we think of as being the one "true" value.
+
+> **Keywords:** <KeywordChip vizId="t-distribution" preset="flights">t-distribution</KeywordChip>, <KeywordChip vizId="t-distribution" preset="batteries">degrees of freedom</KeywordChip>, pooled sample variance.
+
+At the turn of the century, W.S. Gosset, who worked for an Irish brewery, needed to do statistical tests using small samples. This motivated him to tackle the mathematical statistical problem of how to use $s^2$, the estimate of $\sigma^2$, in these tests. He solved the problem. Because of his professional connections, he published the theory he developed under the pen-name "Student". Gosset in 1908 published the actual distribution of
+
+$$
+t = \frac{\bar{X} - \mu}{s/\sqrt{n}}.
+$$
+
+We know, from the unit on [population means and sample means](/unit/m5-sampling-distribution), that $Z = \dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ has the standard Normal distribution. But when $\sigma$, the single "true" value for the standard deviation in the population, is replaced by $s$, the estimate of $\sigma$, this is no longer true, although, as the sample size $n$ increases, it rapidly becomes an excellent approximation. But for small samples it is far from the truth. This is because the sample variance $s^2$ (and also $s$) is itself a random variable: it varies from sample to sample.
+
+We know that the size of the sample influences the accuracy of our estimates. The larger the sample the closer the estimate is likely to be to the true value. Student's $t$-distribution takes account of the size of the sample from which $s$ is calculated.
+
+The shape of the $t$-distribution is similar to that of the Normal distribution. However, the shape of the distribution varies with the sample size. It is longer- or heavier-tailed than the Normal distribution when the sample size is small. As the sample size increases, the $t$-distribution and Normal distribution become progressively closer, and, ultimately, they are identical.
+
+<TryThis
+  vizId="t-distribution"
+  preset="flights"
+  label="Watch t close in on N(0, 1)"
+  description="Each run takes a sample, works out its s, and drops t = (x̄ − μ)/(s/√n) onto the chart. Run it a few times and watch s change. Then drag n from 3 up to 60: the blue t-curve, heavy-tailed for small samples, closes in on the grey N(0, 1)."
+/>
+
+## Degrees of freedom
+
+In order to gain some insight into the notion of "degrees of freedom", consider again the definition of the sample variance:
+
+$$
+s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2.
+$$
+
+The terms $x_i - \bar{x}$ are the deviations of each of the $x_i$ from the sample mean. To achieve a given sample mean for, say, six numbers, five of these can be chosen at will, but the last is then fully determined. Suppose we are given the information that the mean of six numbers is 5 and that the first five of the six numbers are 4, 9, 5, 7 and 3. The sixth number must be 2, otherwise the sample mean would not be 5. It is fixed, it has no "freedom". In general if we are told that the mean of $n$ numbers is $\bar{x}$, and that the first $n - 1$ numbers are $x_1, x_2, \ldots, x_{n-1}$, then the last number is given by
+
+$$
+x_n = n\bar{x} - x_1 - x_2 - \cdots - x_{n-1}.
+$$
+
+In other words, once we are given $\bar{x}$ and the first $n - 1$ of the $x_i$ we have enough information to compute the sample variance. Thus, only $n - 1$ of the deviation terms $x_i - \bar{x}$ in $s^2$ contain real information; the last term is just a formality, but it must be included! We say that $s^2$, based on a sample of size $n$, has $n - 1$ **degrees of freedom**. (This is part of the reason why the formula for the sample variance $s^2$ calls for division by $n - 1$, and not $n$.)
+
+We will be encountering the concept of degrees of freedom regularly. We have a simple rule which helps in making decisions about degrees of freedom.
+
+<Theorem name="The degrees of freedom rule">
+For each parameter we need to estimate prior to evaluating the current parameter of interest, we lose one degree of freedom.
+</Theorem>
+
+For example, when we use $s^2$ to estimate $\sigma^2$, we first need to use $\bar{x}$ to estimate $\mu$. So we lose one degree of freedom. There will be further examples later on in which we will "lose" two or more degrees of freedom!
+
+Because the shape of the $t$-distribution varies with the sample size, there is a whole family of $t$-distributions. It is therefore necessary to have some means of indicating which $t$-distribution is being used in a specific situation. We do this by using a subscript. Intuition suggests that the subscript should be the sample size, but it turns out that the sensible subscript is the degrees of freedom of the standard deviation, which is one less than the sample size. So we use the notation
+
+$$
+t_{n-1} = \frac{\bar{X} - \mu}{s/\sqrt{n}}
+$$
+
+and say that the expression on the right hand side has the $t$-distribution with $n - 1$ degrees of freedom, or simply the $t_{n-1}$-distribution.
+
+As for the Normal distribution, we can use Excel to determine the probabilities associated with different areas of the distribution. The shapes of the different $t$-distributions are dependent on the degrees of freedom.
+
+To illustrate, let's assume we observed a $t$-test statistic of 3.2156 with 12 degrees of freedom. If our alternative hypothesis is of the type
+
+$$
+H_1: \mu > \mu_0
+$$
+
+we need to find $\Pr(t > 3.2156)$, and we use the Excel command
+
+$$
+\texttt{=T.DIST.RT(t, df)} = \texttt{T.DIST.RT(3.2156, 12)} = 0.0037.
+$$
+
+If our alternative hypothesis is of the type
+
+$$
+H_1: \mu \ne \mu_0
+$$
+
+we need to find $\Pr(|t| > 3.2156)$, and we use the Excel command
+
+$$
+\texttt{=T.DIST.2T(t, df)} = \texttt{T.DIST.2T(3.2156, 12)} = 0.0074.
+$$
+
+## Confidence intervals (using the sample variance)
+
+<Example title="Example 1A: flights to Johannesburg">
+Ten direct flights to Johannesburg from Cape Town took, on average, 103 minutes. The sample standard deviation was 5 minutes. Determine a 95% confidence interval for the true mean flight duration.
+
+<Solution>
+We have $\bar{x} = 103$, $s = 5$ and $n = 10$. We know that the statistic $(\bar{X} - \mu)/(s/\sqrt{n})$ has the $t$-distribution with 9 degrees of freedom, denoted by $t_9$.
+
+We see that, for $t_9$, the points between which 95% of the distribution lies can be found by using the formula
+
+$$
+\texttt{=T.INV.2T(probability, df)}
+$$
+
+where *probability* is the probability of lying in the two tails, which is $(100 - A)\%$ for an A% confidence interval. Here
+
+$$
+\texttt{=T.INV.2T(0.05, 9)} = 2.2622.
+$$
+
+Because $2\tfrac{1}{2}\%$ (or 0.025) of the $t_9$-distribution lies to the right of 2.2622 we write
+
+$$
+t_9(0.025) = 2.2622
+$$
+
+and speak of the "$2\tfrac{1}{2}\%$ point of the $t_9$-distribution". Thus
+
+$$
+\Pr(-2.2622 < t_9 < 2.2622) = 0.95.
+$$
+
+But
+
+$$
+\frac{\bar{X} - \mu}{s/\sqrt{10}} \sim t_9.
+$$
+
+Therefore
+
+$$
+\Pr\left(-2.2622 < \frac{\bar{X} - \mu}{s/\sqrt{10}} < 2.2622\right) = 0.95.
+$$
+
+Manipulation of the inequalities, as done in the same context in the unit on [confidence intervals](/unit/m5-confidence-intervals), yields
+
+$$
+\Pr\left(\bar{X} - 2.2622\frac{s}{\sqrt{10}} < \mu < \bar{X} + 2.2622\frac{s}{\sqrt{10}}\right) = 0.95.
+$$
+
+Substituting $\bar{x} = 103$ and $s = 5$ yields
+
+$$
+\bar{x} - 2.2622\frac{s}{\sqrt{10}} = 103 - 2.2622\frac{5}{\sqrt{10}} = 99.4
+$$
+
+for the lower limit of the confidence interval and
+
+$$
+\bar{x} + 2.2622\frac{s}{\sqrt{10}} = 103 + 2.2622\frac{5}{\sqrt{10}} = 106.6
+$$
+
+for the upper limit. Thus a 95% confidence interval for the mean flying time is given by $(99.4, 106.6)$.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="t-distribution"
+  preset="flights"
+  label="Why 2.2622 and not 1.96?"
+  description="The shaded tails hold 5% of t₉, beyond ±2.2622. The grey dashed lines at ±1.96 are the z cut-offs. Repeat 500 times: about 5% of the t values land beyond ±2.2622, but about 8% land beyond ±1.96. With only 10 flights, z would give an interval that is too narrow."
+/>
+
+<Theorem name="Confidence interval for μ, when σ² is estimated by s²">
+If we have a random sample of size $n$ from a population with a Normal distribution, and the sample mean is $\bar{x}$ and the sample variance is $s^2$, then confidence intervals for $\mu$ are given by
+
+$$
+\left(\bar{x} - t_{n-1}\frac{s}{\sqrt{n}}, \ \bar{x} + t_{n-1}\frac{s}{\sqrt{n}}\right)
+$$
+
+where the values of $t_{n-1}$ are obtained using Excel. For 95% confidence intervals, use `=T.INV.2T(0.05, df)`. For 99% confidence intervals, use `=T.INV.2T(0.01, df)`.
+</Theorem>
+
+<Example title="Example 2B: loaves of bread">
+A random sample of 25 loaves of bread had a mean mass of 696 g and a standard deviation of 7 g. Calculate the 99% confidence interval for the mean.
+
+<Solution>
+We have $\bar{x} = 696$, and $s = 7$ has 24 degrees of freedom. Because we want a 99% confidence interval, we use
+
+$$
+\texttt{=T.INV.2T(0.01, 24)} = 2.7969.
+$$
+
+Thus the 99% confidence interval for the mean is
+
+$$
+\left(696 - 2.7969 \times \frac{7}{\sqrt{25}}, \ 696 + 2.7969 \times \frac{7}{\sqrt{25}}\right)
+$$
+
+which reduces to $(692.08, 699.92)$.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="t-distribution"
+  preset="bread"
+  label="99% with 24 degrees of freedom"
+  description="The tails beyond ±2.7969 hold 1% of t₂₄. With 25 loaves the two cut-offs are already fairly close, but z's ±2.58 would still leave about 1.7% of t beyond it instead of 1%. Drag n down to 5 and see how far apart the two cut-offs move."
+/>
+
+<Example title="Example 3C: fuel consumption">
+An estimate of the mean fuel consumption (litres/100 km) of a new car is required. A sample of 18 drivers each drive the car under a variety of conditions for 100 km, and the fuel consumption is measured for each of the drivers. The sample mean was calculated to be $\bar{x} = 6.73$ litres/100 km. The sample standard deviation was $s = 0.35$ litres/100 km. Find the 99% confidence interval for the population mean.
+
+<Solution>
+We have $\bar{x} = 6.73$, $s = 0.35$ and $n = 18$, so $s$ has 17 degrees of freedom. For a 99% confidence interval,
+
+$$
+\texttt{=T.INV.2T(0.01, 17)} = 2.8982.
+$$
+
+The 99% confidence interval is
+
+$$
+\left(6.73 - 2.8982 \times \frac{0.35}{\sqrt{18}}, \ 6.73 + 2.8982 \times \frac{0.35}{\sqrt{18}}\right) = (6.73 - 0.24, \ 6.73 + 0.24)
+$$
+
+which reduces to $(6.49, 6.97)$ litres/100 km.
+</Solution>
+</Example>
+
+## Testing whether the mean is a specified value (population variance estimated from the sample)
+
+<Example title="Example 4A: the enriched diet">
+A poultry farmer is investigating ways of improving the profitability of his operation. Using a standard diet, turkeys grow to a mean mass of 4.5 kg at age 4 months. A sample of 20 turkeys, which were given a special enriched diet, had an average mass of 4.8 kg after 4 months. The sample standard deviation was 0.5 kg. Using the 5% significance level test whether the new diet is effectively increasing the mass of the turkeys.
+
+<Solution>
+We follow the standard hypothesis testing procedure.
+
+1. $H_0: \mu = 4.5$. As usual, for our null hypothesis we assume no change has taken place.
+
+2. $H_1: \mu > 4.5$. A one-sided alternative is appropriate, because an enriched diet should not cause a loss of mass.
+
+3. Significance level: 5%.
+
+4. The rejection region is found by reasoning as follows. Because the population variance is unknown, we need to use the $t$-distribution. The degrees of freedom for $t$ will be 19, because $s$ is based on a sample of 20 observations. We will thus reject $H_0$ if the "observed $t$-value" exceeds $t_{19}(0.05)$. We use the Excel formula `=T.INV(probability, df)`, where *probability* is the left-tailed probability of the $t$-distribution. Thus `=T.INV(0.95, 19)` gives us $t_{19}(0.05) = 1.7291$.
+
+5. The formula for the test statistic is
+
+$$
+t = \frac{\bar{X} - \mu}{s/\sqrt{n}}.
+$$
+
+We substitute the appropriate values, and compute
+
+$$
+t = \frac{4.8 - 4.5}{0.5/\sqrt{20}} = 2.68.
+$$
+
+6. Because $2.68 > 1.7291$ we reject $H_0$, and conclude that, at the 5% significance level, we have established that the new enriched diet is effective.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="t-distribution"
+  preset="turkeys"
+  label="The turkeys' t against t₁₉"
+  description="The shaded tail is the 5% rejection region, t > 1.7291, and the dark line is the turkeys' t = 2.68, well inside it. Every run here has H₀ true: Repeat 500 times and about 5% of runs still land in the region by chance."
+/>
+
+<Example title="Example 5B: car batteries">
+The average life of 6 car batteries is 30 months with a standard deviation of 4 months. The manufacturer claims an average life of 3 years for his batteries. We suspect that he is exaggerating. Test his claim at the 5% significance level.
+
+<Solution>
+1. $H_0: \mu = 36$ months.
+
+2. $H_1: \mu < 36$ months.
+
+3. Significance level: 5%.
+
+4. Degrees of freedom is $6 - 1 = 5$. So we use the $t_5$-distribution. From the form of the alternative hypothesis and the significance level, we will reject $H_0$ if the observed $t$-value is less than $-t_5(0.05)$: `=T.INV(0.05, 5)` $= -2.0150$.
+
+5. Substituting into the test statistic $t_{n-1} = \dfrac{\bar{X} - \mu}{s/\sqrt{n}}$ yields
+
+$$
+t_5 = \frac{30 - 36}{4/\sqrt{6}} = -3.67.
+$$
+
+6. This lies in the rejection region: we conclude that the true mean is significantly less than 36 months.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="t-distribution"
+  preset="batteries"
+  label="Only 6 batteries: heavy tails"
+  description="With 5 degrees of freedom the t-curve is much flatter than N(0, 1), so the cut-off is −2.0150, not z's −1.64. Repeat 500 times with the claim true: about 5% of runs fall below −2.0150, but about 8% fall below −1.64."
+/>
+
+<Example title="Example 6C: crushing strength of bricks">
+A purchaser of bricks believes that their crushing strength is deteriorating. The mean crushing strength had previously been 400 kg, but a recent sample of 81 bricks yielded a mean crushing strength of 390 kg, with a standard deviation of 20 kg. Test the purchaser's belief at the 1% significance level.
+
+<Solution>
+1. $H_0: \mu = 400$ kg.
+
+2. $H_1: \mu < 400$ kg. The purchaser believes the strength is deteriorating.
+
+3. Significance level: 1%.
+
+4. The degrees of freedom are $81 - 1 = 80$. We reject $H_0$ if the observed $t$-value is less than `=T.INV(0.01, 80)` $= -2.3739$.
+
+5. The test statistic is
+
+$$
+t_{80} = \frac{390 - 400}{20/\sqrt{81}} = \frac{-10}{2.2222} = -4.50.
+$$
+
+6. Because $-4.50 < -2.3739$ we reject $H_0$. At the 1% significance level, the purchaser's belief is supported: the mean crushing strength has deteriorated.
+</Solution>
+</Example>
+
+<Example title="Example 7C: ball bearings">
+The specifications for a certain type of ball bearings stipulate a mean diameter of 4.38 mm. The diameters of a sample of 12 ball bearings are measured and the following summarized data computed:
+
+$$
+\sum x_i = 53.18 \qquad \sum x_i^2 = 235.7403.
+$$
+
+Is the sample consistent with the specifications?
+
+<Solution>
+First we need $\bar{x}$ and $s$. The sample mean is $\bar{x} = 53.18/12 = 4.4317$ mm, and by the short-cut formula
+
+$$
+s^2 = \frac{1}{11}\left[235.7403 - \frac{53.18^2}{12}\right] = \frac{235.7403 - 235.676033}{11} = \frac{0.064267}{11} = 0.005842,
+$$
+
+so $s = 0.0764$ mm.
+
+1. $H_0: \mu = 4.38$ mm.
+
+2. $H_1: \mu \ne 4.38$ mm. A diameter that is too big or too small is equally out of specification, so we use a two-sided alternative.
+
+3. Significance level: 5%.
+
+4. The degrees of freedom are $12 - 1 = 11$. We reject $H_0$ if $|t| >$ `=T.INV.2T(0.05, 11)` $= 2.2010$.
+
+5. The test statistic is
+
+$$
+t_{11} = \frac{4.4317 - 4.38}{0.0764/\sqrt{12}} = 2.34.
+$$
+
+6. Because $|2.34| > 2.2010$ we reject $H_0$. At the 5% significance level the sample is not consistent with the specifications: the mean diameter appears to be larger than 4.38 mm.
+</Solution>
+</Example>
+
+<Quiz />

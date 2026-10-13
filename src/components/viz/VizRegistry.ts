@@ -76,6 +76,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // (m5-comparing-two-means). One z-test viz; each preset belongs to one unit.
   "z-test": lazy(() => import("./inference/ZTest")),
 
+  // M5 — Unknown σ: the t-distribution (m5-unknown-sigma). Take samples, work
+  // out t with s in place of σ, and pile them up against t and N(0, 1).
+  "t-distribution": lazy(() => import("./inference/TDistribution")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

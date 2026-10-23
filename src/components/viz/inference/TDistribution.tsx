@@ -36,6 +36,7 @@ import { sampleNormal } from "../sampling";
 import { normalPdf } from "../normal";
 import { tCdf, tInv, tPdf } from "../tdist";
 import { useReplayTween } from "../useReplayTween";
+import { fmt, pct, sub, trim } from "./format";
 import { T_PRESETS, type TPreset, type Tail } from "../data/inferenceData";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
@@ -85,22 +86,6 @@ const MIN_FOR_PERCENT = 20;
 /** Degrees of freedom from which the interpretation calls t "close to" N(0, 1). */
 const CLOSE_DF = 30;
 
-/** Formats a number with a true minus sign, as the text prints it. */
-function fmt(v: number, dp: number): string {
-  const s = v.toFixed(dp);
-  return s.startsWith("-") ? `−${s.slice(1)}` : s;
-}
-
-/** Prints a figure without trailing zeros: 103, 4.5, 0.5. */
-function trim(v: number): string {
-  return fmt(Number(v.toFixed(4)), 4).replace(/\.?0+$/, "");
-}
-
-/** Writes a whole number as subscript digits, for t₉ and t₁₉. */
-function sub(n: number): string {
-  return String(n).replace(/\d/g, (d) => "₀₁₂₃₄₅₆₇₈₉"[Number(d)]);
-}
-
 /** Whether a t lies beyond cut-off c, in the direction(s) the tail names. */
 function beyond(t: number, tail: Tail, c: number): boolean {
   if (tail === "lower") return t < -c;
@@ -119,11 +104,6 @@ function beyondText(c: number, tail: Tail, dp: number): string {
   if (tail === "lower") return `below ${fmt(-c, dp)}`;
   if (tail === "upper") return `above ${fmt(c, dp)}`;
   return `beyond ±${fmt(c, dp)}`;
-}
-
-/** Percentage to one decimal: "5.2%". */
-function pct(p: number): string {
-  return `${(100 * p).toFixed(1)}%`;
 }
 
 /** One sample, kept so the strip and the read-out can show it. */

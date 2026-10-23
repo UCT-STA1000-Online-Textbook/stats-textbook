@@ -22,6 +22,7 @@ import { Collapse } from "@/components/mdx/Collapse";
 import { Note } from "@/components/mdx/Note";
 import { ExcelPointer } from "@/components/mdx/ExcelPointer";
 import { KeywordChip } from "@/components/mdx/KeywordChip";
+import { MeansDecisionTree } from "@/components/mdx/MeansDecisionTree";
 
 export const mdxComponents: MDXComponents = {
   TryThis,
@@ -34,6 +35,7 @@ export const mdxComponents: MDXComponents = {
   Note,
   ExcelPointer,
   KeywordChip,
+  MeansDecisionTree,
 
   // Heading scale: h1 is the unit title and is rendered by `ReadingPanel`,
   // so MDX-level h1s should be rare — they exist mainly for internal

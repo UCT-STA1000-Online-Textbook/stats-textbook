@@ -5,10 +5,398 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 18
 moduleUnitNumber: 6
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Two independent samples have n₁ = 8 and n₂ = 11. The two sample variances are pooled. How many degrees of freedom does the two-sample t-test have?"
+    options:
+      - "19"
+      - "18"
+      - "17"
+      - "7"
+    answer: 2
+    explanation: "s₁² has n₁ − 1 = 7 degrees of freedom and s₂² has n₂ − 1 = 10, so the pooled s² has 7 + 10 = 17 = n₁ + n₂ − 2. We lose two degrees of freedom because μ₁ and μ₂ were both estimated before s² could be calculated."
+    vizHint: "two-sample-t"
+    vizHintParams:
+      preset: "promotions"
+  - id: "q2"
+    type: "mcq"
+    question: "Two samples have n₁ = 6, s₁ = 2 and n₂ = 4, s₂ = 3. What is the pooled variance s²?"
+    options:
+      - "5.875"
+      - "6.5"
+      - "2.5"
+      - "13"
+    answer: 0
+    explanation: "s² = ((n₁ − 1)s₁² + (n₂ − 1)s₂²)/(n₁ + n₂ − 2) = (5 × 4 + 3 × 9)/8 = (20 + 27)/8 = 5.875. Simply averaging the two variances, (4 + 9)/2 = 6.5, ignores that the first sample is larger and so carries more information."
+  - id: "q3"
+    type: "true-false"
+    question: "To use the two-sample t-test in this course, we assume that the two populations are Normal and that their variances are equal."
+    answer: true
+    explanation: "True. Pooling the two sample variances into one estimate s² only makes sense if both samples are estimating the same population variance. Like every t-test, it also assumes the data come from Normal populations, and that the samples are random and representative."
+  - id: "q4"
+    type: "mcq"
+    question: "A two-sample t-test with 12 degrees of freedom has a two-sided alternative and a 5% significance level. Which Excel formula gives the cut-off?"
+    options:
+      - "=T.INV(0.95, 12)"
+      - "=T.INV.2T(0.05, 12)"
+      - "=T.INV.2T(0.05, 14)"
+      - "=NORM.S.INV(0.975)"
+    answer: 1
+    explanation: "With a two-sided alternative the 5% is split between the two tails, which T.INV.2T does for us: =T.INV.2T(0.05, 12) = 2.1788. The degrees of freedom are already n₁ + n₂ − 2 = 12; do not add the 2 back."
+    vizHint: "two-sample-t"
+    vizHintParams:
+      preset: "wheat"
+  - id: "q5"
+    type: "mcq"
+    question: "In Example 11A, t₉ = −1.372 and the cut-offs are ±2.262. What do we conclude?"
+    options:
+      - "Reject H₀: Variety 2 yields more than Variety 1."
+      - "Do not reject H₀: the difference between the varieties is not significant."
+      - "Reject H₀, because t is negative."
+      - "We cannot decide without knowing σ₁ and σ₂."
+    answer: 1
+    explanation: "−1.372 lies between −2.262 and 2.262, so it is not in the rejection region. A difference this size happens by chance about 20% of the time when the two varieties really have the same mean yield."
+    vizHint: "two-sample-t"
+    vizHintParams:
+      preset: "wheat"
+  - id: "q6"
+    type: "mcq"
+    question: "We want to compare the mean scores of three groups of students at once. Which method should be used?"
+    options:
+      - "Three two-sample t-tests"
+      - "A paired t-test"
+      - "Analysis of variance (ANOVA)"
+      - "A one-sample t-test on each group"
+    answer: 2
+    explanation: "Comparing three or more population means at the same time is done with the analysis of variance, ANOVA. It is beyond the scope of this course."
 prevUnit: "m5-unknown-sigma"
 nextUnit: "m5-two-dependent-samples"
 ---
 
-Content coming soon.
+## Comparing two independent sample means (variance estimated from the sample)
+
+When we have small samples from two populations and want to compare their means, the procedure is a little more complex than you might have expected. In the unit on [comparing two sample means](/unit/m5-comparing-two-means), the test statistic for comparing two means was
+
+$$
+Z = \frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{\sqrt{\dfrac{\sigma_1^2}{n_1} + \dfrac{\sigma_2^2}{n_2}}}.
+$$
+
+> **Keywords:** <KeywordChip vizId="two-sample-t" preset="wheat">two-sample t-test</KeywordChip>, <KeywordChip vizId="two-sample-t" preset="promotions">pooled variance</KeywordChip>, degrees of freedom, nonparametric tests, ANOVA.
+
+You would anticipate that the test statistic now might be
+
+$$
+\frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{\sqrt{\dfrac{s_1^2}{n_1} + \dfrac{s_2^2}{n_2}}}.
+$$
+
+But, unfortunately, mathematical statisticians can show that this quantity does not have the $t$-distribution. In order to find a test statistic which does have the $t$-distribution, an additional assumption needs to be made. This assumption is that the population variances in the two populations from which the samples were drawn are equal. The examples below highlight this difference between comparing the means of two populations when the variances are known and when the variances are estimated from the samples.
+
+<Example title="Example 11A: two varieties of wheat">
+Two varieties of wheat are being tested in a developing country. Twelve test plots are given identical preparatory treatment. Six plots are sown with Variety 1 and the other six plots with Variety 2 in an experiment in which the crop scientists hope to determine whether there is a significant difference between yields, using a 5% significance level.
+
+The results were:
+
+| | Yield (tons per plot) |
+| --- | --- |
+| Variety 1 | 1.5, 1.9, 1.2, 1.4, 2.3, 1.3 |
+| Variety 2 | 1.6, 1.8, 2.0, 1.8, 2.3 |
+
+One of the plots planted with Variety 2 was accidentally given an extra dose of fertilizer, so the result was discarded. The means and standard deviations are calculated. They are
+
+| | | |
+| --- | --- | --- |
+| $\bar{x}_1 = 1.60$ | $s_1 = 0.42$ | $n_1 = 6$ |
+| $\bar{x}_2 = 1.90$ | $s_2 = 0.27$ | $n_2 = 5$ |
+
+<Solution>
+We follow the standard hypothesis testing procedure.
+
+1. $H_0: \mu_1 - \mu_2 = 0$.
+
+2. $H_1: \mu_1 - \mu_2 \ne 0$ (a two-tailed test).
+
+3. Significance level: 5%.
+
+4. and 5. Before we can find the rejection region we need to know the "degrees of freedom". The procedure is rather different from that in the test when the population variances were known. Instead of working with the individual variances $\sigma_1^2$ and $\sigma_2^2$ we assume that both populations have the same variance, and we **pool** the two individual sample variances $s_1^2$ and $s_2^2$ to form a joint estimate of the variance, $s^2$. This assumption of equal variances is required by the mathematical theory underlying the $t$-distribution, into which we will not delve. We say more about this assumption later in the unit.
+
+The general formula for the pooled variance is
+
+$$
+s^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
+$$
+
+where $s_1^2$ is based on a sample of size $n_1$ and $s_2^2$ is based on a sample of size $n_2$. In the above example, $n_1 = 6$ and $n_2 = 5$. Therefore
+
+$$
+s^2 = \frac{5 \times (0.42)^2 + 4 \times (0.27)^2}{6 + 5 - 2} = 0.13.
+$$
+
+Therefore, the pooled standard deviation is
+
+$$
+s = \sqrt{0.13} = 0.361.
+$$
+
+How many "degrees of freedom" does $s$ have? $s_1^2$ has 5 and $s_2^2$ has 4. Therefore $s^2$ has $5 + 4 = 9$ degrees of freedom. In general, $s^2$ has $(n_1 - 1) + (n_2 - 1) = n_1 + n_2 - 2$ degrees of freedom. We lose two degrees of freedom because we estimated the two parameters $\mu_1$ (by $\bar{X}_1$) and $\mu_2$ (by $\bar{X}_2$) before estimating $s^2$.
+
+Thus we use the $t$-distribution with 9 degrees of freedom, and because we have a two-sided alternative and a 5% significance level we need the value of $t_9(0.025)$, which is 2.262 (`=T.INV.2T(0.05, 9)`). So we will reject $H_0$ if the observed $t_9$-value is less than $-2.262$ or greater than $2.262$.
+
+The formula for calculating the test statistic in this hypothesis-testing situation, the so-called **two-sample $t$-test**, is
+
+$$
+t_{n_1+n_2-2} = \frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{s\sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}}}
+$$
+
+where $\bar{X}_1$ and $\bar{X}_2$ are the sample means, the value of $\mu_1 - \mu_2$ is determined by the null hypothesis, $s$ is the pooled sample standard deviation, and $n_1$ and $n_2$ are the sample sizes.
+
+Substituting our data into this formula:
+
+$$
+t_{6+5-2} = \frac{1.60 - 1.90 - 0}{0.361\sqrt{\dfrac{1}{6} + \dfrac{1}{5}}}.
+$$
+
+Thus
+
+$$
+t_9 = -1.372.
+$$
+
+6. Because $-1.372$ does not lie in the rejection region we conclude that the difference between the varieties is not significant.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="two-sample-t"
+  preset="wheat"
+  label="Plant both varieties again and again"
+  description="Each run plants 6 + 5 plots with both varieties truly equal, pools the two variances and drops t onto t₉. Repeat 500 times: about 5% land beyond ±2.2622, and about 20% land as far out as the wheat's −1.37. A difference like this one is common when there is no real difference."
+/>
+
+<Theorem name="The two-sample t-test (population variances assumed equal)">
+If two independent random samples, of sizes $n_1$ and $n_2$, are drawn from Normal populations with the same variance, then
+
+$$
+t_{n_1+n_2-2} = \frac{\bar{X}_1 - \bar{X}_2 - (\mu_1 - \mu_2)}{s\sqrt{\dfrac{1}{n_1} + \dfrac{1}{n_2}}}, \qquad \text{where } s^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2},
+$$
+
+has the $t$-distribution with $n_1 + n_2 - 2$ degrees of freedom.
+</Theorem>
+
+<Example title="Example 12B: free gift or discount">
+A marketing specialist considers two promotions in order to increase sales of do-it-yourself hardware in a supermarket. During a trial period the promotions are run on alternative days. In the first promotion, a free set of drill bits is given if the customer purchases an electric drill. In the second, a substantial discount is given on the drill. The marketing specialist is particularly interested in the average amount spent on do-it-yourself hardware by customers who took advantage of the promotion. On the basis of randomly selected samples, the following data were obtained of the amount spent on items of do-it-yourself hardware.
+
+| Promotion | Free gift | Discount |
+| --- | --- | --- |
+| $n$ | 8 | 9 |
+| $\bar{x}$ | R490 | R420 |
+| $s$ | R104 | R92 |
+
+Test, at the 5% level of significance, whether there is any difference in the effectiveness of the two promotions.
+
+<Solution>
+1. $H_0: \mu_1 = \mu_2$.
+
+2. $H_1: \mu_1 \ne \mu_2$.
+
+3. Significance level: 5%.
+
+4. Degrees of freedom: $n_1 + n_2 - 2 = 15$. From Excel, `=T.INV.2T(0.05, 15)` $= 2.131$, so if the observed $t_{15}$ value exceeds 2.131 (or is less than $-2.131$), we reject $H_0$.
+
+5. We need first to calculate $s^2$, the pooled variance:
+
+$$
+s^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2} = \frac{7 \times 104^2 + 8 \times 92^2}{15} = 9561.60
+$$
+
+and so the pooled standard deviation is $s = 97.78$.
+
+We now calculate the observed test statistic
+
+$$
+t_{15} = \frac{490 - 420 - 0}{97.78\sqrt{\dfrac{1}{8} + \dfrac{1}{9}}} = 1.47.
+$$
+
+6. Because $1.47 < 2.131$, we cannot reject $H_0$, and we conclude that we cannot detect a difference between the effectiveness of the two promotions.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="two-sample-t"
+  preset="promotions"
+  label="Could R70 be chance?"
+  description="Each run serves 8 + 9 customers with the two promotions truly equally effective. The free gift's R70 lead gives t = 1.47, inside ±2.1314. Repeat 500 times and count how often chance alone gives a t at least that far from 0."
+/>
+
+<Example title="Example 13C: two assembly methods">
+Two methods of assembling a new television component are under consideration by management. Because of more expensive machinery requirements, method B will only be adopted if it is significantly shorter than method A by more than a minute. In order to determine which method to adopt a skilled worker becomes proficient in both methods, and is then timed with a stopwatch while assembling the component by both methods. The following data were obtained:
+
+| | Mean | Standard deviation | Sample size |
+| --- | --- | --- | --- |
+| Method A | $\bar{x}_1 = 7.72$ minutes | $s_1 = 0.67$ minutes | $n_1 = 17$ |
+| Method B | $\bar{x}_2 = 6.21$ minutes | $s_2 = 0.51$ minutes | $n_2 = 25$ |
+
+What decision should be taken?
+
+<Solution>
+Method B is only worth buying if it saves more than a minute, so the null hypothesis is that it saves exactly one minute.
+
+1. $H_0: \mu_1 - \mu_2 = 1$.
+
+2. $H_1: \mu_1 - \mu_2 > 1$.
+
+3. Significance level: 5%.
+
+4. Degrees of freedom: $n_1 + n_2 - 2 = 17 + 25 - 2 = 40$. This is a one-sided test, so we reject $H_0$ if the observed $t_{40}$ exceeds `=T.INV(0.95, 40)` $= 1.684$.
+
+5. The pooled variance is
+
+$$
+s^2 = \frac{16 \times 0.67^2 + 24 \times 0.51^2}{40} = \frac{7.1824 + 6.2424}{40} = 0.3356,
+$$
+
+so $s = 0.579$. The test statistic is
+
+$$
+t_{40} = \frac{7.72 - 6.21 - 1}{0.579\sqrt{\dfrac{1}{17} + \dfrac{1}{25}}} = \frac{0.51}{0.182} = 2.80.
+$$
+
+6. Because $2.80 > 1.684$ we reject $H_0$. Method B is significantly more than a minute faster than method A, so management should adopt method B.
+
+<TryThis
+  vizId="two-sample-t"
+  preset="assembly"
+  label="Check it in the panel"
+  description="Every run here has method B exactly one minute faster, which is H₀. A t of 2.80 or more turns up in well under 1% of runs."
+/>
+</Solution>
+</Example>
+
+## Checking the assumption of equal variances
+
+Note that there is a statistical test which can be used to compare the sample variances of two independent samples to see whether there is evidence for or against the population variances being equal. This test is called the **F-test** and can be applied before making the decision to pool the sample variances. If the F-test determines (on the basis of the sample variances) that the population variances are not equal, an alternate hypothesis test is recommended. Both this test and the F-test are beyond the scope of this course, so we will make the simplifying assumption that the population variances are equal and that it is justified to pool the sample variances to obtain an estimate of the common variance of the two populations.
+
+You can use Excel to generate the F-test as well as results for both the pooled variance $t$-test and the alternate $t$-test. Check this out using the "Data Analysis" add-on.
+
+<ExcelPointer title="Both t-tests on the managers' ages">
+The ages, to the nearest year, of a random sample of 10 senior managers from each of two large corporations are:
+
+| | Ages |
+| --- | --- |
+| Corporation 1 | 52, 50, 53, 42, 57, 43, 52, 44, 51, 34 |
+| Corporation 2 | 44, 45, 39, 49, 43, 49, 45, 47, 42, 46 |
+
+1. Type each corporation's ages into its own column, say A2:A11 and B2:B11.
+2. Go to **Data → Data Analysis** and choose **t-Test: Two-Sample Assuming Equal Variances**. Give the two columns as the variable ranges, a hypothesized mean difference of 0 and an alpha of 0.05. This is the pooled test of this unit.
+3. Run it again with **t-Test: Two-Sample Assuming Unequal Variances**, the alternate test that does not pool.
+
+The two outputs agree on the means (47.8 and 44.9) and on $t = 1.22$. The pooled test has 18 degrees of freedom and a two-tail p-value of 0.239. The unequal-variances test has about 12.5 degrees of freedom and a two-tail p-value of about 0.245. Not much difference! (The Data Analysis output rounds the degrees of freedom of the unequal-variances test to a whole number, so its p-value can differ slightly in the third decimal. The formula `=T.TEST(A2:A11, B2:B11, 2, 3)` keeps the exact 12.54 degrees of freedom and gives 0.246; `=T.TEST(A2:A11, B2:B11, 2, 2)` gives the pooled 0.239.)
+</ExcelPointer>
+
+<TryThis
+  vizId="two-sample-t"
+  preset="ages"
+  label="Pooled or not: compare the p-values"
+  description="The read-out shows the pooled test and the unequal-variances test side by side for the managers' ages: the same t, slightly different degrees of freedom, and p-values of 0.239 and 0.246."
+/>
+
+<Example title="Example 18C: GMAT scores">
+A particular business school requires a satisfactory GMAT examination score as its entrance requirement. The admissions officer believes that, on average, engineers have higher GMAT scores than applicants with an arts background. The following GMAT scores were extracted from a random sample of applicants with engineering and arts backgrounds.
+
+| | GMAT scores |
+| --- | --- |
+| Engineering | 600, 650, 640, 720, 700, 620, 740, 650 |
+| Arts | 550, 450, 700, 420, 750, 500, 520 |
+
+Investigate the admissions officer's belief.
+
+<Solution>
+From the data, the engineers have $n_1 = 8$, $\bar{x}_1 = 665$ and $s_1 = 49.57$; the arts applicants have $n_2 = 7$, $\bar{x}_2 = 555.71$ and $s_2 = 124.21$. We assume, as always in this course, that the population variances are equal.
+
+1. $H_0: \mu_1 = \mu_2$.
+
+2. $H_1: \mu_1 > \mu_2$. The officer believes engineers score higher.
+
+3. Significance level: 5%.
+
+4. Degrees of freedom: $8 + 7 - 2 = 13$. We reject $H_0$ if the observed $t_{13}$ exceeds `=T.INV(0.95, 13)` $= 1.771$.
+
+5. The pooled variance is
+
+$$
+s^2 = \frac{7 \times 49.57^2 + 6 \times 124.21^2}{13} = 8443.77,
+$$
+
+so $s = 91.89$, and
+
+$$
+t_{13} = \frac{665 - 555.71 - 0}{91.89\sqrt{\dfrac{1}{8} + \dfrac{1}{7}}} = 2.30.
+$$
+
+6. Because $2.30 > 1.771$ we reject $H_0$. At the 5% level, the data support the admissions officer's belief that engineers have higher mean GMAT scores than arts applicants.
+</Solution>
+</Example>
+
+<Example title="Example 19C: dividend yields">
+The dividend yield of a share is the dividend paid by the share during a year divided by the price of the share. A financial analyst wants to compare the dividend yield of gold shares with that of industrial shares listed on the Johannesburg Stock Exchange. She takes a sample of gold shares and a sample of industrial shares and computes the dividend yields. What conclusions did she come to?
+
+| | Dividend yields |
+| --- | --- |
+| Gold shares | 3.6, 4.0, 3.9, 5.0, 2.7, 3.7, 4.6, 3.5, 4.5, 3.5, 3.9, 3.7, 4.6, 4.0, 3.2, 15.5, 5.7, 3.6, 4.1, 6.2 |
+| Industrial shares | 3.2, 2.5, 8.4, 8.7, 2.7, 3.1, 5.3, 4.3, 5.6, 4.0, 5.1, 6.8, 2.5, 8.4, 5.2, 4.7, 3.1, 5.5, 6.5, 3.6, 4.5, 1.6, 3.1 |
+
+The data are summarized as:
+
+| | Gold | Industrial |
+| --- | --- | --- |
+| $n$ | 20 | 23 |
+| $\bar{x}$ | 4.675 | 4.710 |
+| $s$ | 2.677 | 2.004 |
+
+<Solution>
+1. $H_0: \mu_1 = \mu_2$.
+
+2. $H_1: \mu_1 \ne \mu_2$. The analyst has no prior reason to expect either kind of share to yield more.
+
+3. Significance level: 5%.
+
+4. Degrees of freedom: $20 + 23 - 2 = 41$. We reject $H_0$ if $|t_{41}|$ exceeds `=T.INV.2T(0.05, 41)` $= 2.020$.
+
+5. The pooled variance is
+
+$$
+s^2 = \frac{19 \times 2.677^2 + 22 \times 2.004^2}{41} = 5.476,
+$$
+
+so $s = 2.340$, and
+
+$$
+t_{41} = \frac{4.675 - 4.710 - 0}{2.340\sqrt{\dfrac{1}{20} + \dfrac{1}{23}}} = -0.05.
+$$
+
+6. Because $-0.05$ lies well inside $\pm 2.020$ we do not reject $H_0$. The analyst would conclude that there is no evidence of a difference between the mean dividend yields of gold and industrial shares.
+
+Notice the gold yield of 15.5, far above all the others. A single value like this casts doubt on the assumption that the gold yields come from a Normal distribution, which is the subject of the next section.
+</Solution>
+</Example>
+
+## An important footnote to t-tests
+
+Whenever the $t$-test is applied, it is assumed that the population from which the sample was taken has a Normal distribution. Can we test this assumption? And how should we proceed if the test shows that the distribution of the data is not a Normal distribution? The first of these questions can be answered using methods we will explore later, in the unit on [goodness of fit](/unit/m5-goodness-of-fit). The answer to the second question is that methods for doing tests for non-Normal data do exist, but are beyond the scope of this course. For the record, they are called **nonparametric tests**; the tests using the Normal distribution and the $t$-distribution are known as **parametric tests**.
+
+Another question. What should we do when there are three (or more) populations which we want to compare simultaneously? We might want to do a comparison between students with engineering, arts and science backgrounds, and to test the null hypothesis that there is no difference between the mean GMAT scores for these three groups of students. The method to use then is called the **analysis of variance**, usually abbreviated to **ANOVA** (beyond the scope of this course).
+
+## Which test should I use?
+
+The decision tree below summarises the tests on means from this module. Start at the top: is the population variance known, or estimated from the sample? Then ask whether there is one sample or two.
+
+<MeansDecisionTree />
+
+The rule is simple: when the population variance is known, use $Z$; when it is estimated from the sample, use $t$. For very large samples (more than about 100) the $t$-distribution and the standard Normal distribution are practically the same, so the two approaches give almost identical answers, but the $t$-distribution is always the correct one to use when the variance is estimated.
+
+<Note>
+Every test in the tree rests on assumptions. The $t$-tests assume that (i) the underlying populations are Normally distributed and (ii) the samples are random and representative of their populations. The two-sample $t$-test assumes, in addition, that the two population variances are equal. If these assumptions do not hold, the conclusions of the test cannot be trusted, however carefully the arithmetic is done.
+</Note>
+
+<Quiz />

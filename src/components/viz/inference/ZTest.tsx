@@ -37,6 +37,7 @@ import { sampleNormal } from "../sampling";
 import { normalCdf, normalPdf } from "../normal";
 import { useReplayTween } from "../useReplayTween";
 import { ZTEST_PRESETS, type Tail, type ZTestPreset } from "../data/inferenceData";
+import { fmt } from "./format";
 
 const ACCENT = "rgb(37, 99, 235)"; // blue-600
 const ACCENT_DARK = "rgb(29, 78, 216)"; // blue-700
@@ -70,12 +71,6 @@ const MIN_FOR_SCALE = 50;
 const CURVE_STEPS = 180;
 /** Room, in viewBox units, the "p = 0.0708" label needs beside the observed z. */
 const P_LABEL_W = 64;
-
-/** Formats a number with a true minus sign, as the text prints it. */
-function fmt(v: number, dp: number): string {
-  const s = v.toFixed(dp);
-  return s.startsWith("-") ? `−${s.slice(1)}` : s;
-}
 
 /** Rounds to two decimals, as the text does to z before deciding or finding p. */
 function round2(v: number): number {

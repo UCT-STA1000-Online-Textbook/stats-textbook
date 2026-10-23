@@ -4,7 +4,8 @@
  *   - `SAMPLE_MEAN_PRESETS` for `SamplingDistribution` (WU1),
  *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2),
  *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4),
- *   - `T_PRESETS` for `TDistribution` (WU5).
+ *   - `T_PRESETS` for `TDistribution` (WU5),
+ *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -450,5 +451,131 @@ export const T_PRESETS: TPreset[] = [
     dp: 1,
     drawOne: (n) => `Test ${n} batteries`,
     items: "battery lives, in months",
+  },
+];
+
+/**
+ * A worked example the `TwoSampleT` viz can open at (Module 5, WU6,
+ * `m5-two-independent-samples`): two independent samples, both population
+ * variances estimated and assumed equal, so the two sample variances are
+ * pooled.
+ *
+ * Group 1 is always the one subtracted from: H₀ is μ₁ − μ₂ = `delta0`.
+ */
+export interface TwoSamplePreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /** Direction of H₁ for μ₁ − μ₂, against `delta0`. */
+  tail: Tail;
+  alpha: number;
+  /**
+   * The difference μ₁ − μ₂ that H₀ claims. Zero except in Example 13C, where
+   * method B is only worth buying if it saves more than a minute.
+   */
+  delta0: number;
+  /** What each group is, in the example's words, for the strip and read-out. */
+  names: [string, string];
+  n1: number;
+  n2: number;
+  xbar1: number;
+  xbar2: number;
+  s1: number;
+  s2: number;
+  /** Decimals for printing simulated means, matching the example's figures. */
+  dp: number;
+  /** What taking one pair of samples is, in the example's words. */
+  drawOne: string;
+  /** Units of one measurement, for the strip's caption. */
+  units: string;
+  /**
+   * Also show Excel's "unequal variances" t-test beside the pooled one. Only
+   * the ages data of Example 17B, which the lecturer chose for comparing the
+   * two Data Analysis outputs.
+   */
+  showUnequal?: boolean;
+}
+
+/**
+ * Worked examples for `TwoSampleT`, Module 5 WU6. The figures are the ones
+ * printed in the text, except the ages, whose summary is worked out from the
+ * raw data (the book's 45.00 and 3.20 for corporation 2 do not match its own
+ * data, which give 44.9 and 3.11).
+ */
+export const TWO_SAMPLE_PRESETS: TwoSamplePreset[] = [
+  {
+    id: "wheat",
+    label: "Wheat",
+    source: "Example 11A: two varieties of wheat",
+    tail: "two",
+    alpha: 0.05,
+    delta0: 0,
+    names: ["Variety 1", "Variety 2"],
+    n1: 6,
+    n2: 5,
+    xbar1: 1.6,
+    xbar2: 1.9,
+    s1: 0.42,
+    s2: 0.27,
+    dp: 2,
+    drawOne: "Harvest 6 + 5 plots",
+    units: "tons per plot",
+  },
+  {
+    id: "promotions",
+    label: "Promotions",
+    source: "Example 12B: free gift or discount",
+    tail: "two",
+    alpha: 0.05,
+    delta0: 0,
+    names: ["Free gift", "Discount"],
+    n1: 8,
+    n2: 9,
+    xbar1: 490,
+    xbar2: 420,
+    s1: 104,
+    s2: 92,
+    dp: 0,
+    drawOne: "Serve 8 + 9 customers",
+    units: "rand spent",
+  },
+  {
+    id: "assembly",
+    label: "Assembly",
+    source: "Example 13C: two assembly methods",
+    tail: "upper",
+    alpha: 0.05,
+    delta0: 1,
+    names: ["Method A", "Method B"],
+    n1: 17,
+    n2: 25,
+    xbar1: 7.72,
+    xbar2: 6.21,
+    s1: 0.67,
+    s2: 0.51,
+    dp: 2,
+    drawOne: "Time 17 + 25 assemblies",
+    units: "minutes",
+  },
+  {
+    id: "ages",
+    label: "Ages",
+    source: "Excel pointer: managers' ages",
+    tail: "two",
+    alpha: 0.05,
+    delta0: 0,
+    names: ["Corporation 1", "Corporation 2"],
+    n1: 10,
+    n2: 10,
+    xbar1: 47.8,
+    xbar2: 44.9,
+    s1: 6.86,
+    s2: 3.11,
+    dp: 1,
+    drawOne: "Ask 10 + 10 managers",
+    units: "years",
+    showUnequal: true,
   },
 ];

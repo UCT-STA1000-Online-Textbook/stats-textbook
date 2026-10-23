@@ -80,6 +80,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // out t with s in place of σ, and pile them up against t and N(0, 1).
   "t-distribution": lazy(() => import("./inference/TDistribution")),
 
+  // M5 — Two independent samples (m5-two-independent-samples). Take pairs of
+  // samples with H₀ true, pool their variances and pile up the t values.
+  "two-sample-t": lazy(() => import("./inference/TwoSampleT")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

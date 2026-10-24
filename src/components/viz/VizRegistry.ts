@@ -84,6 +84,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // samples with H₀ true, pool their variances and pile up the t values.
   "two-sample-t": lazy(() => import("./inference/TwoSampleT")),
 
+  // M5 — Two dependent samples (m5-two-dependent-samples). Picture the p-value
+  // of a paired t-test as a tail area, then check it by simulation.
+  "paired-t": lazy(() => import("./inference/PairedT")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

@@ -5,7 +5,8 @@
  *   - `CI_PRESETS` for `ConfidenceIntervals` (WU2),
  *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4),
  *   - `T_PRESETS` for `TDistribution` (WU5),
- *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6).
+ *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6),
+ *   - `PAIRED_PRESETS` for `PairedT` (WU7).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -577,5 +578,86 @@ export const TWO_SAMPLE_PRESETS: TwoSamplePreset[] = [
     drawOne: "Ask 10 + 10 managers",
     units: "years",
     showUnequal: true,
+  },
+];
+
+/** The alternatives the paired examples use: μd > 0, or μd ≠ 0. */
+export type PairedTail = Exclude<Tail, "lower">;
+
+/**
+ * A worked example the `PairedT` viz can open at (Module 5, WU7,
+ * `m5-two-dependent-samples`): matched pairs reduced to one sample of
+ * differences d, tested against H₀: μd = 0.
+ */
+export interface PairedPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /** Direction of H₁ for μd. None of the unit's examples is lower-tailed. */
+  tail: PairedTail;
+  alpha: number;
+  /** Number of pairs, and so of differences. */
+  n: number;
+  /** The example's mean difference d̄. */
+  dbar: number;
+  /** The example's standard deviation of the differences, s_d. */
+  sd: number;
+  /**
+   * The example's differences, where the book prints them all. Example 10A
+   * only prints four of its ten pairs, so it has none.
+   */
+  differences?: number[];
+  /** How each difference is formed, e.g. "before − after". */
+  dName: string;
+  /** Decimals for printing a simulated d̄ and s_d. */
+  dp: number;
+  /** What taking one sample of pairs is, in the example's words. */
+  drawOne: string;
+}
+
+/** Worked examples for `PairedT`, Module 5 WU7, with the figures the text prints. */
+export const PAIRED_PRESETS: PairedPreset[] = [
+  {
+    id: "dizzy",
+    label: "Dizziness",
+    source: "Example 8A: medicine for dizziness",
+    tail: "upper",
+    alpha: 0.05,
+    n: 10,
+    dbar: -1.5,
+    sd: 3.57,
+    differences: [2, -6, -3, 4, 0, -3, -3, -3, 3, -6],
+    dName: "before − after",
+    dp: 2,
+    drawOne: "Treat 10 patients",
+  },
+  {
+    id: "music",
+    label: "Music",
+    source: "Example 9C: the pace of music",
+    tail: "two",
+    alpha: 0.05,
+    n: 8,
+    dbar: 6.5,
+    sd: 6.87,
+    differences: [9, 8, 18, -6, 7, 1, 8, 7],
+    dName: "slow − fast",
+    dp: 2,
+    drawOne: "Watch 8 shoppers",
+  },
+  {
+    id: "reading",
+    label: "Reading",
+    source: "Example 10A: two speed-reading methods",
+    tail: "two",
+    alpha: 0.05,
+    n: 10,
+    dbar: -40,
+    sd: 71.6,
+    dName: "method I − method II",
+    dp: 1,
+    drawOne: "Pair 20 readers",
   },
 ];

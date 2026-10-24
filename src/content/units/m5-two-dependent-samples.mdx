@@ -5,10 +5,291 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 19
 moduleUnitNumber: 7
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Twelve patients have their blood pressure measured before and after a course of treatment. How many degrees of freedom does the paired t-test have?"
+    options:
+      - "22"
+      - "24"
+      - "11"
+      - "12"
+    answer: 2
+    explanation: "The two sets of readings are reduced to one sample of 12 differences, so the test is a one-sample t-test on those differences with n − 1 = 12 − 1 = 11 degrees of freedom. Using n₁ + n₂ − 2 = 22 would wrongly treat the readings as two independent samples."
+    vizHint: "paired-t"
+    vizHintParams:
+      preset: "dizzy"
+  - id: "q2"
+    type: "mcq"
+    question: "Which of these studies gives two dependent (paired) samples?"
+    options:
+      - "The reaction times of 15 smokers and 15 non-smokers"
+      - "The marks of the same 30 students in a test written before and after a tutorial"
+      - "The mass of 20 loaves from one bakery and 20 loaves from another"
+      - "The petrol consumption of 10 Toyotas and 12 Fords"
+    answer: 1
+    explanation: "Each 'before' mark can be linked to an 'after' mark from the same student, so the two sets of marks are dependent: they are repeated measures on the same individuals. In the other studies, the two groups are made up of different individuals, so the samples are independent."
+  - id: "q3"
+    type: "mcq"
+    question: "A paired t-test with a two-sided alternative gives t₇ = −2.40. Which Excel formula gives its p-value?"
+    options:
+      - "=T.DIST.2T(-2.40, 7)"
+      - "=T.DIST.2T(2.40, 7)"
+      - "=T.DIST.RT(-2.40, 7)"
+      - "=T.DIST.2T(2.40, 8)"
+    answer: 1
+    explanation: "T.DIST.2T only accepts positive values, so enter the modulus of the test statistic, 2.40, with n − 1 = 7 degrees of freedom: =T.DIST.2T(2.40, 7) = 0.0475. It works out the area to the right of 2.40 and doubles it."
+    vizHint: "paired-t"
+    vizHintParams:
+      preset: "reading"
+  - id: "q4"
+    type: "true-false"
+    question: "=T.DIST.2T(t, df) gives exactly twice the value of =T.DIST.RT(t, df), for any positive t."
+    answer: true
+    explanation: "True. The t-distribution is symmetric about 0, so the area to the left of −t equals the area to the right of t. T.DIST.2T adds the two together, which is the right-hand tail doubled."
+    vizHint: "paired-t"
+    vizHintParams:
+      preset: "music"
+  - id: "q5"
+    type: "mcq"
+    question: "For 10 pairs, d̄ = 4 and s_d = 5. Which is the 95% confidence interval for μd, given =T.INV.2T(0.05, 9) = 2.262?"
+    options:
+      - "4 ± 2.262 × 5"
+      - "4 ± 2.262 × 5/√10"
+      - "4 ± 1.96 × 5/√10"
+      - "4 ± 2.262 × 5/10"
+    answer: 1
+    explanation: "The interval is d̄ ± t × s_d/√n = 4 ± 2.262 × 5/√10 = 4 ± 3.58, that is (0.42, 7.58). The standard deviation of the differences is divided by √n, and because σ is estimated we use t, not 1.96."
+  - id: "q6"
+    type: "mcq"
+    question: "A 95% confidence interval for the mean difference μd is (−4.05, 1.05). What does this tell us about a two-sided test of H₀: μd = 0 at the 5% level?"
+    options:
+      - "We would reject H₀, because the interval contains negative values."
+      - "We would not reject H₀, because 0 lies inside the interval."
+      - "We would reject H₀, because the interval is wide."
+      - "Nothing: confidence intervals and tests are unrelated."
+    answer: 1
+    explanation: "Zero lies inside the interval, so a mean difference of 0 is a plausible value. A two-sided test at the 5% level would not reject H₀: μd = 0."
 prevUnit: "m5-two-independent-samples"
 nextUnit: "m5-goodness-of-fit"
 ---
 
-Content coming soon.
+## Comparing two sample means: matched pairs or paired samples
+
+We'll introduce the idea of a paired $t$-test via an example.
+
+> **Keywords:** <KeywordChip vizId="paired-t" preset="dizzy">paired t-test</KeywordChip>, dependent samples, repeated measures, <KeywordChip vizId="paired-t" preset="reading">T.DIST.2T</KeywordChip>.
+
+<Example title="Example 8A: medicine for dizziness">
+Consider a medicine designed to reduce dizziness. We want to know if it is effective. We have 10 patients who complain of dizziness and we examine the reduction in dizzy spells for each patient when taking the medicine. In other words, we ask how many dizzy spells each patient had per month before taking the medication and again while on (after) the medication. Since a specific "before" score can be linked to a specific "after" score, taking a difference in the dizzy spells is a sensible measure of the reduction in dizzy spells. Note the data below, where the differences in dizzy spells have been calculated.
+
+| Patient | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Before (B) | 19 | 18 | 9 | 8 | 7 | 12 | 16 | 22 | 19 | 18 |
+| After (A) | 17 | 24 | 12 | 4 | 7 | 15 | 19 | 25 | 16 | 24 |
+| $d = B - A$ | 2 | −6 | −3 | 4 | 0 | −3 | −3 | −3 | 3 | −6 |
+
+The two samples have effectively been reduced to one, by taking the difference in scores. Therefore, testing if the two populations ("before" and "after") have the same mean is equivalent to testing if the (population) mean of the difference scores is 0. So, the two paired samples have been reduced to one sample on which we can perform a one-sample $t$-test.
+
+Is the medicine effective? Test at the 5% level of significance.
+
+<Solution>
+The relevant summary statistics obtained from the differences are $\bar{d} = -1.5$ and $s_d = 3.57$. Performing the hypothesis test assuming a 5% level of significance (using the six-point plan), we have the following:
+
+1. $H_0: \mu_d = 0$
+
+2. $H_1: \mu_d > 0$
+
+3. $\alpha = 0.05$
+
+4. The critical value is 1.833 (`=T.INV(0.95, 9)`).
+
+5. If the number of dizzy spells has reduced while on the treatment, the before score should be greater than the after score. And since differences were defined by $d = B - A$, we'd expect them to be positive. Note that the sample information is not consistent with this hypothesis; hypotheses are determined by what you are interested in finding out, NOT by the data!
+
+$$
+t_9 = \frac{-1.5 - 0}{3.57/\sqrt{10}} = -1.33
+$$
+
+Note that $n$ corresponds to the number of observations, and since the test was performed on the difference scores, we count 10 differences.
+
+6. Since the test statistic $-1.33 < 1.833$ we fail to reject the null hypothesis and conclude that the medication isn't effective at reducing dizzy spells.
+</Solution>
+</Example>
+
+Note: It is assumed that the population of difference scores is Normally distributed with a mean of $\mu_d$. Also, in the case above, the p-value associated with the test statistic is `=T.DIST.RT(-1.33, 9)` $= 0.892$ (clearly resulting in a fail to reject decision).
+
+<TryThis
+  vizId="paired-t"
+  preset="dizzy"
+  label="Why is the p-value so big?"
+  description="The shaded area is everything to the right of t = −1.33, which is what T.DIST.RT(−1.33, 9) works out: 0.892. Treat 10 patients again and again with a medicine that does nothing, and about 89% of runs give a t at least as high as the example's."
+/>
+
+As already mentioned, in this example we appear to have two sets of data: the "before" data and the "after" data. But were these really two separate samples? If we had 10 randomly selected patients for "before" and then a different 10 randomly selected patients for "after" then the answer would be yes and the samples would be independent of one another. But, since dizziness varies from patient to patient, we looked at the same 10 patients and took two readings from each individual. Thus our two sets of data were dependent and to perform the test we used a single sample of differences. These dependent measures are known as **repeated measures**.
+
+<Example title="Example 9C: the pace of music">
+A study was conducted to determine if the pace of music played in a shopping centre influences the amount of time that customers spend in the shopping centre. To test the hypothesis, a sample of 8 customers was observed on two different days. On the one day, the customers did their shopping while slow music was playing. On the same day the next week, they did their shopping while fast music was playing. Other than the pace of the music, circumstances were similar. The following observations were made:
+
+| Time spent in shopping centre (minutes) | | | | | | | | |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Slow music (A) | 67 | 52 | 98 | 24 | 55 | 43 | 48 | 70 |
+| Fast music (B) | 58 | 44 | 80 | 30 | 48 | 42 | 40 | 63 |
+| $d = A - B$ | 9 | 8 | 18 | −6 | 7 | 1 | 8 | 7 |
+
+The following sample means and standard deviations were observed:
+
+$$
+\bar{a} = 57.125 \quad s_a = 21.86 \qquad \bar{b} = 50.625 \quad s_b = 15.74 \qquad \bar{d} = 6.5 \quad s_d = 6.87
+$$
+
+Do the data above provide sufficient evidence that the pace of the music has an influence on the amount of time that shoppers spend in a shopping centre?
+
+<Solution>
+The same 8 customers were observed under both kinds of music, so the samples are paired and we test the differences.
+
+1. $H_0: \mu_d = 0$
+
+2. $H_1: \mu_d \ne 0$. We want to know whether the pace has *an* influence, in either direction.
+
+3. $\alpha = 0.05$
+
+4. There are 8 differences, so we use $t_7$. We reject $H_0$ if $|t_7|$ exceeds `=T.INV.2T(0.05, 7)` $= 2.365$.
+
+5. The test statistic is
+
+$$
+t_7 = \frac{6.5 - 0}{6.87/\sqrt{8}} = \frac{6.5}{2.429} = 2.68.
+$$
+
+The p-value is `=T.DIST.2T(2.68, 7)` $= 0.032$.
+
+6. Because $2.68 > 2.365$ (equivalently, $0.032 < 0.05$) we reject $H_0$. The pace of the music does influence the time shoppers spend in the centre: with slow music they stayed longer, by 6.5 minutes on average.
+
+<TryThis
+  vizId="paired-t"
+  preset="music"
+  label="Check it in the panel"
+  description="The shaded tails together are T.DIST.2T(2.68, 7) = 0.032. Repeat 500 times with the music making no difference: only about 3% of runs land as far from 0 as 2.68."
+/>
+</Solution>
+</Example>
+
+Another way of getting dependent samples is when individuals are paired on some criteria to reduce spurious variation in measurements. As a consequence of the latter, the test we used is often called the **paired $t$-test**.
+
+<Example title="Example 10A: two speed-reading methods">
+Twenty individuals were paired on their initial rate of reading. One of each pair was randomly assigned to method I for speed reading and the other to method II. After the courses the speed of reading was measured. Is there a difference in the effectiveness of the two methods?
+
+| Pair | 1 | 2 | … | 9 | 10 |
+| --- | --- | --- | --- | --- | --- |
+| Method I | 1114 | 996 | … | 996 | 894 |
+| Method II | 1032 | 1148 | … | 1032 | 1012 |
+| $d = \text{I} - \text{II}$ | 82 | −152 | … | −36 | −118 |
+
+The relevant summary statistics are
+
+$$
+\bar{d} = -40, \quad s_d = 71.6 \quad \text{and} \quad n = 10 \text{ pairs}.
+$$
+
+<Solution>
+Once again we assume that this is a random representative sample from the population of differences and that the differences in reading speed are Normally distributed with mean $\mu_d$.
+
+1. $H_0: \mu_d = 0$
+
+2. $H_1: \mu_d \ne 0$
+
+3. The test statistic is
+
+$$
+t_9 = \frac{-40 - 0}{71.6/\sqrt{10}} = -1.77.
+$$
+
+4. The p-value for this statistic is `=T.DIST.2T(1.77, 9)` $= 0.111$. (Note that even if the test statistic is negative, the command only accepts positive values, so always enter the modulus of your test statistic for this command.)
+
+5. Therefore we do not reject the null hypothesis (the p-value is too large) and conclude that there isn't a difference in reading speed between the two methods.
+</Solution>
+</Example>
+
+How does `T.DIST.2T` manage with only the positive value? It works on the right-hand side of the $t$-distribution: it finds the area to the right of $|t| = 1.77$, which is `=T.DIST.RT(1.77, 9)` $= 0.0553$. Because the $t$-distribution is symmetric about 0, the area to the left of $-1.77$ is exactly the same, so the two tails together are
+
+$$
+\texttt{T.DIST.2T(1.77, 9)} = 2 \times \texttt{T.DIST.RT(1.77, 9)} = 2 \times 0.0553 = 0.111.
+$$
+
+<TryThis
+  vizId="paired-t"
+  preset="reading"
+  label="Watch T.DIST.2T double the tail"
+  description="First the area to the right of 1.77 is shaded: that is T.DIST.RT(1.77, 9) = 0.0553. Then its mirror image appears to the left of −1.77, and the two together make T.DIST.2T(1.77, 9) = 0.111. Press Replay the doubling to watch it again."
+/>
+
+## Confidence intervals
+
+As before, it is also possible to construct confidence intervals for these differences. Following the same logic as before and using the fact that
+
+$$
+\frac{\bar{d} - \mu_d}{s_d/\sqrt{n}} \sim t_{n-1},
+$$
+
+the 95% confidence interval can be constructed by:
+
+$$
+\Pr\left(-t_{n-1}^{0.025} < \frac{\bar{d} - \mu_d}{s_d/\sqrt{n}} < t_{n-1}^{0.025}\right) = 0.95.
+$$
+
+So
+
+$$
+\Pr\left(\bar{d} - t_{n-1}^{0.025}\frac{s_d}{\sqrt{n}} < \mu_d < \bar{d} + t_{n-1}^{0.025}\frac{s_d}{\sqrt{n}}\right) = 0.95.
+$$
+
+Therefore the 95% confidence interval is:
+
+$$
+\left(\bar{d} - t_{n-1}^{0.025}\frac{s_d}{\sqrt{n}} \ ; \ \bar{d} + t_{n-1}^{0.025}\frac{s_d}{\sqrt{n}}\right)
+$$
+
+where $t_{n-1}^{0.025}$ is `=T.INV.2T(0.05, n-1)`.
+
+<Example title="Example 10A continued">
+Find a 95% confidence interval for the mean difference in reading speed between the two methods.
+
+<Solution>
+To compute the 95% confidence interval, we need `=T.INV.2T(0.05, 9)` $= 2.262$:
+
+$$
+\left(-40 - 2.262\frac{71.6}{\sqrt{10}} \ ; \ -40 + 2.262\frac{71.6}{\sqrt{10}}\right)
+$$
+
+which is equivalent to
+
+$$
+(-40 - 51.216 \ ; \ -40 + 51.216).
+$$
+
+And this results in a 95% confidence interval for the difference in speed reading methods of $-91.22$ to $11.22$. Note that zero lies in this interval.
+</Solution>
+</Example>
+
+<Example title="Example 8A continued">
+Find a 95% confidence interval for the mean difference in dizzy spells per month.
+
+<Solution>
+The 95% confidence interval, using `=T.INV.2T(0.05, 9)` $= 2.262$ again, is:
+
+$$
+\left(-1.5 - 2.262\frac{3.57}{\sqrt{10}} \ ; \ -1.5 + 2.262\frac{3.57}{\sqrt{10}}\right)
+$$
+
+which is equivalent to
+
+$$
+(-1.5 - 2.554 \ ; \ -1.5 + 2.554).
+$$
+
+The corresponding 95% confidence interval for the difference in dizzy spells per month is $-4.05$ to $1.05$. Note again that zero lies in this interval.
+</Solution>
+</Example>
+
+<Quiz />

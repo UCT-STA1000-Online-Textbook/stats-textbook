@@ -5,10 +5,380 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 20
 moduleUnitNumber: 8
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "A goodness of fit test has 6 cells, and the mean of a Poisson distribution was estimated from the data. How many degrees of freedom does the Chi-squared distribution have?"
+    options:
+      - "6"
+      - "5"
+      - "4"
+      - "3"
+    answer: 2
+    explanation: "Degrees of freedom = k − d − 1, where k = 6 cells and d = 1 parameter (λ) was estimated from the data: 6 − 1 − 1 = 4."
+    vizHint: "goodness-of-fit"
+    vizHintParams:
+      preset: "misprints-fit"
+  - id: "q2"
+    type: "mcq"
+    question: "In one cell, the observed frequency is 30 and the expected frequency is 25. What does this cell contribute to D²?"
+    options:
+      - "0.2"
+      - "1"
+      - "5"
+      - "25"
+    answer: 1
+    explanation: "Each cell contributes (Oᵢ − Eᵢ)²/Eᵢ = (30 − 25)²/25 = 25/25 = 1."
+    vizHint: "goodness-of-fit"
+    vizHintParams:
+      preset: "tshirts"
+  - id: "q3"
+    type: "mcq"
+    question: "One cell has an expected frequency of 2.3. What should we do?"
+    options:
+      - "Nothing: the test works for any expected frequency."
+      - "Leave the cell out of D²."
+      - "Amalgamate it with an adjoining cell, and reduce the degrees of freedom by one."
+      - "Round the expected frequency up to 5."
+    answer: 2
+    explanation: "The Chi-squared approximation is good only if all the expected frequencies exceed about 5. Combining the cell with its neighbour fixes that; there is then one cell fewer, so one degree of freedom fewer."
+  - id: "q4"
+    type: "true-false"
+    question: "In a goodness of fit test, we reject H₀ only if D² is too large."
+    answer: true
+    explanation: "True. Goodness of fit tests are one-sided: a large D² means the observed and expected frequencies are too far apart. A small D² means the distribution specified by H₀ fits the data very well."
+    vizHint: "goodness-of-fit"
+    vizHintParams:
+      preset: "misprints"
+  - id: "q5"
+    type: "mcq"
+    question: "Which Excel formula gives the 5% point of the Chi-squared distribution with 3 degrees of freedom?"
+    options:
+      - "=CHISQ.INV.RT(0.05, 3)"
+      - "=CHISQ.INV.RT(0.95, 3)"
+      - "=CHISQ.DIST.RT(0.05, 3)"
+      - "=NORM.S.INV(0.95)"
+    answer: 0
+    explanation: "CHISQ.INV.RT takes the probability in the right-hand tail and the degrees of freedom: =CHISQ.INV.RT(0.05, 3) = 7.815. CHISQ.DIST.RT goes the other way, from a value of D² to its right-tail probability, the p-value."
+  - id: "q6"
+    type: "mcq"
+    question: "We test whether data come from a Normal distribution, using 7 cells and estimating μ and σ from the data. How many degrees of freedom does D² have?"
+    options:
+      - "6"
+      - "5"
+      - "4"
+      - "7"
+    answer: 2
+    explanation: "k − d − 1 = 7 − 2 − 1 = 4. Two parameters, μ and σ, were estimated from the data, so two degrees of freedom are lost on top of the usual one."
+    vizHint: "goodness-of-fit"
+    vizHintParams:
+      preset: "iq"
 prevUnit: "m5-two-dependent-samples"
 nextUnit: "m5-categorical-association"
 ---
 
-Content coming soon.
+## Many seemingly unrelated applications
+
+There is a surprisingly large number of tests of hypotheses for which the sampling distribution of the test statistic has a $\chi^2$-distribution, either exactly or approximately. In terms of numbers of applications in Statistics, the Chi-squared distribution is probably in second place, after the Normal distribution.
+
+> **Keywords:** <KeywordChip vizId="goodness-of-fit" preset="misprints">Chi-squared distribution</KeywordChip>, <KeywordChip vizId="goodness-of-fit" preset="misprints-fit">goodness of fit tests</KeywordChip>, <KeywordChip vizId="goodness-of-fit" preset="tshirts">observed and expected frequencies</KeywordChip>.
+
+We consider here only two of these applications of the Chi-squared distribution: "goodness of fit tests" and "tests of association in contingency tables". Although the rationale behind these applications is completely different, the calculation of the test statistics is almost identical.
+
+## Goodness of fit tests
+
+In the unit on [two independent samples](/unit/m5-two-independent-samples), to do the two-sample $t$-test, we found that we had to make the assumption that (i) the variances were equal (you will find out how to test this in later courses of Statistics) and (ii) the samples were drawn from populations which had Normal distributions. There is therefore a need to be able to test this assumption of Normality. The test described in this section enables us to do just this. Not only can we test if the process that generated the data has a Normal distribution, we can test whether data fits any specified distribution. In our first example, we test whether the process generating misprints in the pages of newspapers produces data with a Poisson distribution.
+
+<Example title="Example 1A: misprints in newspapers">
+In the printing industry, it is generally thought that misprints occur at random, i.e. they occur independently of each other. Thus the number of misprints per page can be expected to obey a Poisson distribution with some parameter $\lambda$. To test this hypothesis, 200 pages from newspapers were examined, and the number of misprints on each page noted. The data are presented below. A 5% significance level is to be used.
+
+| Number of misprints | 0 | 1 | 2 | 3 | 4 | 5 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Observed number of pages | 43 | 69 | 53 | 21 | 8 | 6 |
+
+The table tells us that 43 of the 200 pages examined were free of misprints, 69 of the pages had one misprint, 53 pages had two misprints each (a total of 106 misprints on these 53 pages), …, 6 pages had five misprints on each page (30 misprints on these 6 pages).
+
+In order to test whether the Poisson distribution fits this data, the first problem is to decide what value to use for the parameter $\lambda$ of the Poisson distribution. This can either be specified by the null hypothesis, or the data can be used to estimate $\lambda$. We treat these two situations separately.
+
+<Solution>
+Let us first consider the test of the null hypothesis that the data can be thought of as a sample from a Poisson distribution with parameter $\lambda = 1.2$ misprints per page against the alternative that the data come from some other distribution.
+
+Thus we have
+
+1. $H_0$: Data come from a Poisson distribution with $\lambda = 1.2$
+
+2. $H_1$: The distribution is not Poisson with $\lambda = 1.2$
+
+3. Significance level: 5%
+
+4. and 5. We need firstly to compute the expected (theoretical) frequencies, assuming that the null hypothesis is true. If misprints are occurring in accordance with a Poisson distribution with rate $\lambda = 1.2$ then the probability that a page contains $x$ misprints is
+
+$$
+p(x) = \frac{e^{-1.2} \, 1.2^x}{x!}.
+$$
+
+Thus the probability of no misprints is
+
+$$
+p(0) = e^{-1.2} = 0.3012.
+$$
+
+Thus 30.12% of pages are expected to have no misprints. A sample of 200 pages can therefore be expected to have 60.24 pages with no misprints (30.12% of 200). This theoretical frequency is to be compared with an observed frequency of 43. Similarly $p(1) = e^{-1.2} \times 1.2 = 0.3614$. Thus the expected frequency of one error is $200 \times 0.3614 = 72.28$. We compare this with an observed 69 pages with one error.
+
+Continuing in this way we build up a table of observed and expected frequencies.
+
+| Number of misprints ($x$) | Observed number of pages ($O_i$) | Theoretical probability $p(x)$ | Expected frequency ($E_i$) |
+| --- | --- | --- | --- |
+| 0 | 43 | $1.2^0 e^{-1.2}/0! = 0.3012$ | 60.24 |
+| 1 | 69 | $1.2^1 e^{-1.2}/1! = 0.3614$ | 72.28 |
+| 2 | 53 | $1.2^2 e^{-1.2}/2! = 0.2169$ | 43.38 |
+| 3 | 21 | $1.2^3 e^{-1.2}/3! = 0.0867$ | 17.34 |
+| 4 | 8 | $1.2^4 e^{-1.2}/4! = 0.0260$ | 5.20 |
+| 5 or more | 6 | $1 - \sum_{x=0}^{4} p(x) = 0.0078$ | 1.56 |
+
+Even if $H_0$ is true, we anticipate that the observed and expected frequencies will not be exactly equal; this is because we expect some sampling fluctuation in our random sample of 200 pages. We would clearly like to reject $H_0$, however, if the difference between the observed frequencies and the expected frequencies is "too large".
+
+We need to find a test statistic which is a function of the differences between observed and expected frequencies and which has a known sampling distribution. The sum of these differences is of no use because they sum to zero. So we square the differences and they all become positive. A difference of 3 is negligible if the observed and expected frequencies are 121 and 124, but it is important if the frequencies are 6 and 9. To take account of this we divide the squared differences by their expected frequency. The "right" statistic to use is
+
+$$
+D^2 = \sum \frac{(O_i - E_i)^2}{E_i}
+$$
+
+where the sum is taken over all the cells in the table.
+
+The statistic $D^2$ has approximately a Chi-squared ($\chi^2$) distribution. Like the $t$-distribution, the $\chi^2$-distribution has a degrees of freedom number attached to it. In tests like the one above, the correct degrees of freedom is given by $k - 1$, where $k$ is the number of "cells" into which the data are categorized. Here $k = 6$, and therefore the degrees of freedom for $\chi^2$ is 5. Thus we will reject $H_0$ if $D^2$ exceeds the 5% point of the $\chi^2_5$ distribution. We can use Excel to find this critical value: `=CHISQ.INV.RT(0.05, 5)` $= 11.071$.
+
+If $D^2$ exceeds 11.071 then the observed and expected frequencies are "too far" apart for their differences to be explained by chance sampling fluctuations alone.
+
+Let us compute $D^2$ for the above data.
+
+$$
+D^2 = \sum \frac{(O_i - E_i)^2}{E_i} = \frac{(43 - 60.24)^2}{60.24} + \frac{(69 - 72.28)^2}{72.28} + \cdots + \frac{(6 - 1.56)^2}{1.56} = 22.13
+$$
+
+6. This value lies in the rejection region. We thus reject the null hypothesis that the data are sampled from a Poisson distribution with $\lambda = 1.2$.
+
+We said earlier that the statistic $D^2$ has approximately a $\chi^2$-distribution. This approximation is good provided all the expected frequencies exceed "about" 5. Looking back at the table of expected frequencies, you will see that this condition has been violated: the expected number of pages with 5 (or more) misprints is 1.56, which is much less than 5. To get around this we **amalgamate** adjoining classes. This reduces the number of cells, and also the degrees of freedom. Here it is necessary to amalgamate the last two cells:
+
+| Number of misprints | Observed number of pages ($O_i$) | Theoretical probability | Expected frequency ($E_i$) |
+| --- | --- | --- | --- |
+| 0 | 43 | 0.3012 | 60.24 |
+| 1 | 69 | 0.3614 | 72.28 |
+| 2 | 53 | 0.2169 | 43.38 |
+| 3 | 21 | 0.0867 | 17.34 |
+| 4 or more | 8 + 6 = 14 | 0.0338 | 6.76 |
+
+All the expected values exceed 5, and we now correctly compute $D^2$ as
+
+$$
+D^2 = \frac{(43 - 60.24)^2}{60.24} + \cdots + \frac{(14 - 6.76)^2}{6.76} = 15.74.
+$$
+
+We now have only 5 cells, so the degrees of freedom for $\chi^2$ is 4. The 5% point of $\chi^2_4$ is `=CHISQ.INV.RT(0.05, 4)` $= 9.488$. Because $15.74 > 9.488$, we reject $H_0$ and come to the same conclusion as before (but using the right method this time!).
+</Solution>
+</Example>
+
+<TryThis
+  vizId="goodness-of-fit"
+  preset="misprints"
+  label="Inspect 200 pages that really are Poisson"
+  description="Each run prints 200 pages with misprints that truly follow a Poisson distribution with λ = 1.2, and works out D² from the five cells. O and E never match exactly, but D² rarely passes 9.488: about 5% of runs. The example's 15.74 is far out in the tail."
+/>
+
+<Example title="Example 1A continued: estimating λ from the data">
+Let us now use the data to estimate $\lambda$, and see what difference this makes to the test.
+
+<Solution>
+Our null and alternative hypotheses are now
+
+1. $H_0$: the data fit some Poisson distribution, and
+
+2. $H_1$: the data fit a distribution other than the Poisson distribution.
+
+3. Significance level: 5%
+
+4. and 5. To find $\lambda$ we need to estimate the rate at which misprints occurred in our sample data. The total number of misprints that occurred was $0 \times 43 + 1 \times 69 + 2 \times 53 + \cdots + 5 \times 6 = 300$ misprints. 300 misprints in 200 pages implies that the mean rate at which misprints occur is 1.5 misprints per page. We therefore try to fit a Poisson distribution with $\lambda = 1.5$. Using the same procedure as before, we find a table of expected frequencies.
+
+| Number of misprints | Observed number of pages ($O_i$) | Theoretical probability | Expected frequency ($E_i$) |
+| --- | --- | --- | --- |
+| 0 | 43 | 0.2231 | 44.62 |
+| 1 | 69 | 0.3347 | 66.94 |
+| 2 | 53 | 0.2510 | 50.20 |
+| 3 | 21 | 0.1255 | 25.10 |
+| 4 | 8 | 0.0471 | 9.42 |
+| 5 or more | 6 | 0.0186 | 3.72 |
+
+We amalgamate the last two cells (observed $8 + 6 = 14$, expected $9.42 + 3.72 = 13.14$), so that all expected values exceed 5. We now have five cells.
+
+The rule for finding the degrees of freedom in this case is
+
+$$
+\text{Degrees of freedom} = k - d - 1
+$$
+
+where $k$ is the number of cells, and $d$ is the number of parameters estimated from the data.
+
+Here $k = 5$ and $d = 1$, because we estimated just one parameter, $\lambda$, from the data. Thus we must use $\chi^2$ with $5 - 1 - 1 = 3$ degrees of freedom. The 5% point of $\chi^2_3$ is `=CHISQ.INV.RT(0.05, 3)` $= 7.815$. We reject $H_0$ if $D^2$ exceeds 7.815. Notice that goodness of fit tests are intrinsically one-sided: we reject $H_0$ if $D^2$ is too large. If $D^2$ is small, it means that the distribution specified by $H_0$ fits the data very well.
+
+Using the formula $D^2 = \sum \dfrac{(O_i - E_i)^2}{E_i}$ we calculate
+
+$$
+D^2 = \frac{(43 - 44.62)^2}{44.62} + \cdots + \frac{(14 - 13.14)^2}{13.14} = 1.00.
+$$
+
+6. Because 1.00 lies in the acceptance region, we cannot reject $H_0$. It is reasonable to conclude that the Poisson distribution with $\lambda = 1.5$ misprints per page fits the data well.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="goodness-of-fit"
+  preset="misprints-fit"
+  label="Why estimating λ costs a degree of freedom"
+  description="Now every run estimates λ from its own 200 pages before working out E. The expected frequencies follow each sample a little, so D² comes out smaller, and the pile settles under χ² with 3 degrees of freedom, not 4."
+/>
+
+## A short-cut formula
+
+As in the case with calculating the sample variance, there is a short-cut formula for calculating $D^2$.
+
+$$
+D^2 = \sum \frac{(O_i - E_i)^2}{E_i} = \sum \frac{O_i^2 - 2O_iE_i + E_i^2}{E_i} = \sum \frac{O_i^2}{E_i} - 2\sum O_i + \sum E_i.
+$$
+
+But $\sum O_i = \sum E_i = n$, the sample size. (Each summation is over the $k$ cells.) Therefore
+
+$$
+D^2 = \sum \frac{O_i^2}{E_i} - n.
+$$
+
+This is the best formula for calculating $D^2$.
+
+<Example title="Example 2B: I.Q. scores">
+A random sample of 230 students took an I.Q. test. The scores they obtained have been summarized in the table below:
+
+| Score | Observed frequency |
+| --- | --- |
+| < 90 | 18 |
+| 90 to 110 | 87 |
+| 110 to 130 | 104 |
+| > 130 | 21 |
+
+Test at the 5% level whether these data come from a Normal distribution.
+
+<Solution>
+1. $H_0$: The data follow a Normal distribution (parameters to be estimated from the data).
+
+2. $H_1$: The distribution is not Normal.
+
+3. Significance level: 5%.
+
+4. We use the $\chi^2$-distribution with $k - d - 1$ degrees of freedom. Here there are $k = 4$ cells and $d = 2$ parameters ($\mu$ and $\sigma$) are estimated. Thus we use $\chi^2_1$, and reject $H_0$ if $D^2$ exceeds `=CHISQ.INV.RT(0.05, 1)` $= 3.841$.
+
+5. We need to estimate $\mu$ and $\sigma$. Let us suppose that before the data was summarized into the table above, the sample mean $\bar{x}$ and the standard deviation $s$ were computed to be 111 and 16.3 respectively.
+
+We now use $N(111, 16.3^2)$ to compute the theoretical probabilities that randomly selected I.Q.'s fall into the 4 cells in our table.
+
+If $X \sim N(111, 16.3^2)$, then
+
+$$
+\Pr(X < 90) = \Pr\left(Z < \frac{90 - 111}{16.3}\right) = \Pr(Z < -1.29) = 0.0985.
+$$
+
+Thus the probability that a randomly selected single individual has an I.Q. less than 90 is 0.0985. In a sample of size 230 we therefore expect $230 \times 0.0985 = 22.7$ students to have I.Q.'s below 90.
+
+We do a similar calculation for the remaining cells, to obtain the table:
+
+| Score | Observed frequency | Theoretical probability | Expected frequency |
+| --- | --- | --- | --- |
+| < 90 | 18 | $\Pr(Z < -1.29) = 0.0985$ | 22.7 |
+| 90 to 110 | 87 | $\Pr(-1.29 \le Z < -0.06) = 0.3776$ | 86.8 |
+| 110 to 130 | 104 | $\Pr(-0.06 \le Z < 1.17) = 0.4029$ | 92.7 |
+| > 130 | 21 | $\Pr(Z \ge 1.17) = 0.1210$ | 27.8 |
+
+For the purpose of demonstrating the calculations, we have worked with the $Z$ values rounded to two decimal places. In practice you would always use the unrounded value of $Z$ as an input to your formulae such as `NORM.S.DIST` in Excel.
+
+Thus
+
+$$
+D^2 = \sum \frac{O_i^2}{E_i} - n = \frac{18^2}{22.7} + \frac{87^2}{86.8} + \frac{104^2}{92.7} + \frac{21^2}{27.8} - 230 = 234.01 - 230 = 4.01.
+$$
+
+6. Because $4.01 > 3.841$, we reject $H_0$ and conclude that the Normal distribution is not a good fit to this data.
+
+This example illustrates the method to use to test whether data fit a Normal distribution. In practice, however, the data would be divided into many more than the 4 cells we used in this example.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="goodness-of-fit"
+  preset="iq"
+  label="Test 230 students who really are Normal"
+  description="Each run tests 230 students whose scores truly are Normal, fits μ and σ to its four bands, and works out D². With two parameters estimated only 1 degree of freedom is left, and the χ²₁ curve piles up against 0. About 5% of runs pass 3.841, the cut-off the example's 4.01 lies just beyond."
+/>
+
+Look at the plot of the $\chi^2_1$-distribution for Example 2B (open the I.Q. example in the panel). The shape is quite unlike that of the typical Chi-squared distribution with more than one degree of freedom, such as the $\chi^2_4$ of Example 1A. It is closely related to the Exponential distribution. We saw that $\chi^2_1(0.05) = 3.841$, i.e. the 5% point of the Chi-squared distribution with one degree of freedom is 3.841. And it is not an accident that the square root of 3.841 is equal to 1.96, the 2.5% point of the standard Normal distribution: there is a mathematical relationship between the Normal and Chi-squared distributions.
+
+<Example title="Example 3C: T-shirt colours">
+A T-shirt manufacturer makes a certain line of T-shirt in three colours: white, red and blue. 50% of the T-shirts made are white, 25% are red and 25% blue. One outlet reported sales of 47 white T-shirts, 32 red and 21 blue. Test whether sales are consistent with the manufactured proportions.
+
+<Solution>
+1. $H_0$: Sales are in the proportions 50% white, 25% red, 25% blue.
+
+2. $H_1$: Sales are not in these proportions.
+
+3. Significance level: 5%.
+
+4. There were $47 + 32 + 21 = 100$ T-shirts sold, so the expected frequencies are $100 \times 0.5 = 50$ white, and 25 each of red and blue. All exceed 5. There are $k = 3$ cells and no parameters were estimated from the data, so we use $\chi^2_2$ and reject $H_0$ if $D^2$ exceeds `=CHISQ.INV.RT(0.05, 2)` $= 5.991$.
+
+5. The test statistic is
+
+$$
+D^2 = \frac{(47 - 50)^2}{50} + \frac{(32 - 25)^2}{25} + \frac{(21 - 25)^2}{25} = 0.18 + 1.96 + 0.64 = 2.78.
+$$
+
+6. Because $2.78 < 5.991$ we do not reject $H_0$. Sales are consistent with the manufactured proportions.
+
+<TryThis
+  vizId="goodness-of-fit"
+  preset="tshirts"
+  label="Check it in the panel"
+  description="Every run sells 100 T-shirts in exactly the manufactured proportions. A D² of 2.78 or more turns up in about a quarter of runs: nothing unusual."
+/>
+</Solution>
+</Example>
+
+<Example title="Example 4C: customers at the cashiers">
+A popular clothing store is interested in establishing the distribution of customers arriving at the cashiers. During a 100-minute period, the number of customers arriving per minute was counted, with the following results:
+
+| Number of customers per minute | 0 | 1 | 2 | 3 | 4 | 5 or more |
+| --- | --- | --- | --- | --- | --- | --- |
+| Observed frequency | 8 | 25 | 26 | 21 | 15 | 5 |
+
+Can a Poisson distribution be used to model the arrival times?
+
+<Solution>
+1. $H_0$: The number of arrivals per minute follows a Poisson distribution.
+
+2. $H_1$: The number of arrivals per minute does not follow a Poisson distribution.
+
+3. Significance level: 5%.
+
+4. and 5. First we estimate $\lambda$ from the data. Treating "5 or more" as 5, there were $0 \times 8 + 1 \times 25 + 2 \times 26 + 3 \times 21 + 4 \times 15 + 5 \times 5 = 225$ customers in 100 minutes, so $\lambda = 2.25$ customers per minute. The expected frequencies are $100 \times p(x)$:
+
+| Customers per minute | 0 | 1 | 2 | 3 | 4 | 5 or more |
+| --- | --- | --- | --- | --- | --- | --- |
+| Probability $p(x)$ | 0.1054 | 0.2371 | 0.2668 | 0.2001 | 0.1126 | 0.0780 |
+| Expected frequency $E_i$ | 10.54 | 23.71 | 26.68 | 20.01 | 11.26 | 7.80 |
+
+All the expected frequencies exceed 5, so no cells need to be amalgamated. There are $k = 6$ cells and $d = 1$ parameter was estimated, so we use $\chi^2$ with $6 - 1 - 1 = 4$ degrees of freedom, and reject $H_0$ if $D^2$ exceeds `=CHISQ.INV.RT(0.05, 4)` $= 9.488$.
+
+$$
+D^2 = \frac{(8 - 10.54)^2}{10.54} + \frac{(25 - 23.71)^2}{23.71} + \cdots + \frac{(5 - 7.80)^2}{7.80} = 3.00.
+$$
+
+6. Because $3.00 < 9.488$ we do not reject $H_0$. A Poisson distribution with $\lambda = 2.25$ customers per minute is a reasonable model for the arrivals.
+</Solution>
+</Example>
+
+<Quiz />

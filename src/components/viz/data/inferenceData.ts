@@ -6,7 +6,8 @@
  *   - `ZTEST_PRESETS` for `ZTest` (WU3 and WU4),
  *   - `T_PRESETS` for `TDistribution` (WU5),
  *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6),
- *   - `PAIRED_PRESETS` for `PairedT` (WU7).
+ *   - `PAIRED_PRESETS` for `PairedT` (WU7),
+ *   - `GOF_PRESETS` for `GoodnessOfFit` (WU8).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -659,5 +660,127 @@ export const PAIRED_PRESETS: PairedPreset[] = [
     dName: "method I − method II",
     dp: 1,
     drawOne: "Pair 20 readers",
+  },
+];
+
+/**
+ * The model H₀ says generated the data, in a form the `GoodnessOfFit` viz can
+ * both draw from and fit:
+ *
+ *   - "poisson": counts per item (misprints per page). The last cell is
+ *     "`top` or more". With `fit`, each simulated sample's λ is re-estimated
+ *     from its own mean, as Example 1A does the second time.
+ *   - "normal": measurements grouped at the `cuts`. μ and σ are always
+ *     re-estimated from each sample, as in Example 2B.
+ *   - "fixed": categories with stated proportions (the T-shirt colours).
+ */
+export type GofModel =
+  | { kind: "poisson"; lambda: number; top: number; fit: boolean }
+  | { kind: "normal"; mu: number; sigma: number; cuts: number[] }
+  | { kind: "fixed"; probs: number[] };
+
+/** A worked example the `GoodnessOfFit` viz can open at (Module 5, WU8). */
+export interface GofPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /** One label per cell, in order. */
+  cells: string[];
+  /** The example's observed frequencies Oᵢ. */
+  observed: number[];
+  /** The example's expected frequencies Eᵢ, as the text prints them. */
+  expected: number[];
+  /** Sample size: the number of items classified. */
+  n: number;
+  /** Number of parameters estimated from the data, d in k − d − 1. */
+  estimated: number;
+  alpha: number;
+  model: GofModel;
+  /**
+   * Right-hand end of the D² axis: far enough to show the 5% point and the
+   * example's own D².
+   */
+  maxD2: number;
+  /** Decimals for printing a simulated sample's expected frequencies. */
+  dp: number;
+  /** What taking one sample is, in the example's words. */
+  drawOne: string;
+  /** What the cells count, for the chart's caption. */
+  counts: string;
+}
+
+/**
+ * Worked examples for `GoodnessOfFit`, Module 5 WU8 (`m5-goodness-of-fit`).
+ * Observed and expected frequencies are the ones the text prints, so the
+ * read-out's D² matches the page.
+ */
+export const GOF_PRESETS: GofPreset[] = [
+  {
+    id: "misprints",
+    label: "λ = 1.2",
+    // The read-out header is set in capitals, which would turn λ into Λ, so
+    // the sources spell the rate out in words.
+    source: "Example 1A: misprints, rate of 1.2 given",
+    cells: ["0", "1", "2", "3", "4+"],
+    observed: [43, 69, 53, 21, 14],
+    expected: [60.24, 72.28, 43.38, 17.34, 6.76],
+    n: 200,
+    estimated: 0,
+    alpha: 0.05,
+    model: { kind: "poisson", lambda: 1.2, top: 4, fit: false },
+    maxD2: 20,
+    dp: 2,
+    drawOne: "Inspect 200 pages",
+    counts: "pages with each number of misprints",
+  },
+  {
+    id: "misprints-fit",
+    label: "λ estimated",
+    source: "Example 1A: misprints, rate estimated as 1.5",
+    cells: ["0", "1", "2", "3", "4+"],
+    observed: [43, 69, 53, 21, 14],
+    expected: [44.62, 66.94, 50.2, 25.1, 13.14],
+    n: 200,
+    estimated: 1,
+    alpha: 0.05,
+    model: { kind: "poisson", lambda: 1.5, top: 4, fit: true },
+    maxD2: 15,
+    dp: 2,
+    drawOne: "Inspect 200 pages",
+    counts: "pages with each number of misprints",
+  },
+  {
+    id: "iq",
+    label: "IQ",
+    source: "Example 2B: I.Q. scores",
+    cells: ["< 90", "90 to 110", "110 to 130", "> 130"],
+    observed: [18, 87, 104, 21],
+    expected: [22.7, 86.8, 92.7, 27.8],
+    n: 230,
+    estimated: 2,
+    alpha: 0.05,
+    model: { kind: "normal", mu: 111, sigma: 16.3, cuts: [90, 110, 130] },
+    maxD2: 10,
+    dp: 1,
+    drawOne: "Test 230 students",
+    counts: "students in each score band",
+  },
+  {
+    id: "tshirts",
+    label: "T-shirts",
+    source: "Example 3C: T-shirt colours",
+    cells: ["White", "Red", "Blue"],
+    observed: [47, 32, 21],
+    expected: [50, 25, 25],
+    n: 100,
+    estimated: 0,
+    alpha: 0.05,
+    model: { kind: "fixed", probs: [0.5, 0.25, 0.25] },
+    maxD2: 15,
+    dp: 0,
+    drawOne: "Sell 100 T-shirts",
+    counts: "T-shirts sold in each colour",
   },
 ];

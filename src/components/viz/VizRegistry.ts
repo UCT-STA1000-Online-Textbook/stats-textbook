@@ -88,6 +88,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // of a paired t-test as a tail area, then check it by simulation.
   "paired-t": lazy(() => import("./inference/PairedT")),
 
+  // M5 — Goodness of fit (m5-goodness-of-fit). Sample from the model, compare
+  // observed with expected frequencies, and pile up D² under the χ²-curve.
+  "goodness-of-fit": lazy(() => import("./inference/GoodnessOfFit")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

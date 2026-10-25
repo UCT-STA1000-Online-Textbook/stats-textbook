@@ -57,3 +57,35 @@ export function sampleNormal(mu: number, sigma: number): number {
   const v = Math.random();
   return mu + sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
+
+/**
+ * One draw from the Poisson distribution with mean λ, by Knuth's method:
+ * multiply Uniform draws together until the product falls below e^(−λ); the
+ * number of draws needed, less one, is Poisson. Its cost grows with λ, which
+ * is fine for the small rates used here (a misprint or two per page).
+ */
+export function samplePoisson(lambda: number): number {
+  const limit = Math.exp(-lambda);
+  let k = 0;
+  let product = Math.random();
+  while (product > limit) {
+    k += 1;
+    product *= Math.random();
+  }
+  return k;
+}
+
+/**
+ * One draw from a list of categories with the given probabilities (which
+ * should add to 1), returned as the index of the category chosen. Used for
+ * the T-shirt colours in the goodness-of-fit viz.
+ */
+export function sampleCategory(probs: number[]): number {
+  let u = Math.random();
+  for (let i = 0; i < probs.length - 1; i++) {
+    u -= probs[i];
+    if (u < 0) return i;
+  }
+  // Whatever is left, including any rounding in the probabilities.
+  return probs.length - 1;
+}

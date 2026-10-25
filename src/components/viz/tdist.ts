@@ -13,9 +13,10 @@
 /**
  * Natural log of the gamma function, by the Lanczos approximation (g = 7,
  * 9 terms), accurate to about 15 significant figures for x > 0. Needed for
- * the constant in front of the t density and in the incomplete beta function.
+ * the constant in front of the t density and in the incomplete beta function,
+ * and shared with `chisq.ts` for the χ² density and incomplete gamma function.
  */
-function logGamma(x: number): number {
+export function logGamma(x: number): number {
   const c = [
     0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313,
     -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6,

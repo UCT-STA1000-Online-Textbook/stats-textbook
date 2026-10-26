@@ -24,8 +24,10 @@
  *
  * The experiment rows are virtualised (only the visible window is rendered),
  * so a few thousand rows stay smooth. When the panel is wide enough (Wide
- * view, or a large screen) the sheet sits beside the maze and chart; a CSS
- * container query on the panel's own width decides, not the Wide view flag.
+ * view, or a large screen) the sheet sits beside the maze and chart, and
+ * where the sheet has room the summary tables sit inside it, right of column
+ * J, as in Excel; a CSS container query on the panel's own width decides, not
+ * the Wide view flag (see LAYOUT).
  *
  * Default tier: SVG and HTML, no dependencies. The only animation is the
  * mice running, via `useReplayTween`, which stops drawing frames when done.
@@ -449,8 +451,15 @@ export default function MouseMazeSheet() {
 
   // --- The spreadsheet ---
 
-  // Enough rows to fill the tallest the box gets (about 700px side by side).
-  const viewRows = Math.ceil(700 / ROW_H) + OVERSCAN * 2;
+  /**
+   * Whether the summary tables may move inside the sheet (at the widths in
+   * LAYOUT). Not in formula view, where they would sit far off to the right.
+   */
+  const tablesInSheet = !showFormulas;
+
+  // Enough rows to fill the tallest the box gets: on a large panel it
+  // stretches to the height of the maze, chart and read-out beside it.
+  const viewRows = Math.ceil(1600 / ROW_H) + OVERSCAN * 2;
   // Clamped so a stale scroll position (the sheet just shrank) can never
   // start the window past the last row and render nothing.
   const start = Math.max(0, Math.min(Math.floor(scrollTop / ROW_H) - OVERSCAN, total - viewRows));
@@ -460,207 +469,236 @@ export default function MouseMazeSheet() {
   const headCell = "h-[20px] border-r border-b border-slate-300 bg-slate-100 text-[10px] text-slate-500 text-center font-normal";
 
   const sheet = (
-    <div className="rounded-md border border-slate-300 bg-white overflow-hidden flex flex-col min-h-0">
+    <div className={tablesInSheet ? `${SHEET_BOX} ${SHEET_BOX_IN_SHEET}` : SHEET_BOX}>
       <div
         ref={sheetRef}
         tabIndex={0}
         onKeyDown={onSheetKey}
         onScroll={(e) => setScrollTop(e.currentTarget.scrollTop)}
-        // A definite height in both layouts: an auto height would grow to fit
+        // A definite height in every layout: an auto height would grow to fit
         // every row, leaving nothing to scroll (and losing the position).
-        className="overflow-auto outline-none h-[260px] @min-[780px]:h-[540px]"
+        className={tablesInSheet ? `${SHEET_SCROLL} ${SHEET_SCROLL_IN_SHEET}` : SHEET_SCROLL}
         aria-label="Simulation spreadsheet, one row per experiment"
         role="region"
       >
-        <div className="min-w-max">
-          {/* Column letters, then row 1's headers, both pinned while scrolling */}
-          <div className="sticky top-0 z-10">
-            <div className="flex">
-              <div className={`${headCell} w-[34px] min-w-[34px]`} />
-              <div className={`${headCell} w-[60px] min-w-[60px]`}>A</div>
-              {MOUSE_COLS.map((c) => (
-                <div key={c} className={`${headCell} ${colW}`}>
-                  {c}
+        {/* The experiment columns A to J, then (when the sheet is wide enough)
+            the summary tables in columns L to R, where they sit in Excel. */}
+        <div className="flex min-w-full">
+          <div className="shrink-0">
+            {/* Column letters, then row 1's headers, both pinned while scrolling */}
+            <div className="sticky top-0 z-10">
+              <div className="flex">
+                <div className={`${headCell} w-[34px] min-w-[34px]`} />
+                <div className={`${headCell} w-[60px] min-w-[60px]`}>A</div>
+                {MOUSE_COLS.map((c) => (
+                  <div key={c} className={`${headCell} ${colW}`}>
+                    {c}
+                  </div>
+                ))}
+                <div className={`${headCell} ${showFormulas ? "w-[120px] min-w-[120px]" : "w-[40px] min-w-[40px]"}`}>J</div>
+              </div>
+              {/* Row 1 is taller with wrapped text, as Excel's "Wrap Text" does,
+                  so "Mouse #1" fits a column only wide enough for a 0 or 1. */}
+              <div className="flex bg-white">
+                <div className={`${headCell} w-[34px] min-w-[34px] !h-[32px] leading-[32px]`}>1</div>
+                <div className={`${HEAD1} w-[60px] min-w-[60px]`}>Experiment #</div>
+                {MOUSE_COLS.map((c, m) => (
+                  <div key={c} className={`${HEAD1} ${colW} text-center !text-[9px]`}>
+                    Mouse #{m + 1}
+                  </div>
+                ))}
+                <div className={`${HEAD1} ${showFormulas ? "w-[120px] min-w-[120px]" : "w-[40px] min-w-[40px]"} text-center`}>
+                  X
                 </div>
-              ))}
-              <div className={`${headCell} ${showFormulas ? "w-[120px] min-w-[120px]" : "w-[40px] min-w-[40px]"}`}>J</div>
-            </div>
-            {/* Row 1 is taller with wrapped text, as Excel's "Wrap Text" does,
-                so "Mouse #1" fits a column only wide enough for a 0 or 1. */}
-            <div className="flex bg-white">
-              <div className={`${headCell} w-[34px] min-w-[34px] !h-[32px] leading-[32px]`}>1</div>
-              <div className={`${HEAD1} w-[60px] min-w-[60px]`}>Experiment #</div>
-              {MOUSE_COLS.map((c, m) => (
-                <div key={c} className={`${HEAD1} ${colW} text-center !text-[9px]`}>
-                  Mouse #{m + 1}
-                </div>
-              ))}
-              <div className={`${HEAD1} ${showFormulas ? "w-[120px] min-w-[120px]" : "w-[40px] min-w-[40px]"} text-center`}>
-                X
               </div>
             </div>
-          </div>
 
-          {total === 0 && (
-            <p className="px-3 py-6 text-[12px] text-slate-500">
-              No experiments yet. Press <strong>Run once</strong> to fill down the first row.
-            </p>
-          )}
+            {total === 0 && (
+              <p className="px-3 py-6 text-[12px] text-slate-500">
+                No experiments yet. Press <strong>Run once</strong> to fill down the first row.
+              </p>
+            )}
 
-          {/* Spacer standing in for the rows above the rendered window */}
-          <div style={{ height: start * ROW_H }} />
-          {Array.from({ length: end - start }, (_, k) => {
-            const i = start + k;
-            const r = rows[i];
-            const x = countOut(r);
-            const sheetRow = i + 2;
-            const isSel = i === selRow;
-            const isValue = i < pasted;
-            const tinted = chosen.has(x);
-            return (
-              <div
-                key={i}
-                onClick={() => setSelRow(i)}
-                className="flex cursor-pointer hover:bg-slate-50"
-                style={isSel ? { outline: `2px solid ${EXCEL_GREEN}`, outlineOffset: "-2px" } : undefined}
-              >
-                <div className={`${headCell} w-[34px] min-w-[34px] leading-[22px] !h-[22px]`}>{sheetRow}</div>
-                <div className={`${cell} w-[60px] min-w-[60px] text-right text-slate-700`}>{i + 1}</div>
-                {MOUSE_COLS.map((c, m) => {
-                  const out = mouseOut(r, m);
-                  return (
-                    <div
-                      key={c}
-                      className={`${cell} ${colW} ${showFormulas && !isValue ? "text-left text-slate-600" : "text-right"} ${
-                        out ? "text-blue-700 font-semibold" : "text-slate-500"
-                      }`}
-                    >
-                      {showFormulas && !isValue ? MOUSE_FORMULA : out ? 1 : 0}
-                    </div>
-                  );
-                })}
+            {/* Spacer standing in for the rows above the rendered window */}
+            <div style={{ height: start * ROW_H }} />
+            {Array.from({ length: end - start }, (_, k) => {
+              const i = start + k;
+              const r = rows[i];
+              const x = countOut(r);
+              const sheetRow = i + 2;
+              const isSel = i === selRow;
+              const isValue = i < pasted;
+              const tinted = chosen.has(x);
+              return (
                 <div
-                  className={`${cell} ${showFormulas ? "w-[120px] min-w-[120px] text-left" : "w-[40px] min-w-[40px] text-right"} font-semibold ${
-                    tinted ? "bg-blue-50 text-blue-700" : "text-slate-800"
-                  }`}
+                  key={i}
+                  onClick={() => setSelRow(i)}
+                  className="flex cursor-pointer hover:bg-slate-50"
+                  style={isSel ? { outline: `2px solid ${EXCEL_GREEN}`, outlineOffset: "-2px" } : undefined}
                 >
-                  {showFormulas ? `=SUM(B${sheetRow}:I${sheetRow})` : x}
+                  <div className={`${headCell} w-[34px] min-w-[34px] leading-[22px] !h-[22px]`}>{sheetRow}</div>
+                  <div className={`${cell} w-[60px] min-w-[60px] text-right text-slate-700`}>{i + 1}</div>
+                  {MOUSE_COLS.map((c, m) => {
+                    const out = mouseOut(r, m);
+                    return (
+                      <div
+                        key={c}
+                        className={`${cell} ${colW} ${showFormulas && !isValue ? "text-left text-slate-600" : "text-right"} ${
+                          out ? "text-blue-700 font-semibold" : "text-slate-500"
+                        }`}
+                      >
+                        {showFormulas && !isValue ? MOUSE_FORMULA : out ? 1 : 0}
+                      </div>
+                    );
+                  })}
+                  <div
+                    className={`${cell} ${showFormulas ? "w-[120px] min-w-[120px] text-left" : "w-[40px] min-w-[40px] text-right"} font-semibold ${
+                      tinted ? "bg-blue-50 text-blue-700" : "text-slate-800"
+                    }`}
+                  >
+                    {showFormulas ? `=SUM(B${sheetRow}:I${sheetRow})` : x}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
-          <div style={{ height: Math.max(0, total - end) * ROW_H }} />
+              );
+            })}
+            <div style={{ height: Math.max(0, total - end) * ROW_H }} />
+          </div>
+          {/* Pinned to the top like frozen rows, so the summaries stay in view
+              while the experiment rows scroll past. They wrap from side by side
+              to one above the other when the free strip is narrow. */}
+          {tablesInSheet && <div className={IN_SHEET_SUMMARY}>{summaryTables(true)}</div>}
         </div>
       </div>
     </div>
   );
 
-  /** A small fixed block of cells, drawn the same way as the main sheet. */
-  const summary = (
-    <div className="flex flex-wrap items-start gap-3 overflow-x-auto max-w-full">
-      {/* Parameters and summaries: columns L and M */}
-      <table className="border-collapse text-[11px] tabular-nums">
-        <thead>
-          <tr>
-            <th className="border border-slate-300 bg-slate-100 px-1 text-[10px] font-normal text-slate-500" />
-            <th className="border border-slate-300 bg-slate-100 px-2 text-[10px] font-normal text-slate-500">L</th>
-            <th className="border border-slate-300 bg-slate-100 px-2 text-[10px] font-normal text-slate-500">M</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <SheetRowNum n={1} />
-            <td className="border border-slate-200 px-2 font-semibold">p</td>
-            <td className="border border-slate-200 p-0">
-              <input
-                value={pText}
-                onChange={(e) => editP(e.target.value)}
-                onBlur={() => setPText(String(p))}
-                inputMode="decimal"
-                aria-label="p, the probability a mouse gets out (cell M1)"
-                className="w-[84px] px-2 py-0.5 text-right font-semibold text-blue-700 outline-none focus:ring-2 focus:ring-inset focus:ring-[rgb(33,115,70)]"
-              />
-            </td>
-          </tr>
-          <tr>
-            <SheetRowNum n={2} />
-            <td className="border border-slate-200 px-2 font-semibold">Mean</td>
-            <td className="border border-slate-200 px-2 text-right">
-              {showFormulas ? `=AVERAGE(${range})` : mean === null ? "#DIV/0!" : mean.toFixed(4)}
-            </td>
-          </tr>
-          <tr>
-            <SheetRowNum n={3} />
-            <td className="border border-slate-200 px-2 font-semibold">Variance</td>
-            <td className="border border-slate-200 px-2 text-right">
-              {showFormulas ? `=VAR.S(${range})` : variance === null ? "#DIV/0!" : variance.toFixed(4)}
-            </td>
-          </tr>
-          <tr>
-            <SheetRowNum n={4} />
-            <td className="border border-slate-200 px-2 font-semibold">np</td>
-            {/* np is what the black dashed line on the chart marks */}
-            <td className="border border-slate-200 px-2 text-right" style={{ color: MEAN_C }}>
-              {showFormulas ? "=8*M1" : (MICE * p).toFixed(4)}
-            </td>
-          </tr>
-          <tr>
-            <SheetRowNum n={5} />
-            <td className="border border-slate-200 px-2 font-semibold">np(1 − p)</td>
-            <td className="border border-slate-200 px-2 text-right">
-              {showFormulas ? "=8*M1*(1-M1)" : (MICE * p * (1 - p)).toFixed(4)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  /**
+   * The parameter and summary cells (columns L and M) and the frequency table
+   * (columns O to R), drawn the same way as the main sheet. Rendered twice:
+   * inside the sheet to the right of column J when there is room for them
+   * there, as in the students' own Excel sheet (`inSheet`), and otherwise as
+   * a block below the sheet with its own row numbers. CSS shows one of them.
+   * Inside the sheet the rows take the sheet's row heights and drop the row
+   * numbers, so with the sheet scrolled to the top and the tables side by
+   * side they line up with rows 1 to 10 on the left.
+   */
+  function summaryTables(inSheet: boolean) {
+    const rowNum = (n: number) => (inSheet ? null : <SheetRowNum n={n} />);
+    const corner = inSheet ? null : <th className={COL_HEAD} />;
+    const colHead = inSheet ? `${COL_HEAD} h-[20px]` : COL_HEAD;
+    const head = inSheet ? "h-[32px]" : undefined;
+    const body = inSheet ? "h-[22px]" : undefined;
+    return (
+      <>
+        {/* Parameters and summaries: columns L and M */}
+        <table className="border-collapse bg-white text-[11px] tabular-nums">
+          <thead>
+            <tr>
+              {corner}
+              <th className={colHead}>L</th>
+              <th className={colHead}>M</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className={head}>
+              {rowNum(1)}
+              <td className="border border-slate-200 px-2 font-semibold">p</td>
+              <td className="border border-slate-200 p-0!">
+                <input
+                  value={pText}
+                  onChange={(e) => editP(e.target.value)}
+                  onBlur={() => setPText(String(p))}
+                  inputMode="decimal"
+                  aria-label="p, the probability a mouse gets out (cell M1)"
+                  className="w-[84px] px-2 py-0.5 text-right font-semibold text-blue-700 outline-none focus:ring-2 focus:ring-inset focus:ring-[rgb(33,115,70)]"
+                />
+              </td>
+            </tr>
+            <tr className={body}>
+              {rowNum(2)}
+              <td className="border border-slate-200 px-2 font-semibold">Mean</td>
+              <td className="border border-slate-200 px-2 text-right">
+                {showFormulas ? `=AVERAGE(${range})` : mean === null ? "#DIV/0!" : mean.toFixed(4)}
+              </td>
+            </tr>
+            <tr className={body}>
+              {rowNum(3)}
+              <td className="border border-slate-200 px-2 font-semibold">Variance</td>
+              <td className="border border-slate-200 px-2 text-right">
+                {showFormulas ? `=VAR.S(${range})` : variance === null ? "#DIV/0!" : variance.toFixed(4)}
+              </td>
+            </tr>
+            <tr className={body}>
+              {rowNum(4)}
+              <td className="border border-slate-200 px-2 font-semibold">np</td>
+              {/* np is what the black dashed line on the chart marks */}
+              <td className="border border-slate-200 px-2 text-right" style={{ color: MEAN_C }}>
+                {showFormulas ? "=8*M1" : (MICE * p).toFixed(4)}
+              </td>
+            </tr>
+            <tr className={body}>
+              {rowNum(5)}
+              <td className="border border-slate-200 px-2 font-semibold whitespace-nowrap">np(1 − p)</td>
+              <td className="border border-slate-200 px-2 text-right">
+                {showFormulas ? "=8*M1*(1-M1)" : (MICE * p * (1 - p)).toFixed(4)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      {/* Frequency table: columns O to R */}
-      <table className="border-collapse text-[11px] tabular-nums">
-        <thead>
-          <tr>
-            <th className="border border-slate-300 bg-slate-100 px-1 text-[10px] font-normal text-slate-500" />
-            {["O", "P", "Q", "R"].map((c) => (
-              <th key={c} className="border border-slate-300 bg-slate-100 px-2 text-[10px] font-normal text-slate-500">
-                {c}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <SheetRowNum n={1} />
-            <td className="border border-slate-200 px-2 font-semibold">x</td>
-            <td className="border border-slate-200 px-2 font-semibold">Count</td>
-            <td className="border border-slate-200 px-2 font-semibold">Rel. freq</td>
-            <td className="border border-slate-200 px-2 font-semibold">BINOM.DIST</td>
-          </tr>
-          {pmf.map((prob, x) => {
-            const r = x + 2;
-            const on = chosen.has(x);
-            return (
-              <tr
-                key={x}
-                onClick={() => toggleX(x)}
-                className={`cursor-pointer ${on ? "bg-blue-50" : "hover:bg-slate-50"}`}
-                style={shownX === x ? { outline: `2px solid ${EXCEL_GREEN}`, outlineOffset: "-2px" } : undefined}
-              >
-                <SheetRowNum n={r} />
-                <td className={`border border-slate-200 px-2 text-right ${on ? "text-blue-700 font-semibold" : ""}`}>{x}</td>
-                <td className="border border-slate-200 px-2 text-right">
-                  {showFormulas ? `=COUNTIF(${range},O${r})` : counts[x]}
-                </td>
-                <td className="border border-slate-200 px-2 text-right">
-                  {showFormulas ? `=P${r}/COUNT(${range})` : total === 0 ? "#DIV/0!" : (counts[x] / total).toFixed(4)}
-                </td>
-                <td className="border border-slate-200 px-2 text-right">
-                  {showFormulas ? `=BINOM.DIST(O${r},8,$M$1,FALSE)` : prob.toFixed(4)}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+        {/* Frequency table: columns O to R */}
+        <table className="border-collapse bg-white text-[11px] tabular-nums">
+          <thead>
+            <tr>
+              {corner}
+              {["O", "P", "Q", "R"].map((c) => (
+                <th key={c} className={colHead}>
+                  {c}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            <tr className={head}>
+              {rowNum(1)}
+              <td className="border border-slate-200 px-2 font-semibold">x</td>
+              <td className="border border-slate-200 px-2 font-semibold">Count</td>
+              <td className="border border-slate-200 px-2 font-semibold whitespace-nowrap">Rel. freq</td>
+              <td className="border border-slate-200 px-2 font-semibold">BINOM.DIST</td>
+            </tr>
+            {pmf.map((prob, x) => {
+              const r = x + 2;
+              const on = chosen.has(x);
+              return (
+                <tr
+                  key={x}
+                  onClick={() => toggleX(x)}
+                  className={`${body ?? ""} cursor-pointer ${on ? "bg-blue-50" : "hover:bg-slate-50"}`}
+                  style={shownX === x ? { outline: `2px solid ${EXCEL_GREEN}`, outlineOffset: "-2px" } : undefined}
+                >
+                  {rowNum(r)}
+                  <td className={`border border-slate-200 px-2 text-right ${on ? "text-blue-700 font-semibold" : ""}`}>{x}</td>
+                  <td className="border border-slate-200 px-2 text-right">
+                    {showFormulas ? `=COUNTIF(${range},O${r})` : counts[x]}
+                  </td>
+                  <td className="border border-slate-200 px-2 text-right">
+                    {showFormulas ? `=P${r}/COUNT(${range})` : total === 0 ? "#DIV/0!" : (counts[x] / total).toFixed(4)}
+                  </td>
+                  <td className="border border-slate-200 px-2 text-right">
+                    {showFormulas ? `=BINOM.DIST(O${r},8,$M$1,FALSE)` : prob.toFixed(4)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </>
+    );
+  }
+
+  /** The same tables below the sheet, for panels too narrow to fit them in it. */
+  const summary = (
+    <div className="flex flex-wrap items-start gap-3 overflow-x-auto max-w-full">{summaryTables(false)}</div>
   );
 
   // --- Read-out ---
@@ -776,18 +814,17 @@ export default function MouseMazeSheet() {
 
   // One tree for every width, so the sheet's scroll box is never rebuilt
   // (rebuilding it would lose its scroll position). The panel is a CSS
-  // container: below 780px wide everything stacks; from 780px (Wide view, or
-  // a large screen) the sheet and its tables move into a right-hand column.
-  // Laying out from the panel's own width, not the Wide view flag, means the
-  // two columns only appear when they actually fit.
+  // container and LAYOUT (below) decides from its width where the sheet and
+  // the summary tables go. Laying out from the panel's own width, not the
+  // Wide view flag, means each arrangement only appears when it actually fits.
   return (
     <div className="@container h-full overflow-y-auto overflow-x-hidden">
-      <div className={LAYOUT}>
+      <div className={tablesInSheet ? `${LAYOUT} ${LAYOUT_IN_SHEET}` : LAYOUT}>
         <div className="[grid-area:hint] min-w-0">{hint}</div>
         <div className="[grid-area:controls] min-w-0">{controls}</div>
         <div className="[grid-area:maze] min-w-0">{maze}</div>
-        <div className="[grid-area:sheet] min-w-0">{sheet}</div>
-        <div className="[grid-area:summary] min-w-0">{summary}</div>
+        <div className={tablesInSheet ? `${SHEET_AREA} ${SHEET_AREA_IN_SHEET}` : SHEET_AREA}>{sheet}</div>
+        <div className={tablesInSheet ? `${BELOW_SUMMARY} ${BELOW_SUMMARY_IN_SHEET}` : BELOW_SUMMARY}>{summary}</div>
         <div className="[grid-area:chart] min-w-0">{chart}</div>
         <div className="[grid-area:readout] min-w-0">{readout}</div>
       </div>
@@ -795,16 +832,64 @@ export default function MouseMazeSheet() {
   );
 }
 
-/**
- * Grid areas for the two layouts. Stacked: maze, then the sheet and its
- * tables, then the chart and read-out. Side by side: the 540px sheet runs
- * beside the hint, controls, maze and chart (about the same height, so no
- * gaps open on the left), and the summary tables sit beside the read-out.
+/*
+ * Layout, by the panel's own width (a CSS container query, so it follows
+ * Wide view and the screen size alike). Columns A to J need about 390px; the
+ * summary tables need about 210px more stacked, or 380px side by side. They
+ * go inside the sheet, right of column J as in Excel, whenever the sheet is
+ * wide enough for that, and below it otherwise:
+ *
+ *   under 640px    stacked; tables below the sheet (phones, narrow panels)
+ *   640 to 779px   stacked; the sheet is full width, so the tables go inside
+ *   780 to 1059px  maze and chart beside the sheet; too narrow for the
+ *                  tables inside, so they sit beside the read-out
+ *   1060px and up  beside the sheet, tables inside; the sheet stretches to
+ *                  the full height of the left column
+ *
+ * Each `*_IN_SHEET` string holds the classes that move the tables inside; the
+ * component applies them only while values are shown. Formulas widen columns
+ * B to J to over 1600px, which would push the tables a long sideways scroll
+ * out of view, so in formula view they always sit below the sheet. The two
+ * copies of the tables (`summaryTables`) switch at the same widths, so
+ * exactly one is ever visible.
  */
 const LAYOUT =
   "grid gap-3 grid-cols-1 [grid-template-areas:'hint'_'controls'_'maze'_'sheet'_'summary'_'chart'_'readout'] " +
   "@min-[780px]:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] @min-[780px]:gap-x-4 " +
-  "@min-[780px]:[grid-template-areas:'hint_sheet'_'controls_sheet'_'maze_sheet'_'chart_sheet'_'readout_summary'] @min-[780px]:items-start";
+  "@min-[780px]:[grid-template-areas:'hint_sheet'_'controls_sheet'_'maze_sheet'_'chart_sheet'_'readout_summary'] @min-[780px]:items-start " +
+  // A little more of the width to the sheet, so 1060px leaves room for the
+  // stacked tables beside column J.
+  "@min-[1060px]:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]";
+const LAYOUT_IN_SHEET =
+  "@min-[640px]:[grid-template-areas:'hint'_'controls'_'maze'_'sheet'_'chart'_'readout'] " +
+  "@min-[1060px]:[grid-template-areas:'hint_sheet'_'controls_sheet'_'maze_sheet'_'chart_sheet'_'readout_sheet']";
+
+/** Grid cell holding the sheet. With the tables inside, from 1060px it stretches down its five rows. */
+const SHEET_AREA = "[grid-area:sheet] min-w-0";
+const SHEET_AREA_IN_SHEET = "@min-[1060px]:relative @min-[1060px]:self-stretch @min-[1060px]:min-h-[540px]";
+/** The sheet's frame. With the tables inside, from 1060px it fills the stretched grid cell exactly. */
+const SHEET_BOX = "rounded-md border border-slate-300 bg-white overflow-hidden flex flex-col min-h-0";
+const SHEET_BOX_IN_SHEET = "@min-[1060px]:absolute @min-[1060px]:inset-0";
+/**
+ * The sheet's scroll box. With the tables inside it is taller from 640px,
+ * where they need about 400px stacked, and from 1060px it takes the frame's
+ * full height.
+ */
+const SHEET_SCROLL = "overflow-auto outline-none h-[260px] @min-[780px]:h-[540px]";
+const SHEET_SCROLL_IN_SHEET = "@min-[640px]:h-[420px] @min-[1060px]:h-full";
+/**
+ * The summary tables inside the sheet, right of column J. Their cells are
+ * padded a little less than below the sheet, so the stacked tables fit
+ * beside column J at 1060px without a sideways scroll.
+ */
+const IN_SHEET_SUMMARY =
+  "hidden @min-[640px]:@max-[780px]:flex @min-[1060px]:flex sticky top-0 self-start flex-1 " +
+  "flex-wrap content-start items-start gap-x-4 gap-y-3 pl-4 pr-2 bg-white [&_td]:px-1.5 [&_th]:px-1.5";
+/** The summary tables below the sheet, at the widths where they don't fit in it. */
+const BELOW_SUMMARY = "[grid-area:summary] min-w-0";
+const BELOW_SUMMARY_IN_SHEET = "@min-[640px]:@max-[780px]:hidden @min-[1060px]:hidden";
+/** A grey column-letter cell above the summary tables. */
+const COL_HEAD = "border border-slate-300 bg-slate-100 px-2 text-[10px] font-normal text-slate-500";
 
 /** Row 1 of the experiment sheet: bold, wrapped onto up to two lines. */
 const HEAD1 =

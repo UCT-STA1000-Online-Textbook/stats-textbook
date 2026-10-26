@@ -249,7 +249,7 @@ $$
 But $\sum O_i = \sum E_i = n$, the sample size. (Each summation is over the $k$ cells.) Therefore
 
 $$
-D^2 = \sum \frac{O_i^2}{E_i} - n.
+D^2 = \left( \sum \frac{O_i^2}{E_i} \right) - n.
 $$
 
 This is the best formula for calculating $D^2$.
@@ -301,7 +301,10 @@ For the purpose of demonstrating the calculations, we have worked with the $Z$ v
 Thus
 
 $$
-D^2 = \sum \frac{O_i^2}{E_i} - n = \frac{18^2}{22.7} + \frac{87^2}{86.8} + \frac{104^2}{92.7} + \frac{21^2}{27.8} - 230 = 234.01 - 230 = 4.01.
+\begin{aligned}
+D^2 &= \left( \sum \frac{O_i^2}{E_i} \right) - n = \left( \frac{18^2}{22.7} + \frac{87^2}{86.8} + \frac{104^2}{92.7} + \frac{21^2}{27.8} \right) - 230 \\
+&= 234.01 - 230 = 4.01.
+\end{aligned}
 $$
 
 6. Because $4.01 > 3.841$, we reject $H_0$ and conclude that the Normal distribution is not a good fit to this data.

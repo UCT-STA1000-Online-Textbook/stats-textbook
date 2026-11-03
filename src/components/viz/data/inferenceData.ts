@@ -7,7 +7,8 @@
  *   - `T_PRESETS` for `TDistribution` (WU5),
  *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6),
  *   - `PAIRED_PRESETS` for `PairedT` (WU7),
- *   - `GOF_PRESETS` for `GoodnessOfFit` (WU8).
+ *   - `GOF_PRESETS` for `GoodnessOfFit` (WU8),
+ *   - `ASSOCIATION_PRESETS` for `ContingencyTest` (WU9).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -782,5 +783,121 @@ export const GOF_PRESETS: GofPreset[] = [
     dp: 0,
     drawOne: "Sell 100 T-shirts",
     counts: "T-shirts sold in each colour",
+  },
+];
+
+/** A worked example the `ContingencyTest` viz can open at (Module 5, WU9). */
+export interface AssociationPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which worked example this is, shown in the read-out header. */
+  source: string;
+  /** What the rows classify, e.g. "Company size". */
+  rowTitle: string;
+  /** What the columns classify, e.g. "Performance". */
+  colTitle: string;
+  rows: string[];
+  cols: string[];
+  /** The example's observed frequencies, one array per row. */
+  observed: number[][];
+  alpha: number;
+  /**
+   * Right-hand end of the D² axis: far enough to show the 5% point and the
+   * example's own D² (which is clamped to the edge when it is further out).
+   */
+  maxD2: number;
+  /** What taking one sample is, in the example's words. */
+  drawOne: string;
+  /**
+   * One sentence on the nature of the association, read off the table as the
+   * text does. Shown while the panel is on the example's own data.
+   */
+  finding: string;
+}
+
+/**
+ * Worked examples for `ContingencyTest`, Module 5 WU9
+ * (`m5-categorical-association`). The panel works out the expected
+ * frequencies itself (column total × row total / grand total), so only the
+ * observed counts are stored; they reproduce the text's D² of 19.09 and 14.98.
+ */
+export const ASSOCIATION_PRESETS: AssociationPreset[] = [
+  {
+    id: "firms",
+    label: "Firms",
+    source: "Example 5A: company size and performance",
+    rowTitle: "Company size",
+    colTitle: "Performance (% price change)",
+    rows: ["Small", "Medium", "Large"],
+    cols: ["< 0%", "0–20%", "20–40%", "> 40%"],
+    observed: [
+      [66, 90, 28, 39],
+      [24, 33, 17, 11],
+      [55, 37, 10, 10],
+    ],
+    alpha: 0.05,
+    maxD2: 25,
+    drawOne: "Survey 420 firms",
+    finding:
+      "More small firms than expected are among the best performers, and more large firms among the worst: as firm size decreases, performance improves.",
+  },
+  {
+    id: "films",
+    label: "Films",
+    source: "Example 6B: film processing machines",
+    rowTitle: "Classification",
+    colTitle: "Processing machine",
+    rows: ["Satisfactory", "Unsatisfactory"],
+    cols: ["A", "B", "C"],
+    observed: [
+      [93, 24, 8],
+      [101, 6, 18],
+    ],
+    alpha: 0.05,
+    maxD2: 20,
+    drawOne: "Process 250 films",
+    finding:
+      "Machine B produced more satisfactory films than independence predicts and machine C more unsatisfactory ones: B is the one to choose.",
+  },
+  {
+    id: "rugby",
+    label: "Rugby",
+    source: "Example 7C: South African rugby scoring",
+    rowTitle: "Opponents",
+    colTitle: "Mode of scoring",
+    rows: ["British Isles", "New Zealand", "Australia", "France"],
+    cols: ["Tries", "Penalties", "Drops"],
+    observed: [
+      [70, 31, 6],
+      [44, 38, 11],
+      [79, 31, 7],
+      [43, 32, 3],
+    ],
+    alpha: 0.05,
+    maxD2: 25,
+    drawOne: "Score 395 times",
+    finding:
+      "Against New Zealand there were fewer tries and more penalties and drops than expected, and against France more penalties: the mode of scoring depends on the opponents.",
+  },
+  {
+    id: "investors",
+    label: "Investors",
+    source: "Example 8C: attitude to risk and investments",
+    rowTitle: "Type of investment",
+    colTitle: "Risk category",
+    rows: ["Fixed deposits", "Bonds", "Unit trusts", "Options, futures"],
+    cols: ["Averse", "Neutral", "Lover"],
+    observed: [
+      [79, 58, 49],
+      [10, 8, 9],
+      [12, 10, 19],
+      [10, 34, 42],
+    ],
+    alpha: 0.05,
+    maxD2: 35,
+    drawOne: "Survey 340 clients",
+    finding:
+      "Risk-averse clients favour fixed deposits and avoid options and futures, far more than independence predicts: investment type depends on attitude to risk.",
   },
 ];

@@ -92,6 +92,11 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // observed with expected frequencies, and pile up D² under the χ²-curve.
   "goodness-of-fit": lazy(() => import("./inference/GoodnessOfFit")),
 
+  // M5 — Association in contingency tables (m5-categorical-association). Read
+  // O against E cell by cell, then fill tables with the variables independent
+  // and pile up D² under the χ²-curve with (r − 1)(c − 1) degrees of freedom.
+  "contingency-test": lazy(() => import("./inference/ContingencyTest")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

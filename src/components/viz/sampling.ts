@@ -78,7 +78,8 @@ export function samplePoisson(lambda: number): number {
 /**
  * One draw from a list of categories with the given probabilities (which
  * should add to 1), returned as the index of the category chosen. Used for
- * the T-shirt colours in the goodness-of-fit viz.
+ * the T-shirt colours in the goodness-of-fit viz, and for the cell each item
+ * lands in when the contingency-table viz fills a table.
  */
 export function sampleCategory(probs: number[]): number {
   let u = Math.random();

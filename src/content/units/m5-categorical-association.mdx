@@ -5,10 +5,318 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 21
 moduleUnitNumber: 9
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "A contingency table has 4 rows and 3 columns. How many degrees of freedom does the Chi-squared distribution have for the test of association?"
+    options:
+      - "12"
+      - "7"
+      - "6"
+      - "11"
+    answer: 2
+    explanation: "For an r × c contingency table the degrees of freedom are (r − 1)(c − 1) = (4 − 1)(3 − 1) = 3 × 2 = 6."
+    vizHint: "contingency-test"
+    vizHintParams:
+      preset: "rugby"
+  - id: "q2"
+    type: "mcq"
+    question: "In a contingency table with a grand total of 200, a cell lies in a row whose total is 80 and a column whose total is 50. What is its expected frequency under the hypothesis of independence?"
+    options:
+      - "20"
+      - "40"
+      - "25"
+      - "0.4"
+    answer: 0
+    explanation: "Expected frequency = column total × row total / grand total = 50 × 80 / 200 = 20."
+    vizHint: "contingency-test"
+    vizHintParams:
+      preset: "firms"
+  - id: "q3"
+    type: "mcq"
+    question: "What is the null hypothesis in a test of association in a contingency table?"
+    options:
+      - "The two variables are associated."
+      - "The two variables are independent."
+      - "Every cell has the same expected frequency."
+      - "The row totals are all equal."
+    answer: 1
+    explanation: "We start by assuming that there is no relationship between the two variables, so H₀ says they are statistically independent. The expected frequencies are computed under that assumption."
+  - id: "q4"
+    type: "true-false"
+    question: "In a test of association, we reject H₀ only if D² is too large."
+    answer: true
+    explanation: "True. Tests of association for contingency tables are almost invariably one-sided: the larger the differences between the observed and expected frequencies, the less likely it is that the two variables are independent."
+  - id: "q5"
+    type: "mcq"
+    question: "A test of association in a 2 × 3 table gives D² = 14.98. Which Excel formula gives its p-value?"
+    options:
+      - "=CHISQ.DIST.RT(14.98, 6)"
+      - "=CHISQ.INV.RT(14.98, 2)"
+      - "=CHISQ.DIST.RT(14.98, 2)"
+      - "=CHISQ.INV.RT(0.05, 2)"
+    answer: 2
+    explanation: "The degrees of freedom are (2 − 1)(3 − 1) = 2, and CHISQ.DIST.RT gives the area to the right of D²: =CHISQ.DIST.RT(14.98, 2) = 0.0006. CHISQ.INV.RT goes the other way, from a tail probability to the critical value."
+    vizHint: "contingency-test"
+    vizHintParams:
+      preset: "films"
+  - id: "q6"
+    type: "mcq"
+    question: "In Example 6B, machine B processed 24 satisfactory films, against an expected 15. What does this suggest?"
+    options:
+      - "Machine B processed too few films for the test to be valid."
+      - "Machine B produces a smaller proportion of satisfactory films than the other machines."
+      - "Nothing: only the total D² can be interpreted."
+      - "Machine B produces a larger proportion of satisfactory films than it would if classification were independent of the machine."
+    answer: 3
+    explanation: "Once the test has shown an association, comparing observed with expected frequencies shows its nature. 24 is well above 15, so machine B tends to produce satisfactory films; machine C, with 18 unsatisfactory against an expected 13, tends to produce unsatisfactory ones."
+    vizHint: "contingency-test"
+    vizHintParams:
+      preset: "films"
 prevUnit: "m5-goodness-of-fit"
 nextUnit: "m5-regression"
 ---
 
-Content coming soon.
+## Tests of association in contingency tables
+
+Another use for the Chi-squared distribution is in contingency tables. A contingency table is simply a table (or matrix) of counts. Each entry in the table is called a cell. Each member of a sample is classified according to two variables, e.g. size of bird and nest size, and each cell in the table represents the count of the number of members of the sample who have a particular combination of the two variables, e.g. small birds that make large nests. The Chi-squared distribution is the sampling distribution of the test statistic which tests whether there is an association (or relationship) between the two variables: e.g. Is there a tendency for the size of a bird to be related to the size of nest they build? Or are bird size and nest size independent?
+
+> **Keywords:** <KeywordChip vizId="contingency-test" preset="firms">contingency table</KeywordChip>, <KeywordChip vizId="contingency-test" preset="firms">cell</KeywordChip>, <KeywordChip vizId="contingency-test" preset="films">tests of association</KeywordChip>, <KeywordChip vizId="contingency-test" preset="firms">expected frequencies</KeywordChip>, <KeywordChip vizId="contingency-test" preset="rugby">degrees of freedom (r − 1)(c − 1)</KeywordChip>.
+
+<Example title="Example 5A: company size and performance">
+A financial analyst is interested in determining whether the size of a company (as measured by its market capitalization) has any association with its performance (as categorized by the annual percentage price change of a share in the company on the stock market). The table below gives the number of companies falling into each category in a sample of 420 firms.
+
+| Company size | < 0% | 0–20% | 20–40% | > 40% | Total |
+| --- | --- | --- | --- | --- | --- |
+| Small | 66 | 90 | 28 | 39 | 223 |
+| Medium | 24 | 33 | 17 | 11 | 85 |
+| Large | 55 | 37 | 10 | 10 | 112 |
+| Total | 145 | 160 | 55 | 60 | 420 |
+
+The columns give performance (% price change). There were thus 66 companies whose performances were negative (column < 0%) and which were small, etc. This rectangular collection of frequencies of occurrence is a typical example of a contingency table. This is a $3 \times 4$ contingency table. It is customary to give the number of rows first, then the number of columns. In general we talk of an $r \times c$ contingency table with $r$ rows and $c$ columns.
+
+The financial analyst wants to know if there is a significant relationship (at the 5% level) between the performance and the size of the companies. We use our standard approach to hypothesis testing.
+
+<Solution>
+1. We start by assuming that there is no relationship between the two variables; thus we have $H_0$: the performance and the size of a company are statistically independent.
+
+   You will be wise at this point to reread the section on independence in the unit on [conditional probability and independence](/unit/m1-conditional-probability), where the concept of independence was developed!
+
+2. The alternative hypothesis, which the financial analyst is trying to establish, is $H_1$: the performance and the size of a company are associated.
+
+3. Significance level: 5%.
+
+4. and 5. Under the assumption of independence made in the null hypothesis, we calculate theoretical expected frequencies for each cell. If the theoretical frequencies (which assume independence) and the observed frequencies are "too different", we reject the null hypothesis of independence, and conclude that there is a dependence or a relationship or association between the two variables. A careful examination of the table then helps us to determine the nature of the association.
+
+From the table above, we see that 145 out of the 420 companies had negative performance figures. Thus, using the relative frequencies in the sample, we estimate the probability that a randomly selected company will have negative performance figures as $\Pr[\text{negative performance}] = 145/420 = 0.345$.
+
+Similarly, 223 out of the 420 companies were classified as small. We estimate the probability that a randomly selected company will be small as $\Pr[\text{small}] = 223/420 = 0.531$.
+
+If, as $H_0$ tells us, the performance of a company is independent of its size, then the probability that a randomly selected company will have both negative performance figures and be small will be the product of the individual probabilities, i.e.
+
+$$
+\begin{aligned}
+\Pr[\text{negative performance and small}] &= \Pr[\text{negative performance}] \times \Pr[\text{small}] \\
+&= \frac{145}{420} \times \frac{223}{420} = 0.345 \times 0.531 \\
+&= 0.1833.
+\end{aligned}
+$$
+
+Thus, if $H_0$ is true, the proportion of companies that has negative performance and is small will be 0.1833, or, expressed as a percentage, 18.33%. We have 420 companies in our sample, so we expect $0.1833 \times 420 = 77.0$ to have negative performance and be small. This expected frequency can be computed more directly as
+
+$$
+\frac{145}{420} \times \frac{223}{420} \times 420 = \frac{145 \times 223}{420} = 77.0.
+$$
+
+Thus the calculation of the expected frequencies for this (and every other) cell of the table reduces to a very simple formula:
+
+$$
+\text{expected frequency} = \frac{\text{column total} \times \text{row total}}{\text{grand total}}.
+$$
+
+The full set of expected frequencies is given in brackets after the observed values in the table below:
+
+| Firm size | < 0% | 0–20% | 20–40% | > 40% | Total |
+| --- | --- | --- | --- | --- | --- |
+| Small | 66 (77.0) | 90 (85.0) | 28 (29.2) | 39 (31.9) | 223 |
+| Medium | 24 (29.3) | 33 (32.4) | 17 (11.1) | 11 (12.1) | 85 |
+| Large | 55 (38.7) | 37 (42.7) | 10 (14.7) | 10 (16.0) | 112 |
+| Total | 145 | 160 | 55 | 60 | 420 |
+
+In all the above arithmetic, don't lose sight of the fact that the expected frequencies have been computed assuming that the two variables are independent. Thus, the larger the differences between the observed frequencies in the table and the expected frequencies, the less likely it is that the two variables are independent. The comparison of observed and expected frequencies makes use of the same statistic as was used for goodness of fit tests:
+
+$$
+D^2 = \left( \sum \frac{O_i^2}{E_i} \right) - n,
+$$
+
+where we sum over all the cells in the contingency table, and $n$ is the total number of observations.
+
+Once again we have a degrees of freedom problem. It can be shown that the following rule gives us the degrees of freedom we require:
+
+<Theorem name="Degrees of freedom for tests of association">
+For an $r \times c$ contingency table, the appropriate Chi-squared distribution has degrees of freedom $= (r - 1)(c - 1)$.
+</Theorem>
+
+Here we have a $3 \times 4$ contingency table, hence the degrees of freedom for Chi-squared is $(3 - 1)(4 - 1) = 6$.
+
+Using the 5% significance level, we use Excel to find the 5% point of $\chi^2_6$: `=CHISQ.INV.RT(0.05, 6)` $= 12.592$. We will reject $H_0$ if $D^2 > 12.592$. Notice that tests of association for contingency tables are almost invariably one-sided.
+
+We compute $D^2$ using the short-cut formula:
+
+$$
+D^2 = \left( \frac{66^2}{77.0} + \frac{90^2}{85.0} + \cdots + \frac{10^2}{14.7} + \frac{10^2}{16.0} \right) - 420 = 19.09.
+$$
+
+6. Because `=CHISQ.INV.RT(0.05, 6)` $= 12.592$ and $19.09 > 12.592$, we reject $H_0$. Thus our financial analyst has demonstrated that there is a significant relationship between the performance of a firm and its size. Examination of the table of observed and expected frequencies shows that expected values exceed observed values in the top left and bottom right corners of the contingency table, and vice versa in the top right and bottom left corners. This indicates an inverse relationship between these two variables, that is, as the size of a firm decreases, the performance improves.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="contingency-test"
+  preset="firms"
+  label="Survey 420 firms where size and performance are independent"
+  description="Click any cell to see its expected count worked out. Then fill tables of 420 firms with size and performance truly independent: D² piles up under χ² with 6 degrees of freedom, and passes 12.592 in only about 5% of runs. The analyst's 19.09 is far out in the tail."
+/>
+
+<Example title="Example 6B: film processing machines">
+A photographic company wishes to compare its present automatic film processing machines with two other machines that have recently come onto the market. It processes 194 films on the present machine (called A), and hires the other machines (B and C) for short periods and processes smaller numbers of films on them. Using very stringent criteria, the manager classifies each film as being satisfactorily processed or not. The following contingency table is obtained:
+
+| | A | B | C |
+| --- | --- | --- | --- |
+| Satisfactory | 93 | 24 | 8 |
+| Unsatisfactory | 101 | 6 | 18 |
+
+Test whether the classification of the film as satisfactory or not is independent of the machine the film was processed on.
+
+<Solution>
+No significance level is given, and we use the modified hypothesis testing procedure.
+
+1. $H_0$: The classification is independent of the machine.
+
+2. $H_1$: The classification is dependent on the machine.
+
+3. We compute the expected values, given in brackets in the table below. For example, the expected number of satisfactory films from machine A is $(194 \times 125)/250 = 97$.
+
+| | A | B | C | Total |
+| --- | --- | --- | --- | --- |
+| Satisfactory | 93 (97) | 24 (15) | 8 (13) | 125 |
+| Unsatisfactory | 101 (97) | 6 (15) | 18 (13) | 125 |
+| Total | 194 | 30 | 26 | 250 |
+
+Next we compute $D^2$:
+
+$$
+D^2 = \left( \frac{93^2}{97} + \frac{24^2}{15} + \cdots + \frac{18^2}{13} \right) - 250 = 14.98.
+$$
+
+4. The degrees of freedom are $(3 - 1) \times (2 - 1) = 2$. We use Excel to find the p-value: `=CHISQ.DIST.RT(14.98, 2)` $= 0.0006$. So the test statistic, 14.98, is significant even at the 0.1% level ($P < 0.001$).
+
+5. Our conclusion is that the classification of the film is significantly dependent on the machine used ($\chi^2_2 = 14.98$, $P < 0.001$). (Note that we report the value of the test statistic as a $\chi^2$ value.) Examination of the contingency table shows that machine B tends to produce a large proportion of photographs classified as satisfactory, while machine C tends to produce a large proportion of unsatisfactory photographs. Processing machine B is the recommended choice.
+
+<TryThis
+  vizId="contingency-test"
+  preset="films"
+  label="Check it in the panel"
+  description="With 2 rows and 3 columns there are only 2 degrees of freedom. Fill tables of 250 films with the classification independent of the machine: a D² as big as 14.98 almost never turns up."
+/>
+</Solution>
+</Example>
+
+<Example title="Example 7C: South African rugby scoring">
+An analysis of the tries, penalty goals and dropped goals scored by South Africa in rugby tests against the British Isles, New Zealand, Australia and France gave the following contingency table:
+
+| | Tries | Penalties | Drops |
+| --- | --- | --- | --- |
+| British Isles | 70 | 31 | 6 |
+| New Zealand | 44 | 38 | 11 |
+| Australia | 79 | 31 | 7 |
+| France | 43 | 32 | 3 |
+
+The number of penalties scored against New Zealand and France seems unexpectedly high, and this leads you to want to test the hypothesis that the mode of scoring is dependent on the opponents.
+
+<Solution>
+1. $H_0$: The mode of scoring is independent of the opponents.
+
+2. $H_1$: The mode of scoring is dependent on the opponents.
+
+3. Significance level: 5%.
+
+4. This is a $4 \times 3$ contingency table, so the degrees of freedom are $(4 - 1)(3 - 1) = 6$. We reject $H_0$ if $D^2$ exceeds `=CHISQ.INV.RT(0.05, 6)` $= 12.592$.
+
+5. There were 395 scores in all. The expected frequencies, column total × row total / grand total, are given in brackets:
+
+| | Tries | Penalties | Drops | Total |
+| --- | --- | --- | --- | --- |
+| British Isles | 70 (63.93) | 31 (35.76) | 6 (7.31) | 107 |
+| New Zealand | 44 (55.56) | 38 (31.08) | 11 (6.36) | 93 |
+| Australia | 79 (69.90) | 31 (39.10) | 7 (8.00) | 117 |
+| France | 43 (46.60) | 32 (26.07) | 3 (5.33) | 78 |
+| Total | 236 | 132 | 27 | 395 |
+
+All the expected frequencies exceed 5. Then
+
+$$
+D^2 = \left( \frac{70^2}{63.93} + \frac{31^2}{35.76} + \cdots + \frac{32^2}{26.07} + \frac{3^2}{5.33} \right) - 395 = 14.42.
+$$
+
+6. Because $14.42 > 12.592$, we reject $H_0$: the mode of scoring is dependent on the opponents ($\chi^2_6 = 14.42$, `=CHISQ.DIST.RT(14.42, 6)` $= 0.025$). Against New Zealand, South Africa scored fewer tries and more penalties and dropped goals than expected; against France, more penalties than expected.
+
+<TryThis
+  vizId="contingency-test"
+  preset="rugby"
+  label="Check it in the panel"
+  description="Fill tables of 395 scores with the mode of scoring independent of the opponents. About 2.5% of runs reach a D² of 14.42, so the result is significant at 5% but not at 1%."
+/>
+</Solution>
+</Example>
+
+<Example title="Example 8C: attitude to risk and investments">
+An investment broking company is keen to establish whether there is an association between their clients' perception of their attitude towards risk and the type of investments they prefer. They obtained 340 responses to a questionnaire designed to capture this information. A summary of the number of clients falling into the various categories is shown below:
+
+| Type of investment | Risk averse | Risk neutral | Risk lover |
+| --- | --- | --- | --- |
+| Fixed deposits | 79 | 58 | 49 |
+| Bonds | 10 | 8 | 9 |
+| Unit trusts | 12 | 10 | 19 |
+| Options and futures | 10 | 34 | 42 |
+
+Test the hypothesis that the type of investment is dependent on the risk perception.
+
+<Solution>
+1. $H_0$: The type of investment is independent of the risk perception.
+
+2. $H_1$: The type of investment is dependent on the risk perception.
+
+3. Significance level: 5%.
+
+4. This is a $4 \times 3$ contingency table, so the degrees of freedom are $(4 - 1)(3 - 1) = 6$. We reject $H_0$ if $D^2$ exceeds `=CHISQ.INV.RT(0.05, 6)` $= 12.592$.
+
+5. The expected frequencies, column total × row total / grand total, are given in brackets:
+
+| Type of investment | Risk averse | Risk neutral | Risk lover | Total |
+| --- | --- | --- | --- | --- |
+| Fixed deposits | 79 (60.72) | 58 (60.18) | 49 (65.10) | 186 |
+| Bonds | 10 (8.81) | 8 (8.74) | 9 (9.45) | 27 |
+| Unit trusts | 12 (13.39) | 10 (13.26) | 19 (14.35) | 41 |
+| Options and futures | 10 (28.08) | 34 (27.82) | 42 (30.10) | 86 |
+| Total | 111 | 110 | 119 | 340 |
+
+All the expected frequencies exceed 5. Then
+
+$$
+D^2 = \left( \frac{79^2}{60.72} + \frac{58^2}{60.18} + \cdots + \frac{34^2}{27.82} + \frac{42^2}{30.10} \right) - 340 = 29.97.
+$$
+
+6. Because $29.97 > 12.592$, we reject $H_0$: the type of investment is dependent on the risk perception ($\chi^2_6 = 29.97$, $P < 0.001$). Risk-averse clients prefer fixed deposits and avoid options and futures, while risk lovers prefer options and futures.
+
+<TryThis
+  vizId="contingency-test"
+  preset="investors"
+  label="Check it in the panel"
+  description="The darkest cells are in the fixed deposits and options rows: risk-averse clients hold far more fixed deposits, and far fewer options and futures, than independence predicts, and risk lovers the reverse. Fill tables with the two independent and a D² near 29.97 never appears."
+/>
+</Solution>
+</Example>
+
+<Quiz />

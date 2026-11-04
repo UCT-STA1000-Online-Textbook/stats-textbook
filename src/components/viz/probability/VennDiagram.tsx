@@ -13,7 +13,7 @@
  * A scatter of fixed sample-space "elements" shows which dots fall inside the
  * highlighted set, with a running count.
  *
- * Used in `m1-introducing-probability`; the `mode` param is the contract for
+ * Used in `m1-set-theory`; the `mode` param is the contract for
  * the set-theory `<KeywordChip>` cross-links (see
  * `memory/project_wu1_review_comments.md`).
  */

@@ -16,8 +16,8 @@ export const MODULES = [
 ] as const;
 
 export const ALL_UNITS: UnitMeta[] = [
-  { slug: "m1-introducing-probability",   title: "Introducing Probability",                  moduleId: "m1", moduleTitle: "Probability",               unitNumber: 1,  moduleUnitNumber: 1 },
-  { slug: "m1-set-theory",                title: "Set Theory, Axioms & Theorems",            moduleId: "m1", moduleTitle: "Probability",               unitNumber: 2,  moduleUnitNumber: 2 },
+  { slug: "m1-set-theory",                title: "Set Theory",                               moduleId: "m1", moduleTitle: "Probability",               unitNumber: 1,  moduleUnitNumber: 1 },
+  { slug: "m1-introducing-probability",   title: "Introducing Probability",                  moduleId: "m1", moduleTitle: "Probability",               unitNumber: 2,  moduleUnitNumber: 2 },
   { slug: "m1-permutations-combinations", title: "Permutations & Combinations",              moduleId: "m1", moduleTitle: "Probability",               unitNumber: 3,  moduleUnitNumber: 3 },
   { slug: "m1-conditional-probability",   title: "Conditional Probability & Independence",   moduleId: "m1", moduleTitle: "Probability",               unitNumber: 4,  moduleUnitNumber: 4 },
   { slug: "m2-graphical-summaries",       title: "Graphical Summaries",                      moduleId: "m2", moduleTitle: "Exploring Data",            unitNumber: 5,  moduleUnitNumber: 1 },

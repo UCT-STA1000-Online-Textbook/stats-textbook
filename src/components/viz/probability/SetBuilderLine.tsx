@@ -11,7 +11,7 @@
  * Solid endpoint = closed (≤ / ≥ / value included);
  * hollow endpoint = open (< / > / value excluded).
  *
- * Mirrors Examples 6A and 7A from `m1-introducing-probability`. The `mode`
+ * Mirrors Examples 6A and 7A from `m1-set-theory`. The `mode`
  * param selects which row the result shows on first mount.
  */
 

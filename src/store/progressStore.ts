@@ -104,6 +104,29 @@ export const useProgressStore = create<ProgressState>()(
       // `ThreePanelShell`, after hydration has completed) restores the saved
       // progress — an ordinary post-mount update, not a hydration error.
       skipHydration: true,
+      // Version 1: the first two Module 1 units swapped slugs, so the set
+      // theory unit is now `m1-set-theory` and the probability unit is
+      // `m1-introducing-probability`. Saved progress from before the swap is
+      // filed under the old slugs, so swap those two records once to keep each
+      // student's quiz results with the unit they actually took.
+      version: 1,
+      migrate: (persisted, version) => {
+        const state = persisted as Pick<ProgressState, "units">;
+        if (version < 1 && state?.units) {
+          const oldUnit1 = state.units["m1-introducing-probability"];
+          const oldUnit2 = state.units["m1-set-theory"];
+          delete state.units["m1-introducing-probability"];
+          delete state.units["m1-set-theory"];
+          if (oldUnit1) state.units["m1-set-theory"] = { ...oldUnit1, slug: "m1-set-theory" };
+          if (oldUnit2) {
+            state.units["m1-introducing-probability"] = {
+              ...oldUnit2,
+              slug: "m1-introducing-probability",
+            };
+          }
+        }
+        return state as ProgressState;
+      },
     }
   )
 );

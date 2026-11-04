@@ -493,12 +493,12 @@ export const POISSON_PRESETS: PoissonPreset[] = [
   },
   {
     id: "beercans",
-    label: "Beercans",
+    label: "Beer cans",
     source: "Example 9C",
     lambda: 3.2,
     unit: "km",
     span: "km of road",
-    event: "beercans",
+    event: "beer cans",
     // Pr[X ≤ 2] = 0.3799, the "40% or fewer" figure in part (c).
     select: [0, 2],
   },

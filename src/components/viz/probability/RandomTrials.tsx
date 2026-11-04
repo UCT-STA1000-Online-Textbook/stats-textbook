@@ -422,6 +422,26 @@ export default function RandomTrials({ params }: { params: VizParams }) {
         objBody.velocity.lengthSquared() +
         objBody.angularVelocity.lengthSquared();
 
+      // The coin's physics body is a thin box, which can come to rest
+      // standing on one of its long sides. It would then never sit low enough
+      // to count as landed, and the loop would run forever. A real coin
+      // almost never stays on its edge, so tip it over instead: spin it about
+      // the horizontal axis lying in the coin's plane, in a random direction
+      // so heads and tails stay equally likely. The height and upright checks
+      // keep this from firing at the still top of a small bounce in mid-air.
+      if (isCoin && isRolling && motion < 0.08) {
+        objBody.quaternion.vmult(faceAxes[0].v, upTmp); // coin face normal, in world space
+        const upright = Math.abs(upTmp.y) < 0.2;
+        const onEdge = Math.abs(objBody.position.y - COIN_HALF) < 0.15;
+        if (upright && onEdge) {
+          const tipAxis = upTmp.cross(worldUp);
+          tipAxis.normalize();
+          const direction = Math.random() < 0.5 ? -1 : 1;
+          objBody.wakeUp();
+          objBody.angularVelocity.copy(tipAxis.scale(3 * direction));
+        }
+      }
+
       // The object has come to rest: tally the result of a manual throw
       // exactly once, then let the loop wind down.
       if (isRolling && motion < 0.08 && objBody.position.y < restY + 0.4) {

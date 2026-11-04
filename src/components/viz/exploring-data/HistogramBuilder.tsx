@@ -4,7 +4,7 @@
  * Backs Examples 3A (GMAT scores), 4B (share risk) and the 5C/6C practice
  * datasets from `m2-graphical-summaries`. Students drag a class-width slider
  * and watch the histogram, the class-interval table, and the shape rebuild
- * live. The two width guidelines from the notes — Sturge and GENSTAT — are
+ * live. The two width guidelines from the notes — Sturges and GENSTAT — are
  * shown as one-click chips so students can compare "too spikey" against "too
  * blurred", and an optional overlay marks the mean and median to make skewness
  * concrete (mean pulled toward the long tail).
@@ -90,7 +90,7 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
     const range = max - min;
 
     // Width guidelines from the notes.
-    const sturge = range / (1 + 1.44 * Math.log(n));
+    const sturges = range / (1 + 1.44 * Math.log(n));
     const genstat = range / Math.sqrt(n);
 
     // Lower boundary aligned to the chosen width (start ≤ min).
@@ -106,9 +106,9 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
     const mean = values.reduce((s, v) => s + v, 0) / n;
     const med = median(values);
 
-    return { min, max, sturge, genstat, start, nBins, freqs, maxFreq, mean, med };
+    return { min, max, sturges, genstat, start, nBins, freqs, maxFreq, mean, med };
   }, [values, n, width]);
-  const { min, max, sturge, genstat, start, nBins, freqs, maxFreq, mean, med } = stats;
+  const { min, max, sturges, genstat, start, nBins, freqs, maxFreq, mean, med } = stats;
 
   const progress = useReplayTween([datasetId, width]);
 
@@ -159,10 +159,10 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
             Suggested:
           </span>
           <button
-            onClick={() => setWidth(snap(sturge, dataset.width.min, dataset.width.max, dataset.width.step))}
+            onClick={() => setWidth(snap(sturges, dataset.width.min, dataset.width.max, dataset.width.step))}
             className="px-2 py-0.5 rounded-md text-[11px] border border-[color:var(--color-line)] bg-white hover:border-blue-400"
           >
-            Sturge ≈ {sturge.toFixed(1)}
+            Sturges ≈ {sturges.toFixed(1)}
           </button>
           <button
             onClick={() => setWidth(snap(genstat, dataset.width.min, dataset.width.max, dataset.width.step))}
@@ -254,7 +254,7 @@ export default function HistogramBuilder({ params }: { params: VizParams }) {
             steps={[
               "Pick a dataset along the top.",
               "Drag the slider to change the class-interval width L.",
-              "Tap a 'Suggested' chip to use the Sturge or GENSTAT guideline.",
+              "Tap a 'Suggested' chip to use the Sturges or GENSTAT guideline.",
               "Tick 'Mean & median' to see how a long tail pulls the mean toward it.",
             ]}
           />

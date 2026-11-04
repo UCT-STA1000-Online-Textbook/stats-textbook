@@ -3,544 +3,430 @@ slug: "m1-introducing-probability"
 title: "Introducing Probability"
 moduleId: "m1"
 moduleTitle: "Probability"
-unitNumber: 1
-moduleUnitNumber: 1
+unitNumber: 2
+moduleUnitNumber: 2
 status: "draft"
 quiz:
   - id: "q1"
     type: "mcq"
-    question: "What is L ∩ M where L = {a, b, c} and M = {b, c, d}?"
+    question: "Kolmogorov's 3rd axiom applies when A ∩ B = ∅. Which formula does it give?"
     options:
-      - "{a, b, c, d}"
-      - "{b, c}"
-      - "{a, d}"
-      - "∅ (empty set)"
+      - "Pr(A ∪ B) = Pr(A) × Pr(B)"
+      - "Pr(A ∪ B) = Pr(A) + Pr(B)"
+      - "Pr(A ∩ B) = Pr(A) + Pr(B)"
+      - "Pr(A) = 1 − Pr(B)"
     answer: 1
-    explanation: "The intersection contains elements belonging to both sets. L and M both contain b and c, so L ∩ M = {b, c}. Open the Venn explorer and select 'A ∩ B' to see this lens-shaped region highlighted."
-    vizHint: "venn-diagram"
-    vizHintParams:
-      mode: "intersection"
+    explanation: "Axiom 3 states: if A and B are mutually exclusive (A ∩ B = ∅), then Pr(A ∪ B) = Pr(A) + Pr(B). Multiplication arises in independence (a later topic), and the other options have no basis in the axioms."
   - id: "q2"
     type: "true-false"
-    question: "If G ⊂ H and H ⊂ G, we can conclude that G = H."
-    answer: true
-    explanation: "True. G ⊂ H means every element of G is in H; H ⊂ G means every element of H is in G. Together the two sets must have exactly the same members, so G = H. The notes draw the analogy: x ≤ 2 and x ≥ 2 together force x = 2."
+    question: "As the number of trials n increases, the relative frequency r/n always equals the true probability exactly."
+    answer: false
+    explanation: "False. The relative frequency only tends toward the true probability as a limit: any finite run will almost certainly show some deviation. Open 'Run trials yourself' and hit Simulate 100× a few times: each bar drifts toward the dashed theoretical line without ever locking onto it permanently."
+    vizHint: "random-trials"
   - id: "q3"
     type: "mcq"
-    question: "P = {x | 0 ≤ x ≤ 10} and Q = {x | 5 < x < 20}. Which correctly describes P ∩ Q?"
+    question: "Pr(A) = 0.5, Pr(B) = 0.6, Pr(A ∩ B) = 0.3. Using the Addition Rule (Theorem 3), what is Pr(A ∪ B)?"
     options:
-      - "{x | 5 ≤ x ≤ 10}: both endpoints included"
-      - "{x | 5 < x ≤ 10}: open at 5, closed at 10"
-      - "{x | 0 ≤ x < 20}: full span of both sets"
-      - "{x | 5 < x < 20}: just the range of Q"
+      - "1.1"
+      - "0.8"
+      - "0.3"
+      - "0.5"
     answer: 1
-    explanation: "An element must satisfy both P and Q. P requires x ≥ 0 and x ≤ 10; Q requires x > 5 and x < 20. The binding constraints are x > 5 (Q excludes 5) and x ≤ 10 (P closes at 10). Click 'Plot P, Q and P ∩ Q' to see the solid and hollow endpoints on the number line."
-    vizHint: "set-builder-line"
+    explanation: "Theorem 3: Pr(A ∪ B) = Pr(A) + Pr(B) − Pr(A ∩ B) = 0.5 + 0.6 − 0.3 = 0.8. Open the probability Venn diagram and drag the sliders to these exact values: the Pr(A ∪ B) box should read 0.80."
+    vizHint: "probability-venn"
     vizHintParams:
-      mode: "intersection"
+      pA: 0.5
+      pB: 0.6
+      pAB: 0.3
   - id: "q4"
     type: "mcq"
-    question: "Given sample space S and any set A ⊂ S, which statement is always true?"
+    question: "An elementary event in a sample space S is defined as an event that contains..."
     options:
-      - "A ∩ Ā = S"
-      - "A ∪ Ā = S"
-      - "A ∪ Ā = ∅"
-      - "A ∩ Ā = A"
+      - "All possible outcomes of the experiment"
+      - "Exactly one outcome"
+      - "Two or more outcomes"
+      - "No outcomes (it is the impossible event)"
     answer: 1
-    explanation: "The complement Ā collects all elements of S not in A, so together A and Ā account for every element of S with no overlap: their union is exactly S. Switch to the Ā mode in the Venn explorer: A and its complement tile the entire rectangle with no gaps."
+    explanation: "An elementary event has exactly one member. For a die with S = {1,2,3,4,5,6}, the set {3} is an elementary event. The set {1,3,5} has three members so it is not elementary, and ∅ is the impossible event, not an elementary event."
   - id: "q5"
     type: "mcq"
-    question: "De Morgan's law: the complement of A ∪ B equals which of the following?"
+    question: "Theorem 1: Pr(Ā) = 1 − Pr(A). If Pr(A) = 0.65, what is Pr(Ā)?"
     options:
-      - "A ∩ B"
-      - "Ā ∩ B̄"
-      - "Ā ∪ B̄"
-      - "A ∩ B̄"
+      - "0.65"
+      - "0.35"
+      - "1.65"
+      - "0.50"
     answer: 1
-    explanation: "An element outside A ∪ B must be outside A AND outside B: meaning it belongs to Ā ∩ B̄. In the Venn explorer, the 'Neither' button highlights exactly Ā ∩ B̄, the region outside both circles. Exercise 2.4(c) and 2.4(d) confirm both De Morgan laws."
-    vizHint: "venn-diagram"
-    vizHintParams:
-      mode: "neither"
+    explanation: "Pr(Ā) = 1 − 0.65 = 0.35. The proof uses axioms 2 and 3: since A and Ā are mutually exclusive and A ∪ Ā = S, we have Pr(A) + Pr(Ā) = Pr(S) = 1."
   - id: "q6"
     type: "mcq"
-    question: "Sets A₁, A₂, …, Aₙ are pairwise disjoint (Aᵢ ∩ Aⱼ = ∅ for i ≠ j) and their union covers all of S. What are they called?"
+    question: "A fair die has 6 equally likely outcomes. What is Pr({2, 4, 6}), the probability of rolling an even number?"
     options:
-      - "Pairwise mutually exclusive and exhaustive"
-      - "Complementary events"
-      - "A symmetric difference family"
-      - "Independent subsets"
-    answer: 0
-    explanation: "Both conditions are required: pairwise disjoint (no two sets share an element) and exhaustive (together they cover all of S). Open the 'Partition S' visualisation. The colour strips are exactly this: disjoint pieces that together fill the whole rectangle."
-    vizHint: "set-partition"
+      - "1/6 ≈ 0.17"
+      - "1/3 ≈ 0.33"
+      - "1/2 = 0.50"
+      - "2/3 ≈ 0.67"
+    answer: 2
+    explanation: "Using the equiprobable formula: Pr(A) = n(A)/N = 3/6 = 1/2. The event {2,4,6} contains 3 of the 6 equally likely elementary events. This matches Example 11A exactly."
+    vizHint: "random-trials"
     vizHintParams:
-      n: 4
-prevUnit: null
-nextUnit: "m1-set-theory"
+      experiment: "die"
+  - id: "q7"
+    type: "true-false"
+    question: "It follows from Kolmogorov's axioms that Pr(∅) = 0."
+    answer: true
+    explanation: "True. Since S and ∅ are mutually exclusive and S ∪ ∅ = S, axiom 3 gives Pr(S) = Pr(S) + Pr(∅), so Pr(∅) = 0. The notes state this consequence directly after the axioms."
+prevUnit: "m1-set-theory"
+nextUnit: "m1-permutations-combinations"
 ---
 
-## What is Statistics?
+> **Keywords:** Random experiments, sample space, events, elementary events, certain and impossible events, mutually exclusive events, probability, relative frequency, permutations, combinations, conditional probability, Bayes' theorem, independent events.
 
-We define **statistics** as the science of decision making in the face of uncertainty. The emphasis is not on the collection of data (although the statistician has an important role in advising on the data collection process), but on taking matters one step further: interpreting the data. Statistics may be thought of as data-based decision making. Perhaps it is a pity that our discipline is called Statistics. A far better name would have been Decision Science. Statistics really comes into its own when the decisions to be made are not clear-cut and obvious, and there is uncertainty (even after the data has been gathered) about which of several alternative decisions is the best one to choose.
+## Random experiments, sample spaces, trials
 
-For example, the decision about which card to play in a game of bridge to maximize your chance of winning, or the decision about where to locate a factory so as to maximize the likelihood that your company's share of the market will reach a target value, are not simple decisions. In both situations, you can gather as much data as you can (the cards in your hand, and those already played in the first case; proximity to raw materials and to markets in the second), and take a best possible decision on the basis of this data, but there is still no guarantee of success. In both cases, your opposition may react in unexpected ways, and you risk defeat.
-
-In the above sentences, the words "uncertainty", "chance", "likelihood" and "risk" have appeared. All these terms are qualitative and open to many interpretations. Before the statistician can get down to their real job (of taking decisions in the face of uncertainty), this nebulous concept of uncertainty has to be put onto a firm footing by being quantified in an objective way. **Probability Theory** is the branch of mathematics that achieves this quantification of uncertainty.
-
-Therefore, before you can become a statistician, you have to learn a hefty chunk of Probability Theory. However, before you can begin to explore probability, you need a basic understanding of Set Theory.
-
-## Set Theory
-
-> **Keywords:** <KeywordChip vizId="venn-diagram" mode="A">Set</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="subset">subset</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="intersection">intersection</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="union">union</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="complement-A">complement</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="universal-set">empty and universal sets</KeywordChip>, <KeywordChip vizId="venn-diagram" mode="mutually-exclusive">mutually exclusive sets</KeywordChip>; <KeywordChip vizId="set-partition" n={4}>pairwise mutually exclusive and exhaustive sets</KeywordChip>
-
-<TryThis
-  vizId="venn-diagram"
-  mode="intersection"
-  label="Open the Venn explorer"
-  description="Click any operation (intersection, union, complement, symmetric difference) to see which region of the sample space it picks out."
-/>
-
-### Definition of sets
-
-We define a **set** $A$ to be a collection of distinguishable objects or entities. The set $A$ is determined when we can either (a) list the objects that belong to $A$ or (b) give a rule by which we can decide whether or not a given object belongs to $A$.
+To statisticians, a **random experiment** is a procedure whose **outcome** in a particular performance or trial cannot be predetermined. Although we cannot foretell what the outcome of any single repetition of the experiment will be, we must be able to list the set of all possible outcomes of the experiment. In general, random experiments must be capable, in theory at least, of indefinite repetition. It must also be possible to observe the outcome of each repetition of the experiment. The set of all possible outcomes of a random experiment is called the **sample space** of the random experiment. We usually use the letter $S$ to denote the sample space. Each repetition of the procedure for the random experiment is called a **trial**, and gives rise to **one and only one** of the possible outcomes.
 
 <Example title="Example 1A">
-(a) If we say, "The letters $e$, $f$, $g$ belong to the set $A$", then we write
-$$
-A = \{e, f, g\}.
-$$
+The following are examples of random experiments and their sample spaces.
 
-(b) If we say, "The set $B$ consists of real numbers between 1 and 10 inclusive", then we write
-$$
-B = \{x \mid 1 \leq x \leq 10\}.
-$$
+(a) We toss a coin. We can list the set of possible outcomes: $S = \{\text{heads},\, \text{tails}\}$. We can repeat the experiment endlessly, and we can observe the result of every trial.
 
-We read this by saying: "The set $B$ consists of all real numbers $x$ such that $x$ is larger than or equal to 1 but is less than or equal to 10."
+(b) A phone number is chosen at random. The number is dialled, and the person who answers is asked whether he/she is currently watching television. If the telephone is unanswered after 45 seconds, the outcome, "no reply", is recorded. The set of possible outcomes, the sample space, is $S = \{\text{yes},\, \text{no},\, \text{won't say},\, \text{no reply}\}$.
+
+(c) A light bulb is allowed to burn until it burns out. The lifetime of the bulb is recorded. The possible outcomes are the set of non-negative real numbers (i.e. the set of positive numbers plus zero; the bulb might not burn at all). The sample space is thus $S = \{t \mid t \geq 0\}$.
+
+(d) A die is placed in a shaker, which is agitated violently, and thrown out onto the table. The dots on the upturned face are counted. The sample space is $S = \{1, 2, 3, 4, 5, 6\}$.
+
+(e) In a survey of traffic passing a particular point on Boulevard East, a time period of one minute is chosen at random, and the number of vehicles that pass the point in the minute is counted. The possible outcomes are the integers, including zero: $\{0, 1, 2, 3, \ldots\}$.
+
+(f) A geologist takes rock samples in a mine in order to determine the quality of the iron-ore to be mined. The analytical laboratory reports the proportion of iron in the ore. The sample space is $S = \{p \mid 0 \leq p \leq 1\}$.
 </Example>
 
-Because the object $e$ belongs to the set $A$ we write
-$$
-e \in A
-$$
-and we say: "$e$ is an element of $A$". Because $e$ does not belong to $B$, we write
-$$
-e \notin B
-$$
-and we say: "$e$ is not an element of $B$".
+## Events
 
-Note, firstly, that if $C = \{1, 3, 5, a\}$ and $D = \{a, 1, 5, 3\}$ then $C = D$. The order in which we list the elements of a set is irrelevant. Secondly, if $E = \{a, b, c, a\}$ and $F = \{a, b, c\}$ then $E = F$. The set $E$ contains only the distinguishable elements $a$, $b$ and $c$.
+An **event** is defined to be any subset of the sample space $S$. Thus if $S = \{1, 2, 3, 4, 5, 6\}$ then the sets $A = \{1, 3, 5\}$ and $C = \{3, 4, 5, 6\}$ are events. $A$ is clearly the event of getting an odd number. $C$ is the event of getting a number greater than or equal to 3.
+
+The **empty set** is the set containing no elements. It is often denoted by $\{\}$ or by $\emptyset$. By the definition of subsets, $\emptyset$ and $S$ are both subsets of $S$ and are thus events. They have special names. The event $\emptyset$ is called the **impossible event**, and $S$ is called the **certain event**.
+
+An **elementary event** is an event with exactly one member; the events $D = \{3\}$ and $E = \{5\}$ are elementary events. $A$ and $C$ are not elementary events, nor are $\emptyset$ and $S$.
+
+Given two events $A$ and $B$ we say that $A$ and $B$ are **mutually exclusive** if $A \cap B = \emptyset$, that is, no elementary events are contained in the intersection of $A$ and $B$. For example, if $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $A \cap B = \emptyset$. This makes sense, because $A$ is the event of getting an odd number, $B$ is the event of getting an even number, and obviously you cannot get an odd number **and** an even number on the same throw of a die.
+
+## When does an event "occur"?
+
+We give a special meaning to the concept "the occurrence of an event". We say that the event $A = \{1, 3, 5\}$ has **occurred** if the outcome of a trial is **any** member of $A$. So if we toss a die and get a 3, then we can say that the event $A$ has occurred: we have obtained an odd number. Simultaneously, the events $C$ and $D$, as defined above, have also occurred.
 
 <Example title="Example 2B">
-(a) Express in set theory notation: the set $U$ of numbers which have square roots between 1 and 4.
+What is the sample space for each of the following random experiments?
 
-(b) Write out in full all the elements of the set $Z = \{(x, y) \mid x \in \{1, 2, 3, 4\},\; y = x^2\}$.
+(a) We record a student's final result for a course.
+
+(b) An investor owns two shares which she monitors for a month. At the end of the month she records whether they went up, down or remained unchanged.
 
 <Solution>
-(a) Because the square roots of numbers between 1 and 16 belong to $U$, we write
-$$
-U = \{x \mid 1 \leq x \leq 16\}.
-$$
+(a) The set of possible results is $S = \{\text{Pass},\, \text{Fail},\, \text{Supp},\, \text{DE},\, \text{DPR},\, \text{AB}\}$, where Supp means a supplementary exam was granted, DE means the exam was deferred, DPR means the student was refused a DP (duly performed certificate) and so could not write the exam, and AB means the student was absent from the exam.
 
-(b) $Z = \{(1, 1), (2, 4), (3, 9), (4, 16)\}$.
+(b) It is convenient to let $U = \text{up}$, $D = \text{down}$ and $N = \text{no change}$. Then $S = \{\text{UU},\, \text{UD},\, \text{UN},\, \text{DU},\, \text{DD},\, \text{DN},\, \text{NU},\, \text{ND},\, \text{NN}\}$, where, for example, $\text{DU}$ means "first share down, second share up".
+
+Notice how we construct the most detailed possible sample space: the set of outcomes $\{$both up, one up & one down, one up & one unchanged, one down & one unchanged, both unchanged, both down$\}$ is **not** acceptable because each of these could represent several distinguishable outcomes. For example, "one up & one down" could represent either "UD" or "DU".
 </Solution>
 </Example>
 
 <Example title="Example 3C">
-Which of the following statements are correct and which are wrong?
+A random experiment consists of tossing 3 coins of values R1, R2 and R5 and observing heads and tails. Which of the following is the correct sample space?
 
-(a) $\{3, 3, 3, 3\} = \{3\}$
+(a) $S = \{\text{3 heads},\, \text{2 heads},\, \text{1 head},\, \text{0 heads}\}$.
 
-(b) $6 \in \{5, 6, 7\}$
+(b) $S = \{\text{3 heads},\, \text{2 heads 1 tail},\, \text{1 head 2 tails},\, \text{3 tails}\}$.
 
-(c) $C = \{-1, 0, 1\}$
+(c) $S = \{\text{HHH},\, \text{HHT},\, \text{HTH},\, \text{THH},\, \text{HTT},\, \text{THT},\, \text{TTH},\, \text{TTT}\}$, where, for example, HTH means "heads on R1, tails on R2 and heads on R5".
+</Example>
 
-(d) $F = \{x \mid 4 < f < 5\}$
+<Example title="Example 4B">
+Refer to the random experiments of Example 2B, and give the subsets of $S$ that correspond to the following events.
 
-(e) $\{1, 2, 7\} = \{7, 2, 1, 7\}$
+(a) The student did not write the final exam for the course.
 
-(f) If $H = \{2, 4, 6, 8\}$, $J = \{1, 2, 3, 4\}$ and $K = \{2x \mid x \in H\}$, then $K = J$.
-
-(g) $\{1\} \in \{1, 2, 3\}$.
+(b) None of the shares decline.
 
 <Solution>
-(a), (b), (c) and (e) are correct; (d) should read either $F = \{x \mid 4 < x < 5\}$ or $F = \{f \mid 4 < f < 5\}$. For (f), check that the following statement is correct: if $H$ and $J$ are as given, and if $K = \{2x \mid x \in J\}$ then $K = H$. For (g), note that we never use the $\in$-notation with a set on the left hand side.
+In each case we simply list the outcomes that favour the occurrence of the event in which we are interested. The answers are:
+
+(a) $\{\text{DE},\, \text{DPR},\, \text{AB}\}$.
+
+(b) $\{\text{UU},\, \text{UN},\, \text{NU},\, \text{NN}\}$.
 </Solution>
 </Example>
-
-### Subsets
-
-Suppose we have two sets, $G$ and $H$, and that every element of $G$ also belongs to $H$. Then we say that "$G$ is a subset of $H$" and we write $G \subset H$. We can also write $H \supset G$ and say "$H$ contains $G$". If every element in $G$ does not also belong to $H$, we write $G \not\subset H$ and say "$G$ is not a subset of $H$."
-
-<Example title="Example 4A">
-Let $G = \{1, 3, 5\}$, $H = \{1, 3, 5, 9\}$ and $J = \{1, 2, 3, 4, 5\}$. Then clearly $G \subset H$, $H \not\subset J$, $J \supset G$.
-</Example>
-
-Note that the notation $\subset, \supset$ for sets is analogous to the notation $\leq, \geq$ for ordinary numbers (rather than the notation $<, >$). The "round end" of the subset notation tells you which of the sets is "smaller" (in the same way as the "pointed end" shows which of two numbers is smaller).
-
-Our definition of subset has a curious (at first sight) but logical consequence. Because every element in $G$ belongs to $G$, we can write $G \subset G$. For numbers, we can write $2 \leq 2$.
-
-If $H \subset G$ and $G \subset H$, then, obviously, $H = G$. For numbers, $x \leq 2$ and $x \geq 2$ together imply that $x = 2$.
 
 <Example title="Example 5C">
-Let $V = \{v \mid 0 < v < 5\}$, $W = \{0, 5\}$, $X = \{1, 2, 3, 4\}$, $Y = \{2, 4\}$, $Z = \{x \mid 1 \leq x \leq 4\}$. Which of the following statements are true, and which are false:
+A salesperson, after calling on a client, records the outcome: sale made ($S$), or no sale made ($N$). List the sample space of outcomes in one afternoon if
 
-(a) $V = W$
+(a) two clients are visited;
 
-(b) $Y \subset X$
+(b) three clients are visited.
 
-(c) $W \supset V$
-
-(d) $Z \supset X$
-
-(e) $X = Z$
-
-(f) $Z \not\subset V$
-
-(g) $Y \subset W$
-
-(h) $Y \in Z$
-
-<Solution>
-Only (b) and (d) are true.
-</Solution>
+(c) Suppose now that three outcomes are recorded: sale made ($S$), sales potential good ($P$), no sale ever likely to be made ($N$). List the sample space if two clients are visited.
 </Example>
 
-### Intersections
+## Kolmogorov, father of probability
 
-Suppose that $L = \{a, b, c\}$ and $M = \{b, c, d\}$. Then $L \not\subset M$ and $M \not\subset L$. But if we consider the set $N = \{b, c\}$, then we see that $N \subset L$ and $N \subset M$, and that no other set of which $N$ is a subset has this property. This leads us to the idea of intersection.
+Andrey Nikolaevich Kolmogorov was a Russian mathematician who, in 1933, published the axioms of probability, and established the theoretical foundation for the rigorous mathematical study of probability theory.
 
-The **intersection** of any two sets is the set that contains precisely those elements which belong to both sets. For the sets $L$, $M$ and $N$ above we write $N = L \cap M$ and read this "$N$ equals $L$ intersection $M$". The intersection of two sets $M$ and $N$ can be thought of as the set containing those elements which belong to both $M$ and to $N$.
+<Theorem name="Kolmogorov's Axioms of Probability">
+Suppose that $S$ is the sample space for a random experiment. For all events $A \subset S$, we define the **probability** of $A$, denoted $\Pr(A)$, to be a real number with the following properties:
 
-<Example title="Example 6A">
-If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cap Q$. Is $5 \in P \cap Q$? Is $10 \in P \cap Q$?
+1. $0 \leq \Pr(A) \leq 1$ for all $A \subset S$.
 
-<Solution>
-Paying careful attention to the endpoints,
+2. $\Pr(S) = 1$.
+
+3. If $A \cap B = \emptyset$ (i.e. if $A$ and $B$ are mutually exclusive events) then $\Pr(A \cup B) = \Pr(A) + \Pr(B)$.
+</Theorem>
+
+A consequence of the Kolmogorov axioms is that $\Pr(\emptyset) = 0$. The function $\Pr(A)$ provides a means of attaching probabilities to events in $S$. The first two axioms tell us that probabilities lie between zero and one, and that these extreme probabilities occur for the impossible and certain events, respectively. The probabilities of all other events are graded between these two extremes: unlikely events have probabilities close to zero, and events which are nearly certain have probabilities close to one. If an event is as likely to occur as it is not to occur, then it has probability 0.5. Thus for an unbiased coin, for which "heads" and "tails" are equally likely, the probability of the event "heads" is equal to the probability of the event "tails" is equal to 0.5!
+
+This function $\Pr(A)$ is almost certainly a new kind of function to you. The functions you have seen before, e.g. $y = 3(x^2 + 5)$, take one real number, $x$, and map them onto another real number, $y$. If it helps you, you can think of the function $y = f(x)$ as a kind of mincing machine: you put a number ($x$) in, you get another number ($y$) out. Now you must think of the function $\Pr(A)$ as a new kind of mincing machine: you put a **set** ($A$) in, and out pops a **number** between zero and one (inclusive of these end limits)!
+
+## Relative frequencies
+
+To try to get some insight into the concept of probability, consider a random experiment on some sample space $S$ repeated **infinitely many times**. Let's start by doing $n$ trials of the random experiment and counting the number of times $r$ that some event $A \subset S$ occurs during the $n$ trials. Then we define $r/n$ to be the **relative frequency** of the event $A$. Obviously, $0 \leq r/n \leq 1$. Thus relative frequencies and probabilities both lie between zero and one.
+
+We can think of the probability of the event $A$ as the relative frequency of $A$ as $n$, the number of trials of the random experiment, gets very large. In symbols
 $$
-P \cap Q = \{x \mid 5 < x \leq 10\}.
+\Pr(A) = \lim_{n \to \infty} \frac{r}{n}.
 $$
-No, $5 \notin P \cap Q$, but, yes, $10 \in P \cap Q$.
-</Solution>
-</Example>
+
+If you toss a fair coin, then the probability of "heads" is equal to the probability of "tails", i.e. $\Pr(H) = \Pr(T) = 0.5$. If you tossed the coin 10 times you might observe 6 heads, a relative frequency of $6/10 = 0.6$. But if you tossed it 100 times you might observe 53 heads, relative frequency $53/100 = 0.53$. If you kept going for a few hours more, and tossed it 1000 times you might observe 512 heads, giving a relative frequency of $512/1000 = 0.512$. **As the number of trials increases, the relative frequency tends to get closer and closer to the "true" probability.**
 
 <TryThis
-  vizId="set-builder-line"
-  mode="intersection"
-  label="Plot P, Q and P ∩ Q"
-  description="Place P and Q on a number line and watch the endpoints (solid means included, hollow means excluded); explain why P ∩ Q is open at 5 and closed at 10."
+  vizId="random-trials"
+  label="Run trials yourself"
+  description="Flip a fair coin or roll a fair die: tap the object (or press Flip / Roll) for a real trial, or simulate hundreds at once. Watch each outcome's relative frequency settle toward the theoretical probability; the more trials you run, the closer the bars get to the dashed line. Use the toggle at the top to switch between the coin and the die."
 />
 
-### The empty set, mutually exclusive sets
+### A class experiment: birthdays in April, May and June
 
-What happens if $L = \{a, b, c\}$ and $R = \{d, e, f\}$? If we want $L \cap R$ to be a set, then we must introduce a new concept, the **empty set**, the set that has no members. This is a sensible concept: consider the set of English-speaking fish, or consider the set of real numbers whose square is negative. We reserve the symbol $\emptyset$ to denote the empty set. We use this symbol for no other purpose. We write and read this as $L \cap R = \emptyset$, "the intersection of sets $L$ and $R$ is the empty set".
+Almost exactly a quarter of the days of the year fall into April, May or June ($91/365.25 = 0.249$, allowing for leap years every fourth year). Thus we expect the probability that an individual's birthday falls into one of these three months to be pretty close to 0.249. Let's do an experiment within the class, and fill in this table.
 
-Pairs of sets whose intersection is the empty set are said to be **mutually exclusive sets** (or **disjoint sets**). Thus $L$ and $R$ are mutually exclusive.
+| Group | Number of students (*n*) | Number with birthdays in April, May, June (*r*) | Relative frequency (*r*/*n*) |
+|---|---|---|---|
+| Front row | 8 | 3 | 0.375 |
+| Front three rows | 31 | 9 | 0.290 |
+| Whole class | 158 | 41 | 0.259 |
 
-### The universal set, the sample space
+Do the relative frequencies get closer to the "true" probability as $n$ gets larger?
 
-Another reserved symbol is the letter $S$. It is used for the set containing all objects under consideration. Thus if, in a particular problem, the only objects of interest are the colours of a traffic light, then $S = \{\text{red},\, \text{amber},\, \text{green}\}$. The set $S$ is known to mathematicians as the **universal set**. In statistical jargon the set $S$ is called the **sample space**.
+## Some useful theorems
 
-### Unions
+We consider several theorems that follow immediately from the axioms of probability.
 
-The concept **union** contrasts with the concept intersection. The union of two sets $A$ and $B$ is the set that contains the elements that belong to $A$ or to $B$. Here we use the word "or" in an inclusive sense: we do not exclude from the union those elements that belong to both $A$ and $B$.
+<Theorem name="Theorem 1">
+Let $A \subset S$. Then $\Pr(\overline{A}) = 1 - \Pr(A)$.
 
-If $A = \{1, 2, 3\}$ and $B = \{2, 3, 4, 5\}$ then the union of $A$ and $B$ is the set $C = \{1, 2, 3, 4, 5\}$. We write
+**Proof.** We write $S$ as the union of two mutually exclusive events:
 $$
-C = A \cup B
+A \cup \overline{A} = S.
 $$
-and say "$C$ equals $A$ union $B$".
+Because $A$ and $\overline{A}$ are mutually exclusive, i.e. $A \cap \overline{A} = \emptyset$, we can use axiom 3 to state
+$$
+\Pr(A \cup \overline{A}) = \Pr(A) + \Pr(\overline{A}).
+$$
+But $A \cup \overline{A} = S$, and $\Pr(S) = 1$ by Kolmogorov's 2nd axiom, so $\Pr(A \cup \overline{A}) = 1$. Therefore
+$$
+\Pr(A) + \Pr(\overline{A}) = 1
+$$
+and
+$$
+\Pr(\overline{A}) = 1 - \Pr(A),
+$$
+as required.
+</Theorem>
+
+<Theorem name="Theorem 2">
+If $A \subset S$ and $B \subset S$ then $\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B})$.
+
+**Proof.** Write $A$ as the union of the two mutually exclusive sets:
+$$
+A = (A \cap B) \cup (A \cap \overline{B}).
+$$
+Clearly,
+$$
+(A \cap B) \cap (A \cap \overline{B}) = \emptyset.
+$$
+Therefore, using axiom 3,
+$$
+\Pr(A) = \Pr(A \cap B) + \Pr(A \cap \overline{B}).
+$$
+
+Notice that Theorem 2 may also be expressed as
+$$
+\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B).
+$$
+</Theorem>
+
+<Theorem name="Theorem 3: The Addition Rule">
+For any arbitrary events $A$ and $B$,
+$$
+\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B).
+$$
+
+**Proof.** Write $A \cup B$ as the union of two mutually exclusive sets:
+$$
+A \cup B = B \cup (A \cap \overline{B}).
+$$
+Because $B$ and $A \cap \overline{B}$ are mutually exclusive, we can again apply axiom 3 and say
+$$
+\Pr(A \cup B) = \Pr(B) + \Pr(A \cap \overline{B}).
+$$
+But, by Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B)$. The result follows.
+</Theorem>
+
+<TryThis
+  vizId="probability-venn"
+  label="Test the addition rule"
+  description="Drag Pr(A), Pr(B) and Pr(A ∩ B) and watch the four region probabilities and Pr(A ∪ B) update live. Notice why Pr(A ∩ B) gets clamped: the four regions can't sum to more than 1."
+/>
+
+<Theorem name="Theorem 4">
+If $B \subset A$, then $\Pr(B) \leq \Pr(A)$.
+
+**Proof.** If $B \subset A$ then we can write $A$ as the union of two mutually exclusive sets,
+$$
+A = B \cup (A \cap \overline{B}),
+$$
+and
+$$
+\Pr(A) = \Pr(B) + \Pr(A \cap \overline{B}) \geq \Pr(B)
+$$
+because $\Pr(A \cap \overline{B}) \geq 0$, as all probabilities are non-negative.
+</Theorem>
+
+<Theorem name="Theorem 5">
+If $A_1, A_2, \ldots, A_n$ are pairwise mutually exclusive, i.e. $A_i \cap A_j = \emptyset$ for $i \neq j$, then
+$$
+\Pr(A_1 \cup A_2 \cup \ldots \cup A_n) = \Pr(A_1) + \Pr(A_2) + \ldots + \Pr(A_n),
+$$
+or, in a more concise notation,
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \sum_{i=1}^{n} \Pr(A_i).
+$$
+
+**Proof.** The proof is by repeated use of axiom 3. The events $(A_1 \cup A_2 \cup \ldots \cup A_{n-1})$ and $A_n$ are mutually exclusive. Thus
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) + \Pr(A_n).
+$$
+Next, the events $(A_1 \cup A_2 \cup \ldots \cup A_{n-2})$ and $A_{n-1}$ are mutually exclusive. Thus
+$$
+\Pr\!\left(\bigcup_{i=1}^{n-1} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}),
+$$
+so that
+$$
+\Pr\!\left(\bigcup_{i=1}^{n} A_i\right) = \Pr\!\left(\bigcup_{i=1}^{n-2} A_i\right) + \Pr(A_{n-1}) + \Pr(A_n).
+$$
+Continue the process, and the result follows.
+</Theorem>
 
 <Example title="Example 7A">
-If $P = \{x \mid 0 \leq x \leq 10\}$ and $Q = \{x \mid 5 < x < 20\}$, find $P \cup Q$.
+If $\Pr(A) = 0.5$, $\Pr(B) = 0.6$ and $\Pr(A \cap B) = 0.3$, find $\Pr(\overline{B})$, $\Pr(A \cap \overline{B})$ and $\Pr(A \cup B)$.
 
 <Solution>
-The union includes all the elements of both set $P$ and set $Q$:
-$$
-P \cup Q = \{x \mid 0 \leq x < 20\}.
-$$
+By Theorem 1, $\Pr(\overline{B}) = 1 - \Pr(B) = 1 - 0.6 = 0.4$.
+
+By Theorem 2, $\Pr(A \cap \overline{B}) = \Pr(A) - \Pr(A \cap B) = 0.5 - 0.3 = 0.2$.
+
+By Theorem 3, $\Pr(A \cup B) = \Pr(A) + \Pr(B) - \Pr(A \cap B) = 0.5 + 0.6 - 0.3 = 0.8$.
 </Solution>
 </Example>
 
-### Complements
-
-Our final concept from set theory is that of the **complement** of a set. Given the sample space $S$, we define the complement of a set $A$ to be the set of elements of $S$ which are not in $A$. The complement of $A$ is written $\overline{A}$, and is always relative to the sample space $S$.
-
-If $S = \{1, 2, 3, 4, 5, 6\}$, $A = \{1, 3, 5\}$ and $B = \{2, 4, 6\}$ then $\overline{A} = \{2, 4, 6\}$. We write
-$$
-\overline{A} = B
-$$
-and say "the complement of $A$ equals $B$" or, more briefly, "$A$ complement equals $B$".
-
-<Example title="Example 8A">
-If $S = \{x \mid 0 \leq x \leq 1\}$ and $D = \{x \mid 0 < x < 1\}$, find $\overline{D}$.
-
-<Solution>
-Because the set $D$ excludes the endpoints of the interval from zero to one, $\overline{D} = \{0, 1\}$.
-</Solution>
+<Example title="Example 8C">
+Is it possible for events in the same sample space to have probabilities $\Pr(A) = 0.8$, $\Pr(\overline{B}) = 0.6$ and $\Pr(A \cap \overline{B}) = 0.7$?
 </Example>
-
-<TryThis
-  vizId="venn-diagram"
-  mode="complement-A"
-  label="Highlight the complement"
-  description="Switch to Ā in the Venn explorer to see how the complement covers everything in S that is not in A, and try (A ∩ B)̄ to see why complementing the intersection is the same as the union of complements (De Morgan)."
-/>
 
 <Example title="Example 9C">
-If the sample space $S$ contains the letters of the alphabet, i.e. $S = \{a, b, c, \ldots, x, y, z\}$, the set $A$ contains the vowels, the set $B$ contains the consonants, and the set $C$ contains the first 10 letters of the alphabet $C = \{a, b, c, \ldots, h, i, j\}$, pick out the true and false statements in the following list:
+In the sample space $S$, let $\Pr(A) = 0.7$, $\Pr(B) = 0.5$, $\Pr(C) = 0.1$, $\Pr(A \cup B) = 0.9$, and $\Pr((A \cup B) \cap C) = 0$. Depict the events $A$, $B$ and $C$ on a Venn diagram and find the probability of the events $A \cap B$, $A \cap C$, $A \cup B \cup C$, $\overline{B} \cap C$, and $\overline{A \cap B}$.
+</Example>
 
-(a) $A \cup B = S$
+<Example title="Example 10C">
+If we know that $\Pr(A \cup B) = 0.6$ and $\Pr(A \cap B) = 0.2$, can we find $\Pr(A)$ and $\Pr(B)$?
+</Example>
 
-(b) $A \cap B = \emptyset$
+## Equally probable elementary events
 
-(c) $S \subset S$
+All probability problems, in theory at least, can be solved by making use of Theorem 5. The elementary events whose union make up the sample space $S$ are always mutually exclusive, because if one elementary event occurs, no other elementary event occurs. Therefore, if we knew the probabilities of all the elementary events, we would also be able to compute the probabilities of any event in $S$. By Theorem 5, the probability of any event is simply the sum of the probabilities of the elementary events that make up the event.
 
-(d) $A \cap C = \{a, e, i\}$
+There is a wide class of problems for which we **do** know the probabilities of **all** the elementary events in a sample space. These are the problems for which it is reasonable to assume that **all the elementary events are equally likely**. If there are $N$ elementary events contained in $S$, and each one has the same probability of occurring, then the probability of each and every elementary event must be $1/N$.
 
-(e) $A \subset B$
+Equally probable elementary events occur in many games of chance: coins and dice are assumed to be unbiased; when a card is drawn from a pack of 52 playing cards, the probability of any particular card is assumed to be $1/52$. Let $A$ be some event in this scenario. Then $A$ must consist of the union of elementary events, each of probability $1/N$. If we could determine the **number of elementary events contained in $A$**, then we could write
+$$
+\Pr(A) = \frac{\text{number of elementary events contained in } A}{\text{number of elementary events contained in } S} = \frac{n(A)}{n(S)} = \frac{n(A)}{N},
+$$
+where we define the function $n(A)$ to mean the count of the number of elementary events contained in $A$. Clearly, $n(S) = N$.
 
-(f) $\overline{A} = B$
-
-(g) $S \cap B = B$
-
-(h) $A \cup \overline{A} = S$
-
-(i) $C \cap \overline{A} = \{o, u\}$
-
-(j) $\overline{A \cup C} = \overline{A} \cap \overline{C}$
-
-(k) $A \cap C \subset C$
-
-(l) $\overline{S} = \emptyset$
+<Example title="Example 11A">
+Consider tossing a fair die. Then $S = \{1, 2, 3, 4, 5, 6\}$ and $N = 6$. Let $A = \{1, 3, 5\}$, the event of getting an odd number. Find $\Pr(A)$.
 
 <Solution>
-All are true.
+The number of elementary events contained in $A$ is $n(A) = 3$. So
+$$
+\Pr(A) = \frac{n(A)}{N} = \frac{3}{6} = \frac{1}{2},
+$$
+which your intuition should tell you is correct!
 </Solution>
 </Example>
 
-### Venn diagrams
+<Note>
+**Computing probabilities when the elementary events are all equiprobable.**
 
-A pictorial representation of sets that helps us solve many problems in set theory is known as the **Venn diagram**. In the diagrams below think of all the "points" in the rectangle as being the sample space $S$, and all the points inside the circles for $A$ and $B$ as the sets $A$ and $B$ respectively. The shaded area in the diagram on the left then represents $A \cap B$, the set of points belonging to $A$ and $B$. Similarly the diagram on the right is a visual representation of $A \cup B$, the set of points belonging to $A$ or $B$. Recall once again the special, inclusive meaning we give to "or". When drawing Venn diagrams it is helpful to associate "intersection" with "and" and "union" with "or".
+If all the $N$ elementary events contained in a sample space have probability $1/N$, the following three steps enable the probability of any event $A$ in the sample space to be found:
 
-The diagram on the left below shows how to depict two mutually exclusive sets in a Venn diagram.
+1. Determine the sample space $S$ made up out of elementary events. Determine the number $N = n(S)$ of elementary events contained in $S$. You might have to list and count them, or you might be able to use one of the "counting rules" given below. If the $N$ elementary events are equally probable, then each one occurs with probability $1/N$.
 
-Venn diagrams are usually only useful for up to three sets: the area shaded in the diagram on the right is $A \cap B \cap C$.
+2. Determine $A$, the subset of $S$, the event whose probability is to be found. Count the number of elementary events contained in $A$: suppose $n(A)$ elementary events make up the event $A$.
 
-### Pairwise mutually exclusive, exhaustive sets
+3. Then $\Pr(A) = n(A)/N$.
+</Note>
 
-If a family of sets $A_1, A_2, \ldots, A_n$ are such that any pair of them is mutually exclusive, i.e. $A_i \cap A_j = \emptyset$ if $i \neq j$, and if $A_1 \cup A_2 \cup \ldots \cup A_n = S$, i.e. the union of the sets "exhausts" the sample space, then the family of sets $A_1, A_2, \ldots, A_n$ are said to be **pairwise mutually exclusive and exhaustive**. If we represent such a family of sets on a Venn diagram, the sets must cover the sample space, and they must be disjoint.
+<Example title="Example 12A">
+100 people bought tickets in a charity raffle. 60 of them bought the tickets because they supported the charity. 75 bought tickets because they liked the prize. No one who neither supported the charity nor liked the prize bought a ticket.
 
-<TryThis
-  vizId="set-partition"
-  n={4}
-  label="Partition S"
-  description="Slice S into 2–6 disjoint pieces that cover the whole sample space, then overlay an arbitrary set B to see how it decomposes as a union of intersections with each piece."
-/>
+(a) What is the probability that the prize-winning ticket was bought by someone who liked the prize?
 
-### Using Venn diagrams
+(b) What is the probability that the prize was won by someone who did not support the charity?
 
-<Example title="Example 10B">
-Draw Venn diagrams to show that
-$$
-(A \cup B) \cap C = (A \cap C) \cup (B \cap C).
-$$
+(c) What is the probability that the prize was won by someone who both supported the charity and liked the prize?
 
 <Solution>
-In the left-hand Venn diagram, the grey-shaded area is $A \cup B$, and the vertically shaded area is $C$. Their intersection $(A \cup B) \cap C$ is shaded both grey and vertically. In the right-hand Venn diagram, the two shaded areas are $A \cap C$ and $B \cap C$. Their union is the same as the area shaded both grey and vertically in the left-hand diagram.
+(a) Let $A$ and $B$ be the events "liked the prize" and "support the charity" respectively. To find $\Pr(A)$ we apply the three steps as follows:
+
+1. $N = 100$.
+2. $n(A) = 75$.
+3. Therefore $\Pr(A) = n(A)/N = 75/100 = 0.75$.
+
+(b) To find $\Pr(\overline{B})$ we only have to go through steps 2 and 3:
+
+1. $n(\overline{B}) = 40$.
+2. Thus $\Pr(\overline{B}) = n(\overline{B})/N = 40/100 = 0.4$.
+
+(c) We now need $\Pr(A \cap B)$:
+
+1. $n(A \cap B) = 60 + 75 - 100 = 35$.
+2. $\Pr(A \cap B) = n(A \cap B)/N = 35/100 = 0.35$.
 </Solution>
 </Example>
 
-<Example title="Example 11C">
-Draw Venn diagrams to show that the following are true:
-
-(a) $A \cup B = A \cup (B \cap \overline{A})$
-
-(b) $(A \cap C) \cup (B \cap \overline{A}) = (A \cup C) \cap \overline{\overline{A} \cap \overline{B}}$
-
-(c) The sets $A \cap \overline{B}$, $A \cap C$, $B \cap \overline{A}$ and $\overline{A \cup C}$ form a family of pairwise mutually exclusive and exhaustive sets.
-
-<Solution>
-All are true.
-</Solution>
+<Example title="Example 13C">
+A pack of playing cards contains 52 cards, 13 belonging to each of the four suits "Spades", "Hearts", "Diamonds" and "Clubs". Within each suit the 13 cards are labelled: Ace, 2, …, 10, Jack, Queen, King. Let $D$ be the event that a randomly selected card is a diamond, $K$ the event that the card is a king, and $B$ the event that the card has one of the numbers from 2 to 10. Find $\Pr(D)$, $\Pr(K)$, $\Pr(B)$, $\Pr(D \cap K)$, $\Pr(\overline{B} \cup D)$, $\Pr(\overline{B} \cap K)$ and $\Pr(D \cup K \cup B)$.
 </Example>
 
-<Example title="Example 12C">
-Draw Venn diagrams to determine which of the following statements are true.
+<Example title="Example 14C">
+The seats of a jet airliner are arranged in 55 rows (numbered 1 to 55) of 10 seats (lettered A to K, leaving out I). In each row, seats C, D, G and H are on aisles, and A and K are window seats. Smoking is permitted in rows 45 to 55 inclusive. If a passenger is assigned a seat at random, what is the probability of being allocated
 
-(a) $\overline{A \cap B} = \overline{A} \cap \overline{B}$
+(a) an aisle seat?
 
-(b) $(A \cap B) \cup (\overline{A} \cap B) \subset A \cup B$
+(b) a seat in the smoking section?
 
-(c) $(A \cup B) \cap C = (A \cap C) \cup (B \cap C)$
+(c) a window seat in the non-smoking section?
 
-(d) $(C \cap A) \cup (C \cap B) = C \cup (A \cap B)$
-
-(e) $\bigl[(A \cup B) \cap \overline{C}\bigr] \cup \bigl[(A \cup C) \cap \overline{B}\bigr] = \bigl[(A \cup B \cup C) \cap \overline{(A \cup B) \cap C}\bigr] \cup (\overline{A} \cap \overline{B})$
-
-(f) If the sets $A_1, A_2, A_3$, and $A_4$ are pairwise mutually exclusive and exhaustive, and $B$ is an arbitrary set, then
-$$
-B = (A_1 \cap B) \cup (A_2 \cap B) \cup (A_3 \cap B) \cup (A_4 \cap B).
-$$
-
-<Solution>
-(b), (c), (e) and (f) are true. For (a), check that $\overline{A \cap B} = \overline{A} \cup \overline{B}$ is true.
-</Solution>
+(d) a window seat in row 1?
 </Example>
-
-<Collapse title="Exercises" hint="9 questions">
-
-### Easy exercises
-
-**2.1** Let $S$ be $\{1, 2, 3, 4, 5, 6\}$, the set of all possible outcomes when a die is thrown and the number of dots on the uppermost face recorded. Describe in words the following sets:
-
-(a) $\{6\}$
-
-(b) $\{1, 2, 3, 4\}$
-
-(c) $\{1, 3, 5\}$
-
-(d) $\{2, 4, 6\}$
-
-(e) $\{5, 6\}$
-
-(f) $\overline{\{6\}}$
-
-**\*2.2** If $S = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$, and $A = \{0, 1, 2\}$, $B = \{3, 4, 5, 6, 7\}$, $C = \{7, 8\}$, and $D = \{2, 4, 6, 8\}$, which of the following statements are true?
-
-(a) $A$ and $B$ are mutually exclusive.
-
-(b) $\overline{B} = \{0, 1, 2, 8, 9\}$
-
-(c) $A \cup B \cup C \cup D = \{0, 1, 2, 3, 4, 5, 6, 7, 8\}$
-
-(d) $D \subset (B \cup C)$
-
-(e) $A \cap B \cap C \cap D = \{9\}$
-
-(f) $A \cup (B \cap D) = (A \cap B) \cup (A \cap D)$.
-
-**2.3** Let $S$ denote the set of all companies listed on the Johannesburg Stock Exchange. Let $A = \{x \mid x \text{ is in the gold mining sector}\}$, let $B = \{x \mid x \text{ has annual turnover exceeding R10 million}\}$, let $C = \{x \mid x \text{ has financial year ending in June}\}$, let $D = \{x \mid \text{the share price of } x \text{ is higher now than six months ago}\}$.
-
-Describe in words the following sets:
-
-(a) $A \cup B$
-
-(b) $A \cap D$
-
-(c) $A \cap C \cap D$
-
-(d) $B \cap (C \cup A)$
-
-(e) $\overline{A}$
-
-(f) $\overline{C} \cup D$
-
-(g) $\overline{B \cap C}$
-
-(h) $\overline{B \cap A} \cup (C \cap D)$
-
-**\*2.4** If $A$, $B$ and $C$ are subsets of a universal set $S$, draw Venn diagrams to determine which of the following statements are true.
-
-(a) $A \cup \overline{A} = S$
-
-(b) $A \cap \overline{A} = \emptyset$
-
-(c) $\overline{A \cup B} = \overline{A} \cap \overline{B}$
-
-(d) $\overline{A \cap B} = \overline{A} \cup \overline{B}$
-
-(e) $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$
-
-(f) $A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$
-
-(g) $A \cup B \cup C = S$
-
-(h) $A \cap B \cap C = \emptyset$
-
-(i) $A \cup B \supset A \cap B$
-
-(j) $A \cap (B \cup C) \subset A \cup (B \cap C)$
-
-**2.5** If $S = \{1, 2, 3\}$, list all the subsets of $S$.
-
-**\*2.6** Draw a series of Venn diagrams representing three sets, and shade in the following areas.
-
-(a) $\overline{A \cap B \cap C}$
-
-(b) $(B \cap A) \cup (A \cap C)$
-
-(c) $A \cup B \cup C$
-
-(d) $\overline{A \cup B \cup C} \cap (B \cap C)$
-
-### More difficult exercises
-
-**\*2.7** Let $B_1, B_2, \ldots, B_n$ be $n$ disjoint subsets of $S$ such that
-$$
-\bigcup_{i=1}^{n} B_i = S \quad \text{and} \quad B_i \cap B_j = \emptyset \text{ for } i \neq j.
-$$
-Let $A$ be any other subset of $S$. Use a Venn diagram to show that
-$$
-A = \bigcup_{i=1}^{n} (A \cap B_i).
-$$
-
-(Notation: $\bigcup_{i=1}^{n} B_i$ means $B_1 \cup B_2 \cup \ldots \cup B_n$.)
-
-**2.8** Show that if the set $S$ has $n$ elements, then $S$ has $2^n$ subsets. (Hint: Use the binomial theorem.)
-
-**2.9** Let $A$ and $B$ be two events defined on a sample space $S$. Depict the following events in Venn diagrams:
-
-(a) $C = (A \cap \overline{B}) \cup (\overline{A} \cap B)$
-
-(b) $D = \overline{A \cup B} \cup (A \cap B)$
-
-(c) What can you say about events $C$ and $D$?
-
-</Collapse>
-
-<Collapse title="Exercise solutions" hint="answers to 2.1–2.9">
-
-**2.1**
-
-(a) The number six is obtained.
-
-(b) A number less than or equal to four is obtained.
-
-(c) An odd number is obtained.
-
-(d) An even number is obtained.
-
-(e) A number greater than or equal to 5 is obtained.
-
-(f) A number other than 6 is obtained.
-
-**2.2** All are true except (d) and (f).
-
-**2.3**
-
-(a) Set of companies either in the gold mining sector or with turnovers exceeding R10 million.
-
-(b) Set of gold mining companies whose share price is higher now than six months ago.
-
-(c) Set of gold mining companies with a financial year ending in June whose share price is higher now than six months ago.
-
-(d) Set of all companies which have an annual turnover exceeding R10 million and which are either gold mining companies or companies with financial years ending in June (or both).
-
-(e) Set of companies not in the gold mining sector.
-
-(f) Set of companies which either do not have a financial year ending in June or have a share price which is higher now than six months ago.
-
-(g) Set of companies which either do not have an annual turnover exceeding R10 million or do not have financial year ending in June.
-
-(h) Set of companies which either do not have an annual turnover exceeding R10 million or are not in the gold mining sector or both have a financial year ending in June and have a share price which is higher now than six months ago.
-
-(Notice how difficult it is to express unambiguously in words the meaning of a few mathematical symbols.)
-
-**2.4** All are true, except (g) and (h).
-
-**2.5** $\emptyset, \{1\}, \{2\}, \{3\}, \{1, 2\}, \{1, 3\}, \{2, 3\}, \{1, 2, 3\}$.
-
-**2.9** (c) $C$ and $D$ are mutually exclusive.
-
-</Collapse>
 
 <Quiz />

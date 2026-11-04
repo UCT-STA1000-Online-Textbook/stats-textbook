@@ -12,11 +12,11 @@ quiz:
     question: "What is the defining condition for a Poisson process?"
     options:
       - "There are exactly two outcomes on each trial"
-      - "The events occur at random, so an event is equally likely at any instant"
+      - "The events occur at random, at a certain average rate"
       - "The number of trials is fixed in advance"
       - "The probability of an event is always small"
     answer: 1
-    explanation: "A Poisson process is one in which events occur at random in time or space, meaning an event is equally likely to occur at any instant. Two outcomes per trial and a fixed number of trials are the Binomial conditions; with a Poisson process there is no fixed number of trials at all."
+    explanation: "A Poisson process is one in which events occur at random in time or space: events have a certain average rate of occurrence, but an event is still likely to occur at any instant. Two outcomes per trial and a fixed number of trials are the Binomial conditions; with a Poisson process there is no fixed number of trials at all."
   - id: "q2"
     type: "mcq"
     question: "Breakdowns occur randomly at 12 per 5-day working week. What is λ for the number of breakdowns in a single day?"
@@ -78,22 +78,22 @@ nextUnit: "m4-normal"
 
 ## The Poisson distribution
 
-Many phenomena in physics obey the Poisson probability law, named in honour of the French mathematician Simeon D. Poisson (1781 to 1840). The classic example is the decomposition of radioactive nuclei. In management science, the number of demands for service in a given period of time (on the tellers in a bank, the stock pile of a factory, the runways of an airport, the lines of a telephone exchange) often obeys a Poisson distribution, either exactly or approximately. The same goes for the occurrence of accidents, errors, breakdowns and other calamities: the number that occurs within a specified time period has a Poisson distribution under certain circumstances.
+Many phenomena in physics obey the Poisson probability law, named in honour of the French mathematician Simeon D. Poisson (1781 to 1840). The classic example is radioactive decay. In management science, the number of demands for service in a given period of time (on the tellers in a bank, the stock pile of a factory, the runways of an airport, the lines of a telephone exchange) often obeys a Poisson distribution, either exactly or approximately. The same goes for the occurrence of accidents, errors, breakdowns and other calamities: the number that occurs within a specified time period has a Poisson distribution under certain circumstances.
 
-In broad terms, the condition for a **Poisson process** is that the events occur in time "at random". Loosely, this means that an event is equally likely to occur at any instant in time. If a phenomenon obeys a Poisson process, then the Poisson distribution may be used to model the number of occurrences of the event during a fixed time period.
+In broad terms, the condition for a **Poisson process** is that the events occur in time "at random". Loosely, this means that an event has a certain average rate of occurrence, but the event is still likely to occur at any instant in time. If a phenomenon obeys a Poisson process, then the Poisson distribution may be used to model the number of occurrences of the event during a fixed time period.
 
 We can also use the Poisson distribution when we count the occurrences of an event in a fixed amount of "space". The number of faults in 100 m of computer cable, the number of misprints on an A4 page, and the number of diamonds in a cubic metre of ore are all Poisson processes, so long as the events occur at random in space, and can be modelled with the Poisson distribution.
 
 > **Keywords:** <KeywordChip vizId="poisson-process" preset="potholes">Poisson process</KeywordChip>, events occurring at random, <KeywordChip vizId="poisson-process" preset="trucks">rate λ</KeywordChip>, probability mass function, <KeywordChip vizId="poisson-process" mode="gaps">Exponential distribution</KeywordChip>, time between events, memorylessness.
 
-The Poisson distribution has only one parameter: the average rate $\lambda$ at which events occur per time period. Because the number of events in the interval must be a whole number, the Poisson distribution is discrete.
+The Poisson distribution has only one parameter: the average rate $\lambda$ at which events occur per period. Because the number of events in the period must be a whole number, the Poisson distribution is discrete.
 
 <Definition term="Poisson distribution">
-We are given a period of time during which events occur at random. The average rate at which events occur is $\lambda$ events per time period.
+We are given a period (of time, length, area and so on) during which events occur at random. The average rate at which events occur is $\lambda$ events per period.
 
-It is critical that the time period referred to in the rate must be the same as the time period during which the events are counted.
+It is critical that the period referred to in the rate is the same as the period during which the events are counted. For example, a rate of $\lambda = 3$ events per 50 m must be used when we count the number of events in 50 m, but it must change (to $\lambda = 6$) if we count the number of events in 100 m.
 
-Let the random variable $X$ be the number of events occurring during the time period. Then $X$ has the Poisson distribution with parameter $\lambda$, written $X \sim P(\lambda)$, with probability mass function
+Let the random variable $X$ be the number of events occurring during the period. Then $X$ has the Poisson distribution with parameter $\lambda$, written $X \sim P(\lambda)$, with probability mass function
 
 $$
 p(x) = \frac{e^{-\lambda} \lambda^{x}}{x!}, \qquad x = 0, 1, 2, \ldots
@@ -220,14 +220,14 @@ using the series given above. So all three conditions hold.
 </Solution>
 </Example>
 
-<Example title="Example 9C: beercans along the road">
-Beercans are randomly tossed alongside the national road, with an average frequency of 3.2 per km.
+<Example title="Example 9C: beer cans along the road">
+Beer cans are randomly tossed alongside the national road, with an average frequency of 3.2 per km.
 
-(a) What is the probability of seeing no beercans over a 5 km stretch?
+(a) What is the probability of seeing no beer cans over a 5 km stretch?
 
-(b) What is the probability of seeing at least one beercan in 200 m?
+(b) What is the probability of seeing at least one beer can in 200 m?
 
-(c) Determine the values of $x$ and $y$ in the following statement: "40% of 1 km sections have $x$ or fewer beercans, while 5% have more than $y$."
+(c) Determine the values of $x$ and $y$ in the following statement: "40% of 1 km sections have $x$ or fewer beer cans, while 5% have more than $y$."
 
 For part (c) the following table is useful.
 
@@ -243,7 +243,7 @@ $$
 \Pr[X = 0] = e^{-16} = 0.1125 \times 10^{-6}.
 $$
 
-Roughly one chance in nine million. Over 5 km of national road, seeing no beercans at all is effectively impossible.
+Roughly one chance in nine million. Over 5 km of national road, seeing no beer cans at all is effectively impossible.
 
 **(b)** Now 200 m is 0.2 km, so $\lambda = 0.2 \times 3.2 = 0.64$ and
 
@@ -268,7 +268,7 @@ For $y$, "5% have more than $y$" means $\Pr[X > y] = 0.05$, that is $\Pr[X \le y
 <TryThis
   vizId="poisson-process"
   preset="beercans"
-  label="Read off the beercan percentiles"
+  label="Read off the beer can percentiles"
   description="Bars 0 to 2 are selected, giving the 0.3799 that answers x = 2 in part (c). Click bars 3, 4, 5 and 6 on as well and the total passes 0.95, which is where y = 6 comes from."
 />
 
@@ -320,12 +320,12 @@ Notice what this derivation says: a Poisson distribution is what a Binomial dist
 
 ## The Exponential distribution
 
-The Exponential distribution arises out of the same underlying scenario as the Poisson distribution: the Poisson process, in which events occur at random in time or space. For the Poisson distribution we counted the number of events that occurred in a fixed period of time. For the Exponential distribution we consider the **interval of time between events**.
+The Exponential distribution arises out of the same underlying scenario as the Poisson distribution: the Poisson process, in which events occur at random in time or space. For the Poisson distribution we counted the number of events that occurred in a fixed period. For the Exponential distribution we consider the **interval of time between events**.
 
 We let the random variable $X$ be the time between events. It is a continuous random variable, since it can take any value in the sample space $S = \{x \mid x \ge 0\}$, so it must have a probability density function.
 
 <Definition term="Exponential distribution">
-If events are occurring at random with average rate $\lambda$ per unit of time, then the probability density function for the random variable $X$, the length of time between events, is given by
+If events are occurring at random with average rate $\lambda$ per unit interval, then the probability density function for the random variable $X$, the length of time between events, is given by
 
 $$
 f(x) = \lambda e^{-\lambda x}, \qquad x \ge 0
@@ -337,6 +337,10 @@ $$
 
 $X$ is said to have the Exponential distribution with parameter $\lambda$, and we write $X \sim E(\lambda)$.
 </Definition>
+
+<Note>
+Even though $X$ now measures the gap between events, $\lambda$ is still the average **number of events** per unit interval, exactly as in the Poisson distribution. It is not the average length of the gap. A computer that breaks down on average 1.5 times per week has $\lambda = 1.5$ per week, not 1.5 weeks between breakdowns. (The average gap is in fact $1/\lambda$, here two thirds of a week.)
+</Note>
 
 The Exponential distribution can also be used to model the distance between events in space, so long as the space is one-dimensional. It works for the distance between flaws in a cable, but not for the distance between flaws on an A4 page, because a page is two-dimensional and there is no single direction in which to measure the gap.
 

@@ -209,12 +209,15 @@ $$
 From the table for the standard Normal distribution we can read off this probability as 0.2486.
 
 <ExcelPointer title="Normal probabilities for Example 15A(a)">
-In Excel we use the `=NORM.DIST(x, mean, standard_dev, cumulative)` function.
+Excel has two functions for Normal probabilities:
+
+- `=NORM.DIST(x, mean, standard_dev, cumulative)` works with any Normal distribution, on the original $X$ scale.
+- `=NORM.S.DIST(z, cumulative)` works with the standard Normal distribution $Z$ only. It needs no mean or standard deviation, because these are fixed at 0 and 1. With cumulative set to TRUE it gives $\Pr[Z < z]$. It plays the part of the Normal table, but it gives the whole area to the left of $z$ rather than the area between 0 and $z$.
 
 1. Write the probability as a difference of two cumulative probabilities: $\Pr(251 < X < 253) = \Pr(X < 253) - \Pr(X < 251)$.
 2. Type `=NORM.DIST(253, 251, 3, TRUE) - NORM.DIST(251, 251, 3, TRUE)`, which gives 0.2475.
 3. Setting cumulative to TRUE produces a cumulative probability, which is what we want. FALSE would instead give the height of the density function at that value of $X$ (or $Z$).
-4. We can also work directly with the standard Normal distribution by converting the $X$ values into the equivalent number of standard deviations away from the mean (these are the $Z$ values) and finding $\Pr(0 < Z < 2/3)$: `=NORM.S.DIST(2/3, TRUE) - NORM.S.DIST(0, TRUE)`, which also gives 0.2475.
+4. We can also work directly with the standard Normal distribution. Convert the $X$ values into the equivalent number of standard deviations away from the mean (these are the $Z$ values): $(251 - 251)/3 = 0$ and $(253 - 251)/3 = 2/3$. Then $\Pr(0 < Z < 2/3) = \Pr(Z < 2/3) - \Pr(Z < 0)$, which is `=NORM.S.DIST(2/3, TRUE) - NORM.S.DIST(0, TRUE)`. This also gives 0.2475.
 </ExcelPointer>
 
 Thus, almost a quarter of margarine tubs contain between 251 g and 253 g of margarine. (The table gave 0.2486 because it had to round $2/3$ to 0.67 before looking it up; Excel uses the exact value.)

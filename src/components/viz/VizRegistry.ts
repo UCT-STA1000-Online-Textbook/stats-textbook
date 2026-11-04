@@ -21,12 +21,12 @@ import type { VizParams } from "@/store/vizStore";
 export type VizComponent = ComponentType<{ params: VizParams }>;
 
 export const VIZ_REGISTRY: Record<string, VizComponent> = {
-  // M1 — Set theory primer (m1-introducing-probability)
+  // M1 — Set theory primer (m1-set-theory)
   "venn-diagram": lazy(() => import("./probability/VennDiagram")),
   "set-builder-line": lazy(() => import("./probability/SetBuilderLine")),
   "set-partition": lazy(() => import("./probability/SetPartition")),
 
-  // M1 — Sample spaces, axioms & theorems (m1-set-theory)
+  // M1 — Sample spaces, axioms & theorems (m1-introducing-probability)
   "probability-venn": lazy(() => import("./probability/ProbabilityVenn")),
 
   // M1 — Conditional probability & independence (m1-conditional-probability)
@@ -98,7 +98,7 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   "contingency-test": lazy(() => import("./inference/ContingencyTest")),
 
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
-  // `random-trials` is the law-of-large-numbers demo for m1-set-theory:
+  // `random-trials` is the law-of-large-numbers demo for m1-introducing-probability:
   // a draggable 3D die or coin with a relative-frequency convergence chart.
   "random-trials": lazy(() => import("./probability/RandomTrials")),
   // `counting-studio` is the 3D counting-rules viz for m1-permutations-combinations.

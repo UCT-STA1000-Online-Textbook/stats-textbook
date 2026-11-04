@@ -74,7 +74,7 @@ The Binomial distribution may be used as a probability model in situations where
 
 **1. Each trial has exactly two outcomes.** We have a random experiment whose sample space holds exactly two outcomes, one of which we label "success" and the other "failure", so $S = \{\text{success}, \text{failure}\}$. For example, a door-to-door salesperson calls on a prospective client: the client either purchases the product (success) or does not (failure).
 
-**2. The trials are independent.** The random experiment is repeated $n$ times, and the outcome of any one repetition is not influenced by the outcome of any other. We say we have $n$ independent trials. For example, the salesperson calls on $n = 6$ prospective clients, who make their purchasing decisions independently (there is no communication between them).
+**2. There are a fixed number, $n$, of independent trials.** The random experiment is repeated $n$ times, where $n$ is fixed in advance, and the outcome of any one repetition is not influenced by the outcome of any other. We say we have $n$ independent trials. For example, the salesperson calls on $n = 6$ prospective clients, who make their purchasing decisions independently (there is no communication between them).
 
 **3. The probability of success stays the same.** Each client is equally likely to purchase the product. We write $\Pr(\text{success}) = p$, so $\Pr(\text{failure}) = 1 - p$. It is often convenient to let $q = 1 - p$.
 
@@ -163,11 +163,19 @@ so in about a third of sessions the salesperson makes two or more sales. Adding 
   description="Bars 2 to 6 are selected, which is the Pr[X ≥ 2] = 0.3446 worked out above. Click any bar to add it to the total or take it out, and watch how quickly the probabilities die away past three sales."
 />
 
+<ExcelPointer title="Binomial probabilities in Excel">
+Excel has two functions for the Binomial distribution. Both need the number of trials $n$ and the probability of success $p$.
+
+1. `=BINOM.DIST(x, n, p, FALSE)` gives $\Pr[X = x]$. For the salesperson, `=BINOM.DIST(2, 6, 0.2, FALSE)` gives 0.2458.
+2. `=BINOM.DIST(x, n, p, TRUE)` gives the cumulative probability $\Pr[X \le x]$. So $\Pr[X \ge 2] = 1 - \Pr[X \le 1]$ is `=1 - BINOM.DIST(1, 6, 0.2, TRUE)`, which gives 0.3446.
+3. `=BINOM.DIST.RANGE(n, p, x1, x2)` gives $\Pr[x_1 \le X \le x_2]$ in one step. Note that $n$ and $p$ come first in this one. `=BINOM.DIST.RANGE(6, 0.2, 2, 6)` gives the same 0.3446. Leave out $x_2$ and it gives $\Pr[X = x_1]$ instead.
+</ExcelPointer>
+
 <Example title="Example 2B: tendering for contracts">
 What is the probability of a contractor being awarded only one out of five contracts? Assume that the probability of being awarded a contract is 0.5.
 
 <Solution>
-Let a success be "awarded a contract", so $p = \tfrac{1}{2}$ and $q = 1 - p = \tfrac{1}{2}$. We have $n = 5$ trials, and $X$, the number of successes, has $X \sim B(5, \tfrac{1}{2})$. Then
+Let a success be "awarded a contract", so $p = \tfrac{1}{2}$ and the probability of failure is $1 - p = \tfrac{1}{2}$. We have $n = 5$ trials, and $X$, the number of successes, has $X \sim B(5, \tfrac{1}{2})$. Then
 
 $$
 \Pr[X = x] = p(x) = \binom{5}{x} \left(\tfrac{1}{2}\right)^{x} \left(\tfrac{1}{2}\right)^{5-x}, \qquad x = 0, 1, \ldots, 5

@@ -6,8 +6,9 @@
  * breadcrumb, title, status badges, MDX body, and prev/next pagination.
  *
  * Side-effect: when the slug changes (i.e. user navigates between units),
- * resets the right-hand panel — closes any open quiz and either loads the
- * unit's `defaultViz` or clears the visualisation entirely. This keeps the
+ * resets the right-hand panel: closes any open quiz and loads the unit's
+ * default visualisation (its `defaultViz`, which `src/lib/mdx.ts` fills in
+ * from the first `<TryThis>` when the frontmatter names none). This keeps the
  * three panels consistent without coupling routing to the viz store.
  */
 
@@ -37,8 +38,7 @@ interface ReadingPanelProps {
 }
 
 export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
-  const setViz = useVizStore((s) => s.setViz);
-  const resetViz = useVizStore((s) => s.resetViz);
+  const loadDefaultViz = useVizStore((s) => s.loadDefaultViz);
   const setQuizOpen = useVizStore((s) => s.setQuizOpen);
   const wide = useVizWide();
   // Subscribe to the unit's progress record itself (not the store's getter
@@ -65,14 +65,10 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
     // by the `defaultViz` load below.
     useUiStore.getState().setNavDrawerOpen(false);
     useUiStore.getState().setVizSheetOpen(false);
-    if (frontmatter.defaultViz) {
-      setViz(
-        frontmatter.defaultViz,
-        (frontmatter.defaultVizParams as VizParams) ?? {}
-      );
-    } else {
-      resetViz();
-    }
+    loadDefaultViz(
+      frontmatter.defaultViz ?? null,
+      (frontmatter.defaultVizParams as VizParams) ?? {}
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frontmatter.slug]);
 

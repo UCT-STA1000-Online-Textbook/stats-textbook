@@ -90,11 +90,14 @@ class VizErrorBoundary extends Component<
 /**
  * Renders the active visualisation, or the placeholder if nothing is active.
  * Header bar shows the registered `vizId`, a Rate control (see `VizRating`),
- * in review mode a Comment button, and a Reset action that clears the store
- * back to the unit's default state.
+ * in review mode a Comment button, and a Reset action that closes the quiz
+ * and restarts the unit's default visualisation.
  */
 function VizArea() {
-  const { activeViz, vizParams, resetViz } = useVizStore();
+  const { activeViz, vizParams, resetViz, loadNonce } = useVizStore();
+  // Remount key: every load (a `<TryThis>` click, Reset, or a new unit)
+  // bumps the nonce and starts the viz afresh; see `loadNonce` in vizStore.
+  const vizKey = `${activeViz}:${JSON.stringify(vizParams)}:${loadNonce}`;
   const VizComponent = activeViz ? VIZ_REGISTRY[activeViz] : null;
   const wide = useVizWide();
   const setVizWide = useUiStore((s) => s.setVizWide);
@@ -157,17 +160,16 @@ function VizArea() {
           </button>
         </div>
       </div>
-      {/* Re-key the boundary on viz + params so every `<TryThis>` click
-          clears any error from a previous visualisation. */}
-      <VizErrorBoundary key={`${activeViz}:${JSON.stringify(vizParams)}`}>
+      {/* Re-key the boundary with the viz so every `<TryThis>` click or
+          Reset clears any error from a previous visualisation. */}
+      <VizErrorBoundary key={vizKey}>
         <Suspense fallback={<VizSkeleton />}>
           <div className="flex-1 min-h-0 p-4">
-            {/* Re-key on params so a fresh `<TryThis>` click resets the
-                component to the new initial state. Local interactions inside
-                the viz don't change `vizParams`, so user input is preserved
-                between TryThis fires. */}
+            {/* Re-keyed on every load so a `<TryThis>` click or Reset
+                returns the viz to its starting state. Interactions inside the
+                viz don't touch the store, so they never trigger a remount. */}
             <VizComponent
-              key={`${activeViz}:${JSON.stringify(vizParams)}`}
+              key={vizKey}
               params={vizParams}
             />
           </div>
@@ -187,8 +189,8 @@ function VizSkeleton() {
 }
 
 /**
- * Empty state shown before the student clicks any "Try this" prompt — also
- * the state for placeholder units that have no visualisations yet. Doubles
+ * Empty state for units with no visualisations (no `<TryThis>` and no
+ * `defaultViz`); every other unit opens on its first visualisation. Doubles
  * as a brief explanation of how the right panel is meant to be used.
  */
 function VizPlaceholder() {

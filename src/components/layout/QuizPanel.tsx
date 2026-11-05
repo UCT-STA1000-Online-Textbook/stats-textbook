@@ -35,6 +35,8 @@ import { useProgressStore, QuizAnswer } from "@/store/progressStore";
 import { useQuizContext } from "@/components/mdx/QuizContext";
 import { QuizQuestion } from "@/components/mdx/QuizQuestion";
 import { toVizParams } from "@/components/mdx/vizParams";
+import { REVIEW_MODE } from "@/lib/review";
+import { CommentButton } from "@/components/review/ReviewButtons";
 import {
   IconClose,
   IconCheck,
@@ -182,19 +184,34 @@ export function QuizPanel({ expanded, onToggleExpanded }: QuizPanelProps) {
       {/* Scrollable list of questions */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
         {questions.map((q, i) => (
-          <QuizQuestion
-            key={q.id}
-            question={q}
-            index={i}
-            selected={answers[q.id]}
-            submitted={submitted}
-            onAnswer={(val) => handleAnswer(q.id, val)}
-            onShowHint={
-              q.vizHint
-                ? () => handleShowHint(q.vizHint!, q.vizHintParams)
-                : undefined
-            }
-          />
+          <div key={q.id}>
+            <QuizQuestion
+              question={q}
+              index={i}
+              selected={answers[q.id]}
+              submitted={submitted}
+              onAnswer={(val) => handleAnswer(q.id, val)}
+              onShowHint={
+                q.vizHint
+                  ? () => handleShowHint(q.vizHint!, q.vizHintParams)
+                  : undefined
+              }
+            />
+            {/* Review mode: comment on this question. Indented to sit under
+                the question text, like the options (see QuizQuestion). */}
+            {REVIEW_MODE && (
+              <div className="mt-1.5 pl-[34px]">
+                <CommentButton
+                  label="Comment on this question"
+                  target={() => ({
+                    kind: "quiz",
+                    location: `Quiz question ${i + 1}`,
+                    quote: q.question,
+                  })}
+                />
+              </div>
+            )}
+          </div>
         ))}
       </div>
 

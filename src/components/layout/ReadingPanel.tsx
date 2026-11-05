@@ -22,6 +22,8 @@ import type { VizParams } from "@/store/vizStore";
 import type { UnitFrontmatter } from "@/lib/mdx";
 import { ALL_UNITS } from "@/content/units";
 import { useProgressStore } from "@/store/progressStore";
+import { REVIEW_MODE } from "@/lib/review";
+import { FeedbackCornerButton } from "@/components/review/ReviewButtons";
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -184,6 +186,15 @@ export function ReadingPanel({ frontmatter, content }: ReadingPanelProps) {
           )}
         </nav>
       </article>
+
+      {/* Review mode's Feedback button. A zero-height sticky strip at the end
+          of the scrolling panel stays pinned to its bottom edge, so the
+          button floats in the corner without covering the panel's width. */}
+      {REVIEW_MODE && (
+        <div className="sticky bottom-0 h-0">
+          <FeedbackCornerButton />
+        </div>
+      )}
     </main>
   );
 }

@@ -33,6 +33,9 @@ import { QuizProvider } from "@/components/mdx/QuizContext";
 import { useUiStore } from "@/store/uiStore";
 import { useProgressStore } from "@/store/progressStore";
 import { useFeedbackStore } from "@/store/feedbackStore";
+import { useReviewStore } from "@/store/reviewStore";
+import { ReviewLayer } from "@/components/review/ReviewLayer";
+import { REVIEW_MODE } from "@/lib/review";
 import { IconMenu, IconChart } from "@/components/icons";
 import type { UnitFrontmatter } from "@/lib/mdx";
 
@@ -48,12 +51,13 @@ export function ThreePanelShell({ frontmatter, content }: ThreePanelShellProps) 
   const setVizSheetOpen = useUiStore((s) => s.setVizSheetOpen);
 
   // Runs once per mount, client-only — exactly where it's safe to read
-  // localStorage and adopt the student's real progress, sidebar preference
-  // and viz ratings.
+  // localStorage and adopt the student's real progress, sidebar preference,
+  // viz ratings and (in review mode) the reviewer's saved name and passcode.
   useEffect(() => {
     useProgressStore.persist.rehydrate();
     useUiStore.persist.rehydrate();
     useFeedbackStore.persist.rehydrate();
+    useReviewStore.persist.rehydrate();
   }, []);
 
   return (
@@ -83,6 +87,9 @@ export function ThreePanelShell({ frontmatter, content }: ThreePanelShellProps) 
             aria-hidden
           />
         )}
+
+        {/* Comment tools for lecturers and TAs; see src/lib/review.ts. */}
+        {REVIEW_MODE && <ReviewLayer slug={frontmatter.slug} />}
       </div>
     </QuizProvider>
   );

@@ -195,6 +195,12 @@ export const IconTrophy = (p: IconProps) => (
   </Base>
 );
 
+export const IconMessage = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.55L3 20.5l1.45-5.2A8.5 8.5 0 1 1 21 11.5Z" />
+  </Base>
+);
+
 export const IconStar = (p: IconProps) => (
   <Base {...p}>
     <path d="m12 2.5 2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95L12 2.5Z" />

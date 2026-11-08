@@ -97,6 +97,12 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   // and pile up D² under the χ²-curve with (r − 1)(c − 1) degrees of freedom.
   "contingency-test": lazy(() => import("./inference/ContingencyTest")),
 
+  // M5 — Regression (m5-regression). Fit a line by eye against the
+  // least-squares line, then sample the slope b again and again to see its
+  // Normal sampling distribution and the test of β = 0.
+  "least-squares": lazy(() => import("./inference/LeastSquares")),
+  "slope-sampling": lazy(() => import("./inference/SlopeSampling")),
+
   // Showcase-tier viz (3D) — see the viz tiers note in CLAUDE.md.
   // `random-trials` is the law-of-large-numbers demo for m1-introducing-probability:
   // a draggable 3D die or coin with a relative-frequency convergence chart.

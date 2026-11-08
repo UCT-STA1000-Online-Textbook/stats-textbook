@@ -8,7 +8,9 @@
  *   - `TWO_SAMPLE_PRESETS` for `TwoSampleT` (WU6),
  *   - `PAIRED_PRESETS` for `PairedT` (WU7),
  *   - `GOF_PRESETS` for `GoodnessOfFit` (WU8),
- *   - `ASSOCIATION_PRESETS` for `ContingencyTest` (WU9).
+ *   - `ASSOCIATION_PRESETS` for `ContingencyTest` (WU9),
+ *   - `REGRESSION_PRESETS` for `LeastSquares` (WU10),
+ *   - `SLOPE_PRESETS` for `SlopeSampling` (WU10).
  *
  * Each preset carries the figures printed in its worked example, so the panel
  * and the page agree.
@@ -900,4 +902,123 @@ export const ASSOCIATION_PRESETS: AssociationPreset[] = [
     finding:
       "Risk-averse clients favour fixed deposits and avoid options and futures, far more than independence predicts: investment type depends on attitude to risk.",
   },
+];
+
+/**
+ * The assembly-line example from the WU10 slides: 12 workers' average
+ * assembly time per unit (x, minutes) and defect rate (y, %). Shared by
+ * `LeastSquares` and `SlopeSampling`, which samples new defect rates at these
+ * same assembly times.
+ */
+export const ASSEMBLY_POINTS: { x: number; y: number }[] = [
+  { x: 17.4, y: 7.9 },
+  { x: 19.52, y: 9 },
+  { x: 19.6, y: 11.4 },
+  { x: 20, y: 9.6 },
+  { x: 22.6, y: 8.6 },
+  { x: 23, y: 5.7 },
+  { x: 24.6, y: 6.2 },
+  { x: 25.1, y: 8.2 },
+  { x: 26, y: 2.1 },
+  { x: 26.2, y: 8.1 },
+  { x: 28.4, y: 7.2 },
+  { x: 31.7, y: 3.7 },
+];
+
+/** A data set the `LeastSquares` viz can open at (Module 5, WU10). */
+export interface RegressionPreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** Which example this is, shown in the read-out header. */
+  source: string;
+  /** Axis caption for the independent (explanatory) variable X. */
+  xLabel: string;
+  /** Axis caption for the dependent (response) variable Y. */
+  yLabel: string;
+  /** What Y is, in a few words, for the R² sentence: "income". */
+  yName: string;
+  /** What X is, in a few words, for the R² sentence: "years of education". */
+  xName: string;
+  /** The observed pairs, in the order the slides list them. */
+  points: { x: number; y: number }[];
+  /** Visible x range: the slides' own scatterplot axis. */
+  xView: [number, number];
+  /** Visible y range. */
+  yView: [number, number];
+  /** Gap between labelled ticks on each axis. */
+  xStep: number;
+  yStep: number;
+}
+
+/**
+ * Data sets for `LeastSquares`, Module 5 WU10 (`m5-regression`). Only the raw
+ * pairs are stored: the panel fits the least-squares line itself, and these
+ * reproduce the Excel output in the slides (a = −9.872, b = 3.586 for
+ * education; a = 16.726, b = −0.398 for assembly time).
+ */
+export const REGRESSION_PRESETS: RegressionPreset[] = [
+  {
+    id: "education",
+    label: "Education",
+    source: "Example 1: education and income",
+    xLabel: "Years of education (x)",
+    yLabel: "Income, R1000s (y)",
+    yName: "income",
+    xName: "years of education",
+    points: [
+      { x: 12, y: 33 },
+      { x: 15, y: 41 },
+      { x: 8, y: 18 },
+      { x: 10, y: 28 },
+      { x: 17, y: 53 },
+    ],
+    xView: [5, 19],
+    yView: [0, 60],
+    xStep: 2,
+    yStep: 10,
+  },
+  {
+    id: "assembly",
+    label: "Assembly line",
+    source: "Example: assembly time and defect rate",
+    xLabel: "Assembly time, minutes (x)",
+    yLabel: "Defect rate, % (y)",
+    yName: "defect rates",
+    xName: "assembly times",
+    points: ASSEMBLY_POINTS,
+    xView: [15, 35],
+    yView: [0, 14],
+    xStep: 5,
+    yStep: 2,
+  },
+];
+
+/**
+ * A population the `SlopeSampling` viz can sample from (Module 5, WU10). Each
+ * worker's defect rate is the population line α + βx plus a Normal error with
+ * standard deviation σ, at the assembly times of the slides' 12 workers.
+ */
+export interface SlopePreset {
+  id: string;
+  /** Short name for the preset picker; one or two words so the row fits. */
+  label: string;
+  /** The population intercept α. */
+  alpha: number;
+  /** The population slope β. */
+  beta: number;
+  /** Standard deviation of the points about the population line. */
+  sigma: number;
+}
+
+/**
+ * Populations for `SlopeSampling`. The first takes the slides' fitted line as
+ * if it were the truth (α = 16.726, β = −0.398, with σ = 2.055, Excel's
+ * "Standard Error"); the second has the same spread but no relationship at
+ * all (β = 0, with α at the mean defect rate, 7.308), which is what H₀ in the
+ * test of the slope says.
+ */
+export const SLOPE_PRESETS: SlopePreset[] = [
+  { id: "slope", label: "β = −0.398", alpha: 16.726, beta: -0.398, sigma: 2.055 },
+  { id: "none", label: "β = 0", alpha: 7.308, beta: 0, sigma: 2.055 },
 ];

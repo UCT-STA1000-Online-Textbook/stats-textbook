@@ -5,10 +5,437 @@ moduleId: "m5"
 moduleTitle: "Hypothesis Testing"
 unitNumber: 22
 moduleUnitNumber: 10
-status: "placeholder"
-quiz: []
+status: "draft"
+quiz:
+  - id: "q1"
+    type: "mcq"
+    question: "Using the regression equation Income = −9.872 + 3.586(years of education), with income in R1000s, what is the predicted average income for a person with 15 years of education?"
+    options:
+      - "R53 790"
+      - "R43 918"
+      - "R41 000"
+      - "R29 574"
+    answer: 1
+    explanation: "Substitute x = 15 into the regression equation: −9.872 + 3.586 × 15 = −9.872 + 53.790 = 43.918, so the predicted average income is R43 918."
+  - id: "q2"
+    type: "mcq"
+    question: "In Example 1, the person with 15 years of education earns R41 000, and the regression line predicts R43 918. What is this person's residual?"
+    options:
+      - "2.918"
+      - "−2.918"
+      - "8.515"
+      - "84.918"
+    answer: 1
+    explanation: "A residual is the actual y minus the predicted value: e = y − ŷ = 41 − 43.918 = −2.918. It is negative because the point lies below the regression line."
+    vizHint: "least-squares"
+    vizHintParams:
+      preset: "education"
+  - id: "q3"
+    type: "mcq"
+    question: "Which of these cannot be a correlation coefficient?"
+    options:
+      - "−0.95"
+      - "0"
+      - "1.2"
+      - "0.05"
+    answer: 2
+    explanation: "The correlation coefficient always lies between −1 and 1, so 1.2 is impossible."
+  - id: "q4"
+    type: "mcq"
+    question: "Excel's regression output for the assembly-line data gives Multiple R = 0.644 and a slope coefficient of −0.398. What is the correlation coefficient r?"
+    options:
+      - "0.644"
+      - "−0.644"
+      - "0.415"
+      - "−0.398"
+    answer: 1
+    explanation: "Excel always prints Multiple R as a positive number. The slope is negative, so the relationship is negative and r = −0.644."
+    vizHint: "least-squares"
+    vizHintParams:
+      preset: "assembly"
+  - id: "q5"
+    type: "mcq"
+    question: "A regression of death rates from lung cancer on the number of cigarettes smoked gives R² = 0.486. What does this tell us?"
+    options:
+      - "48.6% of the variation in death rates is explained by the variation in the number of cigarettes smoked."
+      - "48.6% of smokers die of lung cancer."
+      - "Each extra cigarette raises the death rate by 0.486."
+      - "Smoking causes 48.6% of lung cancer deaths."
+    answer: 0
+    explanation: "The coefficient of determination R² is the proportion of the variation in Y that is explained by the variation in X. It says nothing about cause, and the effect of one extra cigarette is the slope (0.529), not R²."
+  - id: "q6"
+    type: "mcq"
+    question: "For the 12 assembly-line workers, the test of H₀: β = 0 gives t = −2.666 with a p-value of 0.0237. How many degrees of freedom does t have, and what do we conclude at the 5% level?"
+    options:
+      - "11 degrees of freedom; do not reject H₀."
+      - "12 degrees of freedom; reject H₀."
+      - "10 degrees of freedom; reject H₀: there is a significant relationship."
+      - "10 degrees of freedom; do not reject H₀: there is no relationship."
+    answer: 2
+    explanation: "The test of the slope has n − 2 = 12 − 2 = 10 degrees of freedom. The p-value 0.0237 is below 0.05, so we reject H₀ and conclude that there is a significant relationship between assembly time and defect rates."
+    vizHint: "slope-sampling"
+    vizHintParams:
+      preset: "none"
+  - id: "q7"
+    type: "true-false"
+    question: "A correlation coefficient close to +1 proves that changes in X cause changes in Y."
+    answer: false
+    explanation: "False. A strong correlation or a significant slope does not in itself prove a causal relationship. Ice-cream sales and drownings at a beach are strongly correlated, but sunny weather is the more likely cause of both."
 prevUnit: "m5-categorical-association"
 nextUnit: null
 ---
 
-Content coming soon.
+## Regression and correlation
+
+This unit deals with describing relationships between two quantitative variables, e.g. age and income.
+
+**Correlation** answers the following question: is there really a relationship between the two variables?
+
+**Regression** answers the following question: how do we predict values for one variable, given particular values for another variable(s)?
+
+> **Keywords:** <KeywordChip vizId="least-squares" preset="education">dependent variable</KeywordChip>, <KeywordChip vizId="least-squares" preset="education">independent variable</KeywordChip>, <KeywordChip vizId="least-squares" preset="assembly">scatterplot</KeywordChip>, <KeywordChip vizId="least-squares" preset="education">residual</KeywordChip>, <KeywordChip vizId="least-squares" preset="education">method of least squares</KeywordChip>, <KeywordChip vizId="least-squares" preset="assembly">correlation coefficient</KeywordChip>, <KeywordChip vizId="least-squares" preset="assembly">coefficient of determination</KeywordChip>, <KeywordChip vizId="slope-sampling" preset="none">testing the slope</KeywordChip>.
+
+## Regression analysis
+
+Regression analysis models situations in which there is (at least) one dependent variable and at least one independent variable.
+
+For this course we will only be modelling with ONE dependent and ONE independent variable. As an example, consider the variables years of education and income. Suppose we are hypothesising that an individual's income is determined (to some degree) by their years of education. Thus we are proposing that "income" is the dependent variable and "years of education" is the independent variable. We are stating a belief that (current) income depends on the number of years of education that an individual can claim credit for. Note that the converse is not necessarily true. We will employ regression analysis to predict an individual's income from their years of education.
+
+<Example title="Example 1: education and income">
+Below is a sample of years of education and income (R1000s) for five individuals.
+
+| Education | Income |
+| --- | --- |
+| 12 | 33 |
+| 15 | 41 |
+| 8 | 18 |
+| 10 | 28 |
+| 17 | 53 |
+
+We plot the dependent variable, "Income", also known as the response variable, on the vertical axis (Y), and the independent (predictor) variable, years of education, on the horizontal (X) axis.
+
+<TryThis
+  vizId="least-squares"
+  preset="education"
+  label="Plot the five individuals"
+  description="Income goes up the vertical axis and years of education along the horizontal axis. The points rise from left to right: a positive relationship."
+/>
+</Example>
+
+## Scatterplots
+
+Regression analysis is only effective as a predictive tool if a relationship actually exists between the dependent and independent variables. Scatterplots can be used as a preliminary method for identifying relationships between two variables. We are interested in categorising the relationships between two variables as:
+
+- **positive**: as X increases, so does Y;
+- **negative**: as X increases, Y decreases; or
+- **no relationship**.
+
+The relationship could also be linear or non-linear. In this course we will only be dealing with linear regression, i.e. a relationship in which the dependent variable is a linear function of the independent variable.
+
+<ExcelPointer title="Scatterplot with a trendline">
+1. Type the data into two columns, with the independent variable (X) in the left-hand column and the dependent variable (Y) on its right. Excel puts the left-hand column on the horizontal axis.
+2. Select both columns, including their headings.
+3. Choose **Insert ▸ Charts ▸ Scatter** (the plain scatter, markers only).
+4. Click any point, then right-click ▸ **Add Trendline…** and choose **Linear**.
+5. In the trendline options, tick **Display Equation on chart** and **Display R-squared value on chart**.
+6. Add axis titles with **Chart Elements (+) ▸ Axis Titles**: the Y variable up the vertical axis, the X variable along the horizontal axis.
+</ExcelPointer>
+
+## Building the regression model
+
+We attempt to fit a straight line (since we are dealing with linear regression) through our observed data. The regression equation is of the form
+
+$$
+Y = a + bX,
+$$
+
+where $Y$ is the dependent variable and $X$ is the independent variable. $a$ and $b$ are chosen so that the regression line "best fits" the observed data. We need to calculate $a$ and $b$: $a$ is the **intercept** term and $b$ is the **slope**.
+
+How do we determine the best regression line to use? How do we determine $a$ and $b$?
+
+## Method of least squares
+
+The constants $a$ and $b$ are chosen to minimise the sum of squared residuals.
+
+<Definition term="Residual">
+A residual ($e$) is the difference between the actual $y$ and $\hat{y}$, the predicted value of $y$:
+
+$$
+e = y - \hat{y}.
+$$
+
+If you have $n$ pairs of observations then you'll have $n$ residuals.
+</Definition>
+
+$$
+\text{Sum of squared residuals} = \sum_{i=1}^{n} e_i^2 = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2.
+$$
+
+We want to minimise this! The line that does so is the **least-squares regression line**.
+
+<TryThis
+  vizId="least-squares"
+  preset="education"
+  label="Find the best line by hand"
+  description="Drag the ends of the line. Each residual is drawn with a square on it whose area is e², and the sum of squared residuals adds up those squares. Get it as small as you can, then show the least-squares line: no line does better than 16.902."
+/>
+
+Excel finds $a$ and $b$ for us.
+
+<ExcelPointer title="Regression with the Analysis ToolPak">
+1. The first time only, switch on the ToolPak: **File ▸ Options ▸ Add-ins**, choose **Excel Add-ins** in the Manage box at the bottom and click **Go**, then tick **Analysis ToolPak** and click **OK**. (On a Mac: **Tools ▸ Excel Add-ins**.)
+2. Type the data into two columns, e.g. education in A1:A6 and income in B1:B6, with the headings in row 1.
+3. Choose **Data ▸ Data Analysis**, pick **Regression** and click **OK**.
+4. **Input Y Range**: the dependent variable, B1:B6. **Input X Range**: the independent variable, A1:A6.
+5. Tick **Labels**, because the ranges include the headings.
+6. Under Output options choose **New Worksheet Ply** (or an Output Range on the same sheet), then click **OK**.
+</ExcelPointer>
+
+<Example title="Example 1 (continued): the Excel output">
+Excel's SUMMARY OUTPUT for the education and income data is:
+
+| Regression Statistics | |
+| --- | --- |
+| Multiple R | 0.988 |
+| R Square | 0.976 |
+| Adjusted R Square | 0.968 |
+| Standard Error | 2.374 |
+| Observations | 5 |
+
+| ANOVA | df | SS | MS | F | Significance F |
+| --- | --- | --- | --- | --- | --- |
+| Regression | 1 | 684.298 | 684.298 | 121.457 | 0.002 |
+| Residual | 3 | 16.902 | 5.634 | | |
+| Total | 4 | 701.200 | | | |
+
+| | Coefficients | Standard Error | t Stat | P-value | Lower 95% | Upper 95% |
+| --- | --- | --- | --- | --- | --- | --- |
+| Intercept | −9.872 | 4.173 | −2.366 | 0.099 | −23.151 | 3.407 |
+| Education | 3.586 | 0.325 | 11.021 | 0.002 | 2.551 | 4.622 |
+
+The intercept $a$ and the slope $b$ are in the **Coefficients** column, so the regression equation is
+
+$$
+\text{Income} = -9.872 + 3.586(\text{years of education}).
+$$
+
+Predict the average income for a person who has 11 years of education.
+
+<Solution>
+Substitute 11 years into the regression equation:
+
+$$
+\text{Income} = -9.872 + 3.586 \times 11 = 29.574.
+$$
+
+Income is measured in R1000s, so the predicted average income is R29 574.
+</Solution>
+</Example>
+
+## Correlation analysis
+
+Correlation is a measure of the linear relationship between X and Y. It is a numerical measure of the strength and direction of a linear relationship between two quantitative variables. If we have access to all individuals in a population, we can calculate the correlation for the population (the true correlation value); otherwise we would calculate the sample correlation.
+
+The sample correlation coefficient ($r$) can be used to justify the existence of a relationship between X and Y, and hence the usefulness of a particular regression analysis.
+
+<Definition term="Sample correlation coefficient">
+$$
+r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{(n - 1)\, s_x s_y}
+$$
+
+The correlation coefficient always lies between $-1$ and $1$.
+</Definition>
+
+- $r > 0$: a positive linear relationship; the points rise from left to right.
+- $r = +1$: a perfect positive linear relationship; every point lies on a rising straight line.
+- $r < 0$: a negative linear relationship; the points fall from left to right.
+- $r = -1$: a perfect negative linear relationship; every point lies on a falling straight line.
+- $r \approx 0$: no linear relationship.
+
+<TryThis
+  vizId="least-squares"
+  preset="education"
+  label="Make r = +1, then r ≈ 0"
+  description="Show the least-squares line, then drag the data points up and down. Line them up exactly and r reaches +1; tilt them the other way for −1; scatter them and r falls towards 0. Reset brings back the data."
+/>
+
+In Excel's regression output, $r$ is the **Multiple R**. Excel always prints it as a positive number, so give it the sign of the slope: in Example 1 the slope is positive and $r = 0.988$.
+
+## Coefficient of determination
+
+The square of the correlation coefficient, $R^2$, is known as the **coefficient of determination**. It is a useful measure which indicates the proportion of the variation in Y that can be explained by the variation in X. In Excel's output it is the **R Square**.
+
+$R^2$ lies between 0 and 1. The closer $R^2$ is to 1, the better the regression model fits the data. The closer it is to 0, the poorer the fit. If $r$ is close to $+1$ or $-1$, $R^2$ will be close to 1, and if $r$ is close to 0, $R^2$ will also be close to 0.
+
+For example, if $R^2 = 0.8697$, then this is interpreted as: 86.97% of the variation in Y is explained by the variation in X. Since this is a large proportion, we would conclude that the regression model fits well.
+
+<Example title="Example: smoking and lung cancer">
+Data consisting of the numbers of cigarettes smoked per person in 44 states in 1960, together with the death rates from lung cancer (per thousand), was collected. We are interested in determining whether a relationship exists between smoking ($x$) and lung cancer ($y$).
+
+**Interpreting the scatterplot.** From the scatterplot of death rates against the number of cigarettes smoked per person, we observe a positive relationship between death rates from lung cancer ($y$) and the number of cigarettes smoked per person ($x$). As the number of cigarettes smoked increases, the death rate due to lung cancer also increases. The relationship between the number of cigarettes and death rates appears to be linear.
+
+**Correlation coefficient.** $r = 0.69$. $r$ is positive, therefore the number of cigarettes smoked and death rates have a positive relationship. The value of $r$ also tells us the strength of the linear relationship between our two variables: there is a fairly strong positive linear relationship between the number of cigarettes smoked and death rates.
+
+**Regression analysis.** Excel's output is:
+
+| Regression Statistics | |
+| --- | --- |
+| Multiple R | 0.697 |
+| R Square | 0.486 |
+| Adjusted R Square | 0.474 |
+| Standard Error | 3.066 |
+| Observations | 44 |
+
+| | Coefficients | Standard Error | t Stat | P-value | Lower 95% | Upper 95% |
+| --- | --- | --- | --- | --- | --- | --- |
+| Intercept | 6.472 | 2.141 | 3.023 | 0.004 | 2.152 | 10.792 |
+| X Variable | 0.529 | 0.084 | 6.306 | 0.000 | 0.360 | 0.698 |
+</Example>
+
+## The intercept and slope terms as random variables
+
+We use sample data to compute $a$ and $b$. These are therefore statistics, as they are computed from a sample.
+
+Both $a$ and $b$ are random variables, since they vary from sample to sample. They therefore both have sampling distributions, which turn out to be Normal. Can you think of a reason why they would be Normal? Hint: think of the central limit theorem.
+
+<Solution>
+Like the sample mean $\bar{x}$, both $a$ and $b$ are worked out by adding up quantities computed from every observation in the sample. The [central limit theorem](/unit/m5-sampling-distribution) tells us that sums and averages of this kind have sampling distributions that are approximately Normal.
+</Solution>
+
+The fixed, but unknown, intercept and slope population parameters could theoretically be obtained by fitting a regression model to the entire population. Since this is often not practically possible, we fit a regression line to a sample of data and use the sample statistics $a$ and $b$ to draw inferences about the unknown population parameters of interest. We write $\beta$ for the population slope.
+
+<TryThis
+  vizId="slope-sampling"
+  preset="slope"
+  label="Take sample after sample"
+  description="Monitor 12 new assembly-line workers again and again. Each sample gives its own line and its own slope b, and after 500 samples the slopes pile up in a Normal curve centred on the population slope β."
+/>
+
+## Regression results
+
+The regression equation for the smoking example is
+
+$$
+\hat{y} = 6.472 + 0.529x,
+$$
+
+where $y$ is the death rate and $x$ the number of cigarettes. The coefficient of $x$ (0.529) tells us that for every one additional cigarette smoked per person, the death rate increases by 0.529 on average.
+
+## Testing the slope
+
+We are typically interested in focusing on the slope coefficient as evidence of a "significant" relationship between X and Y. This is based on disproving that $\beta = 0$ (i.e. no relationship between X and Y). We can also conduct tests on the intercept coefficient ($a$), but $\beta$ is the coefficient which is most informative about the relationship between X and Y.
+
+For the smoking example:
+
+- $H_0$: $\beta = 0$, i.e. there is no relationship between X and Y in the population.
+- $H_1$: $\beta \neq 0$, i.e. there is a relationship between X and Y in the population.
+
+$$
+t = \frac{b - 0}{se(b)} = 6.306,
+$$
+
+which has $n - 2 = 44 - 2 = 42$ degrees of freedom. Both $t$ and its p-value are in Excel's output, in the **t Stat** and **P-value** columns of the slope's row: p-value $\approx 0.000$.
+
+The p-value is overwhelmingly significant. Therefore reject $H_0$ and conclude that there is a significant linear relationship between the number of cigarettes smoked and death rates.
+
+<TryThis
+  vizId="slope-sampling"
+  preset="none"
+  label="What does β = 0 look like?"
+  description="Sample 12 workers from a population with no relationship at all. The slopes still vary around 0, and the test rejects H₀ in only about 5% of samples. A t as far from 0 as the example's −2.666, in either direction, turns up in only about 2.4% of them: its p-value."
+/>
+
+## More regression results
+
+The coefficient of determination $R^2$ is 0.486. This tells us that 48.60% of the variation in death rates from lung cancer can be explained by the variation in the number of cigarettes smoked. We can (cautiously) use the regression line to make predictions.
+
+For example, predict the death rate if the number of cigarettes smoked per person is 20:
+
+$$
+\hat{y} = 6.472 + 0.529(20) = 17.052.
+$$
+
+Note that the intercept term may be interpreted as the predicted value of $y$ when $x = 0$. For example, predict the death rate if the number of cigarettes smoked per person is 0:
+
+$$
+\hat{y} = 6.472 + 0.529(0) = 6.472.
+$$
+
+Note that interpretation of the intercept term may or may not make sense depending on the context. Suppose we fit a regression line for income ($y$) against age ($x$) and get $\hat{y} = 500 + 1000x$. Is it meaningful to interpret the intercept term in this context?
+
+<Solution>
+No. The intercept is the predicted income at age 0, and newborn babies do not earn an income of 500. The intercept is needed to place the line, but here it has no sensible meaning on its own.
+</Solution>
+
+<Example title="Example: assembly time and defect rates">
+12 workers on an assembly line were randomly selected and monitored for a 1 week period. Data comprising the average assembly time per unit as well as defect rates were recorded. Investigate the relationship between assembly times and defect rates.
+
+| Defect rate (%) | Assembly time (in mins) |
+| --- | --- |
+| 7.9 | 17.4 |
+| 9 | 19.52 |
+| 11.4 | 19.6 |
+| 9.6 | 20 |
+| 8.6 | 22.6 |
+| 5.7 | 23 |
+| 6.2 | 24.6 |
+| 8.2 | 25.1 |
+| 2.1 | 26 |
+| 8.1 | 26.2 |
+| 7.2 | 28.4 |
+| 3.7 | 31.7 |
+
+Assembly time is the independent variable (X) here, so for an Excel scatterplot move it into the left-hand column.
+
+<TryThis
+  vizId="least-squares"
+  preset="assembly"
+  label="Plot the 12 workers"
+  description="Defect rates fall as assembly time rises: a negative relationship. Fit the line by hand, then show the least-squares line and its r and R²."
+/>
+
+Excel's output is:
+
+| Regression Statistics | |
+| --- | --- |
+| Multiple R | 0.64449762 |
+| R Square | 0.41537719 |
+| Adjusted R Square | 0.3569149 |
+| Standard Error | 2.05548543 |
+| Observations | 12 |
+
+| ANOVA | df | SS | MS | F | Significance F |
+| --- | --- | --- | --- | --- | --- |
+| Regression | 1 | 30.02 | 30.02 | 7.11 | 0.02 |
+| Residual | 10 | 42.25 | 4.23 | | |
+| Total | 11 | 72.27 | | | |
+
+| | Coefficients | Standard Error | t Stat | P-value | Lower 95% | Upper 95% |
+| --- | --- | --- | --- | --- | --- | --- |
+| Intercept | 16.7255117 | 3.58243116 | 4.6688 | 0.0009 | 8.74336 | 24.7077 |
+| X Variable | −0.3977409 | 0.149216482 | −2.666 | 0.0237 | −0.7302 | −0.0653 |
+
+Interpret the scatterplot and the regression and correlation results. Do you think it makes sense to interpret the intercept term?
+
+<Solution>
+**Interpreting the scatterplot.** From the scatterplot, we observe a negative relationship between defect rates and assembly time. Increasing the time to assemble a unit reduces the defect rate, which is what we would intuitively expect! The relationship between assembly time and defect rates appears to be linear.
+
+**Regression and correlation results.**
+
+- $r = -0.64$ (Multiple R, with the sign of the slope) tells us that there is a moderate negative linear relationship between assembly times and defect rates.
+- The regression equation is $\hat{y} = 16.73 - 0.398x$.
+- The coefficient of $x$ ($-0.398$) tells us that for every 1 additional minute it takes to assemble a unit, the defect rate decreases by 0.398 on average.
+- The p-value for the slope (0.0237) tells us that the test statistic ($-2.666$) is significant, and hence there is a significant relationship between assembly time and defect rates.
+- $R^2 = 0.42$. This tells us that 42% of the variation in defect rates can be explained by variation in assembly times.
+
+**The intercept.** It does not make sense to interpret it. The intercept, 16.73, is the predicted defect rate for an assembly time of 0 minutes, and no unit can be assembled in no time at all. The workers' times all lie between about 17 and 32 minutes, far from 0.
+</Solution>
+</Example>
+
+## Caution!
+
+A correlation coefficient close to $+1$ or $-1$, or a significant slope coefficient $b$, does not in itself prove a causal relationship.
+
+For example, one may observe a strong positive correlation between the number of drownings at a beach and the sales figures of a nearby ice-cream vendor, but this does not imply that ice-cream sales cause an increase in drownings! Sunny weather is more likely to be the cause of the simultaneous rise in ice-cream sales and drownings (due to more beach-goers). Correlation and regression analyses can establish a relationship between two variables, but it is up to the research worker to explain the causal mechanism (usually based on theoretical and logical considerations).
+
+<Quiz />

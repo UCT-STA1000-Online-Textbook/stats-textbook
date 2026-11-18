@@ -323,7 +323,7 @@ With observed test statistic $z$:
 | --- | --- | --- |
 | Lower tail ($<$) | $\Pr(Z \le z)$ | `=NORM.S.DIST(z, TRUE)` |
 | Upper tail ($>$) | $\Pr(Z \ge z)$ | `=1 - NORM.S.DIST(z, TRUE)` |
-| Two-sided ($\ne$) | $2 \times \Pr(Z \ge \lvert z \rvert)$ | `=2*(1 - NORM.S.DIST(ABS(z), TRUE))` |
+| Two-sided ($\ne$) | $\Pr(\lvert Z \rvert \ge \lvert z \rvert) = 2 \times \Pr(Z \ge \lvert z \rvert)$ | `=2*(1 - NORM.S.DIST(ABS(z), TRUE))` |
 </Theorem>
 
 <Example title="Example 15A: daily wages">

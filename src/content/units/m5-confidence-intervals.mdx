@@ -80,7 +80,7 @@ In the [previous unit](/unit/m5-sampling-distribution) we estimated the populati
 
 In many situations, in business and elsewhere, a sample mean by itself is not very useful. Such a single value is called a **point estimate**. For example, suppose that the breakeven point for a potential project is R20 million in revenues, and that we are given a point estimate for revenues of R22 million. Our dilemma is that this point estimate of revenue is subject to variation: the true unknown value may well be below R20 million. Clearly, it will be far more helpful in taking a decision if we could be given a method of calculating an interval of values along with a probability statement about the likelihood that the interval includes the true value. If we could be told that the true value for revenue is likely to lie in the interval R21 million to R23 million, we would decide to go ahead with the project. But if we were told it was likely that the true value lay in the interval R12 million to R32 million, we would most certainly want to get more or better information before investing in the project. Notice that, for both of these intervals, the point estimate of revenues, R22 million, lies at the midpoint of the interval. Our hesitation to invest, given the second scenario, is not due to the position of the midpoint, but to the width of the interval.
 
-The most commonly used probability associated with confidence interval methods is 0.95, and we then talk of a **95% confidence interval**. This phrase means that the probability is 0.95 that the confidence interval from a random sample will include the true population value. Conversely, the probability that the confidence interval from a random sample does not include the population mean is 0.05. Put another way, the confidence interval will not include the population mean 1 time in 20, on average. Let us develop the method for setting up such a confidence interval for the mean (assuming, as usual for now, that $\sigma^{2}$ is known).
+The most commonly used probability associated with confidence interval methods is 0.95, and we then talk of a **95% confidence interval**. This phrase means that 95% of the confidence intervals constructed in this way, one from each random sample, are expected to contain the true population mean. Conversely, 5% of them are expected to miss it. Put another way, the method will fail to include the population mean 1 time in 20, on average. Let us develop the method for setting up such a confidence interval for the mean (assuming, as usual for now, that $\sigma^{2}$ is known).
 
 We make use of the fact that (for large samples)
 
@@ -114,7 +114,7 @@ $$
 \Pr\left[\bar{X} - 1.96\frac{\sigma}{\sqrt{n}} < \mu < \bar{X} + 1.96\frac{\sigma}{\sqrt{n}}\right] = 0.95.
 $$
 
-Look at this probability statement carefully: in words, it says, the probability is 0.95 that an interval formed by the method $\left(\bar{X} - 1.96\frac{\sigma}{\sqrt{n}}, \ \bar{X} + 1.96\frac{\sigma}{\sqrt{n}}\right)$ includes $\mu$, the population mean. The method supplies a 95% confidence interval for $\mu$. We apply this result to our introductory example.
+Look at this probability statement carefully. Here $\bar{X}$ is random, so the statement describes the interval *before* a sample is drawn. In words, it says that 95% of the intervals formed by the method $\left(\bar{X} - 1.96\frac{\sigma}{\sqrt{n}}, \ \bar{X} + 1.96\frac{\sigma}{\sqrt{n}}\right)$ are expected to include $\mu$, the population mean. It does not say that any one interval, once worked out from a sample, has a 0.95 chance of containing $\mu$ (see the note after the next example). The method supplies a 95% confidence interval for $\mu$. We apply this result to our introductory example.
 
 <Example title="Example 1A, continued: travelling times to university">
 Recall that $\bar{x} = 17.96$, $\sigma = 1.4$ and $n = 40$. Find a 95% confidence interval for the population mean travelling time $\mu$.
@@ -126,7 +126,7 @@ $$
 \left(17.96 - 1.96 \times \frac{1.4}{\sqrt{40}}, \ 17.96 + 1.96 \times \frac{1.4}{\sqrt{40}}\right)
 $$
 
-which reduces to $(17.53, 18.39)$. Thus, finally, we can state that we are 95% certain that our method covers the population mean of the travelling time from home to university. This interval method specifies a set of most likely values. We now not only have the point estimate given by $\bar{x}$, we also have some insight into the accuracy of our estimate.
+which reduces to $(17.53, 18.39)$. Thus, finally, we can state that we are 95% confident that this interval contains the population mean of the travelling time from home to university. This interval method specifies a set of most likely values. We now not only have the point estimate given by $\bar{x}$, we also have some insight into the accuracy of our estimate.
 </Solution>
 </Example>
 
@@ -138,7 +138,7 @@ which reduces to $(17.53, 18.39)$. Thus, finally, we can state that we are 95% c
 />
 
 <Note>
-One interval, once it is worked out, either contains $\mu$ or it does not: $\mu$ is a fixed number, not a random one. The "95%" is a statement about the **method**. If we could repeat the whole study many times, about 95 in every 100 of the intervals it produced would include $\mu$. That is why we say we are 95% sure that *the method* covers $\mu$.
+One interval, once it is worked out, either contains $\mu$ or it does not: $\mu$ is a fixed number, not a random one. The "95%" is a statement about the **method**. If we could repeat the whole study many times, about 95 in every 100 of the intervals it produced would include $\mu$. That is why we say we are 95% *confident* in an interval, rather than that it has a 0.95 probability of containing $\mu$.
 </Note>
 
 To obtain confidence intervals with different probability levels, all that needs to be changed is the $z$-value, obtained using the Excel formula `=NORM.S.INV`. The box below gives the appropriate $z$-values for the most frequently used confidence intervals.
@@ -174,13 +174,13 @@ $$
 \left(6.73 - 1.96 \times \frac{1.7}{\sqrt{47}}, \ 6.73 + 1.96 \times \frac{1.7}{\sqrt{47}}\right)
 $$
 
-which is $(6.24, 7.22)$. We are 95% sure that the method will include the true fuel consumption. The 99% confidence interval is found by replacing 1.96 by 2.58:
+which is $(6.24, 7.22)$. We are 95% confident that this interval contains the true mean fuel consumption. The 99% confidence interval is found by replacing 1.96 by 2.58:
 
 $$
 \left(6.73 - 2.58 \times \frac{1.7}{\sqrt{47}}, \ 6.73 + 2.58 \times \frac{1.7}{\sqrt{47}}\right)
 $$
 
-which is $(6.09, 7.37)$. We are 99% sure that the method will include the true fuel consumption. Note the penalty we have to pay for increasing the level of confidence: the interval is considerably wider. Making a wider interval involves accepting margins of variability in sample means.
+which is $(6.09, 7.37)$. We are 99% confident that this interval contains the true mean fuel consumption. Note the penalty we have to pay for increasing the level of confidence: the interval is considerably wider. Making a wider interval involves accepting margins of variability in sample means.
 
 Suppose now that there was a block in the communication between the experimenter and the statistician and that the actual sample size was not 47, but 147. What now are the 95% and 99% confidence intervals?
 
@@ -217,7 +217,7 @@ $$
 \left(168.15 - 1.96 \times \frac{37.60}{\sqrt{58}}, \ 168.15 + 1.96 \times \frac{37.60}{\sqrt{58}}\right) = (168.15 - 9.68, \ 168.15 + 9.68) = (158.47, 177.83).
 $$
 
-We are 95% sure that the method covers the true mean winter expenditure, somewhere between R158.47 and R177.83.
+We are 95% confident that the interval from R158.47 to R177.83 contains the true mean winter expenditure.
 </Solution>
 </Example>
 

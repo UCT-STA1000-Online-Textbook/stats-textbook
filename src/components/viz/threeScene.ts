@@ -1,8 +1,9 @@
 /**
  * Shared three.js scene-lifecycle scaffolding for the project's showcase-tier
- * (real 3D) visualisations — currently `RandomTrials` and `CountingStudio`.
+ * (real 3D) visualisations — currently `RandomTrials`, `CountingStudio` and
+ * `RouletteWheel`.
  *
- * Both components need the same boilerplate: a renderer with a capped pixel
+ * Each of them needs the same boilerplate: a renderer with a capped pixel
  * ratio, soft shadows, an ambient + directional light rig, an optional floor
  * plane, a resize-observed canvas, and a requestAnimationFrame loop that
  * pauses itself the moment nothing is moving (the cohort runs budget devices —
@@ -14,11 +15,11 @@
  * This is a plain factory function, not a React hook — it holds no React
  * state and calls no other hooks, so it can safely run inside a caller's
  * `useEffect` body (a real "use…" hook name here would trip the
- * rules-of-hooks lint rule at every call site). Both call sites treat it as
+ * rules-of-hooks lint rule at every call site). Every call site treats it as
  * effect-scoped: build the scene, build bespoke content, return a cleanup
  * that calls `dispose()`.
  *
- * `three` is imported here and in the two showcase-tier viz modules only, so
+ * `three` is imported here and in the showcase-tier viz modules only, so
  * `React.lazy` keeps it out of the initial bundle and every unit that never
  * opens a 3D viz. Do not import this module from anywhere else.
  */

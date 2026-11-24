@@ -109,6 +109,10 @@ export const VIZ_REGISTRY: Record<string, VizComponent> = {
   "random-trials": lazy(() => import("./probability/RandomTrials")),
   // `counting-studio` is the 3D counting-rules viz for m1-permutations-combinations.
   "counting-studio": lazy(() => import("./probability/CountingStudio")),
+  // `roulette-wheel` is the games-of-chance viz at the end of
+  // m1-conditional-probability: a 3D wheel with a mini betting table that
+  // shows the house advantage at work on a R1 bet on a colour or a number.
+  "roulette-wheel": lazy(() => import("./probability/RouletteWheel")),
 };
 
 /**

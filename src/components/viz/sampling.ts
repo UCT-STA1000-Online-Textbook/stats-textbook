@@ -76,6 +76,14 @@ export function samplePoisson(lambda: number): number {
 }
 
 /**
+ * One of the whole numbers 0, 1, …, count − 1, each equally likely. Used for
+ * the pocket a roulette ball lands in (37 pockets, numbered 0 to 36).
+ */
+export function sampleEquallyLikely(count: number): number {
+  return Math.floor(Math.random() * count);
+}
+
+/**
  * One draw from a list of categories with the given probabilities (which
  * should add to 1), returned as the index of the category chosen. Used for
  * the T-shirt colours in the goodness-of-fit viz, and for the cell each item

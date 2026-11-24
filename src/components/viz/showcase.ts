@@ -15,4 +15,5 @@
 export const SHOWCASE_VIZ: ReadonlySet<string> = new Set([
   "random-trials",
   "counting-studio",
+  "roulette-wheel",
 ]);

@@ -67,11 +67,36 @@ quiz:
       pc: 0.8
       pdc: 0.06
       pdcbar: 0.08
+  - id: "q7"
+    type: "mcq"
+    question: "A game costs R2 to play and you win with probability 1/4. What is the fair payout for a win?"
+    options:
+      - "R8"
+      - "R6"
+      - "R4"
+      - "R0.50"
+    answer: 0
+    explanation: "The fair payout is c/p = 2 / (1/4) = R8. Check: (1/4)(8 − 2) + (3/4)(−2) = 1.5 − 1.5 = 0, so in the long run you neither win nor lose."
+  - id: "q8"
+    type: "mcq"
+    question: "A game costs R1 and you win with probability 1/10. The company pays R9 for a win. What is its house advantage?"
+    options:
+      - "10%"
+      - "9%"
+      - "11.1%"
+      - "1%"
+    answer: 0
+    explanation: "The fair payout is c/p = 1 / (1/10) = R10. The house advantage is (fair payout − actual payout) / fair payout = (10 − 9) / 10 = 10%."
+  - id: "q9"
+    type: "true-false"
+    question: "A roulette wheel has landed on black 7 times in a row. Red is now more likely than usual on the next spin."
+    answer: false
+    explanation: "False: that is the Gambler's Fallacy. Spins of the wheel are independent, so Pr(red | 7 blacks in a row) = Pr(red) = 18/37. The wheel has no memory of the spins before."
 prevUnit: "m1-permutations-combinations"
 nextUnit: "m2-graphical-summaries"
 ---
 
-> **Keywords:** Conditional probability, updating probabilities, Bayes' theorem, the law of total probability, independent events, mutually exclusive versus independent.
+> **Keywords:** Conditional probability, updating probabilities, Bayes' theorem, the law of total probability, independent events, mutually exclusive versus independent, fair game, fair payout, house advantage, the Gambler's Fallacy.
 
 ## Conditional probability
 
@@ -291,5 +316,144 @@ $$
 Many students confuse **independent** events with **mutually exclusive** events. It helps to remember that "mutually exclusive" is a concept from *set theory* (it can be drawn on a Venn diagram), whereas "independence" is a concept from *probability theory* and **cannot** be shown on a Venn diagram.
 
 In fact, two events with positive probability that are mutually exclusive can **never** be independent. The events "the gold price rises today" and "it rains in Cape Town this afternoon" are genuinely independent (they have nothing to do with each other), and their intersection is not empty, so they are not mutually exclusive. By contrast, "heads" and "tails" on a single coin toss *are* mutually exclusive: tell me the coin came up heads and my probability of tails drops instantly from 0.5 to zero. That is the strongest possible dependence, so mutually exclusive events are certainly not independent.
+
+## Games of chance
+
+This section goes with **Video 2** on Amathuba, so watch it alongside these notes.
+
+Video 2 shows how probability is fundamental to games of chance, and to the way gambling turns them into a business. Games of chance are a good way to explain the idea of probability. Understanding the role probability plays in decisions involving uncertainty and risk is also an important life skill.
+
+### Fair games and fair payouts
+
+<Definition term="Fair game">
+A **fair game** is one in which no one is expected to win (or lose) in the long run. If we pay to play a fair game, then what we expect to win cancels out what it costs to play, so that we end up exactly where we started, financially. The amount we receive for a win in a fair game is called the **fair payout**.
+</Definition>
+
+<Example title="A fair payout for a die">
+Suppose you pay R1 to play a game in which you choose a number, and a die is tossed once. If your number comes up, you win and receive $X$ rand. What should the payout $X$ be to make the game fair?
+
+<Solution>
+Consider how often you expect your chosen number to come up. If the die is fair and is tossed a large number of times, your number comes up on average once in every six throws. So $1/6$ of the time you win (you receive $X$, a gain of $X - 1$ after paying R1 to play), and $5/6$ of the time you lose (you receive nothing, a loss of R1).
+
+For the game to be fair, these must cancel out in the long run:
+$$
+\frac{1}{6}(X - 1) + \frac{5}{6}(-1) = 0.
+$$
+Solving, $\tfrac{1}{6}X = 1$, so the fair payout is
+$$
+X = \frac{1}{1/6} = 6.
+$$
+A fair game pays R6 for a win.
+</Solution>
+</Example>
+
+The same argument works for any game. Write $p$ for the probability of a win and $c$ for the cost to play.
+
+<Definition term="Fair payout">
+A game is fair when
+$$
+p\,(X - c) + (1 - p)(-c) = 0,
+$$
+that is, when the payout for a win is
+$$
+\text{Fair payout} = X = \frac{c}{p}.
+$$
+</Definition>
+
+### House advantage
+
+Gambling companies are set up to make a profit from the losses of their clients. So they set the payouts to keep back a portion of what would be a fair payout. This portion is called the **house advantage**. The part of the fair payout that is paid to the winning gambler is called the **win percentage**.
+
+<Definition term="House advantage">
+If a game's fair payout is $c/p$ and the company actually pays out less than that, then
+$$
+\text{House advantage} = \frac{\text{Fair payout} - \text{Actual payout}}{\text{Fair payout}} \times 100\%,
+$$
+and the win percentage is $100\%$ minus the house advantage. Turning this around,
+$$
+\text{Actual payout} = \text{Fair payout} \times (1 - \text{House advantage}).
+$$
+</Definition>
+
+<Example title="Setting the payout for the die game">
+Continuing the die game, the company wants a house advantage of 10%. What payout should it offer for a win?
+
+<Solution>
+The company keeps 10% of the fair payout and returns the other 90% (the win percentage) to the winner. The fair payout is R6, so the company keeps 60c of it and pays
+$$
+\text{Actual payout} = 6 \times (1 - 0.10) = 6 \times 0.90 = \text{R}5.40.
+$$
+</Solution>
+</Example>
+
+<Example title="Finding the house advantage">
+Looked at from the other side: in the die game the actual payout has been set at R5. What is the house advantage?
+
+<Solution>
+The company is keeping back R1 of the fair payout of R6, so
+$$
+\text{House advantage} = \frac{6 - 5}{6} \times 100\% = \frac{1}{6} \times 100\% = 16.67\%.
+$$
+</Solution>
+</Example>
+
+<Example title="Roulette">
+A European roulette wheel has 37 pockets: the numbers 1 to 36, half of them red and half black, and a green 0. You bet R1 on red. If the ball lands in a red pocket the casino pays R2 (your R1 back plus R1). Find the fair payout and the house advantage.
+
+<Solution>
+There are 18 red pockets out of 37, so $p = 18/37$. With $c = 1$,
+$$
+\text{Fair payout} = \frac{c}{p} = \frac{1}{18/37} = \frac{37}{18} = \text{R}2.0556.
+$$
+The casino pays R2, so
+$$
+\text{House advantage} = \frac{2.0556 - 2}{2.0556} \times 100\% = 2.70\%.
+$$
+The green 0 is what tips the game to the casino. A bet on a single number gives the same house advantage: the fair payout is $1/(1/37) = \text{R}37$, the casino pays R36, and $(37 - 36)/37 = 2.70\%$.
+</Solution>
+</Example>
+
+<TryThis
+  vizId="roulette-wheel"
+  label="Spin the roulette wheel"
+  description="Bet R1 on a colour or a single number and spin a 3D roulette wheel. Spin once to watch the ball land, then spin 500 at a time and follow your winnings against the casino's long-run take of 2.7c in every rand, whichever bet you choose."
+/>
+
+### The Gambler's Fallacy
+
+Having thought about these aspects of gambling, we hope that you won't fall prey to the **Gambler's Fallacy**.
+
+Gamblers tend to misunderstand randomness. They believe that randomness can be detected, for example as a lack of pattern, and so they begin to feel that they can predict the next random event from the previous ones. Suppose a gambler is watching a roulette wheel and deciding whether to bet on red or black. The previous 7 spins have all come up black. The gambler feels strongly that this run of black is about to be broken, and bets heavily on red.
+
+As statisticians, we know that the probability of black has not been changed by the previous spins: the outcome is still just as likely to be black as it is to be red. In the language of this unit, successive spins of the wheel are **independent**, so
+$$
+\Pr(\text{red} \mid \text{the last 7 spins were black}) = \Pr(\text{red}) = \frac{18}{37}.
+$$
+
+Many gamblers also **underestimate** the probability that a very unlikely event happens at least once in repeated trials. In the same way, they **overestimate** the probability that a very likely event keeps on happening over repeated trials.
+
+<Example title="Red marbles">
+Consider the following events.
+
+$A$: drawing a red marble 7 times in a row, with replacement, from a bag with 90% red marbles and 10% white marbles.
+
+$B$: drawing at least 1 red marble in 7 tries, with replacement, from a bag with 10% red marbles and 90% white marbles.
+
+Most people think $A$ is more likely than $B$. What do you think? Work out the probabilities and see what the true answer is.
+
+<Solution>
+Because the marbles are drawn with replacement, the 7 draws are independent, so their probabilities multiply.
+
+For $A$, each draw is red with probability 0.9:
+$$
+\Pr(A) = 0.9^7 = 0.4783.
+$$
+For $B$, "at least 1 red" is the complement of "no red at all", and each draw is white with probability 0.9:
+$$
+\Pr(B) = 1 - \Pr(\text{7 whites}) = 1 - 0.9^7 = 1 - 0.4783 = 0.5217.
+$$
+So $B$ is actually the more likely event. A very likely event (red, at 0.9) is less likely than we feel to keep happening 7 times in a row, and a very unlikely event (red, at 0.1) is more likely than we feel to happen at least once in 7 tries.
+</Solution>
+</Example>
 
 <Quiz />

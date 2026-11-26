@@ -26,6 +26,7 @@ import {
   FEEDBACK_TYPE_IDS,
   MAX_COMMENT,
   MAX_QUOTE,
+  NEEDS_DISCUSSION_LABEL,
   REVIEW_MODE,
 } from "@/lib/review";
 
@@ -204,7 +205,12 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       title,
       body,
-      labels: [FEEDBACK_LABEL, `feedback: ${payload.type}`],
+      labels: [
+        FEEDBACK_LABEL,
+        `feedback: ${payload.type}`,
+        // Parks the issue until the lecturers have agreed on it.
+        ...(payload.type === "discussion" ? [NEEDS_DISCUSSION_LABEL] : []),
+      ],
     }),
   });
 

@@ -19,18 +19,39 @@
 export const REVIEW_MODE = process.env.NEXT_PUBLIC_REVIEW_MODE === "on";
 
 /** The kinds of comment a reviewer can choose from, in the order shown. */
-export const FEEDBACK_TYPE_IDS = ["error", "wording", "viz-bug", "idea"] as const;
+export const FEEDBACK_TYPE_IDS = ["error", "wording", "viz-bug", "idea", "discussion"] as const;
 
 /** One of {@link FEEDBACK_TYPE_IDS}. */
 export type FeedbackTypeId = (typeof FEEDBACK_TYPE_IDS)[number];
 
-/** Button label and one-line explanation for each comment type. */
+/**
+ * Label and one-line explanation for each comment type. All the hints are
+ * shown at once in the comment box, so they are written to be compared side
+ * by side: "Idea" is a small change, "Discussion" a bigger one.
+ */
 export const FEEDBACK_TYPES: Record<FeedbackTypeId, { label: string; hint: string }> = {
-  error: { label: "Error", hint: "Something is wrong: maths, a fact, a typo" },
-  wording: { label: "Wording", hint: "Correct, but unclear or awkward" },
-  "viz-bug": { label: "Viz bug", hint: "A visualisation misbehaves or disagrees with the text" },
-  idea: { label: "Idea", hint: "A suggestion for something new or different" },
+  error: { label: "Error", hint: "Something is wrong: a maths slip, a wrong fact, a typo." },
+  wording: { label: "Wording", hint: "Correct, but unclear or awkward to read." },
+  "viz-bug": {
+    label: "Viz bug",
+    hint: "A visualisation is broken, looks wrong on your screen, or disagrees with the text.",
+  },
+  idea: {
+    label: "Idea",
+    hint: "A small addition we could just make, for example a missing solution or an extra example.",
+  },
+  discussion: {
+    label: "Discussion",
+    hint: "A bigger change the lecturers should agree on first, for example reordering sections or units.",
+  },
 };
+
+/**
+ * GitHub label for issues the teaching team must agree on before anyone acts.
+ * Discussion comments get it automatically; the team can also add it by hand
+ * to any issue, and remove it once a decision is made.
+ */
+export const NEEDS_DISCUSSION_LABEL = "needs-discussion";
 
 /** Longest comment a reviewer can type. */
 export const MAX_COMMENT = 2000;

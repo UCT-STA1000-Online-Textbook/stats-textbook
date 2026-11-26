@@ -400,25 +400,41 @@ function DialogCard({ target, slug }: { target: FeedbackTarget; slug: string }) 
               </div>
             )}
 
-            <div role="radiogroup" aria-label="Kind of comment" className="mt-3 grid grid-cols-4 gap-1.5">
+            {/* Every type shows its hint at once, so a reviewer can compare
+                them before choosing instead of clicking through each one. */}
+            <div role="radiogroup" aria-label="Kind of comment" className="mt-3 flex flex-col gap-1">
               {FEEDBACK_TYPE_IDS.map((id) => (
                 <button
                   key={id}
                   type="button"
                   role="radio"
                   aria-checked={type === id}
+                  // The hint is read as a description, so the option's name stays short.
+                  aria-describedby={`feedback-hint-${id}`}
                   onClick={() => setType(id)}
-                  className={`rounded-md border px-1 py-1.5 text-[12px] font-medium transition-colors ${
+                  className={`flex items-baseline gap-2 rounded-md border px-2.5 py-1.5 text-left transition-colors ${
                     type === id
-                      ? "border-blue-600 bg-blue-600 text-white"
-                      : "border-[color:var(--color-line)] text-[color:var(--color-ink-700)] hover:border-blue-400"
+                      ? "border-blue-600 bg-blue-50"
+                      : "border-[color:var(--color-line)] hover:border-blue-400"
                   }`}
                 >
-                  {FEEDBACK_TYPES[id].label}
+                  <span
+                    className={`w-[74px] shrink-0 text-[12px] font-semibold ${
+                      type === id ? "text-blue-700" : "text-[color:var(--color-ink-900)]"
+                    }`}
+                  >
+                    {FEEDBACK_TYPES[id].label}
+                  </span>
+                  <span
+                    id={`feedback-hint-${id}`}
+                    aria-hidden="true"
+                    className="text-[11px] leading-snug text-[color:var(--color-ink-500)]"
+                  >
+                    {FEEDBACK_TYPES[id].hint}
+                  </span>
                 </button>
               ))}
             </div>
-            <p className="mt-1 text-[11px] text-[color:var(--color-ink-500)]">{FEEDBACK_TYPES[type].hint}</p>
 
             <label className="mt-3 block text-[12px] font-medium text-[color:var(--color-ink-700)]">
               What should change?
